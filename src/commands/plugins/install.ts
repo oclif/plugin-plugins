@@ -1,0 +1,38 @@
+import {Command} from '@dxcli/command'
+
+import Plugins from '../../plugins'
+
+let examplePlugin = 'heroku-production-status'
+let bin = 'heroku'
+const g = global as any
+if (g.config) {
+  bin = g.config.bin
+  let pjson = g.config.pjson.dxcli
+  if (pjson.help && pjson.help.plugins) {
+    examplePlugin = Object.keys(pjson.help.plugins)[0]
+  }
+}
+
+export default class PluginsInstall extends Command {
+  static description = 'installs a plugin into the CLI'
+  static usage = 'plugins:install PLUGIN...'
+  static help = `
+  Example:
+    $ ${bin} plugins:install ${examplePlugin}
+  `
+  static variableArgs = true
+  static args = [{name: 'plugin', description: 'plugin to install', required: true}]
+
+  plugins: Plugins
+
+  async run() {
+    this.plugins = new Plugins(this.config)
+    for (let plugin of this.argv) {
+      let scoped = plugin[0] === '@'
+      if (scoped) plugin = plugin.slice(1)
+      let [name, tag = 'latest'] = plugin.split('@')
+      if (scoped) name = `@${name}`
+      await this.plugins.install(name, tag)
+    }
+  }
+}
