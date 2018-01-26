@@ -36,10 +36,7 @@
     "typescript": "^2.6.2"
   },
   "dxcli": {
-    "commands": "./lib/commands",
-    "hooks": {
-      "init": "./lib/hooks/init"
-    }
+    "commands": "./lib/commands"
   },
   "engines": {
     "node": ">=8.0.0"
