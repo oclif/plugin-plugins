@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-unpublished-require */
-
 const undefault = m => m.__esModule === true ? m.default : m
 
 const fs = require('fs')

@@ -34,7 +34,9 @@ ${examplePluginsHelp.join('\n')}
     plugins = plugins.filter(p => p.type !== 'builtin' && p.type !== 'main')
     _.sortBy(plugins, 'name')
     if (!this.flags.core) plugins = plugins.filter(p => p.type !== 'core')
-    if (!plugins.length) cli.warn('no plugins installed')
+    if (!plugins.length) {
+      cli.info('no plugins installed')
+    }
     for (let plugin of plugins) {
       let output = `${plugin.name} ${color.dim(plugin.version)}`
       if (plugin.type !== 'user') output += color.dim(` (${plugin.type})`)

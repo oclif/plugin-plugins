@@ -9,9 +9,9 @@ import Manifest from './manifest'
 import Yarn from './yarn'
 
 export default class Plugins {
-  private manifest: Manifest
-  private yarn: Yarn
-  private debug: any
+  private readonly manifest: Manifest
+  private readonly yarn: Yarn
+  private readonly debug: any
 
   constructor(public config: IConfig) {
     this.manifest = new Manifest(path.join(this.config.dataDir, 'plugins', 'user.json'))
@@ -29,7 +29,7 @@ export default class Plugins {
       cli.info(`Installing plugin ${name}${tag === 'latest' ? '' : '@' + tag}`)
       await this.createPJSON()
       await this.yarn.exec(['add', `${name}@${tag}`])
-      let plugin = await this.loadPlugin(name)
+      let plugin = await this.loadPlugin(name, tag)
       if (!plugin.commands.length) throw new Error('no commands found in plugin')
       await this.manifest.add(name, tag)
     } catch (err) {
@@ -40,9 +40,9 @@ export default class Plugins {
 
   async load(): Promise<IPlugin[]> {
     const plugins = await this.list()
-    return _.compact(await Promise.all(plugins.map(async ([p]) => {
+    return _.compact(await Promise.all(plugins.map(async ([name, {tag}]) => {
       try {
-        return await this.loadPlugin(p)
+        return await this.loadPlugin(name, tag)
       } catch (err) {
         cli.warn(err)
       }
@@ -56,8 +56,8 @@ export default class Plugins {
     await this.yarn.exec(['remove', name])
   }
 
-  private async loadPlugin(name: string) {
-    return load({root: this.userPluginPath(name), type: 'user', resetCache: true})
+  private async loadPlugin(name: string, tag: string) {
+    return load({root: this.userPluginPath(name), type: 'user', tag, resetCache: true})
   }
 
   private async createPJSON() {
