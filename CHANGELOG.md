@@ -1,3 +1,11 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/dxcli/plugins/compare/8fc27ef7ca77edbd8a1be9a830fc6a7b75b15ab3...v0.1.2) (2018-01-28)
+
+
+### Bug Fixes
+
+* updated cli-ux ([b137d61](https://github.com/dxcli/plugins/commit/b137d61))
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/dxcli/plugins/compare/9d5dc97a2691b08db267007a521815beb3831cea...v0.1.1) (2018-01-28)
 
