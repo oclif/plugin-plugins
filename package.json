@@ -1,7 +1,7 @@
 {
   "name": "@dxcli/plugins",
   "description": "plugins plugin for dxcli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Jeff Dickey @jdxcode",
   "bugs": "https://github.com/jdxcode/plugins/issues",
   "dependencies": {

@@ -1,3 +1,11 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/dxcli/plugins/compare/9d5dc97a2691b08db267007a521815beb3831cea...v0.1.1) (2018-01-28)
+
+
+### Bug Fixes
+
+* windows stdin ([8fc27ef](https://github.com/dxcli/plugins/commit/8fc27ef))
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/dxcli/plugins/compare/38862718f982b164d9484e910c7ff62620b825a2...v0.1.0) (2018-01-27)
 
