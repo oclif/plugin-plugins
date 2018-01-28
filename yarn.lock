@@ -164,6 +164,16 @@
     lodash "^4.17.4"
     rwlockfile "^2.0.21"
 
+"@dxcli/manifest-file@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@dxcli/manifest-file/-/manifest-file-0.0.5.tgz#8a462daaa98e8e956864b679d6f7a3c18127f835"
+  dependencies:
+    debug "^3.1.0"
+    fs-extra "^5.0.0"
+    load-json-file "^4.0.0"
+    lodash "^4.17.4"
+    rwlockfile "^2.0.21"
+
 "@dxcli/nyc-config@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@dxcli/nyc-config/-/nyc-config-0.0.4.tgz#bd60c089aaa6d5da34e415bab6bc527d8c35a210"
