@@ -21,6 +21,8 @@ export default class Yarn {
     return new Promise((resolve, reject) => {
       const {fork} = require('child_process')
       let forked = fork(modulePath, args, options)
+      forked.stdout.on('data', (d: any) => process.stdout.write(d))
+      forked.stderr.on('data', (d: any) => process.stderr.write(d))
 
       forked.on('error', reject)
       forked.on('exit', (code: number) => {
@@ -32,9 +34,9 @@ export default class Yarn {
       })
 
       // Fix windows bug with node-gyp hanging for input forever
-      if (this.config.windows) {
-        forked.stdin.write('\n')
-      }
+      // if (this.config.windows) {
+      //   forked.stdin.write('\n')
+      // }
     })
   }
 
@@ -57,7 +59,7 @@ export default class Yarn {
     const npmRunPath = require('npm-run-path')
     let options = {
       cwd: this.cwd,
-      stdio: [0, 1, 2, 'ipc'],
+      stdio: [0, null, null, 'ipc'],
       env: npmRunPath.env({cwd: this.cwd, env: process.env}),
     }
 

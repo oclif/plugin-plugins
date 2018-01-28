@@ -1,4 +1,5 @@
 import {Command} from '@dxcli/command'
+import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
@@ -32,7 +33,9 @@ export default class PluginsInstall extends Command {
       if (scoped) plugin = plugin.slice(1)
       let [name, tag = 'latest'] = plugin.split('@')
       if (scoped) name = `@${name}`
+      cli.action.start(`Installing plugin ${plugin}@${tag}`)
       await this.plugins.install(name, tag)
+      cli.action.stop()
     }
   }
 }
