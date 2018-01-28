@@ -1,3 +1,11 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/dxcli/plugins/compare/b137d61fb343cf44315e1431826416e1b8ead2e7...v0.1.3) (2018-01-28)
+
+
+### Bug Fixes
+
+* test exports ([90fa250](https://github.com/dxcli/plugins/commit/90fa250))
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/dxcli/plugins/compare/8fc27ef7ca77edbd8a1be9a830fc6a7b75b15ab3...v0.1.2) (2018-01-28)
 
