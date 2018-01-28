@@ -1,5 +1,6 @@
-import {expect, test as base} from '@dxcli/dev-test'
+import {IConfig} from '@dxcli/config'
 import {load} from '@dxcli/loader'
+import {expect, FancyTypes, NockScope, test as base} from '@dxcli/test'
 import * as fs from 'fs-extra'
 
 export const test = base
@@ -12,4 +13,9 @@ export const test = base
   ])
 })
 
-export {expect}
+export {
+  expect,
+  IConfig,
+  FancyTypes,
+  NockScope,
+}
