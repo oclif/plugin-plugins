@@ -10,7 +10,7 @@
     "@dxcli/loader": "^0.2.5",
     "@dxcli/manifest-file": "^0.0.4",
     "@heroku-cli/color": "^1.1.1",
-    "cli-ux": "^3.2.1",
+    "cli-ux": "^3.2.2",
     "debug": "^3.1.0",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
