@@ -46,9 +46,9 @@
   "license": "MIT",
   "repository": "dxcli/plugins",
   "scripts": {
-    "commitmsg": "dxcli-dev-commitmsg",
+    "commitmsg": "dxcli-commitlint",
     "precommit": "nps lint -l warn",
-    "prepare": "rm -rf lib && tsc",
+    "prepublishOnly": "nps build",
     "test": "nps test -l warn"
   }
 }
