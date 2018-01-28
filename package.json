@@ -24,7 +24,7 @@
     "@dxcli/engine": "^0.1.13",
     "@dxcli/semantic-release": "^0.3.3",
     "@dxcli/test": "^0.9.17",
-    "@dxcli/tslint": "^0.0.24",
+    "@dxcli/tslint": "^0.1.0",
     "@types/fs-extra": "^5.0.0",
     "chai": "^4.1.2",
     "eslint": "^4.16.0",
