@@ -1,3 +1,11 @@
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/dxcli/plugins/compare/90fa250272db09447b9bd6889f1c98b91063b7d2...v0.1.4) (2018-01-30)
+
+
+### Bug Fixes
+
+* ran generator ([abb6601](https://github.com/dxcli/plugins/commit/abb6601))
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/dxcli/plugins/compare/b137d61fb343cf44315e1431826416e1b8ead2e7...v0.1.3) (2018-01-28)
 
