@@ -9,7 +9,7 @@
     "@dxcli/config": "^0.1.28",
     "@dxcli/loader": "^0.2.9",
     "@dxcli/manifest-file": "^0.0.4",
-    "@dxcli/parser": "^0.0.5",
+    "@dxcli/parser": "^0.0.6",
     "@heroku-cli/color": "^1.1.1",
     "cli-ux": "^3.2.2",
     "debug": "^3.1.0",
