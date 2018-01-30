@@ -1,8 +1,6 @@
-import {IConfig, IPlugin} from '@dxcli/config'
-import {load} from '@dxcli/loader'
+import {IConfig, read} from '@dxcli/config'
 import {cli} from 'cli-ux'
 import * as fs from 'fs-extra'
-import * as _ from 'lodash'
 import * as path from 'path'
 
 import Manifest from './manifest'
@@ -29,24 +27,13 @@ export default class Plugins {
       cli.info(`Installing plugin ${name}${tag === 'latest' ? '' : '@' + tag}`)
       await this.createPJSON()
       await this.yarn.exec(['add', `${name}@${tag}`])
-      let plugin = await this.loadPlugin(name, tag)
-      if (!plugin.commands.length) throw new Error('no commands found in plugin')
+      await this.loadPlugin(name, tag)
+      // if (!plugin.commands.length) throw new Error('no commands found in plugin')
       await this.manifest.add(name, tag)
     } catch (err) {
       await this.uninstall(name).catch(err => this.debug(err))
       throw err
     }
-  }
-
-  async load(): Promise<IPlugin[]> {
-    const plugins = await this.list()
-    return _.compact(await Promise.all(plugins.map(async ([name, {tag}]) => {
-      try {
-        return await this.loadPlugin(name, tag)
-      } catch (err) {
-        cli.warn(err)
-      }
-    })))
   }
 
   public async uninstall(name: string) {
@@ -56,8 +43,14 @@ export default class Plugins {
     await this.yarn.exec(['remove', name])
   }
 
-  private async loadPlugin(name: string, tag: string) {
-    return load({root: this.userPluginPath(name), type: 'user', tag, resetCache: true})
+  userPluginPath(name: string): string {
+    return path.join(this.userPluginsDir, 'node_modules', name)
+  }
+
+  private async loadPlugin(name: string, _: string) {
+    const config = await read({root: this.userPluginPath(name)})
+    return this.config.engine!.load(config)
+    // return this.config.engine!.load(config, {resetCache: true})
   }
 
   private async createPJSON() {
@@ -66,9 +59,6 @@ export default class Plugins {
     }
   }
 
-  private userPluginPath(name: string): string {
-    return path.join(this.userPluginsDir, 'node_modules', name)
-  }
   private get userPluginsDir() {
     return path.join(this.config.dataDir, 'plugins')
   }
