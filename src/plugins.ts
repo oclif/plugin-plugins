@@ -1,4 +1,4 @@
-import {IConfig, read} from '@dxcli/config'
+import {IConfig, read} from '@anycli/config'
 import {cli} from 'cli-ux'
 import * as fs from 'fs-extra'
 import * as path from 'path'
@@ -14,7 +14,7 @@ export default class Plugins {
   constructor(public config: IConfig) {
     this.manifest = new Manifest(path.join(this.config.dataDir, 'plugins', 'user.json'))
     this.yarn = new Yarn({config, cwd: this.userPluginsDir})
-    this.debug = require('debug')('@dxcli/plugins')
+    this.debug = require('debug')('@anycli/plugins')
   }
 
   async list() {

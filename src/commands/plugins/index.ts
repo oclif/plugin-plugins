@@ -1,4 +1,4 @@
-import Command, {flags} from '@dxcli/command'
+import Command, {flags} from '@anycli/command'
 import color from '@heroku-cli/color'
 import cli from 'cli-ux'
 import * as _ from 'lodash'
@@ -38,7 +38,6 @@ ${examplePluginsHelp.join('\n')}
   async run() {
     this.plugins = new Plugins(this.config)
     let plugins = this.config.engine!.plugins
-    plugins = plugins.filter(p => p.type !== 'builtin' && p.type !== 'main')
     _.sortBy(plugins, 'name')
     if (!this.flags.core) plugins = plugins.filter(p => p.type !== 'core')
     if (!plugins.length) {

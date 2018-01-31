@@ -8,4 +8,4 @@ const dev = fs.existsSync(path.join(__dirname, '../tsconfig.json'))
 
 if (dev) require('ts-node/register')
 
-undefault(require('@dxcli/engine'))()
+undefault(require('@anycli/engine'))()

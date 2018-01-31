@@ -1,4 +1,4 @@
-import {IConfig} from '@dxcli/config'
+import {IConfig} from '@anycli/config'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 

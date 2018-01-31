@@ -1,4 +1,4 @@
-import {Command} from '@dxcli/command'
+import {Command} from '@anycli/command'
 import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
@@ -8,7 +8,7 @@ let bin = 'heroku'
 const g = global as any
 if (g.config) {
   bin = g.config.bin
-  let pjson = g.config.pjson.dxcli
+  let pjson = g.config.pjson.anycli
   if (pjson.help && pjson.help.plugins) {
     examplePlugin = Object.keys(pjson.help.plugins)[0]
   }

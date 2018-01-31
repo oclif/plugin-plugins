@@ -1,4 +1,4 @@
-import ManifestFile from '@dxcli/manifest-file'
+import ManifestFile from '@anycli/manifest-file'
 
 export interface File {
   manifest: {
@@ -12,7 +12,7 @@ export interface File {
 
 export default class Manifest extends ManifestFile {
   constructor(file: string) {
-    super(['@dxcli/plugins', file].join(':'), file)
+    super(['@anycli/plugins', file].join(':'), file)
   }
 
   async list(): Promise<File['manifest']['plugins']> {

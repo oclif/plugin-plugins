@@ -1,10 +1,11 @@
-import {IConfig, IPlugin} from '@dxcli/config'
+import {IConfig, IPlugin} from '@anycli/config'
 
 import Plugins from './plugins'
 
-export default async function (config: IConfig, cb: any) {
+export default async function (config: IConfig) {
   const plugins = new Plugins(config)
-  await Promise.all((await plugins.list()).map((([n]) => cb({name: n, root: plugins.userPluginPath(n), type: 'user'}))))
+  const list = await plugins.list()
+  return list.map(([name, {tag}]) => ({name, root: plugins.userPluginPath(name), tag, type: 'user'}))
 }
 
 export {IPlugin}
