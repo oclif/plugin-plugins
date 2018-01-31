@@ -12,9 +12,10 @@ let examplePlugins = {
 }
 let bin = 'heroku'
 const g = global as any
-if (g.config) {
-  bin = g.config.bin
-  let pjson = g.config.pjson['cli-engine']
+if (g.anycli && g.anycli.config) {
+  const config = g.anycli.config
+  bin = config
+  let pjson = config.pjson.anycli || config.pjson['cli-engine']
   if (pjson.help && pjson.help.plugins) {
     examplePlugins = pjson.help.plugins
   }

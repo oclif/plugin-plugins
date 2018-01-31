@@ -6,9 +6,10 @@ import Plugins from '../../plugins'
 let examplePlugin = 'heroku-production-status'
 let bin = 'heroku'
 const g = global as any
-if (g.config) {
-  bin = g.config.bin
-  let pjson = g.config.pjson.anycli
+if (g.anycli && g.anycli.config) {
+  const config = g.anycli.config
+  bin = config.bin
+  let pjson = config.pjson.anycli || config.pjson['cli-engine']
   if (pjson.help && pjson.help.plugins) {
     examplePlugin = Object.keys(pjson.help.plugins)[0]
   }
