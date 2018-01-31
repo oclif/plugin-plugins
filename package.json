@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@anycli/engine": "^0.1.26",
-    "@anycli/test": "^0.9.19",
+    "@anycli/test": "^0.10.0",
     "@anycli/tslint": "^0.1.3",
     "@commitlint/cli": "^6.0.2",
     "@commitlint/config-conventional": "^6.0.2",
