@@ -1,3 +1,11 @@
+<a name="0.1.6"></a>
+## [0.1.6](https://github.com/anycli/plugins/compare/f89c19979540d7e819c3e5c7880b41a3d0df86d0...v0.1.6) (2018-01-31)
+
+
+### Bug Fixes
+
+* set spaces in manifest ([68671d0](https://github.com/anycli/plugins/commit/68671d0))
+
 <a name="0.1.5"></a>
 ## [0.1.5](https://github.com/anycli/plugins/compare/8a0b7e534799d60ab4be42253146433375987fae...v0.1.5) (2018-01-31)
 
