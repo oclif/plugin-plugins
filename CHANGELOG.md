@@ -1,3 +1,11 @@
+<a name="0.1.7"></a>
+## [0.1.7](https://github.com/anycli/plugins/compare/68671d031658b0dcb72579a98da64042fed225da...v0.1.7) (2018-01-31)
+
+
+### Bug Fixes
+
+* hide plugin tag if not exists ([76f1ac5](https://github.com/anycli/plugins/commit/76f1ac5))
+
 <a name="0.1.6"></a>
 ## [0.1.6](https://github.com/anycli/plugins/compare/f89c19979540d7e819c3e5c7880b41a3d0df86d0...v0.1.6) (2018-01-31)
 
