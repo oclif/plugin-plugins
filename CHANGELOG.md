@@ -1,3 +1,11 @@
+<a name="0.1.5"></a>
+## [0.1.5](https://github.com/anycli/plugins/compare/8a0b7e534799d60ab4be42253146433375987fae...v0.1.5) (2018-01-31)
+
+
+### Bug Fixes
+
+* testing release ([f89c199](https://github.com/anycli/plugins/commit/f89c199))
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/dxcli/plugins/compare/90fa250272db09447b9bd6889f1c98b91063b7d2...v0.1.4) (2018-01-30)
 
