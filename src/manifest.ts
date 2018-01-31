@@ -11,6 +11,8 @@ export interface File {
 }
 
 export default class Manifest extends ManifestFile {
+  writeOptions = {spaces: 2}
+
   constructor(file: string) {
     super(['@anycli/plugins', file].join(':'), file)
   }
