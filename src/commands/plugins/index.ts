@@ -47,7 +47,7 @@ ${examplePluginsHelp.join('\n')}
       let output = `${plugin.name} ${color.dim(plugin.version)}`
       if (plugin.type !== 'user') output += color.dim(` (${plugin.type})`)
       if (plugin.type === 'link') output += ` ${plugin.root}`
-      else if (plugin.tag !== 'latest') output += color.dim(` (${String(plugin.tag)})`)
+      else if (plugin.tag && plugin.tag !== 'latest') output += color.dim(` (${String(plugin.tag)})`)
       cli.log(output)
     }
   }
