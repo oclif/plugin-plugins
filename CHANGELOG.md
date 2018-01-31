@@ -1,3 +1,11 @@
+<a name="0.1.8"></a>
+## [0.1.8](https://github.com/anycli/plugins/compare/76f1ac5f3dc9724420762c3c62d1ad7c742a4b06...v0.1.8) (2018-01-31)
+
+
+### Bug Fixes
+
+* fixed global config defaults ([b769c55](https://github.com/anycli/plugins/commit/b769c55))
+
 <a name="0.1.7"></a>
 ## [0.1.7](https://github.com/anycli/plugins/compare/68671d031658b0dcb72579a98da64042fed225da...v0.1.7) (2018-01-31)
 
