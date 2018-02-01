@@ -1,3 +1,11 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/anycli/plugins/compare/b769c5586a5ceafd23105ad847b35717bb0987af...v0.2.0) (2018-02-01)
+
+
+### Features
+
+* added default scope to plugins ([079808b](https://github.com/anycli/plugins/commit/079808b))
+
 <a name="0.1.8"></a>
 ## [0.1.8](https://github.com/anycli/plugins/compare/76f1ac5f3dc9724420762c3c62d1ad7c742a4b06...v0.1.8) (2018-01-31)
 
