@@ -14,7 +14,7 @@
   "bugs": "https://github.com/jdxcode/plugins/issues",
   "dependencies": {
     "@anycli/command": "^0.2.22",
-    "@anycli/manifest-file": "^0.2.0",
+    "@anycli/manifest-file": "^0.3.0",
     "@heroku-cli/color": "^1.1.1",
     "cli-ux": "^3.3.10",
     "debug": "^3.1.0",
