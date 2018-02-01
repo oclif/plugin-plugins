@@ -1,5 +1,6 @@
-import {Command} from '@anycli/command'
+import {Command, parse} from '@anycli/command'
 import cli from 'cli-ux'
+import HTTP from 'http-call'
 
 import Plugins from '../../plugins'
 
@@ -22,21 +23,46 @@ export default class PluginsInstall extends Command {
   Example:
     $ ${bin} plugins:install ${examplePlugin}
   `
-  static variableArgs = true
+  static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
 
-  plugins: Plugins
+  plugins = new Plugins(this.config)
+  options = parse(this.argv, PluginsInstall)
 
   async run() {
-    this.plugins = new Plugins(this.config)
-    for (let plugin of this.argv) {
-      let scoped = plugin[0] === '@'
-      if (scoped) plugin = plugin.slice(1)
-      let [name, tag = 'latest'] = plugin.split('@')
-      if (scoped) name = `@${name}`
-      cli.action.start(`Installing plugin ${plugin}@${tag}`)
-      await this.plugins.install(name, tag)
+    for (let plugin of this.options.argv) {
+      let {name, tag, scope} = parsePlugin(plugin)
+      plugin = scope ? `@${scope}/${name}@${tag}` : `${name}@${tag}`
+      cli.action.start(`Installing plugin ${plugin}`)
+      const defaultScope = this.config.pjson.anycli.pluginScope
+      if (!scope && defaultScope) {
+        let version = await this.fetchVersionFromNPM({name, tag, scope: defaultScope})
+        if (version) scope = defaultScope
+      }
+      await this.plugins.install(scope ? `@${scope}/${name}` : name, tag)
       cli.action.stop()
     }
+  }
+
+  private async fetchVersionFromNPM(plugin: {name: string, scope?: string, tag: string}): Promise<string | undefined> {
+    try {
+      let url = plugin.scope ? `${this.config.npmRegistry}/-/package/@${plugin.scope}%2f${plugin.name}/dist-tags` : `${this.config.npmRegistry}/-/package/${plugin.name}/dist-tags`
+      const {body: pkg} = await HTTP.get(url)
+      return pkg[plugin.tag]
+    } catch (err) {
+      this.debug(err)
+    }
+  }
+}
+
+function parsePlugin(input: string): {name: string, scope?: string, tag: string} {
+  if (input.includes('/')) {
+    let [scope, nameAndTag] = input.split('/')
+    scope = scope.slice(1)
+    let [name, tag = 'latest'] = nameAndTag.split('@')
+    return {scope, name, tag}
+  } else {
+    let [name, tag = 'latest'] = input.split('@')
+    return {name, tag}
   }
 }

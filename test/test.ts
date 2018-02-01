@@ -1,4 +1,4 @@
-import {IConfig, read} from '@anycli/config'
+import {IConfig, IEngine, read} from '@anycli/config'
 import {expect, FancyTypes, NockScope, test as base} from '@anycli/test'
 import * as fs from 'fs-extra'
 
@@ -13,6 +13,7 @@ export const test = base
 })
 
 export {
+  IEngine,
   expect,
   IConfig,
   FancyTypes,

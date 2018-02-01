@@ -1,4 +1,4 @@
-import Command, {flags} from '@anycli/command'
+import {Command, flags, parse} from '@anycli/command'
 import color from '@heroku-cli/color'
 import cli from 'cli-ux'
 import * as _ from 'lodash'
@@ -23,7 +23,7 @@ if (g.anycli && g.anycli.config) {
 const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]: [string, any]) => `    ${name} ${p.version}`)
 
 export default class PluginsIndex extends Command {
-  static flags: flags.Input<PluginsIndex['flags']> = {
+  static flags = {
     core: flags.boolean({description: 'show core plugins'})
   }
   static description = 'list installed plugins'
@@ -31,16 +31,13 @@ export default class PluginsIndex extends Command {
     $ ${bin} plugins
 ${examplePluginsHelp.join('\n')}
 `
-  plugins: Plugins
-  flags: {
-    core: boolean
-  }
+  plugins = new Plugins(this.config)
+  options = parse(this.argv, PluginsIndex)
 
   async run() {
-    this.plugins = new Plugins(this.config)
     let plugins = this.config.engine!.plugins
     _.sortBy(plugins, 'name')
-    if (!this.flags.core) plugins = plugins.filter(p => p.type !== 'core')
+    if (!this.options.flags.core) plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
     if (!plugins.length) {
       cli.info('no plugins installed')
     }

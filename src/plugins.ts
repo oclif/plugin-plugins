@@ -7,8 +7,8 @@ import Manifest from './manifest'
 import Yarn from './yarn'
 
 export default class Plugins {
+  readonly yarn: Yarn
   private readonly manifest: Manifest
-  private readonly yarn: Yarn
   private readonly debug: any
 
   constructor(public config: IConfig) {
