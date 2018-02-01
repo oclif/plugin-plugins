@@ -1,3 +1,11 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/anycli/plugins/compare/079808b09e2bb33b0f3bc828a94c791584daa150...v0.2.1) (2018-02-01)
+
+
+### Bug Fixes
+
+* make config dev dep ([f3411d4](https://github.com/anycli/plugins/commit/f3411d4))
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/anycli/plugins/compare/b769c5586a5ceafd23105ad847b35717bb0987af...v0.2.0) (2018-02-01)
 
