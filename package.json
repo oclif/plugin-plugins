@@ -28,7 +28,7 @@
     "yarn": "^1.3.2"
   },
   "devDependencies": {
-    "@anycli/config": "^0.2.11",
+    "@anycli/config": "^0.3.0",
     "@anycli/engine": "^0.2.0",
     "@anycli/plugin-help": "^0.3.7",
     "@anycli/plugin-version": "^0.1.20",
