@@ -1,3 +1,11 @@
+<a name="0.2.6"></a>
+## [0.2.6](https://github.com/anycli/plugin-plugins/compare/6536efd92eec6eea0c6c5c33f3cec651389b49c8...v0.2.6) (2018-02-02)
+
+
+### Bug Fixes
+
+* fix manifest writing ([131d17f](https://github.com/anycli/plugin-plugins/commit/131d17f))
+
 <a name="0.2.5"></a>
 ## [0.2.5](https://github.com/anycli/plugin-plugins/compare/2fdcbe6176b0acc1c63f079d362543d24723839e...v0.2.5) (2018-02-02)
 
