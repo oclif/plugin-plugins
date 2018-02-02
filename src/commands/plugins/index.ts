@@ -42,7 +42,7 @@ ${examplePluginsHelp.join('\n')}
       cli.info('no plugins installed')
     }
     for (let plugin of plugins) {
-      let output = `${plugin.name} ${color.dim(plugin.version)}`
+      let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
       if (plugin.type !== 'user') output += color.dim(` (${plugin.type})`)
       if (plugin.type === 'link') output += ` ${plugin.root}`
       else if (plugin.tag && plugin.tag !== 'latest') output += color.dim(` (${String(plugin.tag)})`)

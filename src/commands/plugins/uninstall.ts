@@ -1,5 +1,4 @@
 import {Command, parse} from '@anycli/command'
-import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
@@ -30,10 +29,6 @@ export default class PluginsUninstall extends Command {
 
   async run() {
     this.plugins = new Plugins(this.config)
-    for (let plugin of this.options.argv) {
-      cli.action.start(`Uninstalling ${plugin}`)
-      await this.plugins.uninstall(plugin)
-      cli.action.stop()
-    }
+    for (let plugin of this.options.argv) await this.plugins.uninstall(plugin)
   }
 }

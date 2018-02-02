@@ -1,6 +1,7 @@
 import {IConfig, read} from '@anycli/config'
 import {cli} from 'cli-ux'
 import * as fs from 'fs-extra'
+import HTTP from 'http-call'
 import * as path from 'path'
 
 import Manifest from './manifest'
@@ -24,7 +25,11 @@ export default class Plugins {
 
   async install(name: string, tag = 'latest') {
     try {
-      cli.info(`Installing plugin ${name}${tag === 'latest' ? '' : '@' + tag}`)
+      const unfriendly = this.unfriendlyName(name)
+      if (unfriendly) {
+        let version = await this.fetchVersionFromNPM({name: unfriendly, tag})
+        if (version) name = unfriendly
+      }
       await this.createPJSON()
       await this.yarn.exec(['add', `${name}@${tag}`])
       await this.loadPlugin(name, tag)
@@ -36,11 +41,38 @@ export default class Plugins {
     }
   }
 
-  public async uninstall(name: string) {
-    const plugins = await this.manifest.list()
-    if (!plugins[name]) return
+  async uninstall(name: string) {
+    let unfriendly = await this.hasPlugin(name)
+    if (!unfriendly) return cli.warn(`${name} is not installed`)
+    cli.action.start(`Uninstalling ${this.friendlyName(unfriendly)}`)
     await this.manifest.remove(name)
-    await this.yarn.exec(['remove', name])
+    try {
+      await this.yarn.exec(['remove', name])
+    } catch (err) {
+      cli.warn(err)
+    }
+    cli.action.stop()
+  }
+
+  async hasPlugin(name: string): Promise<string | undefined> {
+    const list = await this.list()
+    const plugin = list.find(([n]) => this.friendlyName(n) === this.friendlyName(name))
+    if (plugin) return plugin[0]
+  }
+
+  unfriendlyName(name: string): string | undefined {
+    if (name.includes('@')) return
+    const defaultScope = this.config.pjson.anycli.pluginScope
+    if (!defaultScope) return
+    return `@${defaultScope}/${name}-plugin`
+  }
+
+  friendlyName(name: string): string {
+    const defaultScope = this.config.pjson.anycli.pluginScope
+    if (!defaultScope) return name
+    const match = name.match(`@${defaultScope}/(.+)-plugin`)
+    if (!match) return name
+    return match[1]
   }
 
   userPluginPath(name: string): string {
@@ -55,7 +87,7 @@ export default class Plugins {
 
   private async createPJSON() {
     if (!await fs.pathExists(this.pjsonPath)) {
-      await fs.outputJSON(this.pjsonPath, {private: true, 'cli-engine': {schema: 1}}, {spaces: 2})
+      await fs.outputJSON(this.pjsonPath, {private: true, anycli: {schema: 1}}, {spaces: 2})
     }
   }
 
@@ -64,5 +96,15 @@ export default class Plugins {
   }
   private get pjsonPath() {
     return path.join(this.userPluginsDir, 'package.json')
+  }
+
+  private async fetchVersionFromNPM(plugin: {name: string, tag: string}): Promise<string | undefined> {
+    try {
+      let url = `${this.config.npmRegistry}/-/package/${plugin.name.replace('/', '%2f')}/dist-tags`
+      const {body: pkg} = await HTTP.get(url)
+      return pkg[plugin.tag]
+    } catch (err) {
+      this.debug(err)
+    }
   }
 }
