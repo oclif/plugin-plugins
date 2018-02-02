@@ -1,7 +1,7 @@
 {
   "name": "@anycli/plugin-plugins",
   "description": "plugins plugin for anycli",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "author": "Jeff Dickey @jdxcode",
   "anycli": {
     "commands": "./lib/commands",
