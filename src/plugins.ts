@@ -42,16 +42,12 @@ export default class Plugins {
   }
 
   async uninstall(name: string) {
-    let unfriendly = await this.hasPlugin(name)
-    if (!unfriendly) return cli.warn(`${name} is not installed`)
-    cli.action.start(`Uninstalling ${this.friendlyName(unfriendly)}`)
     await this.manifest.remove(name)
     try {
       await this.yarn.exec(['remove', name])
     } catch (err) {
       cli.warn(err)
     }
-    cli.action.stop()
   }
 
   async hasPlugin(name: string): Promise<string | undefined> {

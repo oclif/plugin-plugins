@@ -64,9 +64,9 @@
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@anycli/screen/-/screen-0.0.3.tgz#f0afd970c3ed725702948a45a874ede1fdd9362e"
 
-"@anycli/test@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/@anycli/test/-/test-0.10.2.tgz#59019ff864dcb431e07bfa16659fa4d64fc8be4b"
+"@anycli/test@^0.10.3":
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/@anycli/test/-/test-0.10.3.tgz#f0179c6407f7a4a71893bd1ded95a0669b20ea31"
   dependencies:
     fancy-test "^0.6.6"
     lodash "^4.17.4"

@@ -40,7 +40,12 @@ export default class PluginsInstall extends Command {
 }
 
 function parsePlugin(input: string): {name: string, tag: string} {
-  if (input.includes('/')) input = input.slice(1)
-  let [name, tag = 'latest'] = input.split('@')
-  return {name, tag}
+  if (input.includes('/')) {
+    input = input.slice(1)
+    let [name, tag = 'latest'] = input.split('@')
+    return {name: '@' + name, tag}
+  } else {
+    let [name, tag = 'latest'] = input.split('@')
+    return {name, tag}
+  }
 }
