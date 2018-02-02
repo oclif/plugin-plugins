@@ -71,7 +71,7 @@
     "lint": "concurrently -p command \"eslint .\" \"tsc -p test --noEmit\" \"tslint -p test\"",
     "postpublish": "rm .anycli.manifest.json",
     "posttest": "yarn run lint",
-    "prepublishOnly": "yarn run build && anycli-dev manifest > .anycli.manifest.json",
+    "prepublishOnly": "yarn run build && anycli-dev manifest -o .anycli.manifest.json",
     "test": "mocha --forbid-only \"test/**/*.test.ts\""
   },
   "types": "lib/index.d.ts"
