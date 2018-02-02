@@ -91,9 +91,9 @@
     widest-line "^2.0.0"
     wrap-ansi "^3.0.1"
 
-"@anycli/plugin-help@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@anycli/plugin-help/-/plugin-help-0.4.3.tgz#bc3dfafefc813cdf9877272125c60bd40238e431"
+"@anycli/plugin-help@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.npmjs.org/@anycli/plugin-help/-/plugin-help-0.4.5.tgz#1d4693bd55a1c892aa80a0cb53039ae953814b47"
   dependencies:
     "@anycli/command" "^0.3.7"
     "@anycli/screen" "^0.0.3"
@@ -121,9 +121,9 @@
     "@anycli/command" "^0.3.5"
     cli-ux "^3.3.12"
 
-"@anycli/plugin-version@^0.1.29":
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/@anycli/plugin-version/-/plugin-version-0.1.29.tgz#954759841472d875578b5486d2b828e2f928795c"
+"@anycli/plugin-version@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.npmjs.org/@anycli/plugin-version/-/plugin-version-0.1.30.tgz#0c80e4c856f4a3249a5d56b4c9d553b20c514198"
   dependencies:
     "@anycli/command" "^0.3.7"
     cli-ux "^3.3.13"
