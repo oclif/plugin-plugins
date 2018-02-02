@@ -30,7 +30,7 @@
   "devDependencies": {
     "@anycli/config": "^0.2.11",
     "@anycli/engine": "^0.2.0",
-    "@anycli/plugin-help": "^0.3.7",
+    "@anycli/plugin-help": "^0.4.0",
     "@anycli/plugin-version": "^0.1.20",
     "@anycli/test": "^0.10.3",
     "@anycli/tslint": "^0.2.2",
