@@ -64,13 +64,13 @@ export default class Plugins {
     if (name.includes('@')) return
     const defaultScope = this.config.pjson.anycli.pluginScope
     if (!defaultScope) return
-    return `@${defaultScope}/${name}-plugin`
+    return `@${defaultScope}/plugin-${name}`
   }
 
   friendlyName(name: string): string {
     const defaultScope = this.config.pjson.anycli.pluginScope
     if (!defaultScope) return name
-    const match = name.match(`@${defaultScope}/(.+)-plugin`)
+    const match = name.match(`@${defaultScope}/plugin-(.+)`)
     if (!match) return name
     return match[1]
   }

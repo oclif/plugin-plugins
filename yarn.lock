@@ -2,16 +2,6 @@
 # yarn lockfile v1
 
 
-"@anycli/command@^0.2.19":
-  version "0.2.21"
-  resolved "https://registry.yarnpkg.com/@anycli/command/-/command-0.2.21.tgz#68a725cddb0dece1d7dd69965de4ae7e3908b61c"
-  dependencies:
-    "@anycli/parser" "^3.0.1"
-    cli-ux "^3.3.10"
-    debug "^3.1.0"
-    lodash "^4.17.4"
-    tslib "^1.9.0"
-
 "@anycli/command@^0.3.4":
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@anycli/command/-/command-0.3.4.tgz#c02b07f0f309192021cd76fa66b3f88db173025e"
@@ -33,20 +23,9 @@
     lodash "^4.17.4"
     read-pkg "^3.0.0"
 
-"@anycli/config@^0.2.3":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@anycli/config/-/config-0.2.4.tgz#957e4f174cadd397d9bdd81d3552544a8214273e"
-  dependencies:
-    cli-ux "^3.3.10"
-    debug "^3.1.0"
-    fs-extra "^5.0.0"
-    load-json-file "^4.0.0"
-    lodash "^4.17.4"
-    read-pkg "^3.0.0"
-
-"@anycli/engine@^0.1.44":
-  version "0.1.44"
-  resolved "https://registry.yarnpkg.com/@anycli/engine/-/engine-0.1.44.tgz#fe0cc84aad092b6b2411223baf6a76c6e598675e"
+"@anycli/engine@^0.1.46":
+  version "0.1.46"
+  resolved "https://registry.yarnpkg.com/@anycli/engine/-/engine-0.1.46.tgz#89ed1b587f5fc83f8ca865786420684d319d04fa"
   dependencies:
     "@anycli/manifest-file" "^0.3.8"
     cli-ux "^3.3.12"
@@ -66,14 +45,6 @@
     lodash "^4.17.4"
     proper-lockfile "^3.0.2"
 
-"@anycli/parser@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@anycli/parser/-/parser-3.0.1.tgz#24a2bca4abe1e1ffb91b0210b709b3ec15ee4ea4"
-  dependencies:
-    "@anycli/screen" "^0.0.3"
-    chalk "^2.3.0"
-    lodash "^4.17.4"
-
 "@anycli/parser@^3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@anycli/parser/-/parser-3.0.4.tgz#8714c4f73134625fe3781b9e2b5aa0ebb5685a82"
@@ -81,6 +52,13 @@
     "@anycli/screen" "^0.0.3"
     chalk "^2.3.0"
     lodash "^4.17.4"
+
+"@anycli/plugin-version@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@anycli/plugin-version/-/plugin-version-0.1.19.tgz#8a4e9b3e44acb810cb1db82db71bf9dc1048b297"
+  dependencies:
+    "@anycli/command" "^0.3.4"
+    cli-ux "^3.3.12"
 
 "@anycli/screen@^0.0.3":
   version "0.0.3"
@@ -99,14 +77,6 @@
   dependencies:
     tslint "^5.9.1"
     tslint-xo "^0.6.0"
-
-"@anycli/version@^0.1.19":
-  version "0.1.19"
-  resolved "https://registry.yarnpkg.com/@anycli/version/-/version-0.1.19.tgz#4464c3c831e0dc1d0ef92375167ec9af923b66c3"
-  dependencies:
-    "@anycli/command" "^0.2.19"
-    "@anycli/config" "^0.2.3"
-    cli-ux "^3.3.10"
 
 "@heroku-cli/color@^1.1.3":
   version "1.1.3"

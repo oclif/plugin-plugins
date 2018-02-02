@@ -1,5 +1,5 @@
 {
-  "name": "@anycli/plugins-plugin",
+  "name": "@anycli/plugin-plugins",
   "description": "plugins plugin for anycli",
   "version": "0.2.2",
   "author": "Jeff Dickey @jdxcode",
@@ -8,10 +8,10 @@
     "plugins": "./lib/load",
     "pluginScope": "heroku-cli",
     "devPlugins": [
-      "@anycli/version"
+      "@anycli/plugin-version"
     ]
   },
-  "bugs": "https://github.com/anycli/plugins-plugin/issues",
+  "bugs": "https://github.com/anycli/plugin-plugins/issues",
   "dependencies": {
     "@anycli/command": "^0.3.4",
     "@anycli/manifest-file": "^0.3.8",
@@ -27,10 +27,10 @@
   },
   "devDependencies": {
     "@anycli/config": "^0.2.11",
-    "@anycli/engine": "^0.1.44",
+    "@anycli/engine": "^0.1.46",
+    "@anycli/plugin-version": "^0.1.19",
     "@anycli/test": "^0.10.2",
     "@anycli/tslint": "^0.2.2",
-    "@anycli/version": "^0.1.19",
     "@types/chai": "^4.1.2",
     "@types/fs-extra": "^5.0.0",
     "@types/lodash": "^4.14.100",
@@ -54,13 +54,13 @@
   "files": [
     "/lib"
   ],
-  "homepage": "https://github.com/anycli/plugins-plugin",
+  "homepage": "https://github.com/anycli/plugin-plugins",
   "keywords": [
     "anycli-plugin"
   ],
   "license": "MIT",
   "main": "lib/index.js",
-  "repository": "anycli/plugins-plugin",
+  "repository": "anycli/plugin-plugins",
   "scripts": {
     "build": "rm -rf lib && tsc",
     "lint": "concurrently -p command \"eslint .\" \"tsc -p test --noEmit\" \"tslint -p test\"",
