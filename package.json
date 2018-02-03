@@ -31,7 +31,7 @@
     "@anycli/config": "^1.0.17",
     "@anycli/dev-cli": "^0.1.4",
     "@anycli/engine": "^0.3.6",
-    "@anycli/plugin-help": "^0.5.0",
+    "@anycli/plugin-help": "^0.6.0",
     "@anycli/plugin-version": "^0.1.34",
     "@anycli/test": "^0.10.8",
     "@anycli/tslint": "^0.2.5",
