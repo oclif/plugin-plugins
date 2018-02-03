@@ -38,7 +38,7 @@ export default class PluginsUninstall extends Command {
         cli.warn(`${friendly} is not installed`)
         continue
       }
-      await this.plugins.uninstall(unfriendly)
+      await this.plugins.uninstall(unfriendly.name)
       cli.action.stop()
     }
   }

@@ -1,59 +1,115 @@
-import {IConfig, read} from '@anycli/config'
-import {cli} from 'cli-ux'
+import * as Config from '@anycli/config'
+import cli from 'cli-ux'
 import * as fs from 'fs-extra'
 import HTTP from 'http-call'
+import loadJSON = require('load-json-file')
+import * as _ from 'lodash'
 import * as path from 'path'
+import * as semver from 'semver'
 
-import Manifest from './manifest'
 import Yarn from './yarn'
+
+const initPJSON: Config.PJSON.User = {private: true, anycli: {schema: 1, plugins: []}, dependencies: {}}
 
 export default class Plugins {
   readonly yarn: Yarn
-  private readonly manifest: Manifest
   private readonly debug: any
 
-  constructor(public config: IConfig) {
-    this.manifest = new Manifest(path.join(this.config.dataDir, 'plugins', 'user.json'))
-    this.yarn = new Yarn({config, cwd: this.userPluginsDir})
+  constructor(public config: Config.IConfig) {
+    this.yarn = new Yarn({config, cwd: this.config.dataDir})
     this.debug = require('debug')('@anycli/plugins')
   }
 
+  async pjson(): Promise<Config.PJSON.User> {
+    try {
+      const pjson: Config.PJSON = await loadJSON(this.pjsonPath)
+      return {
+        ...initPJSON,
+        anycli: {
+          ...initPJSON.anycli,
+          ...pjson.anycli,
+        },
+        dependencies: {},
+        ...pjson,
+      }
+    } catch (err) {
+      this.debug(err)
+      if (err.code !== 'ENOENT') cli.warn(err)
+      return initPJSON
+    }
+  }
+
   async list() {
-    const plugins = await this.manifest.list()
-    return Object.entries(plugins)
+    const pjson = await this.pjson()
+    return this.normalizePlugins(pjson.anycli.plugins)
   }
 
   async install(name: string, tag = 'latest') {
     try {
+      const range = semver.validRange(tag)
       const unfriendly = this.unfriendlyName(name)
-      if (unfriendly) {
-        let version = await this.fetchVersionFromNPM({name: unfriendly, tag})
-        if (version) name = unfriendly
+      if (unfriendly && await this.npmHasPackage(unfriendly)) {
+        name = unfriendly
       }
       await this.createPJSON()
       await this.yarn.exec(['add', `${name}@${tag}`])
-      await this.loadPlugin(name, tag)
-      // if (!plugin.commands.length) throw new Error('no commands found in plugin')
-      await this.manifest.add(name, tag)
+      // const plugin = await this.loadPlugin(name, range || tag)
+      // if (!plugin.valid) {
+      //   throw new Error('no commands found in plugin')
+      // }
+      await this.add({name, tag: range || tag, type: 'user'})
     } catch (err) {
       await this.uninstall(name).catch(err => this.debug(err))
       throw err
     }
   }
 
+  async add(plugin: Config.PJSON.PluginTypes) {
+    const pjson = await this.pjson()
+    pjson.anycli.plugins = _.uniq([...pjson.anycli.plugins || [], plugin])
+    await this.savePJSON(pjson)
+  }
+
+  async remove(name: string) {
+    const pjson = await this.pjson()
+    if (pjson.dependencies) delete pjson.dependencies[name]
+    pjson.anycli.plugins = _(this.normalizePlugins(pjson.anycli.plugins))
+    .filter(p => p.name !== name)
+    .value()
+    await this.savePJSON(pjson)
+  }
+
   async uninstall(name: string) {
-    await this.manifest.remove(name)
     try {
       await this.yarn.exec(['remove', name])
-    } catch (err) {
-      cli.warn(err)
+    } finally {
+      await this.remove(name)
     }
   }
 
-  async hasPlugin(name: string): Promise<string | undefined> {
+  async update() {
+    const plugins = await this.list()
+    if (plugins.length === 0) return
+    cli.action.start(`${this.config.name}: Updating plugins`)
+    await this.yarn.exec(['add', ...plugins
+      .filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
+      .map(p => `${p.name}@${p.tag}`)
+    ])
+    cli.action.stop()
+  }
+
+  async hasPlugin(name: string) {
     const list = await this.list()
-    const plugin = list.find(([n]) => this.friendlyName(n) === this.friendlyName(name))
-    if (plugin) return plugin[0]
+    return list.find(p => this.friendlyName(p.name) === this.friendlyName(name))
+  }
+
+  async yarnNodeVersion(): Promise<string | undefined> {
+    try {
+      let f = await loadJSON(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
+      return f.nodeVersion
+    } catch (err) {
+      if (err.code !== 'ENOENT') cli.warn(err)
+    }
   }
 
   unfriendlyName(name: string): string | undefined {
@@ -71,36 +127,43 @@ export default class Plugins {
     return match[1]
   }
 
-  userPluginPath(name: string): string {
-    return path.join(this.userPluginsDir, 'node_modules', name)
-  }
-
-  private async loadPlugin(name: string, _: string) {
-    const config = await read({root: this.userPluginPath(name)})
-    return this.config.engine!.load(config)
-    // return this.config.engine!.load(config, {resetCache: true})
-  }
+  // private async loadPlugin(plugin: Config.PJSON.PluginTypes) {
+  //   return Config.load({...plugin as any, root: this.config.dataDir})
+  // }
 
   private async createPJSON() {
     if (!await fs.pathExists(this.pjsonPath)) {
-      await fs.outputJSON(this.pjsonPath, {private: true, anycli: {schema: 1}}, {spaces: 2})
+      await this.savePJSON(initPJSON)
     }
   }
 
-  private get userPluginsDir() {
-    return path.join(this.config.dataDir, 'plugins')
-  }
   private get pjsonPath() {
-    return path.join(this.userPluginsDir, 'package.json')
+    return path.join(this.config.dataDir, 'package.json')
   }
 
-  private async fetchVersionFromNPM(plugin: {name: string, tag: string}): Promise<string | undefined> {
+  private async npmHasPackage(name: string): Promise<boolean> {
     try {
-      let url = `${this.config.npmRegistry}/-/package/${plugin.name.replace('/', '%2f')}/dist-tags`
-      const {body: pkg} = await HTTP.get(url)
-      return pkg[plugin.tag]
+      let url = `${this.config.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
+      await HTTP.get(url)
+      return true
     } catch (err) {
       this.debug(err)
+      return false
     }
+  }
+
+  private async savePJSON(pjson: Config.PJSON.User) {
+    pjson.anycli.plugins = this.normalizePlugins(pjson.anycli.plugins)
+    await fs.outputJSON(this.pjsonPath, pjson, {spaces: 2})
+  }
+
+  private normalizePlugins(input: Config.PJSON.User['anycli']['plugins']) {
+    let plugins = (input || []).map(p => {
+      if (typeof p === 'string') {
+        return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User
+      } else return p
+    })
+    plugins = _.uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
+    return plugins
   }
 }

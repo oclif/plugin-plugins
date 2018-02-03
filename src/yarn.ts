@@ -1,5 +1,4 @@
 import {IConfig} from '@anycli/config'
-import * as fs from 'fs-extra'
 import * as path from 'path'
 
 const debug = require('debug')('cli:yarn')
@@ -41,7 +40,6 @@ export default class Yarn {
   }
 
   async exec(args: string[] = []): Promise<void> {
-    if (args.length !== 0) await this.checkForYarnLock()
     if (args[0] !== 'run') {
       const cacheDir = path.join(this.config.cacheDir, 'yarn')
       args = [
@@ -49,6 +47,8 @@ export default class Yarn {
         '--non-interactive',
         `--mutex=file:${path.join(this.cwd, 'yarn.lock')}`,
         `--preferred-cache-folder=${cacheDir}`,
+        '--check-files',
+        // '--no-lockfile',
         ...this.proxyArgs(),
       ]
       if (this.config.npmRegistry) {
@@ -75,13 +75,6 @@ export default class Yarn {
         return this.exec([...args, networkConcurrency])
       }
       throw err
-    }
-  }
-
-  async checkForYarnLock() {
-    // add yarn lockfile if it does not exist
-    if (this.cwd && !await fs.pathExists(path.join(this.cwd, 'yarn.lock'))) {
-      await this.exec()
     }
   }
 

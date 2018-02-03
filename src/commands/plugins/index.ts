@@ -5,41 +5,36 @@ import * as _ from 'lodash'
 
 import Plugins from '../../plugins'
 
-let examplePlugins = {
-  'heroku-ci': {version: '1.8.0'},
-  'heroku-cli-status': {version: '3.0.10', type: 'link'},
-  'heroku-fork': {version: '4.1.22'},
-}
-let bin = 'heroku'
-const g = global as any
-if (g.anycli && g.anycli.config) {
-  const config = g.anycli.config
-  bin = config
-  let pjson = config.pjson.anycli || config.pjson['cli-engine']
-  if (pjson.help && pjson.help.plugins) {
-    examplePlugins = pjson.help.plugins
-  }
-}
-const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]: [string, any]) => `    ${name} ${p.version}`)
-
 export default class PluginsIndex extends Command {
   static flags = {
     core: flags.boolean({description: 'show core plugins'})
   }
   static description = 'list installed plugins'
-  static help = `Example:
-    $ ${bin} plugins
-${examplePluginsHelp.join('\n')}
-`
+  static examples = [`<%
+let examplePlugins = {
+  'heroku-ci': {version: '1.8.0'},
+  'heroku-cli-status': {version: '3.0.10', type: 'link'},
+  'heroku-fork': {version: '4.1.22'},
+}
+const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]: [string, any]) => \`    \${name} \${p.version}\`)
+
+%>Example:
+    $ <%- config.bin> plugins
+<%- examplePluginsHelp.join('\n') %>
+`]
+
   plugins = new Plugins(this.config)
   options = parse(this.argv, PluginsIndex)
 
   async run() {
-    let plugins = this.config.engine!.plugins
+    let plugins = this.config.plugins
     _.sortBy(plugins, 'name')
-    if (!this.options.flags.core) plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
+    if (!this.options.flags.core) {
+      plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
+    }
     if (!plugins.length) {
       cli.info('no plugins installed')
+      return
     }
     for (let plugin of plugins) {
       let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
