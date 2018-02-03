@@ -1,3 +1,11 @@
+<a name="0.2.11"></a>
+## [0.2.11](https://github.com/anycli/plugin-plugins/compare/ea5519430ead1099db1d96a1a1b0276d3a3b13ff...v0.2.11) (2018-02-03)
+
+
+### Bug Fixes
+
+* update scope variable ([d1f9bf2](https://github.com/anycli/plugin-plugins/commit/d1f9bf2))
+
 <a name="0.2.10"></a>
 ## [0.2.10](https://github.com/anycli/plugin-plugins/compare/e7fab8c795135e398620fbda5d3e4308011cc396...v0.2.10) (2018-02-03)
 
