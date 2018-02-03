@@ -1,3 +1,12 @@
+<a name="0.2.9"></a>
+## [0.2.9](https://github.com/anycli/plugin-plugins/compare/5053299973c5f43bf74a7e326d26b3edb2e7055b...v0.2.9) (2018-02-03)
+
+
+### Bug Fixes
+
+* disable help test for now ([e7fab8c](https://github.com/anycli/plugin-plugins/commit/e7fab8c))
+* updated to use new config ([68b8959](https://github.com/anycli/plugin-plugins/commit/68b8959))
+
 <a name="0.2.8"></a>
 ## [0.2.8](https://github.com/anycli/plugin-plugins/compare/fbbcca0e8882bf05800e61e96add4b50e5f91e25...v0.2.8) (2018-02-02)
 
