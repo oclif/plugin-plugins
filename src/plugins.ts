@@ -114,15 +114,15 @@ export default class Plugins {
 
   unfriendlyName(name: string): string | undefined {
     if (name.includes('@')) return
-    const defaultScope = this.config.pjson.anycli.pluginScope
-    if (!defaultScope) return
-    return `@${defaultScope}/plugin-${name}`
+    const scope = this.config.pjson.anycli.scope
+    if (!scope) return
+    return `@${scope}/plugin-${name}`
   }
 
   friendlyName(name: string): string {
-    const defaultScope = this.config.pjson.anycli.pluginScope
-    if (!defaultScope) return name
-    const match = name.match(`@${defaultScope}/plugin-(.+)`)
+    const scope = this.config.pjson.anycli.scope
+    if (!scope) return name
+    const match = name.match(`@${scope}/plugin-(.+)`)
     if (!match) return name
     return match[1]
   }

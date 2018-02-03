@@ -2,33 +2,33 @@ import {expect, test} from '../../test'
 
 describe('command', () => {
   test
-  .command(['plugins:install', 'status'], {resetConfig: true})
+  .command(['plugins:install', 'status'], {reset: true})
   .stdout()
-  .command(['plugins'], {resetConfig: true})
+  .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.contain('status '))
   .stdout()
-  .command(['status'], {resetConfig: true})
+  .command(['status'], {reset: true})
   .do(output => expect(output.stdout).to.contain('No known issues at this time'))
   .command(['plugins:uninstall', '@heroku-cli/plugin-status'])
   .stdout()
-  .command(['plugins'], {resetConfig: true})
+  .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
   .it('installs and uninstalls status')
 
   test
-  .command(['plugins:install', '@heroku-cli/plugin-status'], {resetConfig: true})
+  .command(['plugins:install', '@heroku-cli/plugin-status'], {reset: true})
   .stdout()
-  .command(['plugins'], {resetConfig: true})
+  .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.contain('status '))
   .stdout()
-  .command(['status'], {resetConfig: true})
+  .command(['status'], {reset: true})
   .do(output => expect(output.stdout).to.contain('No known issues at this time'))
   .it('installs @heroku-cli/plugin-status')
 
   test
-  .command(['plugins:install', 'heroku-debug@beta'], {resetConfig: true})
+  .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
   .stdout()
-  .command(['plugins'], {resetConfig: true})
+  .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.match(/heroku-debug \d+\.\d+\.\d+-beta \(beta\)/))
   .it('installs @heroku-cli/plugin-status@beta')
 

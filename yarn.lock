@@ -33,9 +33,33 @@
     load-json-file "^4.0.0"
     lodash "^4.17.4"
 
+"@anycli/command@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@anycli/command/-/command-1.2.3.tgz#b239669674f98098b1af096f081958b270fab0b6"
+  dependencies:
+    "@anycli/parser" "^3.2.2"
+    cli-ux "^3.3.13"
+    debug "^3.1.0"
+    fs-extra "^5.0.0"
+    load-json-file "^4.0.0"
+    lodash "^4.17.4"
+
 "@anycli/config@^1.0.17":
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/@anycli/config/-/config-1.0.17.tgz#b8452ac8d584d3c6b32b62be663d81d3a409149d"
+  dependencies:
+    cli-ux "^3.3.13"
+    debug "^3.1.0"
+    fs-extra "^5.0.0"
+    fs-extra-debug "^1.0.4"
+    globby "^7.1.1"
+    load-json-file "^4.0.0"
+    lodash "^4.17.4"
+    read-pkg "^3.0.0"
+
+"@anycli/config@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@anycli/config/-/config-1.1.0.tgz#22ef1b42ee9004aac7c1e53a3c2ff8d13da68e9f"
   dependencies:
     cli-ux "^3.3.13"
     debug "^3.1.0"
@@ -98,11 +122,33 @@
     chalk "^2.3.0"
     lodash "^4.17.4"
 
+"@anycli/parser@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@anycli/parser/-/parser-3.2.2.tgz#ee2616e889e7dd78bc269638b7eee3f3096e2c91"
+  dependencies:
+    "@anycli/screen" "^0.0.3"
+    chalk "^2.3.0"
+    lodash "^4.17.4"
+
 "@anycli/plugin-help@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@anycli/plugin-help/-/plugin-help-0.5.0.tgz#90090c054277ee3e5b8a7df87dcc85a0e2fdf493"
   dependencies:
     "@anycli/command" "^0.3.8"
+    "@anycli/screen" "^0.0.3"
+    chalk "^2.3.0"
+    cli-ux "^3.3.13"
+    indent-string "^3.2.0"
+    lodash "^4.17.4"
+    string-width "^2.1.1"
+    widest-line "^2.0.0"
+    wrap-ansi "^3.0.1"
+
+"@anycli/plugin-help@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@anycli/plugin-help/-/plugin-help-0.6.0.tgz#a7177b0b4afc87544ae7e7bcdc095fbeea65791f"
+  dependencies:
+    "@anycli/command" "^1.2.3"
     "@anycli/screen" "^0.0.3"
     chalk "^2.3.0"
     cli-ux "^3.3.13"
@@ -132,9 +178,9 @@
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@anycli/screen/-/screen-0.0.3.tgz#f0afd970c3ed725702948a45a874ede1fdd9362e"
 
-"@anycli/test@^0.10.8":
-  version "0.10.8"
-  resolved "https://registry.yarnpkg.com/@anycli/test/-/test-0.10.8.tgz#cc3405991eea72fcc6b213c8589a57e88f9f5bbf"
+"@anycli/test@^0.10.9":
+  version "0.10.9"
+  resolved "https://registry.yarnpkg.com/@anycli/test/-/test-0.10.9.tgz#6b74000c02fe6b324d66d057a079505f49391ffd"
   dependencies:
     fancy-test "^0.6.10"
     lodash "^4.17.4"
