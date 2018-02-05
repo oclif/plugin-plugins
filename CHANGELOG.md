@@ -1,3 +1,11 @@
+<a name="0.2.12"></a>
+## [0.2.12](https://github.com/anycli/plugin-plugins/compare/d1f9bf2748c9fd80983efe196ed3c114b9cea4cc...v0.2.12) (2018-02-05)
+
+
+### Bug Fixes
+
+* updated with config/command changes ([1d86582](https://github.com/anycli/plugin-plugins/commit/1d86582))
+
 <a name="0.2.11"></a>
 ## [0.2.11](https://github.com/anycli/plugin-plugins/compare/ea5519430ead1099db1d96a1a1b0276d3a3b13ff...v0.2.11) (2018-02-03)
 
