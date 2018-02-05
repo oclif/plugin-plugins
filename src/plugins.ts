@@ -1,12 +1,13 @@
 import * as Config from '@anycli/config'
 import cli from 'cli-ux'
-import * as fs from 'fs-extra'
+import * as fs from 'fs'
+import * as fse from 'fs-extra'
 import HTTP from 'http-call'
 import loadJSON = require('load-json-file')
-import * as _ from 'lodash'
 import * as path from 'path'
 import * as semver from 'semver'
 
+import {uniq, uniqWith} from './util'
 import Yarn from './yarn'
 
 const initPJSON: Config.PJSON.User = {private: true, anycli: {schema: 1, plugins: []}, dependencies: {}}
@@ -34,7 +35,7 @@ export default class Plugins {
       }
     } catch (err) {
       this.debug(err)
-      if (err.code !== 'ENOENT') cli.warn(err)
+      if (err.code !== 'ENOENT') process.emitWarning(err)
       return initPJSON
     }
   }
@@ -66,16 +67,15 @@ export default class Plugins {
 
   async add(plugin: Config.PJSON.PluginTypes) {
     const pjson = await this.pjson()
-    pjson.anycli.plugins = _.uniq([...pjson.anycli.plugins || [], plugin])
+    pjson.anycli.plugins = uniq([...pjson.anycli.plugins || [], plugin])
     await this.savePJSON(pjson)
   }
 
   async remove(name: string) {
     const pjson = await this.pjson()
     if (pjson.dependencies) delete pjson.dependencies[name]
-    pjson.anycli.plugins = _(this.normalizePlugins(pjson.anycli.plugins))
+    pjson.anycli.plugins = this.normalizePlugins(pjson.anycli.plugins)
     .filter(p => p.name !== name)
-    .value()
     await this.savePJSON(pjson)
   }
 
@@ -132,7 +132,7 @@ export default class Plugins {
   // }
 
   private async createPJSON() {
-    if (!await fs.pathExists(this.pjsonPath)) {
+    if (!fs.existsSync(this.pjsonPath)) {
       await this.savePJSON(initPJSON)
     }
   }
@@ -143,8 +143,9 @@ export default class Plugins {
 
   private async npmHasPackage(name: string): Promise<boolean> {
     try {
+      const http: typeof HTTP = require('http-call').HTTP
       let url = `${this.config.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
-      await HTTP.get(url)
+      await http.get(url)
       return true
     } catch (err) {
       this.debug(err)
@@ -154,6 +155,7 @@ export default class Plugins {
 
   private async savePJSON(pjson: Config.PJSON.User) {
     pjson.anycli.plugins = this.normalizePlugins(pjson.anycli.plugins)
+    const fs: typeof fse = require('fs-extra')
     await fs.outputJSON(this.pjsonPath, pjson, {spaces: 2})
   }
 
@@ -163,7 +165,7 @@ export default class Plugins {
         return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User
       } else return p
     })
-    plugins = _.uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
+    plugins = uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
     return plugins
   }
 }

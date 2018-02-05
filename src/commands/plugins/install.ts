@@ -1,4 +1,4 @@
-import {Command, parse} from '@anycli/command'
+import {Command} from '@anycli/command'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -27,10 +27,10 @@ Example:
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
 
   plugins = new Plugins(this.config)
-  options = parse(this.argv, PluginsInstall)
 
   async run() {
-    for (let plugin of this.options.argv) {
+    const {argv} = this.parse(PluginsInstall)
+    for (let plugin of argv) {
       let {name, tag} = parsePlugin(plugin)
       cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(name))}`)
       await this.plugins.install(name, tag)

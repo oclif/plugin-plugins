@@ -1,4 +1,4 @@
-import {Command, parse} from '@anycli/command'
+import {Command} from '@anycli/command'
 
 import Plugins from '../../plugins'
 
@@ -7,10 +7,10 @@ export default class PluginsUpdate extends Command {
   static command = 'update'
   static description = 'update installed plugins'
 
-  options = parse(this.argv, PluginsUpdate)
   plugins = new Plugins(this.config)
 
   async run() {
+    this.parse(PluginsUpdate)
     await this.plugins.update()
   }
 }

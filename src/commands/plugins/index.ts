@@ -1,9 +1,8 @@
-import {Command, flags, parse} from '@anycli/command'
+import {Command, flags} from '@anycli/command'
 import color from '@heroku-cli/color'
-import cli from 'cli-ux'
-import * as _ from 'lodash'
 
 import Plugins from '../../plugins'
+import {sortBy} from '../../util'
 
 export default class PluginsIndex extends Command {
   static flags = {
@@ -24,16 +23,16 @@ const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]: [strin
 `]
 
   plugins = new Plugins(this.config)
-  options = parse(this.argv, PluginsIndex)
 
   async run() {
+    const {flags} = this.parse(PluginsIndex)
     let plugins = this.config.plugins
-    _.sortBy(plugins, 'name')
-    if (!this.options.flags.core) {
+    sortBy(plugins, p => p.name)
+    if (!flags.core) {
       plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
     }
     if (!plugins.length) {
-      cli.info('no plugins installed')
+      this.log('no plugins installed')
       return
     }
     for (let plugin of plugins) {
@@ -41,7 +40,7 @@ const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]: [strin
       if (plugin.type !== 'user') output += color.dim(` (${plugin.type})`)
       if (plugin.type === 'link') output += ` ${plugin.root}`
       else if (plugin.tag && plugin.tag !== 'latest') output += color.dim(` (${String(plugin.tag)})`)
-      cli.log(output)
+      this.log(output)
     }
   }
 }
