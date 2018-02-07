@@ -13,3 +13,4 @@ export const test = Fancy.test
 })
 
 export {expect} from 'fancy-test'
+export {Fancy}

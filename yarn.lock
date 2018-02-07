@@ -2,26 +2,43 @@
 # yarn lockfile v1
 
 
-"@anycli/command@^1.2.13", "@anycli/command@^1.2.14":
+"@anycli/command@^1.2.14":
   version "1.2.14"
   resolved "https://registry.yarnpkg.com/@anycli/command/-/command-1.2.14.tgz#de8e1be33f64143c49242c0deb7bf9a06a826813"
   dependencies:
     "@anycli/parser" "^3.2.6"
 
-"@anycli/config@^1.3.23", "@anycli/config@^1.3.29":
-  version "1.3.29"
-  resolved "https://registry.yarnpkg.com/@anycli/config/-/config-1.3.29.tgz#ad59bc1fbc5971f85a1f6e027a8c5e0e6b1bcfaa"
-
-"@anycli/dev-cli@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@anycli/dev-cli/-/dev-cli-0.3.2.tgz#9ed9fe4994fa9ccf8ac1c77a47f6aa9cde2cb1d1"
+"@anycli/command@^1.2.16", "@anycli/command@^1.2.17":
+  version "1.2.17"
+  resolved "https://registry.yarnpkg.com/@anycli/command/-/command-1.2.17.tgz#557a37cd8669afc3d2314627b7dae81eb61d0c6d"
   dependencies:
-    "@anycli/command" "^1.2.13"
-    "@anycli/config" "^1.3.23"
+    "@anycli/parser" "^3.2.6"
+
+"@anycli/command@^1.2.18":
+  version "1.2.18"
+  resolved "https://registry.yarnpkg.com/@anycli/command/-/command-1.2.18.tgz#c60daf9ca31763cfd53df4b79af304000424eb29"
+  dependencies:
+    "@anycli/parser" "^3.2.6"
+
+"@anycli/config@^1.3.40":
+  version "1.3.40"
+  resolved "https://registry.yarnpkg.com/@anycli/config/-/config-1.3.40.tgz#0c8c3c80571fc020ed13bdacba9744604fb77a13"
+
+"@anycli/config@^1.3.41":
+  version "1.3.41"
+  resolved "https://registry.yarnpkg.com/@anycli/config/-/config-1.3.41.tgz#8df83d09e5077a6feb7d8a0e8c76a9acaefad117"
+
+"@anycli/dev-cli@^0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@anycli/dev-cli/-/dev-cli-0.3.8.tgz#88ff28a78eed2b44a14343bb69a4fd2d4c9959eb"
+  dependencies:
+    "@anycli/command" "^1.2.16"
+    "@anycli/config" "^1.3.40"
     "@anycli/errors" "^0.2.1"
-    "@anycli/plugin-help" "^0.6.8"
+    "@anycli/plugin-help" "^0.7.0"
     lodash.template "^4.4.0"
     normalize-package-data "^2.4.0"
+    require-resolve "^0.0.2"
 
 "@anycli/errors@^0.2.1":
   version "0.2.1"
@@ -37,11 +54,23 @@
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/@anycli/parser/-/parser-3.2.6.tgz#bbd119a80709099179a9f11af0dc44b68c54575b"
 
-"@anycli/plugin-help@^0.6.8", "@anycli/plugin-help@^0.6.9":
-  version "0.6.9"
-  resolved "https://registry.yarnpkg.com/@anycli/plugin-help/-/plugin-help-0.6.9.tgz#1ff4a4aac9f8e56f3d36ffc1270e50fb1c453b4d"
+"@anycli/plugin-help@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@anycli/plugin-help/-/plugin-help-0.7.0.tgz#dda7324ab6f5d8bf16deb4f7017301196ea1b22e"
   dependencies:
     "@anycli/command" "^1.2.14"
+    chalk "^2.3.0"
+    indent-string "^3.2.0"
+    lodash.template "^4.4.0"
+    string-width "^2.1.1"
+    widest-line "^2.0.0"
+    wrap-ansi "^3.0.1"
+
+"@anycli/plugin-help@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@anycli/plugin-help/-/plugin-help-0.7.1.tgz#6493a9b580d3cba47583f51f31fe410f056a59f9"
+  dependencies:
+    "@anycli/command" "^1.2.17"
     chalk "^2.3.0"
     indent-string "^3.2.0"
     lodash.template "^4.4.0"
@@ -53,9 +82,9 @@
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@anycli/screen/-/screen-0.0.3.tgz#f0afd970c3ed725702948a45a874ede1fdd9362e"
 
-"@anycli/test@^0.10.13":
-  version "0.10.13"
-  resolved "https://registry.yarnpkg.com/@anycli/test/-/test-0.10.13.tgz#216fdd942727f8049f4d310fc202dd970084071f"
+"@anycli/test@^0.10.15":
+  version "0.10.15"
+  resolved "https://registry.yarnpkg.com/@anycli/test/-/test-0.10.15.tgz#4259d574c26c55098d5ae85c30cf2860d2ac19ba"
   dependencies:
     fancy-test "^1.0.1"
 
@@ -681,6 +710,10 @@ password-prompt@^1.0.4:
     ansi-escapes "^3.0.0"
     cross-spawn "^5.1.0"
 
+path-extra@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/path-extra/-/path-extra-1.0.3.tgz#7c112189a6e50d595790e7ad2037e44e410c1166"
+
 path-is-absolute@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
@@ -716,6 +749,12 @@ redeyed@~1.0.0:
   resolved "https://registry.yarnpkg.com/redeyed/-/redeyed-1.0.1.tgz#e96c193b40c0816b00aec842698e61185e55498a"
   dependencies:
     esprima "~3.0.0"
+
+require-resolve@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/require-resolve/-/require-resolve-0.0.2.tgz#bab410ab1aee2f3f55b79317451dd3428764e6f3"
+  dependencies:
+    x-path "^0.0.2"
 
 resolve@^1.3.2:
   version "1.5.0"
@@ -993,6 +1032,12 @@ wrap-ansi@^3.0.1:
 wrappy@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
+
+x-path@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/x-path/-/x-path-0.0.2.tgz#294d076bb97a7706cc070bbb2a6fd8c54df67b12"
+  dependencies:
+    path-extra "^1.0.2"
 
 yallist@^2.1.2:
   version "2.1.2"
