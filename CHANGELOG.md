@@ -1,3 +1,13 @@
+<a name="0.2.14"></a>
+## [0.2.14](https://github.com/anycli/plugin-plugins/compare/5314932d64dbbc5cd0f408daf6bd439501638038...v0.2.14) (2018-02-07)
+
+
+### Bug Fixes
+
+* updated config ([a33ae15](https://github.com/anycli/plugin-plugins/commit/a33ae15))
+* updated deps ([04eb7dc](https://github.com/anycli/plugin-plugins/commit/04eb7dc))
+* updated deps ([30f009c](https://github.com/anycli/plugin-plugins/commit/30f009c))
+
 <a name="0.2.13"></a>
 ## [0.2.13](https://github.com/anycli/plugin-plugins/compare/1d86582c3e609ee9ec062d848a1dc457ede8a907...v0.2.13) (2018-02-06)
 
