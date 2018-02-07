@@ -67,7 +67,7 @@ export default class Plugins {
 
   async add(plugin: Config.PJSON.PluginTypes) {
     const pjson = await this.pjson()
-    pjson.anycli.plugins = uniq([...pjson.anycli.plugins || [], plugin])
+    pjson.anycli.plugins = uniq([...pjson.anycli.plugins || [], plugin]) as any
     await this.savePJSON(pjson)
   }
 
