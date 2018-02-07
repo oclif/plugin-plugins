@@ -19,10 +19,7 @@ import Plugins from '../../plugins'
 export default class PluginsInstall extends Command {
   static description = 'installs a plugin into the CLI'
   static usage = 'plugins:install PLUGIN...'
-  static examples = [`
-Example:
-  $ <%= config.bin %> plugins:install \${examplePlugin}
-`]
+  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.anycli.examplePlugin || "heroku-production-status" %> ']
   static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
 

@@ -9,18 +9,18 @@ export default class PluginsIndex extends Command {
     core: flags.boolean({description: 'show core plugins'})
   }
   static description = 'list installed plugins'
-  static examples = [`<%
-let examplePlugins = {
-  'heroku-ci': {version: '1.8.0'},
-  'heroku-cli-status': {version: '3.0.10', type: 'link'},
-  'heroku-fork': {version: '4.1.22'},
-}
-const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]: [string, any]) => \`    \${name} \${p.version}\`)
+  static examples = ['$ <%- config.bin %> plugins']
 
-%>Example:
-    $ <%- config.bin> plugins
-<%- examplePluginsHelp.join('\n') %>
-`]
+  // static examples = [`<%
+// let examplePlugins = {
+  // 'heroku-ci': {version: '1.8.0'},
+  // 'heroku-cli-status': {version: '3.0.10', type: 'link'},
+  // 'heroku-fork': {version: '4.1.22'}
+// }
+// const examplePluginsHelp = Object.entries(examplePlugins).map(([name, p]) => \`    \${name} \${p.version}\`).join('\n')
+// %>$ <%- config.bin %> plugins
+// <%- examplePluginsHelp %>
+// `]
 
   plugins = new Plugins(this.config)
 
