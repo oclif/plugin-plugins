@@ -1,3 +1,11 @@
+<a name="0.2.15"></a>
+## [0.2.15](https://github.com/anycli/plugin-plugins/compare/a33ae1565f69caee7575319907f61d7fd639f03c...v0.2.15) (2018-02-07)
+
+
+### Bug Fixes
+
+* async ([95db82b](https://github.com/anycli/plugin-plugins/commit/95db82b))
+
 <a name="0.2.14"></a>
 ## [0.2.14](https://github.com/anycli/plugin-plugins/compare/5314932d64dbbc5cd0f408daf6bd439501638038...v0.2.14) (2018-02-07)
 
