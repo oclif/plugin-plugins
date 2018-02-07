@@ -1,3 +1,11 @@
+<a name="0.2.16"></a>
+## [0.2.16](https://github.com/anycli/plugin-plugins/compare/95db82b0cb4e62f73d32692b3f9a7491b60754b1...v0.2.16) (2018-02-07)
+
+
+### Bug Fixes
+
+* fixed help strings ([38e2166](https://github.com/anycli/plugin-plugins/commit/38e2166))
+
 <a name="0.2.15"></a>
 ## [0.2.15](https://github.com/anycli/plugin-plugins/compare/a33ae1565f69caee7575319907f61d7fd639f03c...v0.2.15) (2018-02-07)
 
