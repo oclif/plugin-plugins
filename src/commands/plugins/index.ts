@@ -1,5 +1,5 @@
-import {Command, flags} from '@oclif/command'
 import color from '@heroku-cli/color'
+import {Command, flags} from '@oclif/command'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
