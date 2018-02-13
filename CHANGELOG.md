@@ -1,3 +1,11 @@
+<a name="0.2.18"></a>
+## [0.2.18](https://github.com/oclif/plugin-plugins/compare/v0.2.17...v0.2.18) (2018-02-13)
+
+
+### Bug Fixes
+
+* oclif rename ([7ae9d8f](https://github.com/oclif/plugin-plugins/commit/7ae9d8f))
+
 <a name="0.2.16"></a>
 ## [0.2.16](https://github.com/anycli/plugin-plugins/compare/95db82b0cb4e62f73d32692b3f9a7491b60754b1...v0.2.16) (2018-02-07)
 
