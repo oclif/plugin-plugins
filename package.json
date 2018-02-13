@@ -27,10 +27,10 @@
   },
   "devDependencies": {
     "@oclif/config": "^1.3.45",
-    "@oclif/dev-cli": "^0.3.14",
+    "@oclif/dev-cli": "^1.0.0",
     "@oclif/errors": "^1.0.1",
-    "@oclif/plugin-help": "^0.7.4",
-    "@oclif/test": "^0.10.15",
+    "@oclif/plugin-help": "^1.0.0",
+    "@oclif/test": "^1.0.0",
     "@oclif/tslint": "^0.2.7",
     "@types/chai": "^4.1.2",
     "@types/fs-extra": "^5.0.0",
@@ -42,7 +42,7 @@
     "chai": "^4.1.2",
     "concurrently": "^3.5.1",
     "fancy-test": "^1.0.1",
-    "globby": "^7.1.1",
+    "globby": "^8.0.0",
     "mocha": "^5.0.0",
     "ts-node": "^4.1.0",
     "typescript": "^2.7.1"
