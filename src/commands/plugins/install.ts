@@ -1,4 +1,4 @@
-import {Command} from '@anycli/command'
+import {Command} from '@oclif/command'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -7,10 +7,10 @@ import Plugins from '../../plugins'
 // let examplePlugin = 'heroku-production-status'
 // let bin = 'heroku'
 // const g = global as any
-// if (g.anycli && g.anycli.config) {
-//   const config = g.anycli.config
+// if (g.oclif && g.oclif.config) {
+//   const config = g.oclif.config
 //   bin = config.bin
-//   let pjson = config.pjson.anycli || config.pjson['cli-engine']
+//   let pjson = config.pjson.oclif || config.pjson['cli-engine']
 //   if (pjson.help && pjson.help.plugins) {
 //     examplePlugin = Object.keys(pjson.help.plugins)[0]
 //   }
@@ -19,7 +19,7 @@ import Plugins from '../../plugins'
 export default class PluginsInstall extends Command {
   static description = 'installs a plugin into the CLI'
   static usage = 'plugins:install PLUGIN...'
-  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.anycli.examplePlugin || "heroku-production-status" %> ']
+  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "heroku-production-status" %> ']
   static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
 

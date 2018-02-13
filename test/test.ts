@@ -1,5 +1,5 @@
-import * as Config from '@anycli/config'
-import * as Fancy from '@anycli/test'
+import * as Config from '@oclif/config'
+import * as Fancy from '@oclif/test'
 import * as fs from 'fs-extra'
 
 export const test = Fancy.test

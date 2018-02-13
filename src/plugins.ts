@@ -1,4 +1,4 @@
-import * as Config from '@anycli/config'
+import * as Config from '@oclif/config'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
@@ -10,7 +10,7 @@ import * as semver from 'semver'
 import {uniq, uniqWith} from './util'
 import Yarn from './yarn'
 
-const initPJSON: Config.PJSON.User = {private: true, anycli: {schema: 1, plugins: []}, dependencies: {}}
+const initPJSON: Config.PJSON.User = {private: true, oclif: {schema: 1, plugins: []}, dependencies: {}}
 
 export default class Plugins {
   readonly yarn: Yarn
@@ -18,7 +18,7 @@ export default class Plugins {
 
   constructor(public config: Config.IConfig) {
     this.yarn = new Yarn({config, cwd: this.config.dataDir})
-    this.debug = require('debug')('@anycli/plugins')
+    this.debug = require('debug')('@oclif/plugins')
   }
 
   async pjson(): Promise<Config.PJSON.User> {
@@ -26,9 +26,9 @@ export default class Plugins {
       const pjson: Config.PJSON = await loadJSON(this.pjsonPath)
       return {
         ...initPJSON,
-        anycli: {
-          ...initPJSON.anycli,
-          ...pjson.anycli,
+        oclif: {
+          ...initPJSON.oclif,
+          ...pjson.oclif,
         },
         dependencies: {},
         ...pjson,
@@ -42,7 +42,7 @@ export default class Plugins {
 
   async list() {
     const pjson = await this.pjson()
-    return this.normalizePlugins(pjson.anycli.plugins)
+    return this.normalizePlugins(pjson.oclif.plugins)
   }
 
   async install(name: string, tag = 'latest') {
@@ -67,14 +67,14 @@ export default class Plugins {
 
   async add(plugin: Config.PJSON.PluginTypes) {
     const pjson = await this.pjson()
-    pjson.anycli.plugins = uniq([...pjson.anycli.plugins || [], plugin]) as any
+    pjson.oclif.plugins = uniq([...pjson.oclif.plugins || [], plugin]) as any
     await this.savePJSON(pjson)
   }
 
   async remove(name: string) {
     const pjson = await this.pjson()
     if (pjson.dependencies) delete pjson.dependencies[name]
-    pjson.anycli.plugins = this.normalizePlugins(pjson.anycli.plugins)
+    pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
     .filter(p => p.name !== name)
     await this.savePJSON(pjson)
   }
@@ -114,13 +114,13 @@ export default class Plugins {
 
   unfriendlyName(name: string): string | undefined {
     if (name.includes('@')) return
-    const scope = this.config.pjson.anycli.scope
+    const scope = this.config.pjson.oclif.scope
     if (!scope) return
     return `@${scope}/plugin-${name}`
   }
 
   friendlyName(name: string): string {
-    const scope = this.config.pjson.anycli.scope
+    const scope = this.config.pjson.oclif.scope
     if (!scope) return name
     const match = name.match(`@${scope}/plugin-(.+)`)
     if (!match) return name
@@ -154,12 +154,12 @@ export default class Plugins {
   }
 
   private async savePJSON(pjson: Config.PJSON.User) {
-    pjson.anycli.plugins = this.normalizePlugins(pjson.anycli.plugins)
+    pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
     const fs: typeof fse = require('fs-extra')
     await fs.outputJSON(this.pjsonPath, pjson, {spaces: 2})
   }
 
-  private normalizePlugins(input: Config.PJSON.User['anycli']['plugins']) {
+  private normalizePlugins(input: Config.PJSON.User['oclif']['plugins']) {
     let plugins = (input || []).map(p => {
       if (typeof p === 'string') {
         return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User

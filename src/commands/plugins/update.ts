@@ -1,4 +1,4 @@
-import {Command} from '@anycli/command'
+import {Command} from '@oclif/command'
 
 import Plugins from '../../plugins'
 

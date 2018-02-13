@@ -1,4 +1,4 @@
-import {IConfig} from '@anycli/config'
+import {IConfig} from '@oclif/config'
 import * as path from 'path'
 
 const debug = require('debug')('cli:yarn')
