@@ -1,7 +1,7 @@
 {
   "name": "@oclif/plugin-plugins",
   "description": "plugins plugin for oclif",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Jeff Dickey @jdxcode",
   "oclif": {
     "commands": "./lib/commands",
