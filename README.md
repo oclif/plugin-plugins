@@ -13,6 +13,7 @@ plugins plugin for oclif
 [![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/master/package.json)
 
 <!-- toc -->
+* [What is this?](#what-is-this)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -50,26 +51,26 @@ Now the user can run any of the commands below to manage plugins at runtime.
 <!-- commands -->
 # Commands
 
-* [oclif-example plugins](#plugins)
-* [oclif-example plugins:install PLUGIN...](#pluginsinstall-plugin)
-* [oclif-example plugins:uninstall PLUGIN...](#pluginsuninstall-plugin)
-* [oclif-example plugins:update](#pluginsupdate)
+* [mycli plugins](#plugins)
+* [mycli plugins:install PLUGIN...](#pluginsinstall-plugin)
+* [mycli plugins:uninstall PLUGIN...](#pluginsuninstall-plugin)
+* [mycli plugins:update](#pluginsupdate)
 ## plugins
 
 list installed plugins
 
 ```
 USAGE
-  $ oclif-example plugins
+  $ mycli plugins
 
 OPTIONS
   --core  show core plugins
 
 EXAMPLE
-  $ oclif-example plugins
+  $ mycli plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins.ts)_
 
 ### plugins:install PLUGIN...
 
@@ -77,16 +78,16 @@ installs a plugin into the CLI
 
 ```
 USAGE
-  $ oclif-example plugins:install PLUGIN...
+  $ mycli plugins:install PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to install
 
 EXAMPLE
-  $ oclif-example plugins:install heroku-production-status
+  $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/install.ts)_
 
 ### plugins:uninstall PLUGIN...
 
@@ -94,13 +95,13 @@ removes a plugin from the CLI
 
 ```
 USAGE
-  $ oclif-example plugins:uninstall PLUGIN...
+  $ mycli plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/uninstall.ts)_
 
 ### plugins:update
 
@@ -108,10 +109,10 @@ update installed plugins
 
 ```
 USAGE
-  $ oclif-example plugins:update
+  $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/update.ts)_
 
 ## plugins:install PLUGIN...
 
@@ -119,16 +120,16 @@ installs a plugin into the CLI
 
 ```
 USAGE
-  $ oclif-example plugins:install PLUGIN...
+  $ mycli plugins:install PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to install
 
 EXAMPLE
-  $ oclif-example plugins:install heroku-production-status
+  $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/install.ts)_
 
 ## plugins:uninstall PLUGIN...
 
@@ -136,13 +137,13 @@ removes a plugin from the CLI
 
 ```
 USAGE
-  $ oclif-example plugins:uninstall PLUGIN...
+  $ mycli plugins:uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/uninstall.ts)_
 
 ## plugins:update
 
@@ -150,8 +151,8 @@ update installed plugins
 
 ```
 USAGE
-  $ oclif-example plugins:update
+  $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

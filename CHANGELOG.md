@@ -1,3 +1,11 @@
+<a name="1.0.6"></a>
+## [1.0.6](https://github.com/oclif/plugin-plugins/compare/0a0155d9f2ac09ecde7f8ce2b15b85fae6c5cba8...v1.0.6) (2018-03-22)
+
+
+### Bug Fixes
+
+* rename example to mycli ([e018e45](https://github.com/oclif/plugin-plugins/commit/e018e45))
+
 <a name="1.0.5"></a>
 ## [1.0.5](https://github.com/oclif/plugin-plugins/compare/3e1bc65d5bcd452548c440630dbe9d2194ca81bc...v1.0.5) (2018-03-22)
 
