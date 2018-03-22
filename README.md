@@ -24,7 +24,7 @@ $ npm install -g @oclif/plugin-plugins
 $ oclif-example COMMAND
 running command...
 $ oclif-example (-v|--version|version)
-@oclif/plugin-plugins/1.0.4 darwin-x64 node-v9.9.0
+@oclif/plugin-plugins/1.0.5 linux-x64 node-v9.8.0
 $ oclif-example --help [COMMAND]
 USAGE
   $ oclif-example COMMAND
@@ -53,7 +53,7 @@ EXAMPLE
   $ oclif-example plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins.ts)_
 
 ### plugins:install PLUGIN...
 
@@ -70,7 +70,7 @@ EXAMPLE
   $ oclif-example plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/install.ts)_
 
 ### plugins:uninstall PLUGIN...
 
@@ -84,7 +84,7 @@ ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/uninstall.ts)_
 
 ### plugins:update
 
@@ -95,7 +95,7 @@ USAGE
   $ oclif-example plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/update.ts)_
 
 ## plugins:install PLUGIN...
 
@@ -112,7 +112,7 @@ EXAMPLE
   $ oclif-example plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/install.ts)_
 
 ## plugins:uninstall PLUGIN...
 
@@ -126,7 +126,7 @@ ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/uninstall.ts)_
 
 ## plugins:update
 
@@ -137,5 +137,5 @@ USAGE
   $ oclif-example plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.4/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.5/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
