@@ -48,6 +48,12 @@ First add the plugin to your project with `yarn add @oclif/plugin-plugins`, then
 
 Now the user can run any of the commands below to manage plugins at runtime.
 
+# Friendly names
+
+To make it simpler for users to install plugins, we have "friendly name" functionality. With this, you can run `mycli plugins:install myplugin` and it will first check if `@mynpmorg/plugin-myplugin` exists on npm before trying to install `myplugin`. This is useful if you want to use a generic name that's already taken in npm.
+
+To set this up, simply set the `oclif.scope` to the name of your npm org. In the example above, this would be `mynpmorg`.
+
 <!-- commands -->
 # Commands
 
