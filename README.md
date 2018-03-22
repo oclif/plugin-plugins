@@ -12,6 +12,36 @@ plugins plugin for oclif
 [![Downloads/week](https://img.shields.io/npm/dw/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
 [![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/master/package.json)
 
+# What is this?
+
+This plugin is used to allow users to install plugins into your oclif CLI at runtime. For example, in the Heroku CLI this is used to allow people to install plugins such as the Heroku Kafka plugin:
+
+```sh-session
+$ heroku plugins:install heroku-kafka
+$ heroku kafka
+```
+
+This is useful to allow users to create their own plugins to work in your CLI or to allow you to build functionality that users can optionally install.
+
+One particular way this is useful is for building functionality you aren't ready to include in a public repository. Build your plugin separately as a plugin, then include it as a core plugin later into your CLI.
+
+# Usage
+
+First add the plugin to your project with `yarn add @oclif/plugin-plugins`, then add it to the `package.json` of the oclif CLI:
+
+```js
+{
+  "name": "mycli",
+  "version": "0.0.0",
+  // ...
+  "oclif": {
+    "plugins": ["@oclif/plugin-help", "@oclif/plugin-plugins"]
+  }
+}
+```
+
+Now the user can run any of the commands below to manage plugins at runtime.
+
 <!-- toc -->
 * [Usage](#usage)
 * [Commands](#commands)
