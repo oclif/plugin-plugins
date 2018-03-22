@@ -60,7 +60,7 @@
     "devPlugins": [
       "@oclif/plugin-help"
     ],
-    "bin": "oclif-example"
+    "bin": "mycli"
   },
   "repository": "oclif/plugin-plugins",
   "scripts": {
