@@ -12,6 +12,11 @@ plugins plugin for oclif
 [![Downloads/week](https://img.shields.io/npm/dw/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
 [![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/master/package.json)
 
+<!-- toc -->
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+
 # What is this?
 
 This plugin is used to allow users to install plugins into your oclif CLI at runtime. For example, in the Heroku CLI this is used to allow people to install plugins such as the Heroku Kafka plugin:
@@ -42,25 +47,6 @@ First add the plugin to your project with `yarn add @oclif/plugin-plugins`, then
 
 Now the user can run any of the commands below to manage plugins at runtime.
 
-<!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
-<!-- usage -->
-# Usage
-
-```sh-session
-$ npm install -g @oclif/plugin-plugins
-$ oclif-example COMMAND
-running command...
-$ oclif-example (-v|--version|version)
-@oclif/plugin-plugins/1.0.5 linux-x64 node-v9.8.0
-$ oclif-example --help [COMMAND]
-USAGE
-  $ oclif-example COMMAND
-...
-```
-<!-- usagestop -->
 <!-- commands -->
 # Commands
 
