@@ -15,6 +15,7 @@ plugins plugin for oclif
 <!-- toc -->
 * [What is this?](#what-is-this)
 * [Usage](#usage)
+* [Friendly names](#friendly-names)
 * [Commands](#commands)
 <!-- tocstop -->
 
@@ -56,7 +57,6 @@ To set this up, simply set the `oclif.scope` to the name of your npm org. In the
 
 # Commands
 <!-- commands -->
-
 * [mycli plugins](#plugins)
 * [mycli plugins:install PLUGIN...](#pluginsinstall-plugin)
 * [mycli plugins:uninstall PLUGIN...](#pluginsuninstall-plugin)
@@ -76,7 +76,7 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins.ts)_
 
 ### plugins:install PLUGIN...
 
@@ -93,7 +93,7 @@ EXAMPLE
   $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/install.ts)_
 
 ### plugins:uninstall PLUGIN...
 
@@ -107,7 +107,7 @@ ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/uninstall.ts)_
 
 ### plugins:update
 
@@ -118,7 +118,7 @@ USAGE
   $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/update.ts)_
 
 ## plugins:install PLUGIN...
 
@@ -135,7 +135,7 @@ EXAMPLE
   $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/install.ts)_
 
 ## plugins:uninstall PLUGIN...
 
@@ -149,7 +149,7 @@ ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/uninstall.ts)_
 
 ## plugins:update
 
@@ -160,5 +160,5 @@ USAGE
   $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.6/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
