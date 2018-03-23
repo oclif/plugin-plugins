@@ -54,8 +54,8 @@ To make it simpler for users to install plugins, we have "friendly name" functio
 
 To set this up, simply set the `oclif.scope` to the name of your npm org. In the example above, this would be `mynpmorg`.
 
-<!-- commands -->
 # Commands
+<!-- commands -->
 
 * [mycli plugins](#plugins)
 * [mycli plugins:install PLUGIN...](#pluginsinstall-plugin)
