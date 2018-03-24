@@ -57,11 +57,12 @@ To set this up, simply set the `oclif.scope` to the name of your npm org. In the
 
 # Commands
 <!-- commands -->
-* [mycli plugins](#plugins)
-* [mycli plugins:install PLUGIN...](#pluginsinstall-plugin)
-* [mycli plugins:uninstall PLUGIN...](#pluginsuninstall-plugin)
-* [mycli plugins:update](#pluginsupdate)
-## plugins
+* [mycli plugins](#mycli-plugins)
+* [mycli plugins:install PLUGIN...](#mycli-pluginsinstall-plugin)
+* [mycli plugins:uninstall PLUGIN...](#mycli-pluginsuninstall-plugin)
+* [mycli plugins:update](#mycli-pluginsupdate)
+
+## mycli plugins
 
 list installed plugins
 
@@ -76,51 +77,9 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins.ts)_
 
-### plugins:install PLUGIN...
-
-installs a plugin into the CLI
-
-```
-USAGE
-  $ mycli plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to install
-
-EXAMPLE
-  $ mycli plugins:install heroku-production-status
-```
-
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/install.ts)_
-
-### plugins:uninstall PLUGIN...
-
-removes a plugin from the CLI
-
-```
-USAGE
-  $ mycli plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-```
-
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/uninstall.ts)_
-
-### plugins:update
-
-update installed plugins
-
-```
-USAGE
-  $ mycli plugins:update
-```
-
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/update.ts)_
-
-## plugins:install PLUGIN...
+### mycli plugins:install PLUGIN...
 
 installs a plugin into the CLI
 
@@ -135,9 +94,9 @@ EXAMPLE
   $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins/install.ts)_
 
-## plugins:uninstall PLUGIN...
+### mycli plugins:uninstall PLUGIN...
 
 removes a plugin from the CLI
 
@@ -149,9 +108,9 @@ ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins/uninstall.ts)_
 
-## plugins:update
+### mycli plugins:update
 
 update installed plugins
 
@@ -160,5 +119,47 @@ USAGE
   $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.7/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins/update.ts)_
+
+## mycli plugins:install PLUGIN...
+
+installs a plugin into the CLI
+
+```
+USAGE
+  $ mycli plugins:install PLUGIN...
+
+ARGUMENTS
+  PLUGIN  plugin to install
+
+EXAMPLE
+  $ mycli plugins:install heroku-production-status
+```
+
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins/install.ts)_
+
+## mycli plugins:uninstall PLUGIN...
+
+removes a plugin from the CLI
+
+```
+USAGE
+  $ mycli plugins:uninstall PLUGIN...
+
+ARGUMENTS
+  PLUGIN  plugin to uninstall
+```
+
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins/uninstall.ts)_
+
+## mycli plugins:update
+
+update installed plugins
+
+```
+USAGE
+  $ mycli plugins:update
+```
+
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.8/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

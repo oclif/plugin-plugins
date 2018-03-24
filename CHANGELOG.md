@@ -1,3 +1,11 @@
+<a name="1.0.8"></a>
+## [1.0.8](https://github.com/oclif/plugin-plugins/compare/v1.0.7...v1.0.8) (2018-03-24)
+
+
+### Bug Fixes
+
+* use new semantic-release ([9898b8e](https://github.com/oclif/plugin-plugins/commit/9898b8e))
+
 <a name="1.0.7"></a>
 ## [1.0.7](https://github.com/oclif/plugin-plugins/compare/e018e45bcd779ac2463c7e218c151356cc58694f...v1.0.7) (2018-03-23)
 
