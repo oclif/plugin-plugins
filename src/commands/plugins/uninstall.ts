@@ -24,6 +24,7 @@ export default class PluginsUninstall extends Command {
   `
   static variableArgs = true
   static args = [{name: 'plugin', description: 'plugin to uninstall', required: true}]
+  static aliases = ['plugins:unlink']
 
   plugins = new Plugins(this.config)
 

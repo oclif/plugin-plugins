@@ -55,10 +55,10 @@ export default class Plugins {
       }
       await this.createPJSON()
       await this.yarn.exec(['add', `${name}@${tag}`])
-      // const plugin = await this.loadPlugin(name, range || tag)
-      // if (!plugin.valid) {
-      //   throw new Error('no commands found in plugin')
-      // }
+      const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
+      if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
+        throw new Error('plugin is invalid')
+      }
       await this.add({name, tag: range || tag, type: 'user'})
     } catch (err) {
       await this.uninstall(name).catch(err => this.debug(err))
@@ -90,7 +90,10 @@ export default class Plugins {
 
   async uninstall(name: string) {
     try {
-      await this.yarn.exec(['remove', name])
+      const pjson = await this.pjson()
+      if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
+        await this.yarn.exec(['remove', name])
+      }
     } finally {
       await this.remove(name)
     }
