@@ -59,6 +59,7 @@ To set this up, simply set the `oclif.scope` to the name of your npm org. In the
 <!-- commands -->
 * [`mycli plugins`](#mycli-plugins)
 * [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+* [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
 * [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
 * [`mycli plugins:update`](#mycli-pluginsupdate)
 
@@ -77,7 +78,7 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.9/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.0/src/commands/plugins.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -94,7 +95,24 @@ EXAMPLE
   $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.9/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.0/src/commands/plugins/install.ts)_
+
+## `mycli plugins:install PLUGIN...`
+
+links a plugin into the CLI for development
+
+```
+USAGE
+  $ mycli plugins:install PLUGIN...
+
+ARGUMENTS
+  PATH  [default: .] path to plugin
+
+EXAMPLE
+  $ mycli plugins:install heroku-production-status
+```
+
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.0/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -108,7 +126,7 @@ ARGUMENTS
   PLUGIN  plugin to uninstall
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.9/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.0/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -119,5 +137,5 @@ USAGE
   $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.0.9/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.0/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

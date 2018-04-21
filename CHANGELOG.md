@@ -1,3 +1,17 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/oclif/plugin-plugins/compare/v1.0.9...v1.1.0) (2018-04-21)
+
+
+### Bug Fixes
+
+* await ([e35604d](https://github.com/oclif/plugin-plugins/commit/e35604d))
+* bump command ([5d37a07](https://github.com/oclif/plugin-plugins/commit/5d37a07))
+
+
+### Features
+
+* added plugins:link ([6a82a61](https://github.com/oclif/plugin-plugins/commit/6a82a61))
+
 <a name="1.0.9"></a>
 ## [1.0.9](https://github.com/oclif/plugin-plugins/compare/v1.0.8...v1.0.9) (2018-04-18)
 
