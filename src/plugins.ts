@@ -71,7 +71,7 @@ export default class Plugins {
     if (!c.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
       throw new CLIError('plugin is not a valid oclif plugin')
     }
-    this.add({type: 'link', name: c.name, root: c.root})
+    await this.add({type: 'link', name: c.name, root: c.root})
   }
 
   async add(plugin: Config.PJSON.PluginTypes) {
