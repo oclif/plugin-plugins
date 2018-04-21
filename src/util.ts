@@ -22,13 +22,11 @@ export namespace sortBy {
 }
 
 export function uniq<T>(arr: T[]): T[] {
-  return arr.filter((a, i) => {
-    return !arr.find((b, j) => j !== i && b === a)
-  })
+  return arr.filter((a, i) => arr.indexOf(a) === i)
 }
 
 export function uniqWith<T>(arr: T[], fn: (a: T, b: T) => boolean): T[] {
   return arr.filter((a, i) => {
-    return !arr.find((b, j) => j !== i && fn(a, b))
+    return !arr.find((b, j) => j > i && fn(a, b))
   })
 }
