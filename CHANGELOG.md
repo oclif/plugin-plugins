@@ -1,3 +1,11 @@
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/oclif/plugin-plugins/compare/v1.1.0...v1.1.1) (2018-04-21)
+
+
+### Bug Fixes
+
+* uniq functions ([4268083](https://github.com/oclif/plugin-plugins/commit/4268083))
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/oclif/plugin-plugins/compare/v1.0.9...v1.1.0) (2018-04-21)
 
