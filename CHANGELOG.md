@@ -1,3 +1,11 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/oclif/plugin-plugins/compare/v1.1.1...v1.1.2) (2018-04-21)
+
+
+### Bug Fixes
+
+* some install/uninstall fixes ([59d91a2](https://github.com/oclif/plugin-plugins/commit/59d91a2))
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/oclif/plugin-plugins/compare/v1.1.0...v1.1.1) (2018-04-21)
 
