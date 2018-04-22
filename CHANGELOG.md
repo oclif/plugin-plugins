@@ -1,3 +1,11 @@
+<a name="1.1.3"></a>
+## [1.1.3](https://github.com/oclif/plugin-plugins/compare/v1.1.2...v1.1.3) (2018-04-22)
+
+
+### Bug Fixes
+
+* added update hook ([6b01f11](https://github.com/oclif/plugin-plugins/commit/6b01f11))
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/oclif/plugin-plugins/compare/v1.1.1...v1.1.2) (2018-04-21)
 
