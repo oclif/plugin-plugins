@@ -27,7 +27,7 @@ export default class PluginsIndex extends Command {
   async run() {
     const {flags} = this.parse(PluginsIndex)
     let plugins = this.config.plugins
-    sortBy(plugins, p => p.name)
+    sortBy(plugins, p => this.plugins.friendlyName(p.name))
     if (!flags.core) {
       plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
     }

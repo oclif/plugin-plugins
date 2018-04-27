@@ -43,12 +43,12 @@
     debug "^3.1.0"
     semver "^5.5.0"
 
-"@oclif/command@^1.4.14":
-  version "1.4.14"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.4.14.tgz#b9a65945566711dba1d180af05e427da9a673166"
+"@oclif/command@^1.4.15", "@oclif/command@^1.4.16":
+  version "1.4.16"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.4.16.tgz#4e1cdae611d1eac28bfd3481797b38b8638767c0"
   dependencies:
-    "@oclif/errors" "^1.0.4"
-    "@oclif/parser" "^3.3.2"
+    "@oclif/errors" "^1.0.6"
+    "@oclif/parser" "^3.3.3"
     debug "^3.1.0"
     semver "^5.5.0"
 
@@ -58,20 +58,20 @@
   dependencies:
     debug "^3.1.0"
 
-"@oclif/dev-cli@^1.13.6":
-  version "1.13.6"
-  resolved "https://registry.yarnpkg.com/@oclif/dev-cli/-/dev-cli-1.13.6.tgz#9ef12d771acee7a231753b7ef4611603710f3fc3"
+"@oclif/dev-cli@^1.13.8":
+  version "1.13.8"
+  resolved "https://registry.yarnpkg.com/@oclif/dev-cli/-/dev-cli-1.13.8.tgz#6b8db116d210740152443f8759cc4ad65125da6e"
   dependencies:
-    "@oclif/command" "^1.4.14"
+    "@oclif/command" "^1.4.15"
     "@oclif/config" "^1.6.13"
     "@oclif/errors" "^1.0.6"
     "@oclif/plugin-help" "^1.2.5"
-    cli-ux "^3.3.31"
+    cli-ux "^3.4.1"
     debug "^3.1.0"
     fs-extra "^5.0.0"
     lodash "^4.17.5"
     normalize-package-data "^2.4.0"
-    qqjs "^0.3.6"
+    qqjs "^0.3.7"
     require-resolve "^0.0.2"
     tslib "^1.9.0"
 
@@ -105,6 +105,13 @@
   dependencies:
     "@oclif/linewrap" "^1.0.0"
     chalk "^2.3.2"
+
+"@oclif/parser@^3.3.3":
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.3.3.tgz#bfde499b836178eee2b6b29ccb7fb3f95851d3c6"
+  dependencies:
+    "@oclif/linewrap" "^1.0.0"
+    chalk "^2.4.0"
 
 "@oclif/plugin-help@^1.2.5":
   version "1.2.5"
@@ -375,6 +382,14 @@ chalk@^2.3.0, chalk@^2.3.2, chalk@^2.4.0:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
+chalk@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
+  dependencies:
+    ansi-styles "^3.2.1"
+    escape-string-regexp "^1.0.5"
+    supports-color "^5.3.0"
+
 check-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
@@ -395,25 +410,6 @@ class-utils@^0.3.5:
 clean-stack@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-1.3.0.tgz#9e821501ae979986c46b1d66d2d432db2fd4ae31"
-
-cli-ux@^3.3.31:
-  version "3.3.31"
-  resolved "https://registry.yarnpkg.com/cli-ux/-/cli-ux-3.3.31.tgz#e4f2a380df00ebf298189b83a77ae92cdfc7355f"
-  dependencies:
-    "@oclif/linewrap" "^1.0.0"
-    "@oclif/screen" "^1.0.2"
-    ansi-styles "^3.2.1"
-    cardinal "^1.0.0"
-    chalk "^2.4.0"
-    clean-stack "^1.3.0"
-    extract-stack "^1.0.0"
-    fs-extra "^5.0.0"
-    indent-string "^3.2.0"
-    lodash "^4.17.5"
-    password-prompt "^1.0.4"
-    semver "^5.5.0"
-    strip-ansi "^4.0.0"
-    supports-color "^5.4.0"
 
 cli-ux@^3.4.1:
   version "3.4.1"
@@ -847,6 +843,16 @@ http-call@^5.1.0:
     is-retry-allowed "^1.1.0"
     is-stream "^1.1.0"
     tslib "^1.9.0"
+    tunnel-agent "^0.6.0"
+
+http-call@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/http-call/-/http-call-5.1.1.tgz#0110095d455b876c64cc9fe820b3f836cc552ea7"
+  dependencies:
+    content-type "^1.0.4"
+    debug "^3.1.0"
+    is-retry-allowed "^1.1.0"
+    is-stream "^1.1.0"
     tunnel-agent "^0.6.0"
 
 ignore@^3.3.5:
@@ -1361,9 +1367,9 @@ pump@^1.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-qqjs@^0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/qqjs/-/qqjs-0.3.6.tgz#6e4b8008489a055fb95a93365154a9e777e9b784"
+qqjs@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/qqjs/-/qqjs-0.3.7.tgz#eb7d481d3cf3e8c9744da0d21d917d1a4b2080d9"
   dependencies:
     chalk "^2.3.2"
     debug "^3.1.0"
@@ -1716,9 +1722,9 @@ tree-kill@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/tree-kill/-/tree-kill-1.2.0.tgz#5846786237b4239014f05db156b643212d4c6f36"
 
-ts-node@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.0.0.tgz#46c25f8498593a9248eeea16906f1598fa098140"
+ts-node@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.0.1.tgz#e2dd65abcadae530d2b2109cfd19202ba9f90402"
   dependencies:
     arrify "^1.0.0"
     chalk "^2.3.0"
