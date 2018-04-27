@@ -1,3 +1,11 @@
+<a name="1.1.4"></a>
+## [1.1.4](https://github.com/oclif/plugin-plugins/compare/v1.1.3...v1.1.4) (2018-04-27)
+
+
+### Bug Fixes
+
+* sort plugins by friendly name ([f9a2964](https://github.com/oclif/plugin-plugins/commit/f9a2964))
+
 <a name="1.1.3"></a>
 ## [1.1.3](https://github.com/oclif/plugin-plugins/compare/v1.1.2...v1.1.3) (2018-04-22)
 
