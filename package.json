@@ -10,7 +10,7 @@
     "chalk": "^2.4.1",
     "cli-ux": "^3.4.1",
     "debug": "^3.1.0",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.0",
     "http-call": "^5.1.1",
     "load-json-file": "^4.0.0",
     "npm-run-path": "^2.0.2",
