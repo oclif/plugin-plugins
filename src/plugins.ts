@@ -68,6 +68,7 @@ export default class Plugins {
 
   async link(p: string) {
     const c = await Config.load(path.resolve(p))
+    cli.action.start(`${this.config.name}: linking plugin ${c.name}`)
     if (!c.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
       throw new CLIError('plugin is not a valid oclif plugin')
     }
