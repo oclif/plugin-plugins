@@ -1,3 +1,11 @@
+<a name="1.1.6"></a>
+## [1.1.6](https://github.com/oclif/plugin-plugins/compare/v1.1.5...v1.1.6) (2018-05-01)
+
+
+### Bug Fixes
+
+* updated command and fs-extra ([b5beef0](https://github.com/oclif/plugin-plugins/commit/b5beef0))
+
 <a name="1.1.5"></a>
 ## [1.1.5](https://github.com/oclif/plugin-plugins/compare/v1.1.4...v1.1.5) (2018-05-01)
 
