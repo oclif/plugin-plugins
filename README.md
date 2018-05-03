@@ -78,7 +78,7 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.6/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.7/src/commands/plugins.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -91,11 +91,14 @@ USAGE
 ARGUMENTS
   PLUGIN  plugin to install
 
+ALIASES
+  $ mycli plugins:add
+
 EXAMPLE
   $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.6/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.7/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -112,7 +115,7 @@ EXAMPLE
   $ mycli plugins:install heroku-production-status
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.6/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.7/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -127,9 +130,10 @@ ARGUMENTS
 
 ALIASES
   $ mycli plugins:unlink
+  $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.6/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.7/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -140,5 +144,5 @@ USAGE
   $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.6/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.7/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

@@ -1,3 +1,11 @@
+<a name="1.1.7"></a>
+## [1.1.7](https://github.com/oclif/plugin-plugins/compare/v1.1.6...v1.1.7) (2018-05-03)
+
+
+### Bug Fixes
+
+* error out when plugin not found ([330d957](https://github.com/oclif/plugin-plugins/commit/330d957))
+
 <a name="1.1.6"></a>
 ## [1.1.6](https://github.com/oclif/plugin-plugins/compare/v1.1.5...v1.1.6) (2018-05-01)
 
