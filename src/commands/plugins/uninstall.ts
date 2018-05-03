@@ -24,7 +24,7 @@ export default class PluginsUninstall extends Command {
   `
   static variableArgs = true
   static args = [{name: 'plugin', description: 'plugin to uninstall', required: true}]
-  static aliases = ['plugins:unlink']
+  static aliases = ['plugins:unlink', 'plugins:remove']
 
   plugins = new Plugins(this.config)
 
@@ -36,8 +36,7 @@ export default class PluginsUninstall extends Command {
       cli.action.start(`Uninstalling ${friendly}`)
       const unfriendly = await this.plugins.hasPlugin(plugin)
       if (!unfriendly) {
-        cli.warn(`${friendly} is not installed`)
-        continue
+        return this.error(`${friendly} is not installed`)
       }
       await this.plugins.uninstall(unfriendly.name)
       cli.action.stop()

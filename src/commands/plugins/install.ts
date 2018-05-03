@@ -22,6 +22,7 @@ export default class PluginsInstall extends Command {
   static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "heroku-production-status" %> ']
   static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
+  static aliases = ['plugins:add']
 
   plugins = new Plugins(this.config)
 
