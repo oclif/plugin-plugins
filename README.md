@@ -59,7 +59,7 @@ To set this up, simply set the `oclif.scope` to the name of your npm org. In the
 <!-- commands -->
 * [`mycli plugins`](#mycli-plugins)
 * [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-* [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+* [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
 * [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
 * [`mycli plugins:update`](#mycli-pluginsupdate)
 
@@ -78,7 +78,7 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.9/src/commands/plugins.ts)_
+_See code: [src/commands/plugins.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.10/src/commands/plugins.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -95,27 +95,27 @@ ALIASES
   $ mycli plugins:add
 
 EXAMPLE
-  $ mycli plugins:install heroku-production-status
+  $ mycli plugins:install myplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.9/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.10/src/commands/plugins/install.ts)_
 
-## `mycli plugins:install PLUGIN...`
+## `mycli plugins:link PLUGIN`
 
 links a plugin into the CLI for development
 
 ```
 USAGE
-  $ mycli plugins:install PLUGIN...
+  $ mycli plugins:link PLUGIN
 
 ARGUMENTS
   PATH  [default: .] path to plugin
 
 EXAMPLE
-  $ mycli plugins:install heroku-production-status
+  $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.9/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.10/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -133,7 +133,7 @@ ALIASES
   $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.9/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.10/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -144,5 +144,5 @@ USAGE
   $ mycli plugins:update
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.9/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.1.10/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
