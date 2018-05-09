@@ -3,24 +3,12 @@ import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
-let examplePlugin = 'heroku-production-status'
-let bin = 'heroku'
-const g = global as any
-if (g.oclif && g.oclif.config) {
-  const config = g.oclif.config
-  bin = config.bin
-  let pjson = config.pjson.oclif || config.pjson['cli-engine']
-  if (pjson.help && pjson.help.plugins) {
-    examplePlugin = Object.keys(pjson.help.plugins)[0]
-  }
-}
-
 export default class PluginsUninstall extends Command {
   static description = 'removes a plugin from the CLI'
   static usage = 'plugins:uninstall PLUGIN...'
   static help = `
   Example:
-    $ ${bin} plugins:uninstall ${examplePlugin}
+    $ <%- config.bin %> plugins:uninstall <%- config.pjson.oclif.examplePlugin || "myplugin" %>
   `
   static variableArgs = true
   static args = [{name: 'plugin', description: 'plugin to uninstall', required: true}]

@@ -4,22 +4,10 @@ import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
-// let examplePlugin = 'heroku-production-status'
-// let bin = 'heroku'
-// const g = global as any
-// if (g.oclif && g.oclif.config) {
-//   const config = g.oclif.config
-//   bin = config.bin
-//   let pjson = config.pjson.oclif || config.pjson['cli-engine']
-//   if (pjson.help && pjson.help.plugins) {
-//     examplePlugin = Object.keys(pjson.help.plugins)[0]
-//   }
-// }
-
 export default class PluginsInstall extends Command {
   static description = 'installs a plugin into the CLI'
   static usage = 'plugins:install PLUGIN...'
-  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "heroku-production-status" %> ']
+  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
   static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
   static aliases = ['plugins:add']

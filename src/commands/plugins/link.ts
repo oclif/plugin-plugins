@@ -6,8 +6,8 @@ import Plugins from '../../plugins'
 
 export default class PluginsLink extends Command {
   static description = 'links a plugin into the CLI for development'
-  static usage = 'plugins:install PLUGIN...'
-  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "heroku-production-status" %> ']
+  static usage = 'plugins:link PLUGIN'
+  static examples = ['$ <%= config.bin %> plugins:link <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
   static args = [{name: 'path', description: 'path to plugin', required: true, default: '.'}]
 
   plugins = new Plugins(this.config)
