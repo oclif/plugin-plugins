@@ -1,3 +1,11 @@
+<a name="1.1.12"></a>
+## [1.1.12](https://github.com/oclif/plugin-plugins/compare/v1.1.11...v1.1.12) (2018-05-10)
+
+
+### Bug Fixes
+
+* yarn automatically grabs proxy config now ([fb3efe4](https://github.com/oclif/plugin-plugins/commit/fb3efe4))
+
 <a name="1.1.11"></a>
 ## [1.1.11](https://github.com/oclif/plugin-plugins/compare/v1.1.10...v1.1.11) (2018-05-10)
 
