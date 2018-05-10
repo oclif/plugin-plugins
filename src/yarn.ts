@@ -48,8 +48,6 @@ export default class Yarn {
         `--mutex=file:${path.join(this.cwd, 'yarn.lock')}`,
         `--preferred-cache-folder=${cacheDir}`,
         '--check-files',
-        // '--no-lockfile',
-        ...this.proxyArgs(),
       ]
       if (this.config.npmRegistry) {
         args.push(`--registry=${this.config.npmRegistry}`)
@@ -76,14 +74,5 @@ export default class Yarn {
       }
       throw err
     }
-  }
-
-  proxyArgs(): string[] {
-    let args = []
-    let http = process.env.http_proxy || process.env.HTTP_PROXY
-    let https = process.env.https_proxy || process.env.HTTPS_PROXY
-    if (http) args.push(`--proxy=${http}`)
-    if (https) args.push(`--https-proxy=${https}`)
-    return args
   }
 }
