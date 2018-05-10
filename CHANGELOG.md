@@ -1,3 +1,11 @@
+<a name="1.1.11"></a>
+## [1.1.11](https://github.com/oclif/plugin-plugins/compare/v1.1.10...v1.1.11) (2018-05-10)
+
+
+### Bug Fixes
+
+* allow plugins:uninstall to use paths ([3fa8dd8](https://github.com/oclif/plugin-plugins/commit/3fa8dd8))
+
 <a name="1.1.10"></a>
 ## [1.1.10](https://github.com/oclif/plugin-plugins/compare/v1.1.9...v1.1.10) (2018-05-09)
 
