@@ -11,7 +11,7 @@ export default class PluginsUninstall extends Command {
     $ <%- config.bin %> plugins:uninstall <%- config.pjson.oclif.examplePlugin || "myplugin" %>
   `
   static variableArgs = true
-  static args = [{name: 'plugin', description: 'plugin to uninstall', required: true}]
+  static args = [{name: 'plugin', description: 'plugin to uninstall'}]
   static aliases = ['plugins:unlink', 'plugins:remove']
 
   plugins = new Plugins(this.config)
@@ -19,6 +19,7 @@ export default class PluginsUninstall extends Command {
   async run() {
     const {argv} = this.parse(PluginsUninstall)
     this.plugins = new Plugins(this.config)
+    if (!argv.length) argv.push('.')
     for (let plugin of argv) {
       const friendly = this.plugins.friendlyName(plugin)
       cli.action.start(`Uninstalling ${friendly}`)

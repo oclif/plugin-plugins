@@ -113,7 +113,13 @@ export default class Plugins {
 
   async hasPlugin(name: string) {
     const list = await this.list()
-    return list.find(p => this.friendlyName(p.name) === this.friendlyName(name))
+    return list.find(p => {
+      if (this.friendlyName(p.name) === this.friendlyName(name)) return true
+      if (p.type === 'link') {
+        if (path.resolve(p.root) === path.resolve(name)) return true
+      }
+      return false
+    })
   }
 
   async yarnNodeVersion(): Promise<string | undefined> {
