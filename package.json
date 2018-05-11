@@ -57,6 +57,9 @@
   "oclif": {
     "commands": "./lib/commands",
     "scope": "heroku-cli",
+    "hooks": {
+      "update": "./lib/hooks/update.js"
+    },
     "devPlugins": [
       "@oclif/plugin-help"
     ],
