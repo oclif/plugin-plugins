@@ -1,3 +1,11 @@
+<a name="1.1.14"></a>
+## [1.1.14](https://github.com/oclif/plugin-plugins/compare/v1.1.13...v1.1.14) (2018-05-15)
+
+
+### Bug Fixes
+
+* do not update if only linked plugins ([b7ac0e1](https://github.com/oclif/plugin-plugins/commit/b7ac0e1))
+
 <a name="1.1.13"></a>
 ## [1.1.13](https://github.com/oclif/plugin-plugins/compare/v1.1.12...v1.1.13) (2018-05-11)
 
