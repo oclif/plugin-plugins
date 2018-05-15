@@ -101,13 +101,10 @@ export default class Plugins {
   }
 
   async update() {
-    const plugins = await this.list()
+    const plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
-    await this.yarn.exec(['add', ...plugins
-      .filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
-      .map(p => `${p.name}@${p.tag}`)
-    ])
+    await this.yarn.exec(['add', ...plugins.map(p => `${p.name}@${p.tag}`)])
     cli.action.stop()
   }
 
