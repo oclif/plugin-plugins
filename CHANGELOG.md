@@ -1,3 +1,11 @@
+<a name="1.1.15"></a>
+## [1.1.15](https://github.com/oclif/plugin-plugins/compare/v1.1.14...v1.1.15) (2018-05-23)
+
+
+### Bug Fixes
+
+* yarn 1.7.0 ([58d64fa](https://github.com/oclif/plugin-plugins/commit/58d64fa))
+
 <a name="1.1.14"></a>
 ## [1.1.14](https://github.com/oclif/plugin-plugins/compare/v1.1.13...v1.1.14) (2018-05-15)
 
