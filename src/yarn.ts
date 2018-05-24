@@ -1,15 +1,14 @@
 import {IConfig} from '@oclif/config'
+import ux from 'cli-ux'
 import * as path from 'path'
 
 const debug = require('debug')('cli:yarn')
 
 export default class Yarn {
   config: IConfig
-  cwd: string
 
-  constructor({config, cwd}: { config: IConfig; cwd: string }) {
+  constructor({config}: { config: IConfig }) {
     this.config = config
-    this.cwd = cwd
   }
 
   get bin(): string {
@@ -20,8 +19,12 @@ export default class Yarn {
     return new Promise((resolve, reject) => {
       const {fork} = require('child_process')
       let forked = fork(modulePath, args, options)
-      forked.stdout.on('data', (d: any) => process.stdout.write(d))
       forked.stderr.on('data', (d: any) => process.stderr.write(d))
+      forked.stdout.setEncoding('utf8')
+      forked.stdout.on('data', (d: any) => {
+        if (options.verbose) process.stdout.write(d)
+        else ux.action.status = d.replace(/\n$/, '').split('\n').pop()
+      })
 
       forked.on('error', reject)
       forked.on('exit', (code: number) => {
@@ -39,13 +42,14 @@ export default class Yarn {
     })
   }
 
-  async exec(args: string[] = []): Promise<void> {
+  async exec(args: string[] = [], opts: {cwd: string, verbose: boolean}): Promise<void> {
+    const cwd = opts.cwd
     if (args[0] !== 'run') {
       const cacheDir = path.join(this.config.cacheDir, 'yarn')
       args = [
         ...args,
         '--non-interactive',
-        `--mutex=file:${path.join(this.cwd, 'yarn.lock')}`,
+        `--mutex=file:${path.join(cwd, 'yarn.lock')}`,
         `--preferred-cache-folder=${cacheDir}`,
         '--check-files',
       ]
@@ -56,12 +60,16 @@ export default class Yarn {
 
     const npmRunPath = require('npm-run-path')
     let options = {
-      cwd: this.cwd,
+      ...opts,
+      cwd,
       stdio: [0, null, null, 'ipc'],
-      env: npmRunPath.env({cwd: this.cwd, env: process.env}),
+      env: npmRunPath.env({cwd, env: process.env}),
     }
 
-    debug(`${this.cwd}: ${this.bin} ${args.join(' ')}`)
+    if (opts.verbose) {
+      process.stderr.write(`${cwd}: ${this.bin} ${args.join(' ')}`)
+    }
+    debug(`${cwd}: ${this.bin} ${args.join(' ')}`)
     try {
       await this.fork(this.bin, args, options)
       debug('done')
@@ -70,7 +78,7 @@ export default class Yarn {
       let networkConcurrency = '--network-concurrency=1'
       if (err.message.includes('EAI_AGAIN') && !args.includes(networkConcurrency)) {
         debug('EAI_AGAIN')
-        return this.exec([...args, networkConcurrency])
+        return this.exec([...args, networkConcurrency], opts)
       }
       throw err
     }

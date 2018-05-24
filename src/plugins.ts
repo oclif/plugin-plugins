@@ -14,11 +14,12 @@ import Yarn from './yarn'
 const initPJSON: Config.PJSON.User = {private: true, oclif: {schema: 1, plugins: []}, dependencies: {}}
 
 export default class Plugins {
+  verbose = false
   readonly yarn: Yarn
   private readonly debug: any
 
   constructor(public config: Config.IConfig) {
-    this.yarn = new Yarn({config, cwd: this.config.dataDir})
+    this.yarn = new Yarn({config})
     this.debug = require('debug')('@oclif/plugins')
   }
 
@@ -54,15 +55,24 @@ export default class Plugins {
         name = unfriendly
       }
       await this.createPJSON()
-      await this.yarn.exec(['add', `${name}@${tag}`])
+      await this.yarn.exec(['add', `${name}@${tag}`], {cwd: this.config.dataDir, verbose: this.verbose})
       const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
       if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
         throw new Error('plugin is invalid')
       }
+      await this.refresh(plugin.root)
       await this.add({name, tag: range || tag, type: 'user'})
     } catch (err) {
       await this.uninstall(name).catch(err => this.debug(err))
       throw err
+    }
+  }
+
+  // if yarn.lock exists, fetch locked dependencies
+  async refresh(root: string, {prod = true}: {prod?: boolean} = {}) {
+    if (fs.existsSync(path.join(root, 'yarn.lock'))) {
+      // use yarn.lock to fetch dependencies
+      await this.yarn.exec(prod ? ['--prod'] : [], {cwd: root, verbose: this.verbose})
     }
   }
 
@@ -72,6 +82,7 @@ export default class Plugins {
     if (!c.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
       throw new CLIError('plugin is not a valid oclif plugin')
     }
+    await this.refresh(c.root, {prod: false})
     await this.add({type: 'link', name: c.name, root: c.root})
   }
 
@@ -93,7 +104,7 @@ export default class Plugins {
     try {
       const pjson = await this.pjson()
       if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
-        await this.yarn.exec(['remove', name])
+        await this.yarn.exec(['remove', name], {cwd: this.config.dataDir, verbose: this.verbose})
       }
     } finally {
       await this.remove(name)
@@ -104,7 +115,10 @@ export default class Plugins {
     const plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
-    await this.yarn.exec(['add', ...plugins.map(p => `${p.name}@${p.tag}`)])
+    await this.yarn.exec(['add', ...plugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
+    for (let p of plugins) {
+      await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
+    }
     cli.action.stop()
   }
 

@@ -1,4 +1,4 @@
-import {Command} from '@oclif/command'
+import {Command, flags} from '@oclif/command'
 import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
@@ -12,13 +12,18 @@ export default class PluginsUninstall extends Command {
   `
   static variableArgs = true
   static args = [{name: 'plugin', description: 'plugin to uninstall'}]
+  static flags = {
+    help: flags.help({char: 'h'}),
+    verbose: flags.boolean({char: 'v'}),
+  }
   static aliases = ['plugins:unlink', 'plugins:remove']
 
   plugins = new Plugins(this.config)
 
   async run() {
-    const {argv} = this.parse(PluginsUninstall)
+    const {flags, argv} = this.parse(PluginsUninstall)
     this.plugins = new Plugins(this.config)
+    if (flags.verbose) this.plugins.verbose = true
     if (!argv.length) argv.push('.')
     for (let plugin of argv) {
       const friendly = this.plugins.friendlyName(plugin)

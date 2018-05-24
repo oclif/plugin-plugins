@@ -1,4 +1,4 @@
-import {Command} from '@oclif/command'
+import {Command, flags} from '@oclif/command'
 import chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -10,12 +10,17 @@ export default class PluginsInstall extends Command {
   static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
   static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
+  static flags = {
+    help: flags.help({char: 'h'}),
+    verbose: flags.boolean({char: 'v'}),
+  }
   static aliases = ['plugins:add']
 
   plugins = new Plugins(this.config)
 
   async run() {
-    const {argv} = this.parse(PluginsInstall)
+    const {flags, argv} = this.parse(PluginsInstall)
+    if (flags.verbose) this.plugins.verbose = true
     for (let plugin of argv) {
       let {name, tag} = parsePlugin(plugin)
       cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(name))}`)
