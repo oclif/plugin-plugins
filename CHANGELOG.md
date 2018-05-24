@@ -1,3 +1,11 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/oclif/plugin-plugins/compare/v1.1.15...v1.2.0) (2018-05-24)
+
+
+### Features
+
+* verbose and yarn.lock support ([577f9a5](https://github.com/oclif/plugin-plugins/commit/577f9a5))
+
 <a name="1.1.15"></a>
 ## [1.1.15](https://github.com/oclif/plugin-plugins/compare/v1.1.14...v1.1.15) (2018-05-23)
 
