@@ -37,7 +37,7 @@
     "fancy-test": "^1.0.8",
     "globby": "^8.0.1",
     "mocha": "^5.2.0",
-    "ts-node": "6.0.3",
+    "ts-node": "6.0.4",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   },
