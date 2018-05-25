@@ -1,3 +1,11 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/oclif/plugin-plugins/compare/v1.2.0...v1.2.1) (2018-05-25)
+
+
+### Bug Fixes
+
+* pass --verbose to yarn ([1c7dc0e](https://github.com/oclif/plugin-plugins/commit/1c7dc0e))
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/oclif/plugin-plugins/compare/v1.1.15...v1.2.0) (2018-05-24)
 
