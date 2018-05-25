@@ -53,6 +53,9 @@ export default class Yarn {
         `--preferred-cache-folder=${cacheDir}`,
         '--check-files',
       ]
+      if (opts.verbose) {
+        args.push('--verbose')
+      }
       if (this.config.npmRegistry) {
         args.push(`--registry=${this.config.npmRegistry}`)
       }
