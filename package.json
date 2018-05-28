@@ -22,7 +22,7 @@
     "@oclif/config": "^1.6.19",
     "@oclif/dev-cli": "^1.13.22",
     "@oclif/errors": "^1.1.2",
-    "@oclif/plugin-help": "^1.2.11",
+    "@oclif/plugin-help": "^2.0.0",
     "@oclif/test": "^1.0.6",
     "@oclif/tslint": "^1.1.2",
     "@types/chai": "^4.1.3",
