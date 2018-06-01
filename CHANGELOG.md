@@ -1,3 +1,12 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/oclif/plugin-plugins/compare/v1.3.2...v1.4.0) (2018-06-01)
+
+
+### Features
+
+* show version after uninstalling ([fea821c](https://github.com/oclif/plugin-plugins/commit/fea821c))
+* show version after uninstalling ([c1c69ec](https://github.com/oclif/plugin-plugins/commit/c1c69ec))
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/oclif/plugin-plugins/compare/v1.3.1...v1.3.2) (2018-06-01)
 
