@@ -1,3 +1,11 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/oclif/plugin-plugins/compare/v1.2.1...v1.3.0) (2018-06-01)
+
+
+### Features
+
+* allow installing from github urls ([4ae4f3d](https://github.com/oclif/plugin-plugins/commit/4ae4f3d))
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/oclif/plugin-plugins/compare/v1.2.0...v1.2.1) (2018-05-25)
 
