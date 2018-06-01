@@ -130,8 +130,13 @@ export default class Plugins {
     const plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
-    await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
-    await this.yarn.exec(['add', ...plugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
+    if (plugins.find(p => !!p.url)) {
+      await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
+    }
+    const npmPlugins = plugins.filter(p => !p.url)
+    if (npmPlugins.length) {
+      await this.yarn.exec(['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
+    }
     for (let p of plugins) {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
     }
