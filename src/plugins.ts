@@ -49,19 +49,34 @@ export default class Plugins {
 
   async install(name: string, tag = 'latest') {
     try {
-      const range = semver.validRange(tag)
-      const unfriendly = this.unfriendlyName(name)
-      if (unfriendly && await this.npmHasPackage(unfriendly)) {
-        name = unfriendly
-      }
+      const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
       await this.createPJSON()
-      await this.yarn.exec(['add', `${name}@${tag}`], {cwd: this.config.dataDir, verbose: this.verbose})
-      const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
-      if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
-        throw new Error('plugin is invalid')
+      if (name.includes(':')) {
+        // url
+        const url = name
+        await this.yarn.exec(['add', url], yarnOpts)
+        name = Object.entries((await this.pjson()).dependencies || {}).find(([, u]: any) => u === url)![0]
+        const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
+        await this.refresh(plugin.root)
+        if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
+          throw new Error('plugin is invalid')
+        }
+        await this.add({name, url, type: 'user'})
+      } else {
+        // npm
+        const range = semver.validRange(tag)
+        const unfriendly = this.unfriendlyName(name)
+        if (unfriendly && await this.npmHasPackage(unfriendly)) {
+          name = unfriendly
+        }
+        await this.yarn.exec(['add', `${name}@${tag}`], yarnOpts)
+        const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
+        if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
+          throw new Error('plugin is invalid')
+        }
+        await this.refresh(plugin.root)
+        await this.add({name, tag: range || tag, type: 'user'})
       }
-      await this.refresh(plugin.root)
-      await this.add({name, tag: range || tag, type: 'user'})
     } catch (err) {
       await this.uninstall(name).catch(err => this.debug(err))
       throw err
@@ -115,6 +130,7 @@ export default class Plugins {
     const plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
+    await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
     await this.yarn.exec(['add', ...plugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
     for (let p of plugins) {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))

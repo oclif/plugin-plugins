@@ -14,6 +14,20 @@ describe('command', () => {
   .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
   .it('installs and uninstalls @oclif/example-plugin-ts')
+
+  test
+  .command(['plugins:install', 'jdxcode/oclif-debug'], {reset: true})
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('oclif-debug'))
+  .stdout()
+  .command(['debug'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('debug'))
+  .command(['plugins:uninstall', 'oclif-debug'])
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .it('installs and uninstalls jdxcode/oclif-debug')
   // test
   // .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
   // .stdout()

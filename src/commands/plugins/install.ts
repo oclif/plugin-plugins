@@ -22,21 +22,29 @@ export default class PluginsInstall extends Command {
     const {flags, argv} = this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
     for (let plugin of argv) {
-      let {name, tag} = parsePlugin(plugin)
-      cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(name))}`)
-      await this.plugins.install(name, tag)
+      let p = parsePlugin(plugin)
+      if (p.type === 'npm') {
+        cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`)
+        await this.plugins.install(p.name, p.tag)
+      } else {
+        cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
+        await this.plugins.install(p.url)
+      }
       cli.action.stop()
     }
   }
 }
 
-function parsePlugin(input: string): {name: string, tag: string} {
-  if (input.includes('/')) {
+function parsePlugin(input: string): {name: string, tag: string, type: 'npm'} | {url: string, type: 'repo'} {
+  if (input.includes('@') && input.includes('/')) {
     input = input.slice(1)
     let [name, tag = 'latest'] = input.split('@')
-    return {name: '@' + name, tag}
+    return {name: '@' + name, tag, type: 'npm'}
+  } else if (input.includes('/')) {
+    if (input.includes(':')) return {url: input, type: 'repo'}
+    else return {url: `https://github.com/${input}`, type: 'repo'}
   } else {
     let [name, tag = 'latest'] = input.split('@')
-    return {name, tag}
+    return {name, tag, type: 'npm'}
   }
 }
