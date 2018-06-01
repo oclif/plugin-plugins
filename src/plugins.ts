@@ -47,16 +47,17 @@ export default class Plugins {
     return this.normalizePlugins(pjson.oclif.plugins)
   }
 
-  async install(name: string, tag = 'latest') {
+  async install(name: string, tag = 'latest'): Promise<Config.IConfig> {
     try {
       const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
       await this.createPJSON()
+      let plugin
       if (name.includes(':')) {
         // url
         const url = name
         await this.yarn.exec(['add', url], yarnOpts)
         name = Object.entries((await this.pjson()).dependencies || {}).find(([, u]: any) => u === url)![0]
-        const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
+        plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
         await this.refresh(plugin.root)
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
           throw new Error('plugin is invalid')
@@ -70,13 +71,14 @@ export default class Plugins {
           name = unfriendly
         }
         await this.yarn.exec(['add', `${name}@${tag}`], yarnOpts)
-        const plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
+        plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
           throw new Error('plugin is invalid')
         }
         await this.refresh(plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
       }
+      return plugin
     } catch (err) {
       await this.uninstall(name).catch(err => this.debug(err))
       throw err

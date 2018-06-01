@@ -27,16 +27,17 @@ Can be installed from npm or a git url.
   async run() {
     const {flags, argv} = this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
-    for (let plugin of argv) {
-      let p = parsePlugin(plugin)
+    for (let name of argv) {
+      let p = parsePlugin(name)
+      let plugin
       if (p.type === 'npm') {
         cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`)
-        await this.plugins.install(p.name, p.tag)
+        plugin = await this.plugins.install(p.name, p.tag)
       } else {
         cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
-        await this.plugins.install(p.url)
+        plugin = await this.plugins.install(p.url)
       }
-      cli.action.stop()
+      cli.action.stop(`installed v${plugin.version}`)
     }
   }
 }
