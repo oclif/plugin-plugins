@@ -5,9 +5,15 @@ import cli from 'cli-ux'
 import Plugins from '../../plugins'
 
 export default class PluginsInstall extends Command {
-  static description = 'installs a plugin into the CLI'
+  static description = `installs a plugin into the CLI
+Can be installed from npm or a git url.
+`
   static usage = 'plugins:install PLUGIN...'
-  static examples = ['$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
+  static examples = [
+    '$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
+    '$ <%= config.bin %> plugins:install https://github.com/someuser/someplugin',
+    '$ <%= config.bin %> plugins:install someuser/someplugin',
+  ]
   static strict = false
   static args = [{name: 'plugin', description: 'plugin to install', required: true}]
   static flags = {
