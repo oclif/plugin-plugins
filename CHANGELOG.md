@@ -1,3 +1,11 @@
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/oclif/plugin-plugins/compare/v1.3.1...v1.3.2) (2018-06-01)
+
+
+### Bug Fixes
+
+* add docs for plugins:install with github ([15d00b2](https://github.com/oclif/plugin-plugins/commit/15d00b2))
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/oclif/plugin-plugins/compare/v1.3.0...v1.3.1) (2018-06-01)
 

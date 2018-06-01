@@ -78,7 +78,7 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.1/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.2/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -95,14 +95,19 @@ OPTIONS
   -h, --help     show CLI help
   -v, --verbose
 
+DESCRIPTION
+  Can be installed from npm or a git url.
+
 ALIASES
   $ mycli plugins:add
 
-EXAMPLE
-  $ mycli plugins:install myplugin
+EXAMPLES
+  $ mycli plugins:install myplugin 
+  $ mycli plugins:install https://github.com/someuser/someplugin
+  $ mycli plugins:install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.1/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.2/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -123,7 +128,7 @@ EXAMPLE
   $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.1/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.2/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -145,7 +150,7 @@ ALIASES
   $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.1/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.2/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -160,5 +165,5 @@ OPTIONS
   -v, --verbose
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.1/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.3.2/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
