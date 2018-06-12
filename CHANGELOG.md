@@ -1,3 +1,11 @@
+<a name="1.5.2"></a>
+## [1.5.2](https://github.com/oclif/plugin-plugins/compare/v1.5.1...v1.5.2) (2018-06-12)
+
+
+### Bug Fixes
+
+* Added clarifications to the behaviour of plugin:install and plugin:link ([#47](https://github.com/oclif/plugin-plugins/issues/47)) ([dc2cedf](https://github.com/oclif/plugin-plugins/commit/dc2cedf)), closes [#45](https://github.com/oclif/plugin-plugins/issues/45)
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/oclif/plugin-plugins/compare/v1.5.0...v1.5.1) (2018-06-12)
 
