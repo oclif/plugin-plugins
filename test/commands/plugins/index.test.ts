@@ -16,6 +16,20 @@ describe('command', () => {
   .it('installs and uninstalls @oclif/example-plugin-ts')
 
   test
+  .command(['plugins:install', 'aliasme'], {reset: true})
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('oclif-debug'))
+  .stdout()
+  .command(['debug'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('debug'))
+  .command(['plugins:uninstall', 'oclif-debug'])
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .it('installs via an alias')
+
+  test
   .command(['plugins:install', 'jdxcode/oclif-debug'], {reset: true})
   .stdout()
   .command(['plugins'], {reset: true})

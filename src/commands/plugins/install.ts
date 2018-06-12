@@ -27,7 +27,10 @@ Can be installed from npm or a git url.
   async run() {
     const {flags, argv} = this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
+    const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv) {
+      if (aliases[name] === null) this.error(`${name} is blacklisted`)
+      name = aliases[name] || name
       let p = parsePlugin(name)
       let plugin
       if (p.type === 'npm') {
