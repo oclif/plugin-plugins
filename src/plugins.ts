@@ -129,9 +129,20 @@ export default class Plugins {
   }
 
   async update() {
-    const plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
+    let plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
+
+    // migrate deprecated plugins
+    const aliases = this.config.pjson.oclif.aliases || {}
+    for (let [name, to] of Object.entries(aliases)) {
+      const plugin = plugins.find(p => p.name === name)
+      if (!plugin) continue
+      if (to) await this.install(to)
+      await this.uninstall(name)
+      plugins = plugins.filter(p => p.name !== name)
+    }
+
     if (plugins.find(p => !!p.url)) {
       await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
     }
