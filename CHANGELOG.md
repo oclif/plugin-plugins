@@ -1,3 +1,11 @@
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/oclif/plugin-plugins/compare/v1.4.0...v1.5.0) (2018-06-12)
+
+
+### Features
+
+* added aliases ([60bbdc0](https://github.com/oclif/plugin-plugins/commit/60bbdc0))
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/oclif/plugin-plugins/compare/v1.3.2...v1.4.0) (2018-06-01)
 
