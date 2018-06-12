@@ -1,3 +1,11 @@
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/oclif/plugin-plugins/compare/v1.5.0...v1.5.1) (2018-06-12)
+
+
+### Bug Fixes
+
+* remove/migrate plugins during updates ([cad9523](https://github.com/oclif/plugin-plugins/commit/cad9523))
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/oclif/plugin-plugins/compare/v1.4.0...v1.5.0) (2018-06-12)
 
