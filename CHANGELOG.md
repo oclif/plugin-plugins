@@ -1,3 +1,11 @@
+<a name="1.5.3"></a>
+## [1.5.3](https://github.com/oclif/plugin-plugins/compare/v1.5.2...v1.5.3) (2018-06-29)
+
+
+### Bug Fixes
+
+* switch to [@oclif](https://github.com/oclif)/color ([4c2bfa6](https://github.com/oclif/plugin-plugins/commit/4c2bfa6))
+
 <a name="1.5.2"></a>
 ## [1.5.2](https://github.com/oclif/plugin-plugins/compare/v1.5.1...v1.5.2) (2018-06-12)
 
