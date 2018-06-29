@@ -1,4 +1,4 @@
-import color from '@heroku-cli/color'
+import color from '@oclif/color'
 import {Command, flags} from '@oclif/command'
 
 import Plugins from '../../plugins'
