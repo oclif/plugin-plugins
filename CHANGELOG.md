@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/oclif/plugin-plugins/compare/v1.5.3...v1.5.4) (2018-06-29)
+
+
+### Bug Fixes
+
+* bump semantic-release ([c0a2e49](https://github.com/oclif/plugin-plugins/commit/c0a2e49))
+
 <a name="1.5.3"></a>
 ## [1.5.3](https://github.com/oclif/plugin-plugins/compare/v1.5.2...v1.5.3) (2018-06-29)
 
