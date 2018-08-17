@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/oclif/plugin-plugins/compare/v1.5.4...v1.6.0) (2018-08-17)
+
+
+### Features
+
+* typescript 3 ([b63959a](https://github.com/oclif/plugin-plugins/commit/b63959a))
+
 ## [1.5.4](https://github.com/oclif/plugin-plugins/compare/v1.5.3...v1.5.4) (2018-06-29)
 
 
