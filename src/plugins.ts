@@ -205,10 +205,14 @@ export default class Plugins {
     return path.join(this.config.dataDir, 'package.json')
   }
 
+  private get npmRegistry(): string {
+    return this.config.npmRegistry || 'https://registry.npmjs.org'
+  }
+
   private async npmHasPackage(name: string): Promise<boolean> {
     try {
       const http: typeof HTTP = require('http-call').HTTP
-      let url = `${this.config.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
+      let url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
       await http.get(url)
       return true
     } catch (err) {
