@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/oclif/plugin-plugins/compare/v1.6.0...v1.6.1) (2018-08-22)
+
+
+### Bug Fixes
+
+* default registry to npmjs.org ([#50](https://github.com/oclif/plugin-plugins/issues/50)) ([4cd0cb2](https://github.com/oclif/plugin-plugins/commit/4cd0cb2))
+
 # [1.6.0](https://github.com/oclif/plugin-plugins/compare/v1.5.4...v1.6.0) (2018-08-17)
 
 
