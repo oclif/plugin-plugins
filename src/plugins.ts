@@ -123,6 +123,8 @@ export default class Plugins {
       if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.yarn.exec(['remove', name], {cwd: this.config.dataDir, verbose: this.verbose})
       }
+    } catch (err) {
+      cli.warn(err)
     } finally {
       await this.remove(name)
     }
