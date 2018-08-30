@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/oclif/plugin-plugins/compare/v1.6.1...v1.6.2) (2018-08-30)
+
+
+### Bug Fixes
+
+* only warn if error uninstalling plugin ([0c93e0a](https://github.com/oclif/plugin-plugins/commit/0c93e0a))
+
 ## [1.6.1](https://github.com/oclif/plugin-plugins/compare/v1.6.0...v1.6.1) (2018-08-22)
 
 
