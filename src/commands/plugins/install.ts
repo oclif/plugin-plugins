@@ -23,6 +23,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static flags = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
+    force: flags.boolean({char: 'f'}),
   }
   static aliases = ['plugins:add']
 
@@ -39,10 +40,10 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       let plugin
       if (p.type === 'npm') {
         cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`)
-        plugin = await this.plugins.install(p.name, p.tag)
+        plugin = await this.plugins.install(p.name, p.tag, flags.force)
       } else {
         cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
-        plugin = await this.plugins.install(p.url)
+        plugin = await this.plugins.install(p.url, undefined, flags.force)
       }
       cli.action.stop(`installed v${plugin.version}`)
     }
