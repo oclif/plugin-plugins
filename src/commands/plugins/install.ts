@@ -23,7 +23,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static flags = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
-    force: flags.boolean({char: 'f'}),
+    force: flags.boolean({char: 'f', description: 'yarn install with force flag'}),
   }
   static aliases = ['plugins:add']
 
