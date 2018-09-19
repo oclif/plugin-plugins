@@ -47,7 +47,7 @@ export default class Plugins {
     return this.normalizePlugins(pjson.oclif.plugins)
   }
 
-  async install(name: string, tag = 'latest', force = false): Promise<Config.IConfig> {
+  async install(name: string, {tag = 'latest', force = false} = {}): Promise<Config.IConfig> {
     try {
       const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
       await this.createPJSON()

@@ -40,10 +40,10 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       let plugin
       if (p.type === 'npm') {
         cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`)
-        plugin = await this.plugins.install(p.name, p.tag, flags.force)
+        plugin = await this.plugins.install(p.name, {tag: p.tag, force: flags.force})
       } else {
         cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
-        plugin = await this.plugins.install(p.url, 'latest', flags.force)
+        plugin = await this.plugins.install(p.url, {force: flags.force})
       }
       cli.action.stop(`installed v${plugin.version}`)
     }
