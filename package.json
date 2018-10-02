@@ -19,7 +19,7 @@
     "yarn": "^1.10.1"
   },
   "devDependencies": {
-    "@oclif/config": "^1.7.6",
+    "@oclif/config": "^1.8.1",
     "@oclif/dev-cli": "^1.18.1",
     "@oclif/errors": "^1.2.1",
     "@oclif/plugin-help": "^2.1.2",

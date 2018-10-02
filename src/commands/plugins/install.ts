@@ -39,6 +39,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       let plugin
       if (p.type === 'npm') {
         cli.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`)
+        await this.config.runHook('plugins:preinstall', {
+          plugin: p
+        })
         plugin = await this.plugins.install(p.name, p.tag)
       } else {
         cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
