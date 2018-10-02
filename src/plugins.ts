@@ -4,7 +4,7 @@ import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
 import HTTP from 'http-call'
-import loadJSON = require('load-json-file')
+import loadJSON from 'load-json-file'
 import * as path from 'path'
 import * as semver from 'semver'
 
@@ -25,7 +25,7 @@ export default class Plugins {
 
   async pjson(): Promise<Config.PJSON.User> {
     try {
-      const pjson: Config.PJSON = await loadJSON(this.pjsonPath)
+      const pjson = await loadJSON<Config.PJSON>(this.pjsonPath)
       return {
         ...initPJSON,
         oclif: {
@@ -171,7 +171,7 @@ export default class Plugins {
 
   async yarnNodeVersion(): Promise<string | undefined> {
     try {
-      let f = await loadJSON(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
+      let f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
       return f.nodeVersion
     } catch (err) {
       if (err.code !== 'ENOENT') cli.warn(err)
