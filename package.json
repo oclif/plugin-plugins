@@ -15,6 +15,7 @@
     "load-json-file": "^5.1.0",
     "npm-run-path": "^2.0.2",
     "semver": "^5.5.1",
+    "treeify": "^1.1.0",
     "tslib": "^1.9.3",
     "yarn": "^1.10.1"
   },

@@ -30,6 +30,8 @@ export default class PluginsUninstall extends Command {
       cli.action.start(`Uninstalling ${friendly}`)
       const unfriendly = await this.plugins.hasPlugin(plugin)
       if (!unfriendly) {
+        const p = this.config.plugins.find(p => p.name === plugin)
+        if (p) return this.error(`${friendly} is installed via ${p.type}, uninstall ${p.type} instead`)
         return this.error(`${friendly} is not installed`)
       }
       await this.plugins.uninstall(unfriendly.name)
