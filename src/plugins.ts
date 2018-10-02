@@ -185,6 +185,14 @@ export default class Plugins {
     return `@${scope}/plugin-${name}`
   }
 
+  async maybeUnfriendlyName(name: string): Promise<string> {
+    const unfriendly = this.unfriendlyName(name)
+    if (unfriendly && await this.npmHasPackage(unfriendly)) {
+      return unfriendly
+    }
+    return name
+  }
+
   friendlyName(name: string): string {
     const scope = this.config.pjson.oclif.scope
     if (!scope) return name
