@@ -47,7 +47,7 @@ export default class PluginsIndex extends Command {
       if (trees[plugin.name]) {
         let tree: { [key: string]: any } = {}
         for (let p of trees[plugin.name]) {
-            tree[this.formatPlugin(p)] = {}
+          tree[this.formatPlugin(p)] = {}
         }
         const pathTree = treeify.asTree(tree, true)
         this.log(pathTree)
