@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/oclif/plugin-plugins/compare/v1.6.3...v1.7.0) (2018-10-02)
+
+
+### Features
+
+* plugins:preinstall hook ([2ba5ef0](https://github.com/oclif/plugin-plugins/commit/2ba5ef0))
+
 ## [1.6.3](https://github.com/oclif/plugin-plugins/compare/v1.6.2...v1.6.3) (2018-10-02)
 
 
