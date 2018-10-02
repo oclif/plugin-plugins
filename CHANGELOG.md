@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/oclif/plugin-plugins/compare/v1.6.2...v1.6.3) (2018-10-02)
+
+
+### Bug Fixes
+
+* updated typescript and yarn ([106388d](https://github.com/oclif/plugin-plugins/commit/106388d))
+
 ## [1.6.2](https://github.com/oclif/plugin-plugins/compare/v1.6.1...v1.6.2) (2018-08-30)
 
 
