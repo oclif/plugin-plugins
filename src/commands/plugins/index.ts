@@ -31,11 +31,10 @@ export default class PluginsIndex extends Command {
   }
 
   private display(plugins: IPlugin[]) {
-    let trees: { [key: string]: any } = {}
+    let trees: { [key: string]: any } = {root: []}
 
     for (let plugin of plugins) {
-      if (['core', 'user', 'link'].includes(plugin.type)) {
-        if (!trees.root) trees.root = []
+      if (!plugin.parent) {
         trees.root.push(plugin)
       } else {
         if (!trees[plugin.type]) trees[plugin.type] = []
@@ -48,8 +47,7 @@ export default class PluginsIndex extends Command {
       if (trees[plugin.name]) {
         let tree: { [key: string]: any } = {}
         for (let p of trees[plugin.name]) {
-          const subTree = this.formatPlugin(p, plugin.type)
-          tree[subTree] = {}
+            tree[this.formatPlugin(p)] = {}
         }
         const pathTree = treeify.asTree(tree, true)
         this.log(pathTree)
@@ -57,8 +55,7 @@ export default class PluginsIndex extends Command {
     }
   }
 
-  private formatPlugin(plugin: any, parentType: boolean | string = false): string {
-    if (parentType) plugin.type = parentType
+  private formatPlugin(plugin: any): string {
     let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
     if (plugin.type !== 'user')
       output += color.dim(` (${plugin.type})`)
