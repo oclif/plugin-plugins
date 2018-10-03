@@ -1,3 +1,24 @@
+## [1.7.1](https://github.com/oclif/plugin-plugins/compare/v1.7.0...v1.7.1) (2018-10-02)
+
+
+### Bug Fixes
+
+* use unfriendly name for preinstall hook ([#66](https://github.com/oclif/plugin-plugins/issues/66)) ([b5d38e2](https://github.com/oclif/plugin-plugins/commit/b5d38e2))
+
+# [1.7.0](https://github.com/oclif/plugin-plugins/compare/v1.6.3...v1.7.0) (2018-10-02)
+
+
+### Features
+
+* plugins:preinstall hook ([2ba5ef0](https://github.com/oclif/plugin-plugins/commit/2ba5ef0))
+
+## [1.6.3](https://github.com/oclif/plugin-plugins/compare/v1.6.2...v1.6.3) (2018-10-02)
+
+
+### Bug Fixes
+
+* updated typescript and yarn ([106388d](https://github.com/oclif/plugin-plugins/commit/106388d))
+
 ## [1.6.2](https://github.com/oclif/plugin-plugins/compare/v1.6.1...v1.6.2) (2018-08-30)
 
 
