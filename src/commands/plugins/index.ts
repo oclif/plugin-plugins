@@ -7,6 +7,50 @@ import {sortBy} from '../../util'
 
 const treeify = require('treeify')
 
+class Tree {
+  nodes: {[key: string]: Tree} = {}
+  constructor() {}
+
+  insert(child: string, parent?: string): boolean {
+    // if not parent, at root tree
+    if (!parent) {
+      this.nodes[child] = new Tree()
+      return true
+    }
+    // if already inserted return
+    if (this.search(child)) return true
+    // find parent
+    let node = this.search(parent)
+    // and insert
+    if (node) {
+      node.insert(child)
+      return true
+    }
+    return false
+  }
+
+  search(key: string): Tree | undefined {
+    for (let child of Object.keys(this.nodes)) {
+      if (child === key) return this.nodes[child]
+      else return this.nodes[child].search(key)
+    }
+  }
+
+  // tslint:disable-next-line:no-console
+  display(logger: any = console.log) {
+    const addNodes = function (nodes: any) {
+      let tree: { [key: string]: any } = {}
+      for (let p of Object.keys(nodes)) {
+        tree[p] = addNodes(nodes[p].nodes)
+      }
+      return tree
+    }
+
+    let tree = addNodes(this.nodes)
+    logger(treeify.asTree(tree, true, true, true))
+  }
+}
+
 export default class PluginsIndex extends Command {
   static flags = {
     core: flags.boolean({description: 'show core plugins'})
@@ -30,32 +74,26 @@ export default class PluginsIndex extends Command {
     this.display(plugins)
   }
 
-  private display(plugins: IPlugin[]) {
-    let trees: { [key: string]: any } = {root: []}
-
-    for (let plugin of plugins) {
-      if (!plugin.parent) {
-        trees.root.push(plugin)
-      } else {
-        if (!trees[plugin.type]) trees[plugin.type] = []
-        trees[plugin.type].push(plugin)
-      }
-    }
-
-    for (let plugin of trees.root) {
-      this.log(this.formatPlugin(plugin))
-      if (trees[plugin.name]) {
-        let tree: { [key: string]: any } = {}
-        for (let p of trees[plugin.name]) {
-          tree[this.formatPlugin(p)] = {}
-        }
-        const pathTree = treeify.asTree(tree, true)
-        this.log(pathTree)
-      }
+  private addToTree(tree: Tree, plugin: IPlugin, parent?: string) {
+    const name = this.formatPlugin(plugin)
+    tree.insert(name, parent)
+    for (let p of plugin.children) {
+      this.addToTree(tree, p, name)
     }
   }
 
+  private display(plugins: IPlugin[]) {
+    let tree = new Tree()
+
+    for (let plugin of plugins.filter(p => !p.parent)) {
+      this.addToTree(tree, plugin)
+    }
+
+    tree.display(this.log)
+  }
+
   private formatPlugin(plugin: any): string {
+    // console.log(plugin.type)
     let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
     if (plugin.type !== 'user')
       output += color.dim(` (${plugin.type})`)
