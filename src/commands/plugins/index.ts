@@ -1,55 +1,10 @@
 import color from '@oclif/color'
 import {Command, flags} from '@oclif/command'
-import {IPlugin} from '@oclif/config'
+import {Plugin} from '@oclif/config'
+import {cli} from 'cli-ux'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
-
-const treeify = require('treeify')
-
-class Tree {
-  nodes: {[key: string]: Tree} = {}
-  constructor() {}
-
-  insert(child: string, parent?: string): boolean {
-    // if not parent, at root tree
-    if (!parent) {
-      this.nodes[child] = new Tree()
-      return true
-    }
-    // if already inserted return
-    if (this.search(child)) return true
-    // find parent
-    let node = this.search(parent)
-    // and insert
-    if (node) {
-      node.insert(child)
-      return true
-    }
-    return false
-  }
-
-  search(key: string): Tree | undefined {
-    for (let child of Object.keys(this.nodes)) {
-      if (child === key) return this.nodes[child]
-      else return this.nodes[child].search(key)
-    }
-  }
-
-  // tslint:disable-next-line:no-console
-  display(logger: any = console.log) {
-    const addNodes = function (nodes: any) {
-      let tree: { [key: string]: any } = {}
-      for (let p of Object.keys(nodes)) {
-        tree[p] = addNodes(nodes[p].nodes)
-      }
-      return tree
-    }
-
-    let tree = addNodes(this.nodes)
-    logger(treeify.asTree(tree, true, true, true))
-  }
-}
 
 export default class PluginsIndex extends Command {
   static flags = {
@@ -74,26 +29,24 @@ export default class PluginsIndex extends Command {
     this.display(plugins)
   }
 
-  private addToTree(tree: Tree, plugin: IPlugin, parent?: string) {
-    const name = this.formatPlugin(plugin)
-    tree.insert(name, parent)
-    for (let p of plugin.children) {
-      this.addToTree(tree, p, name)
+  private display(plugins: Plugin[]) {
+    for (let plugin of plugins.filter((p: Plugin) => !p.parent)) {
+      this.log(this.formatPlugin(plugin))
+      let tree = this.createTree(plugin)
+      tree.display(this.log)
     }
   }
 
-  private display(plugins: IPlugin[]) {
-    let tree = new Tree()
-
-    for (let plugin of plugins.filter(p => !p.parent)) {
-      this.addToTree(tree, plugin)
+  private createTree(plugin: Plugin) {
+    let tree = cli.tree()
+    for (let p of plugin.children) {
+      const name = this.formatPlugin(p)
+      tree.insert(name, this.createTree(p))
     }
-
-    tree.display(this.log)
+    return tree
   }
 
   private formatPlugin(plugin: any): string {
-    // console.log(plugin.type)
     let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
     if (plugin.type !== 'user')
       output += color.dim(` (${plugin.type})`)
