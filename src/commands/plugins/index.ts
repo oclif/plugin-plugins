@@ -32,8 +32,10 @@ export default class PluginsIndex extends Command {
   private display(plugins: Plugin[]) {
     for (let plugin of plugins.filter((p: Plugin) => !p.parent)) {
       this.log(this.formatPlugin(plugin))
-      let tree = this.createTree(plugin)
-      tree.display(this.log)
+      if (plugin.children.length) {
+        let tree = this.createTree(plugin)
+        tree.display(this.log)
+      }
     }
   }
 
