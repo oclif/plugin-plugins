@@ -23,6 +23,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static flags = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
+    force: flags.boolean({char: 'f', description: 'yarn install with force flag'}),
   }
   static aliases = ['plugins:add']
 
@@ -42,10 +43,10 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         await this.config.runHook('plugins:preinstall', {
           plugin: p
         })
-        plugin = await this.plugins.install(p.name, p.tag)
+        plugin = await this.plugins.install(p.name, {tag: p.tag, force: flags.force})
       } else {
         cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
-        plugin = await this.plugins.install(p.url)
+        plugin = await this.plugins.install(p.url, {force: flags.force})
       }
       cli.action.stop(`installed v${plugin.version}`)
     }
