@@ -7,7 +7,6 @@ plugins plugin for oclif
 [![CircleCI](https://circleci.com/gh/oclif/plugin-plugins/tree/master.svg?style=shield)](https://circleci.com/gh/oclif/plugin-plugins/tree/master)
 [![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/oclif/plugin-plugins?branch=master&svg=true)](https://ci.appveyor.com/project/oclif/plugin-plugins/branch/master)
 [![Codecov](https://codecov.io/gh/oclif/plugin-plugins/branch/master/graph/badge.svg)](https://codecov.io/gh/oclif/plugin-plugins)
-[![Greenkeeper](https://badges.greenkeeper.io/oclif/plugin-plugins.svg)](https://greenkeeper.io/)
 [![Known Vulnerabilities](https://snyk.io/test/github/oclif/plugin-plugins/badge.svg)](https://snyk.io/test/github/oclif/plugin-plugins)
 [![Downloads/week](https://img.shields.io/npm/dw/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
 [![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/master/package.json)
@@ -78,7 +77,7 @@ EXAMPLE
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v1.6.3/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v1.7.3/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -113,7 +112,7 @@ EXAMPLES
   $ mycli plugins:install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.6.3/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.7.3/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -140,7 +139,7 @@ EXAMPLE
   $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.6.3/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.7.3/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -162,7 +161,7 @@ ALIASES
   $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.6.3/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.7.3/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -177,5 +176,5 @@ OPTIONS
   -v, --verbose
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.6.3/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.7.3/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
