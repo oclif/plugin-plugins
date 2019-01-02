@@ -1,5 +1,7 @@
 import color from '@oclif/color'
 import {Command, flags} from '@oclif/command'
+import {Plugin} from '@oclif/config'
+import {cli} from 'cli-ux'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
@@ -24,12 +26,36 @@ export default class PluginsIndex extends Command {
       this.log('no plugins installed')
       return
     }
-    for (let plugin of plugins) {
-      let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
-      if (plugin.type !== 'user') output += color.dim(` (${plugin.type})`)
-      if (plugin.type === 'link') output += ` ${plugin.root}`
-      else if (plugin.tag && plugin.tag !== 'latest') output += color.dim(` (${String(plugin.tag)})`)
-      this.log(output)
+    this.display(plugins as Plugin[])
+  }
+
+  private display(plugins: Plugin[]) {
+    for (let plugin of plugins.filter((p: Plugin) => !p.parent)) {
+      this.log(this.formatPlugin(plugin))
+      if (plugin.children.length) {
+        let tree = this.createTree(plugin)
+        tree.display(this.log)
+      }
     }
+  }
+
+  private createTree(plugin: Plugin) {
+    let tree = cli.tree()
+    for (let p of plugin.children) {
+      const name = this.formatPlugin(p)
+      tree.insert(name, this.createTree(p))
+    }
+    return tree
+  }
+
+  private formatPlugin(plugin: any): string {
+    let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
+    if (plugin.type !== 'user')
+      output += color.dim(` (${plugin.type})`)
+    if (plugin.type === 'link')
+      output += ` ${plugin.root}`
+    else if (plugin.tag && plugin.tag !== 'latest')
+      output += color.dim(` (${String(plugin.tag)})`)
+    return output
   }
 }

@@ -8,7 +8,7 @@
     "@oclif/color": "^0.0.0",
     "@oclif/command": "^1.5.4",
     "chalk": "^2.4.1",
-    "cli-ux": "^4.9.3",
+    "cli-ux": "^5.0.0",
     "debug": "^4.1.0",
     "fs-extra": "^7.0.1",
     "http-call": "^5.2.2",
@@ -19,7 +19,7 @@
     "yarn": "^1.12.3"
   },
   "devDependencies": {
-    "@oclif/config": "^1.9.0",
+    "@oclif/config": "^1.10.4",
     "@oclif/dev-cli": "^1.19.4",
     "@oclif/errors": "^1.2.2",
     "@oclif/plugin-help": "^2.1.4",

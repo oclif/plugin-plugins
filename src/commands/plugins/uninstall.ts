@@ -1,4 +1,5 @@
 import {Command, flags} from '@oclif/command'
+import {Plugin} from '@oclif/config'
 import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
@@ -30,6 +31,10 @@ export default class PluginsUninstall extends Command {
       cli.action.start(`Uninstalling ${friendly}`)
       const unfriendly = await this.plugins.hasPlugin(plugin)
       if (!unfriendly) {
+        let p = this.config.plugins.find(p => p.name === plugin) as Plugin | undefined
+        if (p) {
+          if (p && p.parent) return this.error(`${friendly} is installed via plugin ${p.parent!.name}, uninstall ${p.parent!.name} instead`)
+        }
         return this.error(`${friendly} is not installed`)
       }
       await this.plugins.uninstall(unfriendly.name)
