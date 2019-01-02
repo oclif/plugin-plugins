@@ -1,4 +1,5 @@
 import {Command, flags} from '@oclif/command'
+import {Plugin} from '@oclif/config'
 import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
