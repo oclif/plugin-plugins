@@ -43,23 +43,13 @@
     supports-color "^5.4.0"
     tslib "^1"
 
-"@oclif/command@^1.5.1", "@oclif/command@^1.5.6":
+"@oclif/command@^1.5.1", "@oclif/command@^1.5.4", "@oclif/command@^1.5.6":
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.8.tgz#cd09d4f3183123548cb25d1b12b92e41277ac3e9"
   integrity sha512-+Xuqp7by9jmB+GvR2r450wUXkCpZVdeOXQD0mLSEm3h+Mxhp0NPHuhzXZQvLI0/2fXR+cmJLv1CfpaCYaflL/g==
   dependencies:
     "@oclif/errors" "^1.2.2"
     "@oclif/parser" "^3.7.2"
-    debug "^4.1.0"
-    semver "^5.6.0"
-
-"@oclif/command@^1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.4.tgz#659456def965454e1c0115e8265533980eefb200"
-  integrity sha512-R76o9r2nMYLmpiRyEGDyIlwWIs5n+7aL6TncnqHCtjk990bN4ax5GyKf1S/+vw+2GswwOzNJ/wvxy5gbB3QZbg==
-  dependencies:
-    "@oclif/errors" "^1.2.2"
-    "@oclif/parser" "^3.6.1"
     debug "^4.1.0"
     semver "^5.6.0"
 
@@ -103,15 +93,6 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@oclif/linewrap/-/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
   integrity sha512-Ups2dShK52xXa8w6iBWLgcjPJWjais6KPJQq3gQ/88AY6BXoTX+MIGFPrWQO1KLMiQfoTpcLnUwloN4brrVUHw==
-
-"@oclif/parser@^3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.6.1.tgz#dd0ad29d9178d75a2de30314874a6167675925ed"
-  integrity sha512-H5gyGM3GaDFr1SHt7gsHfMEmt0/Q5SQYOqmtBlpofYaqiof8wdHZQAj4KY2oJpcy4tnsRJrFM3fN3GNEARBgtg==
-  dependencies:
-    "@oclif/linewrap" "^1.0.0"
-    chalk "^2.4.1"
-    tslib "^1.9.3"
 
 "@oclif/parser@^3.7.2":
   version "3.7.2"
@@ -638,9 +619,9 @@ debug@^3.1.0:
     ms "^2.1.1"
 
 debug@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.0.tgz#373687bffa678b38b1cd91f861b63850035ddc87"
-  integrity sha512-heNPJUJIqC+xB6ayLAMHaIrmN9HKa7aQO8MGqKpvCA+uJYVcvR6l5kgdrhRuwPFHU7P5/A1w0BjByPHwpfTDKg==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
 
@@ -1020,21 +1001,10 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
   integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
 
-http-call@^5.1.2:
+http-call@^5.1.2, http-call@^5.2.2:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/http-call/-/http-call-5.2.3.tgz#4b59df8c313c92056e2004e666330b46f7d0532b"
   integrity sha512-IkwGruHVHATmnonLKMGX5tkpM0KSn/C240o8/OfBsESRaJacykSia+akhD0d3fljQ5rQPXtBvSrVShAsj+EOUQ==
-  dependencies:
-    content-type "^1.0.4"
-    debug "^3.1.0"
-    is-retry-allowed "^1.1.0"
-    is-stream "^1.1.0"
-    tunnel-agent "^0.6.0"
-
-http-call@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/http-call/-/http-call-5.2.2.tgz#d8eb37eef701e566d44373ef19b22444ebb7c02e"
-  integrity sha512-DMEU+vvbrvt7n1BYPacbvtSwUmIgORP7HphTmKFqt1wBVeGi/+ADe7KkfyKAcnpa9HEoVaPWdfpOKy7fNeLdiw==
   dependencies:
     content-type "^1.0.4"
     debug "^3.1.0"
