@@ -26,7 +26,7 @@ export default class PluginsIndex extends Command {
       this.log('no plugins installed')
       return
     }
-    this.display(plugins)
+    this.display(plugins as Plugin[])
   }
 
   private display(plugins: Plugin[]) {
