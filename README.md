@@ -15,6 +15,7 @@ plugins plugin for oclif
 * [What is this?](#what-is-this)
 * [Usage](#usage)
 * [Friendly names](#friendly-names)
+* [Aliases/Blacklist](#aliases-blacklist)
 * [Commands](#commands)
 <!-- tocstop -->
 
@@ -53,6 +54,30 @@ Now the user can run any of the commands below to manage plugins at runtime.
 To make it simpler for users to install plugins, we have "friendly name" functionality. With this, you can run `mycli plugins:install myplugin` and it will first check if `@mynpmorg/plugin-myplugin` exists on npm before trying to install `myplugin`. This is useful if you want to use a generic name that's already taken in npm.
 
 To set this up, simply set the `oclif.scope` to the name of your npm org. In the example above, this would be `mynpmorg`.
+
+# Aliases/Blacklist
+
+Over time in the Heroku CLI we've changed plugin names, brought plugins into the core of the CLI, or sunset old plugins that no longer function. There is support in this plugin for dealing with these situations.
+
+For renaming plugins, add an alias section to `oclif.aliases` in `package.json`:
+
+```json
+"aliases": {
+  "old-name-plugin": "new-name-plugin"
+}
+```
+
+If a user had `old-name-plugin` installed, the next time the CLI is updated it will remove `old-name-plugin` and install `new-name-plugin`. If a user types `mycli plugins:install old-name-plugin` it will actually install `new-name-plugin` instead.
+
+For removing plugins that are no longer needed (either because they're sunset or because they've been moved into core), set the alias to null:
+
+```json
+"aliases": {
+  "old-name-plugin": null
+}
+```
+
+`old-name-plugin` will be autoremoved on the next update and will not be able to be installed with `mycli plugins:install old-name-plugin`.
 
 # Commands
 <!-- commands -->
