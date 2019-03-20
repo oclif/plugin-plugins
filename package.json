@@ -69,7 +69,7 @@
   "repository": "oclif/plugin-plugins",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "clean": "rm -f .oclif.manifest.json",
+    "clean": "rm -f oclif.manifest.json",
     "lint": "tsc -p test --noEmit && tslint -p test -t stylish",
     "postpublish": "yarn run clean",
     "posttest": "yarn run lint",
