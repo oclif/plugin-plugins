@@ -1,5 +1,6 @@
 import {IConfig} from '@oclif/config'
 import ux from 'cli-ux'
+import NpmRunPath from 'npm-run-path'
 import * as path from 'path'
 
 const debug = require('debug')('cli:yarn')
@@ -61,7 +62,7 @@ export default class Yarn {
       }
     }
 
-    const npmRunPath = require('npm-run-path')
+    const npmRunPath: typeof NpmRunPath = require('npm-run-path')
     let options = {
       ...opts,
       cwd,
