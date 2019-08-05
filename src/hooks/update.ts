@@ -4,5 +4,9 @@ import Plugins from '../plugins'
 
 export const update: Hook<'update'> = async function () {
   const plugins = new Plugins(this.config)
-  await plugins.update()
+  try {
+    await plugins.update()
+  } catch (e) {
+    this.error(e)
+  }
 }
