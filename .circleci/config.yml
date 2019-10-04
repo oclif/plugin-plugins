@@ -24,19 +24,19 @@ jobs:
           curl -s https://codecov.io/bash | bash
       - store_test_results: &store_test_results
           path: ~/cli/reports
+  node-12:
+    <<: *test
+    docker:
+      - image: node:12
   node-10:
     <<: *test
     docker:
       - image: node:10
-  node-8:
-    <<: *test
-    docker:
-      - image: node:8
 
 workflows:
   version: 2
   "@oclif/plugin-plugins":
     jobs:
       - node-latest
+      - node-12
       - node-10
-      - node-8
