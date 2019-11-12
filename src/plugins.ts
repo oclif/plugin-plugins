@@ -133,6 +133,9 @@ export default class Plugins {
     }
   }
 
+  // In this case we want these operations to happen
+  // sequentially so the `no-await-in-loop` rule is ugnored
+  /* eslint-disable no-await-in-loop */
   async update() {
     let plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
@@ -160,6 +163,7 @@ export default class Plugins {
     }
     cli.action.stop()
   }
+  /* eslint-enable no-await-in-loop */
 
   async hasPlugin(name: string) {
     const list = await this.list()

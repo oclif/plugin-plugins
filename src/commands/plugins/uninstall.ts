@@ -27,6 +27,9 @@ export default class PluginsUninstall extends Command {
 
   plugins = new Plugins(this.config)
 
+  // In this case we want these operations to happen
+  // sequentially so the `no-await-in-loop` rule is ugnored
+  /* eslint-disable no-await-in-loop */
   async run() {
     const {flags, argv} = this.parse(PluginsUninstall)
     this.plugins = new Plugins(this.config)
@@ -47,4 +50,5 @@ export default class PluginsUninstall extends Command {
       cli.action.stop()
     }
   }
+  /* eslint-enable no-await-in-loop */
 }

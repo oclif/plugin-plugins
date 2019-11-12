@@ -35,6 +35,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
   plugins = new Plugins(this.config)
 
+  // In this case we want these operations to happen
+  // sequentially so the `no-await-in-loop` rule is ugnored
+  /* eslint-disable no-await-in-loop */
   async run() {
     const {flags, argv} = this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
@@ -57,6 +60,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       cli.action.stop(`installed v${plugin.version}`)
     }
   }
+  /* eslint-enable no-await-in-loop */
 
   async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {url: string; type: 'repo'}> {
     if (input.includes('@') && input.includes('/')) {
