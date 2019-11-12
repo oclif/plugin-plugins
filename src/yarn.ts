@@ -19,7 +19,7 @@ export default class Yarn {
   fork(modulePath: string, args: string[] = [], options: any = {}): Promise<void> {
     return new Promise((resolve, reject) => {
       const {fork} = require('child_process')
-      let forked = fork(modulePath, args, options)
+      const forked = fork(modulePath, args, options)
       forked.stderr.on('data', (d: any) => process.stderr.write(d))
       forked.stdout.setEncoding('utf8')
       forked.stdout.on('data', (d: any) => {
@@ -43,7 +43,7 @@ export default class Yarn {
     })
   }
 
-  async exec(args: string[] = [], opts: {cwd: string, verbose: boolean}): Promise<void> {
+  async exec(args: string[] = [], opts: {cwd: string; verbose: boolean}): Promise<void> {
     const cwd = opts.cwd
     if (args[0] !== 'run') {
       const cacheDir = path.join(this.config.cacheDir, 'yarn')
@@ -63,7 +63,7 @@ export default class Yarn {
     }
 
     const npmRunPath: typeof NpmRunPath = require('npm-run-path')
-    let options = {
+    const options = {
       ...opts,
       cwd,
       stdio: [0, null, null, 'ipc'],
@@ -79,7 +79,7 @@ export default class Yarn {
       debug('done')
     } catch (err) {
       // TODO: https://github.com/yarnpkg/yarn/issues/2191
-      let networkConcurrency = '--network-concurrency=1'
+      const networkConcurrency = '--network-concurrency=1'
       if (err.message.includes('EAI_AGAIN') && !args.includes(networkConcurrency)) {
         debug('EAI_AGAIN')
         return this.exec([...args, networkConcurrency], opts)

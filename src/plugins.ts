@@ -15,7 +15,9 @@ const initPJSON: Config.PJSON.User = {private: true, oclif: {schema: 1, plugins:
 
 export default class Plugins {
   verbose = false
+
   readonly yarn: Yarn
+
   private readonly debug: any
 
   constructor(public config: Config.IConfig) {
@@ -138,7 +140,7 @@ export default class Plugins {
 
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
-    for (let [name, to] of Object.entries(aliases)) {
+    for (const [name, to] of Object.entries(aliases)) {
       const plugin = plugins.find(p => p.name === name)
       if (!plugin) continue
       if (to) await this.install(to)
@@ -146,14 +148,14 @@ export default class Plugins {
       plugins = plugins.filter(p => p.name !== name)
     }
 
-    if (plugins.find(p => !!p.url)) {
+    if (plugins.find(p => Boolean(p.url))) {
       await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
     }
     const npmPlugins = plugins.filter(p => !p.url)
     if (npmPlugins.length) {
       await this.yarn.exec(['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
     }
-    for (let p of plugins) {
+    for (const p of plugins) {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
     }
     cli.action.stop()
@@ -172,7 +174,7 @@ export default class Plugins {
 
   async yarnNodeVersion(): Promise<string | undefined> {
     try {
-      let f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
+      const f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
       return f.nodeVersion
     } catch (err) {
       if (err.code !== 'ENOENT') cli.warn(err)
@@ -223,7 +225,7 @@ export default class Plugins {
   private async npmHasPackage(name: string): Promise<boolean> {
     try {
       const http: typeof HTTP = require('http-call').HTTP
-      let url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
+      const url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
       await http.get(url)
       return true
     } catch (err) {
@@ -242,7 +244,7 @@ export default class Plugins {
     let plugins = (input || []).map(p => {
       if (typeof p === 'string') {
         return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User
-      } else return p
+      } return p
     })
     plugins = uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
     return plugins

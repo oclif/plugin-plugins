@@ -8,9 +8,11 @@ import {sortBy} from '../../util'
 
 export default class PluginsIndex extends Command {
   static flags = {
-    core: flags.boolean({description: 'show core plugins'})
+    core: flags.boolean({description: 'show core plugins'}),
   }
+
   static description = 'list installed plugins'
+
   static examples = ['$ <%- config.bin %> plugins']
 
   plugins = new Plugins(this.config)
@@ -30,18 +32,18 @@ export default class PluginsIndex extends Command {
   }
 
   private display(plugins: Plugin[]) {
-    for (let plugin of plugins.filter((p: Plugin) => !p.parent)) {
+    for (const plugin of plugins.filter((p: Plugin) => !p.parent)) {
       this.log(this.formatPlugin(plugin))
       if (plugin.children && plugin.children.length) {
-        let tree = this.createTree(plugin)
+        const tree = this.createTree(plugin)
         tree.display(this.log)
       }
     }
   }
 
   private createTree(plugin: Plugin) {
-    let tree = cli.tree()
-    for (let p of plugin.children) {
+    const tree = cli.tree()
+    for (const p of plugin.children) {
       const name = this.formatPlugin(p)
       tree.insert(name, this.createTree(p))
     }

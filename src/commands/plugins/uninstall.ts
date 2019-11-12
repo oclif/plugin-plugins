@@ -6,17 +6,23 @@ import Plugins from '../../plugins'
 
 export default class PluginsUninstall extends Command {
   static description = 'removes a plugin from the CLI'
+
   static usage = 'plugins:uninstall PLUGIN...'
+
   static help = `
   Example:
     $ <%- config.bin %> plugins:uninstall <%- config.pjson.oclif.examplePlugin || "myplugin" %>
   `
+
   static variableArgs = true
+
   static args = [{name: 'plugin', description: 'plugin to uninstall'}]
+
   static flags = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
   }
+
   static aliases = ['plugins:unlink', 'plugins:remove']
 
   plugins = new Plugins(this.config)
@@ -26,12 +32,12 @@ export default class PluginsUninstall extends Command {
     this.plugins = new Plugins(this.config)
     if (flags.verbose) this.plugins.verbose = true
     if (!argv.length) argv.push('.')
-    for (let plugin of argv) {
+    for (const plugin of argv) {
       const friendly = this.plugins.friendlyName(plugin)
       cli.action.start(`Uninstalling ${friendly}`)
       const unfriendly = await this.plugins.hasPlugin(plugin)
       if (!unfriendly) {
-        let p = this.config.plugins.find(p => p.name === plugin) as Plugin | undefined
+        const p = this.config.plugins.find(p => p.name === plugin) as Plugin | undefined
         if (p) {
           if (p && p.parent) return this.error(`${friendly} is installed via plugin ${p.parent!.name}, uninstall ${p.parent!.name} instead`)
         }
