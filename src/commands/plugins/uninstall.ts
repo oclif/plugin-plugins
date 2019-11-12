@@ -31,7 +31,7 @@ export default class PluginsUninstall extends Command {
     const {flags, argv} = this.parse(PluginsUninstall)
     this.plugins = new Plugins(this.config)
     if (flags.verbose) this.plugins.verbose = true
-    if (!argv.length) argv.push('.')
+    if (argv.length === 0) argv.push('.')
     for (const plugin of argv) {
       const friendly = this.plugins.friendlyName(plugin)
       cli.action.start(`Uninstalling ${friendly}`)

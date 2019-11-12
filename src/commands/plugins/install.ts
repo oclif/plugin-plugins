@@ -63,12 +63,13 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       input = input.slice(1)
       const [name, tag = 'latest'] = input.split('@')
       return {name: '@' + name, tag, type: 'npm'}
-    } if (input.includes('/')) {
+    }
+    if (input.includes('/')) {
       if (input.includes(':')) return {url: input, type: 'repo'}
       return {url: `https://github.com/${input}`, type: 'repo'}
     }
-    let [name, tag = 'latest'] = input.split('@')
-    name = await this.plugins.maybeUnfriendlyName(name)
+    const [splitName, tag = 'latest'] = input.split('@')
+    const name = await this.plugins.maybeUnfriendlyName(splitName)
     return {name, tag, type: 'npm'}
   }
 }

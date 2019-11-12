@@ -24,7 +24,7 @@ export default class PluginsIndex extends Command {
     if (!flags.core) {
       plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
     }
-    if (!plugins.length) {
+    if (plugins.length === 0) {
       this.log('no plugins installed')
       return
     }
@@ -34,7 +34,7 @@ export default class PluginsIndex extends Command {
   private display(plugins: Plugin[]) {
     for (const plugin of plugins.filter((p: Plugin) => !p.parent)) {
       this.log(this.formatPlugin(plugin))
-      if (plugin.children && plugin.children.length) {
+      if (plugin.children && plugin.children.length > 0) {
         const tree = this.createTree(plugin)
         tree.display(this.log)
       }

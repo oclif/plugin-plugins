@@ -37,9 +37,9 @@ export default class Plugins {
         dependencies: {},
         ...pjson,
       }
-    } catch (err) {
-      this.debug(err)
-      if (err.code !== 'ENOENT') process.emitWarning(err)
+    } catch (error) {
+      this.debug(error)
+      if (error.code !== 'ENOENT') process.emitWarning(error)
       return initPJSON
     }
   }
@@ -82,9 +82,9 @@ export default class Plugins {
         await this.add({name, tag: range || tag, type: 'user'})
       }
       return plugin
-    } catch (err) {
-      await this.uninstall(name).catch(err => this.debug(err))
-      throw err
+    } catch (error) {
+      await this.uninstall(name).catch(error => this.debug(error))
+      throw error
     }
   }
 
@@ -126,8 +126,8 @@ export default class Plugins {
       if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.yarn.exec(['remove', name], {cwd: this.config.dataDir, verbose: this.verbose})
       }
-    } catch (err) {
-      cli.warn(err)
+    } catch (error) {
+      cli.warn(error)
     } finally {
       await this.remove(name)
     }
@@ -152,7 +152,7 @@ export default class Plugins {
       await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
     }
     const npmPlugins = plugins.filter(p => !p.url)
-    if (npmPlugins.length) {
+    if (npmPlugins.length > 0) {
       await this.yarn.exec(['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
     }
     for (const p of plugins) {
@@ -176,8 +176,8 @@ export default class Plugins {
     try {
       const f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
       return f.nodeVersion
-    } catch (err) {
-      if (err.code !== 'ENOENT') cli.warn(err)
+    } catch (error) {
+      if (error.code !== 'ENOENT') cli.warn(error)
     }
   }
 
@@ -228,8 +228,8 @@ export default class Plugins {
       const url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
       await http.get(url)
       return true
-    } catch (err) {
-      this.debug(err)
+    } catch (error) {
+      this.debug(error)
       return false
     }
   }
@@ -244,7 +244,8 @@ export default class Plugins {
     let plugins = (input || []).map(p => {
       if (typeof p === 'string') {
         return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User
-      } return p
+      }
+      return p
     })
     plugins = uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
     return plugins
