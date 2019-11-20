@@ -15,7 +15,9 @@ const initPJSON: Config.PJSON.User = {private: true, oclif: {schema: 1, plugins:
 
 export default class Plugins {
   verbose = false
+
   readonly yarn: Yarn
+
   private readonly debug: any
 
   constructor(public config: Config.IConfig) {
@@ -35,9 +37,9 @@ export default class Plugins {
         dependencies: {},
         ...pjson,
       }
-    } catch (err) {
-      this.debug(err)
-      if (err.code !== 'ENOENT') process.emitWarning(err)
+    } catch (error) {
+      this.debug(error)
+      if (error.code !== 'ENOENT') process.emitWarning(error)
       return initPJSON
     }
   }
@@ -80,9 +82,9 @@ export default class Plugins {
         await this.add({name, tag: range || tag, type: 'user'})
       }
       return plugin
-    } catch (err) {
-      await this.uninstall(name).catch(err => this.debug(err))
-      throw err
+    } catch (error) {
+      await this.uninstall(name).catch(error => this.debug(error))
+      throw error
     }
   }
 
@@ -124,13 +126,16 @@ export default class Plugins {
       if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.yarn.exec(['remove', name], {cwd: this.config.dataDir, verbose: this.verbose})
       }
-    } catch (err) {
-      cli.warn(err)
+    } catch (error) {
+      cli.warn(error)
     } finally {
       await this.remove(name)
     }
   }
 
+  // In this case we want these operations to happen
+  // sequentially so the `no-await-in-loop` rule is ugnored
+  /* eslint-disable no-await-in-loop */
   async update() {
     let plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
@@ -138,7 +143,7 @@ export default class Plugins {
 
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
-    for (let [name, to] of Object.entries(aliases)) {
+    for (const [name, to] of Object.entries(aliases)) {
       const plugin = plugins.find(p => p.name === name)
       if (!plugin) continue
       if (to) await this.install(to)
@@ -146,18 +151,19 @@ export default class Plugins {
       plugins = plugins.filter(p => p.name !== name)
     }
 
-    if (plugins.find(p => !!p.url)) {
+    if (plugins.find(p => Boolean(p.url))) {
       await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
     }
     const npmPlugins = plugins.filter(p => !p.url)
-    if (npmPlugins.length) {
+    if (npmPlugins.length > 0) {
       await this.yarn.exec(['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
     }
-    for (let p of plugins) {
+    for (const p of plugins) {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
     }
     cli.action.stop()
   }
+  /* eslint-enable no-await-in-loop */
 
   async hasPlugin(name: string) {
     const list = await this.list()
@@ -172,10 +178,10 @@ export default class Plugins {
 
   async yarnNodeVersion(): Promise<string | undefined> {
     try {
-      let f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
+      const f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
       return f.nodeVersion
-    } catch (err) {
-      if (err.code !== 'ENOENT') cli.warn(err)
+    } catch (error) {
+      if (error.code !== 'ENOENT') cli.warn(error)
     }
   }
 
@@ -223,11 +229,11 @@ export default class Plugins {
   private async npmHasPackage(name: string): Promise<boolean> {
     try {
       const http: typeof HTTP = require('http-call').HTTP
-      let url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
+      const url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
       await http.get(url)
       return true
-    } catch (err) {
-      this.debug(err)
+    } catch (error) {
+      this.debug(error)
       return false
     }
   }
@@ -242,7 +248,8 @@ export default class Plugins {
     let plugins = (input || []).map(p => {
       if (typeof p === 'string') {
         return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User
-      } else return p
+      }
+      return p
     })
     plugins = uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
     return plugins

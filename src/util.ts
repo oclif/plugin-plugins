@@ -5,7 +5,7 @@ export function sortBy<T>(arr: T[], fn: (i: T) => sortBy.Types | sortBy.Types[])
 
     if (Array.isArray(a) && Array.isArray(b)) {
       if (a.length === 0 && b.length === 0) return 0
-      let diff = compare(a[0], b[0])
+      const diff = compare(a[0], b[0])
       if (diff !== 0) return diff
       return compare(a.slice(1), b.slice(1))
     }
