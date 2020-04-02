@@ -5,7 +5,7 @@
   "author": "Jeff Dickey @jdxcode",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
-    "@oclif/color": "^0.0.0",
+    "@oclif/color": "^0.x",
     "@oclif/command": "^1.5.12",
     "chalk": "^2.4.2",
     "cli-ux": "^5.2.1",
