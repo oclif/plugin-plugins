@@ -42,7 +42,7 @@
     supports-color "^5.4.0"
     tslib "^1"
 
-"@oclif/command@^1.5.1", "@oclif/command@^1.5.10", "@oclif/command@^1.5.12", "@oclif/command@^1.5.8":
+"@oclif/command@^1.5.1", "@oclif/command@^1.5.10", "@oclif/command@^1.5.8":
   version "1.5.12"
   resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.12.tgz#d4b5033c4e9d9f37e06857cf84cf0c8927e368b5"
   integrity sha512-D5/Kph9smL92X1z9WPmxFd9zDruFsCk4/LbfCaBmiO2Vyyt7Y9O6kI1YLsC3B0KC9wymSCTH14IK96rf9AFHfQ==
@@ -52,7 +52,29 @@
     debug "^4.1.1"
     semver "^5.6.0"
 
-"@oclif/config@^1.12.11", "@oclif/config@^1.12.8":
+"@oclif/command@^1.5.12", "@oclif/command@^1.5.20":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.6.1.tgz#774e860f283f32a728377da1c2a90beb8aadf9f5"
+  integrity sha512-pvmMmfGn+zm4e4RwVw63mg9sIaqKqmVsFbImQoUrCO/43UmWzoSHWNXKdgEGigOezWrkZfFucaeZcSbp149OWg==
+  dependencies:
+    "@oclif/config" "^1.15.1"
+    "@oclif/errors" "^1.2.2"
+    "@oclif/parser" "^3.8.3"
+    "@oclif/plugin-help" "^3"
+    debug "^4.1.1"
+    semver "^5.6.0"
+
+"@oclif/config@^1.12.11", "@oclif/config@^1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.15.1.tgz#39950c70811ab82d75bb3cdb33679ed0a4c21c57"
+  integrity sha512-GdyHpEZuWlfU8GSaZoiywtfVBsPcfYn1KuSLT1JTfvZGpPG6vShcGr24YZ3HG2jXUFlIuAqDcYlTzOrqOdTPNQ==
+  dependencies:
+    "@oclif/errors" "^1.0.0"
+    "@oclif/parser" "^3.8.0"
+    debug "^4.1.1"
+    tslib "^1.9.3"
+
+"@oclif/config@^1.12.8":
   version "1.12.11"
   resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.12.11.tgz#b7a7feb28bd4927957213de6a37cecc846367a84"
   integrity sha512-j1NiPuVZr3C6jba5XeKlwc6DfPNoDUZERZvAvly2nvngAuVcl9/JhboCkyyS+Jrq8K+ymlZc4knZ8RVnMK8owg==
@@ -78,7 +100,7 @@
     qqjs "^0.3.10"
     tslib "^1.9.3"
 
-"@oclif/errors@^1.2.1", "@oclif/errors@^1.2.2":
+"@oclif/errors@^1.0.0", "@oclif/errors@^1.2.1", "@oclif/errors@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@oclif/errors/-/errors-1.2.2.tgz#9d8f269b15f13d70aa93316fed7bebc24688edc2"
   integrity sha512-Eq8BFuJUQcbAPVofDxwdE0bL14inIiwt5EaKRVY9ZDIG11jwdXZqiQEECJx0VfnLyUZdYfRd/znDI/MytdJoKg==
@@ -94,13 +116,14 @@
   resolved "https://registry.yarnpkg.com/@oclif/linewrap/-/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
   integrity sha512-Ups2dShK52xXa8w6iBWLgcjPJWjais6KPJQq3gQ/88AY6BXoTX+MIGFPrWQO1KLMiQfoTpcLnUwloN4brrVUHw==
 
-"@oclif/parser@^3.7.3":
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.7.3.tgz#cb2240f457396e7b1af2f13caa0dca85b92a5a37"
-  integrity sha512-yfYpDzVn9ipo4HZtYLfMtd3j3ArpTQlRbQfy9pNnHFd4VedE2PNYQTRWYYMuu1FxEOoknlMZbzsewVvl41TvKg==
+"@oclif/parser@^3.7.3", "@oclif/parser@^3.8.0", "@oclif/parser@^3.8.3":
+  version "3.8.5"
+  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.8.5.tgz#c5161766a1efca7343e1f25d769efbefe09f639b"
+  integrity sha512-yojzeEfmSxjjkAvMRj0KzspXlMjCfBzNRPkWw8ZwOSoNWoJn+OCS/m/S+yfV6BvAM4u2lTzX9Y5rCbrFIgkJLg==
   dependencies:
+    "@oclif/errors" "^1.2.2"
     "@oclif/linewrap" "^1.0.0"
-    chalk "^2.4.1"
+    chalk "^2.4.2"
     tslib "^1.9.3"
 
 "@oclif/plugin-help@^2.1.4", "@oclif/plugin-help@^2.1.6":
@@ -111,6 +134,21 @@
     "@oclif/command" "^1.5.8"
     chalk "^2.4.1"
     indent-string "^3.2.0"
+    lodash.template "^4.4.0"
+    string-width "^3.0.0"
+    strip-ansi "^5.0.0"
+    widest-line "^2.0.1"
+    wrap-ansi "^4.0.0"
+
+"@oclif/plugin-help@^3":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-3.1.0.tgz#507ff8e9cabe734672b12d1ec0b79812d18c58a8"
+  integrity sha512-orSWpXGlJaX16eSjAtI8scA8QhrjQOaCSHodEx52t18JKbIVzG8jcngugyWAOB/V4jhPl0rdiVk9XFsaIIiG2g==
+  dependencies:
+    "@oclif/command" "^1.5.20"
+    "@oclif/config" "^1.15.1"
+    chalk "^2.4.1"
+    indent-string "^4.0.0"
     lodash.template "^4.4.0"
     string-width "^3.0.0"
     strip-ansi "^5.0.0"
@@ -1586,6 +1624,11 @@ indent-string@^3.2.0:
   resolved "https://registry.yarnpkg.com/indent-string/-/indent-string-3.2.0.tgz#4a5fd6d27cc332f37e5419a504dbb837105c9289"
   integrity sha1-Sl/W0nzDMvN+VBmlBNu4NxBckok=
 
+indent-string@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/indent-string/-/indent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
+  integrity sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -2149,10 +2192,15 @@ ms@2.0.0:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
   integrity sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
 
-ms@2.1.1, ms@^2.1.1:
+ms@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
+
+ms@^2.1.1:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
+  integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
 mute-stream@0.0.8:
   version "0.0.8"
