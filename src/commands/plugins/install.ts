@@ -65,7 +65,8 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {url: string; type: 'repo'}> {
     if (input.startsWith('git+ssh://')) {
       return {url: input, type: 'repo'}
-    } else if (input.includes('@') && input.includes('/')) {
+    }
+    if (input.includes('@') && input.includes('/')) {
       input = input.slice(1)
       const [name, tag = 'latest'] = input.split('@')
       return {name: '@' + name, tag, type: 'npm'}
