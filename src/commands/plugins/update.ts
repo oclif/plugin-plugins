@@ -4,8 +4,11 @@ import Plugins from '../../plugins'
 
 export default class PluginsUpdate extends Command {
   static topic = 'plugins'
+
   static command = 'update'
+
   static description = 'update installed plugins'
+
   static flags = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
