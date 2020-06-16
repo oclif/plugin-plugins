@@ -234,7 +234,12 @@ export default class Plugins {
       return true
     } catch (error) {
       this.debug(error)
-      return false
+
+      if (error.statusCode === 404) {
+        return false
+      }
+
+      throw error
     }
   }
 

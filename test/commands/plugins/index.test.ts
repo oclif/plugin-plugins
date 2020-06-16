@@ -42,6 +42,17 @@ describe('command', () => {
   .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
   .it('installs and uninstalls jdxcode/oclif-debug')
+
+  test
+  .nock('https://registry.npmjs.org', api => api
+  .get('/-/package/@heroku-cli%2fplugin-stubbed/dist-tags')
+  .reply(503, ''))
+  .command(['plugins:install', 'stubbed'], {reset: true})
+  .catch(/HTTP Error 503/)
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .it('does not install if unsure if scoped package does not exist')
   // test
   // .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
   // .stdout()
