@@ -229,7 +229,7 @@ export default class Plugins {
   private async npmHasPackage(name: string): Promise<boolean> {
     try {
       const http: typeof HTTP = require('http-call').HTTP
-      const url = `${this.npmRegistry}/-/package/${name.replace('/', '%2f')}/dist-tags`
+      const url = `${this.npmRegistry}/${name.replace('/', '%2f')}`
       await http.get(url)
       return true
     } catch (error) {

@@ -45,7 +45,7 @@ describe('command', () => {
 
   test
   .nock('https://registry.npmjs.org', api => api
-  .get('/-/package/@heroku-cli%2fplugin-stubbed/dist-tags')
+  .get('/@heroku-cli%2fplugin-stubbed')
   .reply(503, ''))
   .command(['plugins:install', 'stubbed'], {reset: true})
   .catch(/HTTP Error 503/)
