@@ -63,6 +63,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   /* eslint-enable no-await-in-loop */
 
   async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {url: string; type: 'repo'}> {
+    if (input.startsWith('git+ssh://')) {
+      return {url: input, type: 'repo'}
+    }
     if (input.includes('@') && input.includes('/')) {
       input = input.slice(1)
       const [name, tag = 'latest'] = input.split('@')
