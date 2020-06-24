@@ -73,7 +73,7 @@
     "build": "rm -rf lib && tsc",
     "clean": "rm -f oclif.manifest.json",
     "lint": "eslint . --ext .ts --config .eslintrc",
-    "pretest": "tsc -p test --noEmit",
+    "pretest": "yarn build --noEmit",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "posttest": "yarn lint",
     "prepublishOnly": "yarn run build && oclif-dev manifest && oclif-dev readme",
