@@ -14,7 +14,7 @@
     "http-call": "^5.2.2",
     "load-json-file": "^5.2.0",
     "npm-run-path": "^3.0.0",
-    "semver": "^5.6.0",
+    "semver": "^7.3.2",
     "tslib": "^2.0.0",
     "yarn": "^1.21.1"
   },
