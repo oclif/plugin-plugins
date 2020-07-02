@@ -15,7 +15,7 @@ plugins plugin for oclif
 * [What is this?](#what-is-this)
 * [Usage](#usage)
 * [Friendly names](#friendly-names)
-* [Aliases/Blacklist](#aliasesblacklist)
+* [Aliases](#aliases)
 * [Commands](#commands)
 <!-- tocstop -->
 
@@ -55,7 +55,7 @@ To make it simpler for users to install plugins, we have "friendly name" functio
 
 To set this up, simply set the `oclif.scope` to the name of your npm org. In the example above, this would be `mynpmorg`.
 
-# Aliases/Blacklist
+# Aliases
 
 Over time in the Heroku CLI we've changed plugin names, brought plugins into the core of the CLI, or sunset old plugins that no longer function. There is support in this plugin for dealing with these situations.
 

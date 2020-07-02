@@ -43,7 +43,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv) {
-      if (aliases[name] === null) this.error(`${name} is blacklisted`)
+      if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] || name
       const p = await this.parsePlugin(name)
       let plugin
