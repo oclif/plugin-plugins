@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/oclif/plugin-plugins/compare/v1.8.3...v1.9.0) (2020-07-02)
+
+
+### Features
+
+* support more git/ssh url's ([#82](https://github.com/oclif/plugin-plugins/issues/82)) ([f0f3185](https://github.com/oclif/plugin-plugins/commit/f0f3185d4d7ecb3be4ccc553d509d7868fc7f6d6))
+
 ## [1.7.3](https://github.com/oclif/plugin-plugins/compare/v1.7.2...v1.7.3) (2018-11-12)
 
 
