@@ -2466,10 +2466,10 @@ npm-run-path@^2.0.0:
   dependencies:
     path-key "^2.0.0"
 
-npm-run-path@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-3.0.0.tgz#9bbd1824407d510ef3576c5ebc8b418dead140d9"
-  integrity sha512-42wmNM/F44tq5pDfDDwYWh30JbQokeUn79/6qNyoEvCSOMy0Q2iHe7unLRzRWQL5JLrOoQT6WzSuc6ylvEMmNg==
+npm-run-path@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
+  integrity sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==
   dependencies:
     path-key "^3.0.0"
 
@@ -2681,12 +2681,7 @@ path-key@^2.0.0, path-key@^2.0.1:
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-2.0.1.tgz#411cadb574c5a140d3a4b1910d40d80cc9f40b40"
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
-path-key@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/path-key/-/path-key-3.0.0.tgz#4c459253329ac9abfd22a456a18a49bb3394f271"
-  integrity sha512-zLY/S2T5y8zv1vEpx4VHguUgmtgkewofGKSpa7VmzdU3Jbu8JonUvt5hzjBpJvamSnusynqJiYwkbi22aTo7Rw==
-
-path-key@^3.1.0:
+path-key@^3.0.0, path-key@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-3.1.1.tgz#581f6ade658cbba65a0d3380de7753295054f375"
   integrity sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==
