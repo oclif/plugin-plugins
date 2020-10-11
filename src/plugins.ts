@@ -83,6 +83,9 @@ export default class Plugins {
       }
       return plugin
     } catch (error) {
+      if (String(error).includes('EACCES')) {
+        cli.warn(`Plugin failed to install because of a permissions error.\nDoes your current user own the directory ${this.config.dataDir}?`)
+      }
       await this.uninstall(name).catch(error => this.debug(error))
       throw error
     }
