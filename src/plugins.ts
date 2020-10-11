@@ -1,5 +1,5 @@
 import * as Config from '@oclif/config'
-import {CLIError} from '@oclif/errors'
+import {CLIError, PrettyPrintableError} from '@oclif/errors'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
@@ -83,10 +83,16 @@ export default class Plugins {
       }
       return plugin
     } catch (error) {
-      if (String(error).includes('EACCES')) {
-        cli.warn(`Plugin failed to install because of a permissions error.\nDoes your current user own the directory ${this.config.dataDir}?`)
-      }
       await this.uninstall(name).catch(error => this.debug(error))
+
+      if (String(error).includes('EACCES')) {
+        throw new CLIError(error, {
+          suggestions: [
+            `Plugin failed to install because of a permissions error.\nDoes your current user own the directory ${this.config.dataDir}?`,
+          ],
+        })
+      }
+
       throw error
     }
   }
