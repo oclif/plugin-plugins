@@ -1,3 +1,11 @@
+## [1.9.1](https://github.com/oclif/plugin-plugins/compare/v1.9.0...v1.9.1) (2020-10-13)
+
+
+### Bug Fixes
+
+* add debugging comments to plugin unfriendly name registry lookup ([#182](https://github.com/oclif/plugin-plugins/issues/182)) ([82f8434](https://github.com/oclif/plugin-plugins/commit/82f84344e2c15978f0ad586060539d489fd122be))
+* add warning to yarn install permissions error ([#183](https://github.com/oclif/plugin-plugins/issues/183)) ([a41f8c2](https://github.com/oclif/plugin-plugins/commit/a41f8c2fcb8175bba0882124d7dbb5d10a21c1da))
+
 # [1.9.0](https://github.com/oclif/plugin-plugins/compare/v1.8.3...v1.9.0) (2020-07-02)
 
 
