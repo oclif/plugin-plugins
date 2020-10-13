@@ -7,6 +7,7 @@
   "dependencies": {
     "@oclif/color": "^0.x",
     "@oclif/command": "^1.5.12",
+    "@oclif/errors": "^1.2.2",
     "chalk": "^2.4.2",
     "cli-ux": "^5.2.1",
     "debug": "^4.1.0",
@@ -21,7 +22,6 @@
   "devDependencies": {
     "@oclif/config": "^1.12.11",
     "@oclif/dev-cli": "^1.21.3",
-    "@oclif/errors": "^1.2.2",
     "@oclif/plugin-help": "^3.1.0",
     "@oclif/test": "^1.2.4",
     "@types/chai": "^4.1.7",
