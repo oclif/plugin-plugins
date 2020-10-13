@@ -194,9 +194,11 @@ export default class Plugins {
 
   async maybeUnfriendlyName(name: string): Promise<string> {
     const unfriendly = this.unfriendlyName(name)
+    this.debug(`checking registry for expanded package name ${unfriendly}`)
     if (unfriendly && await this.npmHasPackage(unfriendly)) {
       return unfriendly
     }
+    this.debug(`expanded package name ${unfriendly} not found, using given package name ${name}`)
     return name
   }
 
