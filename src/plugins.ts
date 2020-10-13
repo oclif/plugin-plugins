@@ -1,5 +1,5 @@
 import * as Config from '@oclif/config'
-import {CLIError, PrettyPrintableError} from '@oclif/errors'
+import {CLIError} from '@oclif/errors'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
