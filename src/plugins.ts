@@ -55,6 +55,11 @@ export default class Plugins {
       await this.createPJSON()
       let plugin
       const add = force ? ['add', '--force'] : ['add']
+      const invalidPluginError = new CLIError('plugin is invalid', {
+        suggestions: [
+          'Plugin failed to install because it does not appear to be a valid CLI plugin.\nIf you are sure it is, contact the CLI developer noting this error.',
+        ],
+      })
       if (name.includes(':')) {
         // url
         const url = name
@@ -63,7 +68,7 @@ export default class Plugins {
         plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
         await this.refresh(plugin.root)
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
-          throw new Error('plugin is invalid')
+          throw invalidPluginError
         }
         await this.add({name, url, type: 'user'})
       } else {
@@ -76,7 +81,7 @@ export default class Plugins {
         await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
         plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
-          throw new Error('plugin is invalid')
+          throw invalidPluginError
         }
         await this.refresh(plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
