@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/oclif/plugin-plugins/compare/v1.9.1...v1.9.2) (2020-11-10)
+
+
+### Bug Fixes
+
+* stop cli action & rethrow install error ([#195](https://github.com/oclif/plugin-plugins/issues/195)) ([62040f2](https://github.com/oclif/plugin-plugins/commit/62040f2cd1ee2a9ecea237b87ef94602906b6c12))
+
 ## [1.9.1](https://github.com/oclif/plugin-plugins/compare/v1.9.0...v1.9.1) (2020-10-13)
 
 
