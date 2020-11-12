@@ -1,5 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import {Plugin} from '@oclif/config'
+import chalk from 'chalk'
 import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
@@ -46,7 +47,12 @@ export default class PluginsUninstall extends Command {
         }
         return this.error(`${friendly} is not installed`)
       }
-      await this.plugins.uninstall(unfriendly.name)
+      try {
+        await this.plugins.uninstall(unfriendly.name)
+      } catch (error) {
+        cli.action.stop(chalk.bold.red('failed'))
+        throw error
+      }
       cli.action.stop()
     }
   }
