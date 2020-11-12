@@ -1,3 +1,10 @@
+## [1.9.3](https://github.com/oclif/plugin-plugins/compare/v1.9.2...v1.9.3) (2020-11-12)
+
+
+### Bug Fixes
+
+* Downgrade fs-extra to support Node.js 8 ([#199](https://github.com/oclif/plugin-plugins/issues/199)) ([ee9f806](https://github.com/oclif/plugin-plugins/commit/ee9f806728f5b881c2e51b913c61b58d14bde4d3))
+
 ## [1.9.2](https://github.com/oclif/plugin-plugins/compare/v1.9.1...v1.9.2) (2020-11-10)
 
 
