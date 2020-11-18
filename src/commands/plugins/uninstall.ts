@@ -36,9 +36,9 @@ export default class PluginsUninstall extends Command {
     if (flags.verbose) this.plugins.verbose = true
     if (argv.length === 0) argv.push('.')
     for (const plugin of argv) {
-      const friendly = this.plugins.friendlyName(plugin)
+      const friendly = this.removeTags(this.plugins.friendlyName(plugin))
       cli.action.start(`Uninstalling ${friendly}`)
-      const unfriendly = await this.plugins.hasPlugin(plugin)
+      const unfriendly = await this.plugins.hasPlugin(this.removeTags(plugin))
       if (!unfriendly) {
         const p = this.config.plugins.find(p => p.name === plugin) as Plugin | undefined
         if (p) {
@@ -51,4 +51,19 @@ export default class PluginsUninstall extends Command {
     }
   }
   /* eslint-enable no-await-in-loop */
+
+  private removeTags(plugin: string) {
+    if (plugin.includes('@')) {
+      const chunked = plugin.split('@')
+      const last = chunked[chunked.length - 1]
+
+      if (!last.includes('/') && chunked.length > 1) {
+        chunked.pop()
+      }
+
+      return chunked.join('@')
+    }
+
+    return plugin
+  }
 }
