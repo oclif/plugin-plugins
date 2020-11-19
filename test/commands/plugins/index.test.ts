@@ -16,6 +16,17 @@ describe('command', () => {
   .it('installs and uninstalls @oclif/example-plugin-ts')
 
   test
+  .command(['plugins:install', '@oclif/example-plugin-ts@latest'], {reset: true})
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('@oclif/example-plugin-ts'))
+  .command(['plugins:uninstall', '@oclif/example-plugin-ts@latest'], {reset: true})
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .it('installs and uninstalls @oclif/example-plugin-ts with tags')
+
+  test
   .command(['plugins:install', 'aliasme'], {reset: true})
   .stdout()
   .command(['plugins'], {reset: true})
