@@ -1,3 +1,10 @@
+## [1.9.4](https://github.com/oclif/plugin-plugins/compare/v1.9.3...v1.9.4) (2020-11-19)
+
+
+### Bug Fixes
+
+* allow tagged packages to be uninstalled ([#202](https://github.com/oclif/plugin-plugins/issues/202)) ([716569c](https://github.com/oclif/plugin-plugins/commit/716569cd74c93405d2cbc6c65a2fb27bbbc9ee0e))
+
 ## [1.9.3](https://github.com/oclif/plugin-plugins/compare/v1.9.2...v1.9.3) (2020-11-12)
 
 
