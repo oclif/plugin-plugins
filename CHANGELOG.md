@@ -1,3 +1,11 @@
+## [1.9.5](https://github.com/oclif/plugin-plugins/compare/v1.9.4...v1.9.5) (2020-12-19)
+
+
+### Bug Fixes
+
+* chalk import ([#227](https://github.com/oclif/plugin-plugins/issues/227)) ([eac457e](https://github.com/oclif/plugin-plugins/commit/eac457e90ea16dbb29165540cf63737f68b80b03))
+* stop cli action & rethrow uninstall error ([#200](https://github.com/oclif/plugin-plugins/issues/200)) ([7695a4c](https://github.com/oclif/plugin-plugins/commit/7695a4c1b0efc2b5b5a6a2eefddd8b4e36c49af0))
+
 ## [1.9.4](https://github.com/oclif/plugin-plugins/compare/v1.9.3...v1.9.4) (2020-11-19)
 
 
