@@ -13,7 +13,7 @@ export default class PluginsIndex extends Command {
 
   static description = 'list installed plugins'
 
-  static examples = ['$ <%- config.bin %> plugins']
+  static examples = ['$ <%- config.bin %> plugins list']
 
   plugins = new Plugins(this.config)
 
