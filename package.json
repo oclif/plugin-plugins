@@ -1,9 +1,9 @@
 {
-  "name": "@oclif/plugin-plugins",
-  "description": "plugins plugin for oclif",
+  "name": "@vtex/cli-plugin-plugins",
+  "description": "plugins plugin for toolbelt",
   "version": "1.9.5",
-  "author": "Jeff Dickey @jdxcode",
-  "bugs": "https://github.com/oclif/plugin-plugins/issues",
+  "author": "vtex",
+  "bugs": "https://github.com/vtex/cli-plugin-plugins/issues",
   "dependencies": {
     "@oclif/color": "^0.x",
     "@oclif/command": "^1.5.12",
@@ -27,7 +27,7 @@
     "@types/chai": "^4.1.7",
     "@types/fs-extra": "^9.0",
     "@types/mocha": "^8.0.0",
-    "@types/node": "^14.0.26",
+    "@types/node": "^14.14.16",
     "@types/semver": "^7.3.1",
     "@types/supports-color": "^7.2.0",
     "chai": "^4.2.0",
@@ -48,7 +48,7 @@
     "oclif.manifest.json",
     "/lib"
   ],
-  "homepage": "https://github.com/oclif/plugin-plugins",
+  "homepage": "https://github.com/vtex/cli-plugin-plugins",
   "keywords": [
     "oclif-plugin"
   ],
@@ -56,7 +56,7 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "scope": "heroku-cli",
+    "scope": "vtex",
     "hooks": {
       "update": "./lib/hooks/update.js"
     },
@@ -68,9 +68,11 @@
     },
     "bin": "mycli"
   },
-  "repository": "oclif/plugin-plugins",
+  "repository": "vtex/cli-plugin-plugins",
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "watch": "yarn build-clean && yarn tsc --watch",
+    "build": "yarn build-clean && tsc",
+    "build-clean": "rm -rf lib",
     "clean": "rm -f oclif.manifest.json",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "pretest": "yarn build --noEmit && tsc -p test --noEmit",
