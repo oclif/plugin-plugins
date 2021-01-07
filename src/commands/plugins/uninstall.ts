@@ -3,7 +3,7 @@ import {Plugin} from '@oclif/config'
 import * as chalk from 'chalk'
 import cli from 'cli-ux'
 
-import Plugins from '../../plugins'
+import Plugins from '../../modules/plugins'
 
 export default class PluginsUninstall extends Command {
   static description = 'removes a plugin from the CLI'

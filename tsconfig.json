@@ -3,6 +3,8 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
     "module": "commonjs",
     "outDir": "./lib",
     "pretty": true,

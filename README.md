@@ -81,28 +81,12 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 # Commands
 <!-- commands -->
-* [`mycli plugins`](#mycli-plugins)
 * [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
 * [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
+* [`mycli plugins:list`](#mycli-pluginslist)
+* [`mycli plugins:source PLUGIN`](#mycli-pluginssource-plugin)
 * [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
 * [`mycli plugins:update`](#mycli-pluginsupdate)
-
-## `mycli plugins`
-
-list installed plugins
-
-```
-USAGE
-  $ mycli plugins
-
-OPTIONS
-  --core  show core plugins
-
-EXAMPLE
-  $ mycli plugins
-```
-
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v1.9.5/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -138,7 +122,7 @@ EXAMPLES
   $ mycli plugins:install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v1.9.5/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.0/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -165,7 +149,45 @@ EXAMPLE
   $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v1.9.5/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.0/src/commands/plugins/link.ts)_
+
+## `mycli plugins:list`
+
+list installed plugins
+
+```
+USAGE
+  $ mycli plugins:list
+
+OPTIONS
+  --core  show core plugins
+
+EXAMPLE
+  $ mycli plugins list
+```
+
+_See code: [src/commands/plugins/list.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.0/src/commands/plugins/list.ts)_
+
+## `mycli plugins:source PLUGIN`
+
+List all plugins from VTEX
+
+```
+USAGE
+  $ mycli plugins:source PLUGIN
+
+ARGUMENTS
+  PATH  [default: .] path to plugin
+
+OPTIONS
+  -h, --help     show CLI help
+  -v, --verbose
+
+EXAMPLE
+  $ mycli plugins:source myplugin
+```
+
+_See code: [src/commands/plugins/source.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.0/src/commands/plugins/source.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -187,7 +209,7 @@ ALIASES
   $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v1.9.5/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.0/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -202,5 +224,5 @@ OPTIONS
   -v, --verbose
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.9.5/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.0/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

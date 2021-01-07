@@ -1,3 +1,12 @@
+## [Unreleased]
+
+## [1.10.0] - 2021-01-07
+
+### Changed
+- [List] Move command from `index` to `plugins list`
+- [Source] New command that list all `VTEX` plugins
+- [Install] Create symlink to `plugin` access `vtex` lib
+
 ## [1.9.5](https://github.com/oclif/plugin-plugins/compare/v1.9.4...v1.9.5) (2020-12-19)
 
 

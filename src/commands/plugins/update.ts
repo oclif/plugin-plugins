@@ -1,6 +1,6 @@
 import {Command, flags} from '@oclif/command'
 
-import Plugins from '../../plugins'
+import Plugins from '../../modules/plugins'
 
 export default class PluginsUpdate extends Command {
   static topic = 'plugins'

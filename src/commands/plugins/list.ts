@@ -3,8 +3,8 @@ import {Command, flags} from '@oclif/command'
 import {Plugin} from '@oclif/config'
 import {cli} from 'cli-ux'
 
-import Plugins from '../../plugins'
-import {sortBy} from '../../util'
+import Plugins from '../../modules/plugins'
+import {sortBy} from '../../modules/util'
 
 export default class PluginsIndex extends Command {
   static flags = {
@@ -13,7 +13,7 @@ export default class PluginsIndex extends Command {
 
   static description = 'list installed plugins'
 
-  static examples = ['$ <%- config.bin %> plugins']
+  static examples = ['$ <%- config.bin %> plugins list']
 
   plugins = new Plugins(this.config)
 

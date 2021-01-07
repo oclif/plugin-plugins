@@ -1,26 +1,37 @@
-name: Node.js CI
+name: ci
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
 
 jobs:
-  build:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
+  lint:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn install --ignore-scripts
+      - run: yarn run ci:prettier-check
+      - run: yarn run lint
+
+  test:
+    needs: [lint]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: '12'
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install
-        env:
-          CI: true
-      - run: yarn test
-        env:
-          CI: true
+      - run: yarn install --ignore-scripts
+      - run: yarn run ci:test

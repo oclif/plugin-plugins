@@ -1,6 +1,6 @@
 import {Hook} from '@oclif/config'
 
-import Plugins from '../plugins'
+import Plugins from '../modules/plugins'
 
 export const update: Hook<'update'> = async function () {
   const plugins = new Plugins(this.config)

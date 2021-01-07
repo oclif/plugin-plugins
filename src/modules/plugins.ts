@@ -83,6 +83,7 @@ export default class Plugins {
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
           throw invalidPluginError
         }
+        await fse.symlink(path.join(this.config.dataDir, '/client/current'), path.join(this.config.dataDir, '/node_modules/vtex'))
         await this.refresh(plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
       }
@@ -183,8 +184,9 @@ export default class Plugins {
     const list = await this.list()
     const friendly = list.find(p => this.friendlyName(p.name) === this.friendlyName(name))
     const unfriendly = list.find(p => this.unfriendlyName(p.name) === this.unfriendlyName(name))
+    const unfriendlyInput = list.find(p => p.name === this.unfriendlyName(name))
     const link = list.find(p => p.type === 'link' && path.resolve(p.root) === path.resolve(name))
-    return friendly ?? unfriendly ?? link ?? false
+    return friendly ?? unfriendly ?? link ?? unfriendlyInput ?? false
   }
 
   async yarnNodeVersion(): Promise<string | undefined> {
@@ -200,7 +202,7 @@ export default class Plugins {
     if (name.includes('@')) return
     const scope = this.config.pjson.oclif.scope
     if (!scope) return
-    return `@${scope}/plugin-${name}`
+    return `@${scope}/cli-plugin-${name}`
   }
 
   async maybeUnfriendlyName(name: string): Promise<string> {
