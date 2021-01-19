@@ -83,7 +83,7 @@ export default class Plugins {
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
           throw invalidPluginError
         }
-        await fse.symlink(path.join(this.config.dataDir, '/client/current'), path.join(this.config.dataDir, '/node_modules/vtex'))
+        await fse.symlink(this.config.root, path.join(this.config.dataDir, 'node_modules', 'vtex'))
         await this.refresh(plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
       }
@@ -176,6 +176,7 @@ export default class Plugins {
     for (const p of plugins) {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
     }
+    await fse.symlink(this.config.root, path.join(this.config.dataDir, 'node_modules', 'vtex'))
     cli.action.stop()
   }
   /* eslint-enable no-await-in-loop */

@@ -1,7 +1,10 @@
 ## [Unreleased]
 
-## [1.10.0] - 2021-01-07
+## [1.10.1] - 2021-01-19 (https://github.com/vtex/cli-plugin-plugins/compare/v1.10.0...v1.10.1)
+### Fixed
+- [Install] Fix symlink path to `plugin` access `vtex` lib
 
+## [1.10.0] - 2021-01-07 (https://github.com/vtex/cli-plugin-plugins/compare/v1.9.5...v1.10.0)
 ### Changed
 - [List] Move command from `index` to `plugins list`
 - [Source] New command that list all `VTEX` plugins
