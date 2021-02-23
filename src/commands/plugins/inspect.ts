@@ -21,7 +21,7 @@ type Dependencies = {
 }
 
 export default class PluginsInspect extends Command {
-  static description = 'inspects an installed plugin';
+  static description = 'displays installation properties of a plugin';
 
   static usage = 'plugins:inspect PLUGIN...';
 
