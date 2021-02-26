@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/oclif/plugin-plugins/compare/v1.9.5...v1.10.0) (2021-02-26)
+
+
+### Features
+
+* add plugins:inspect ([#237](https://github.com/oclif/plugin-plugins/issues/237)) ([4e4a481](https://github.com/oclif/plugin-plugins/commit/4e4a481fc7c1f1e35896c30f186108b02dc89135))
+
 ## [1.9.5](https://github.com/oclif/plugin-plugins/compare/v1.9.4...v1.9.5) (2020-12-19)
 
 
