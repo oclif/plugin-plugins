@@ -68,7 +68,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
             force: flags.force,
           })
         } else {
-          this.ensureGithubRepoIsFromVtexOrg(p.url)
+          this.ensureGitRepoIsFromVtexOrg(p.url)
           this.ensurePluginFollowsStandardPattern(p.url)
 
           cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
