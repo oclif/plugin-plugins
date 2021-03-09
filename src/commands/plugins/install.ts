@@ -57,7 +57,8 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       })
       try {
         if (p.type === 'npm') {
-          this.ensurePackageScopeIsVtex(p.name)
+          this.ensureNpmPackageScopeIsVtex(p.name)
+          this.ensurePluginFollowsStandardPattern(p.name)
 
           cli.action.start(
             `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`,
@@ -67,6 +68,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
             force: flags.force,
           })
         } else {
+          this.ensureGithubRepoIsFromVtexOrg(p.url)
+          this.ensurePluginFollowsStandardPattern(p.url)
+
           cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
           plugin = await this.plugins.install(p.url, {force: flags.force})
         }
@@ -101,11 +105,27 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     return {name, tag, type: 'npm'}
   }
 
-  ensurePackageScopeIsVtex(name: string) {
+  ensureNpmPackageScopeIsVtex(name: string) {
     if (!name.startsWith('@vtex/')) {
       this.error(
-        `Only @vtex plugins are allowed to be installed. ${name} is not a @vtex plugin`,
+        this.nonVtexPluginErrorMessage(name),
       )
     }
+  }
+
+  ensureGithubRepoIsFromVtexOrg(url: string) {
+    if (!url.includes('/vtex/')) {
+      this.error(this.nonVtexPluginErrorMessage(url))
+    }
+  }
+
+  ensurePluginFollowsStandardPattern(identifier: string) {
+    if (!identifier.includes('cli-plugin-')) {
+      this.error('All toolbelt plugins need to follow the naming convention "cli-plugin-{pluginName}"')
+    }
+  }
+
+  nonVtexPluginErrorMessage(identifier: string) {
+    return `Only @vtex plugins are allowed to be installed. ${identifier} is not a @vtex plugin`
   }
 }
