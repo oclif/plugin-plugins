@@ -113,7 +113,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     }
   }
 
-  ensureGithubRepoIsFromVtexOrg(url: string) {
+  ensureGitRepoIsFromVtexOrg(url: string) {
     if (!url.includes('/vtex/')) {
       this.error(this.nonVtexPluginErrorMessage(url))
     }
