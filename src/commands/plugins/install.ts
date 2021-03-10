@@ -59,7 +59,6 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       })
       try {
         const pluginsAllowList = FeatureFlag.getSingleton().getFeatureFlagInfo<{allowedNpmScopes: string[]; allowedGitOrgs: string[]}>('PLUGINS_ALLOW_LIST')
-        console.log(pluginsAllowList)
         if (p.type === 'npm') {
           this.ensureNpmPackageScopeIsAllowed(p.name, pluginsAllowList.allowedNpmScopes)
           this.ensurePluginFollowsStandardPattern(p.name)
