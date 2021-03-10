@@ -1,6 +1,8 @@
 import {Command, flags} from '@oclif/command'
 import chalk = require('chalk')
 import cli from 'cli-ux'
+import {FeatureFlag} from 'vtex'
+
 
 import Plugins from '../../modules/plugins'
 
@@ -56,8 +58,10 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         plugin: p,
       })
       try {
+        const pluginsAllowList = FeatureFlag.getSingleton().getFeatureFlagInfo<{allowedNpmScopes: string[]; allowedGitOrgs: string[]}>('PLUGINS_ALLOW_LIST')
+        console.log(pluginsAllowList)
         if (p.type === 'npm') {
-          this.ensureNpmPackageScopeIsVtex(p.name)
+          this.ensureNpmPackageScopeIsAllowed(p.name, pluginsAllowList.allowedNpmScopes)
           this.ensurePluginFollowsStandardPattern(p.name)
 
           cli.action.start(
@@ -68,7 +72,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
             force: flags.force,
           })
         } else {
-          this.ensureGitRepoIsFromVtexOrg(p.url)
+          this.ensureGitOrgIsAllowed(p.url, pluginsAllowList.allowedGitOrgs)
           this.ensurePluginFollowsStandardPattern(p.url)
 
           cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
@@ -105,17 +109,17 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     return {name, tag, type: 'npm'}
   }
 
-  ensureNpmPackageScopeIsVtex(name: string) {
-    if (!name.startsWith('@vtex/')) {
+  ensureNpmPackageScopeIsAllowed(name: string, allowedNpmScopes: string[]) {
+    if (!allowedNpmScopes.some(npmScope => name.startsWith(npmScope))) {
       this.error(
-        this.nonVtexPluginErrorMessage(name),
+        this.notAllowedPluginErrorMessage(name),
       )
     }
   }
 
-  ensureGitRepoIsFromVtexOrg(url: string) {
-    if (!url.includes('/vtex/')) {
-      this.error(this.nonVtexPluginErrorMessage(url))
+  ensureGitOrgIsAllowed(url: string, allowedGitOrgs: string[]) {
+    if (!allowedGitOrgs.some(gitOrg => url.includes(gitOrg))) {
+      this.error(this.notAllowedPluginErrorMessage(url))
     }
   }
 
@@ -125,7 +129,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     }
   }
 
-  nonVtexPluginErrorMessage(identifier: string) {
-    return `Only @vtex plugins are allowed to be installed. ${identifier} is not a @vtex plugin`
+  notAllowedPluginErrorMessage(identifier: string) {
+    return `Only plugins from a restricted list of vendors are allowed to be installed. ${identifier} is not allowed.`
   }
 }
