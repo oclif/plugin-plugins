@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [1.10.2] - 2021-03-10
+
+### Changed
+
+- [Install] Ensure that user cannot install non-vtex plugins
+
 ## [1.10.1] - 2021-01-19 (https://github.com/vtex/cli-plugin-plugins/compare/v1.10.0...v1.10.1)
 ### Fixed
 - [Install] Fix symlink path to `plugin` access `vtex` lib

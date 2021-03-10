@@ -1,6 +1,8 @@
 import {Command, flags} from '@oclif/command'
 import chalk = require('chalk')
 import cli from 'cli-ux'
+import {FeatureFlag} from 'vtex'
+
 
 import Plugins from '../../modules/plugins'
 
@@ -11,21 +13,21 @@ Can be installed from npm or a git url.
 Installation of a user-installed plugin will override a core plugin.
 
 e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in the CLI without the need to patch and update the whole CLI.
-`;
+`
 
-  static usage = 'plugins:install PLUGIN...';
+  static usage = 'plugins:install PLUGIN...'
 
   static examples = [
     '$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
     '$ <%= config.bin %> plugins:install https://github.com/someuser/someplugin',
     '$ <%= config.bin %> plugins:install someuser/someplugin',
-  ];
+  ]
 
-  static strict = false;
+  static strict = false
 
   static args = [
     {name: 'plugin', description: 'plugin to install', required: true},
-  ];
+  ]
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -34,11 +36,11 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       char: 'f',
       description: 'yarn install with force flag',
     }),
-  };
+  }
 
-  static aliases = ['plugins:add'];
+  static aliases = ['plugins:add']
 
-  plugins = new Plugins(this.config);
+  plugins = new Plugins(this.config)
 
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ugnored
@@ -56,7 +58,11 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         plugin: p,
       })
       try {
+        const pluginsAllowList = FeatureFlag.getSingleton().getFeatureFlagInfo<{allowedNpmScopes: string[]; allowedGitOrgs: string[]}>('PLUGINS_ALLOW_LIST')
         if (p.type === 'npm') {
+          this.ensureNpmPackageScopeIsAllowed(p.name, pluginsAllowList.allowedNpmScopes)
+          this.ensurePluginFollowsStandardPattern(p.name)
+
           cli.action.start(
             `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`,
           )
@@ -65,6 +71,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
             force: flags.force,
           })
         } else {
+          this.ensureGitOrgIsAllowed(p.url, pluginsAllowList.allowedGitOrgs)
+          this.ensurePluginFollowsStandardPattern(p.url)
+
           cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
           plugin = await this.plugins.install(p.url, {force: flags.force})
         }
@@ -77,7 +86,11 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   }
   /* eslint-enable no-await-in-loop */
 
-  async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {url: string; type: 'repo'}> {
+  async parsePlugin(
+    input: string,
+  ): Promise<
+    { name: string; tag: string; type: 'npm' } | { url: string; type: 'repo' }
+  > {
     if (input.startsWith('git+ssh://') || input.endsWith('.git')) {
       return {url: input, type: 'repo'}
     }
@@ -93,5 +106,29 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     const [splitName, tag = 'latest'] = input.split('@')
     const name = await this.plugins.maybeUnfriendlyName(splitName)
     return {name, tag, type: 'npm'}
+  }
+
+  ensureNpmPackageScopeIsAllowed(name: string, allowedNpmScopes: string[]) {
+    if (!allowedNpmScopes.some(npmScope => name.startsWith(npmScope))) {
+      this.error(
+        this.notAllowedPluginErrorMessage(name),
+      )
+    }
+  }
+
+  ensureGitOrgIsAllowed(url: string, allowedGitOrgs: string[]) {
+    if (!allowedGitOrgs.some(gitOrg => url.includes(gitOrg))) {
+      this.error(this.notAllowedPluginErrorMessage(url))
+    }
+  }
+
+  ensurePluginFollowsStandardPattern(identifier: string) {
+    if (!identifier.includes('cli-plugin-')) {
+      this.error('All toolbelt plugins need to follow the naming convention "cli-plugin-{pluginName}"')
+    }
+  }
+
+  notAllowedPluginErrorMessage(identifier: string) {
+    return `Only plugins from a restricted list of vendors are allowed to be installed. ${identifier} is not allowed.`
   }
 }
