@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [1.10.2] - 2021-03-10
+
 ### Changed
 
 - [Install] Ensure that user cannot install non-vtex plugins
