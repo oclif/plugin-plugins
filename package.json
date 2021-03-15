@@ -1,7 +1,7 @@
 {
   "name": "@vtex/cli-plugin-plugins",
   "description": "plugins plugin for toolbelt",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "author": "vtex",
   "bugs": "https://github.com/vtex/cli-plugin-plugins/issues",
   "dependencies": {
@@ -64,10 +64,15 @@
     "devPlugins": [
       "@oclif/plugin-help"
     ],
+    "topics": {
+      "plugins": {
+        "description": "Manages the CLI plugins. Run 'vtex plugins' to see all 6 subcommands"
+      }
+    },
     "aliases": {
       "aliasme": "oclif-debug"
     },
-    "bin": "mycli"
+    "bin": "vtex"
   },
   "repository": "vtex/cli-plugin-plugins",
   "scripts": {

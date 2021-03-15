@@ -21,11 +21,11 @@ plugins plugin for oclif
 
 # What is this?
 
-This plugin is used to allow users to install plugins into your oclif CLI at runtime. For example, in the Heroku CLI this is used to allow people to install plugins such as the Heroku Kafka plugin:
+This plugin is used to allow users to install plugins into your oclif CLI at runtime. For example, in the VTEX CLI this is used to allow people to install plugins such as the VTEX Autoupdate plugin:
 
 ```sh-session
-$ heroku plugins:install heroku-kafka
-$ heroku kafka
+$ vtex plugins install autoupdate
+$ vtex autoupdate
 ```
 
 This is useful to allow users to create their own plugins to work in your CLI or to allow you to build functionality that users can optionally install.
@@ -57,7 +57,7 @@ To set this up, simply set the `oclif.scope` to the name of your npm org. In the
 
 # Aliases
 
-Over time in the Heroku CLI we've changed plugin names, brought plugins into the core of the CLI, or sunset old plugins that no longer function. There is support in this plugin for dealing with these situations.
+Over time in the VTEX CLI we've changed plugin names, brought plugins into the core of the CLI, or sunset old plugins that no longer function. There is support in this plugin for dealing with these situations.
 
 For renaming plugins, add an alias section to `oclif.aliases` in `package.json`:
 
@@ -81,148 +81,133 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 # Commands
 <!-- commands -->
-* [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-* [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
-* [`mycli plugins:list`](#mycli-pluginslist)
-* [`mycli plugins:source PLUGIN`](#mycli-pluginssource-plugin)
-* [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
-* [`mycli plugins:update`](#mycli-pluginsupdate)
+* [`vtex plugins install PLUGIN`](#vtex-plugins-install-plugin)
+* [`vtex plugins link PLUGIN`](#vtex-plugins-link-plugin)
+* [`vtex plugins:list`](#vtex-pluginslist)
+* [`vtex plugins source PLUGIN`](#vtex-plugins-source-plugin)
+* [`vtex plugins uninstall PLUGIN`](#vtex-plugins-uninstall-plugin)
+* [`vtex plugins:update`](#vtex-pluginsupdate)
 
-## `mycli plugins:install PLUGIN...`
+## `vtex plugins install PLUGIN`
 
-installs a plugin into the CLI
+Installs a plugin into the CLI.
 
 ```
 USAGE
-  $ mycli plugins:install PLUGIN...
+  $ vtex plugins install PLUGIN
 
 ARGUMENTS
   PLUGIN  plugin to install
 
 OPTIONS
-  -f, --force    yarn install with force flag
+  -f, --force    Refetches all packages, even the ones that were previously installed.
   -h, --help     show CLI help
   -v, --verbose
 
-DESCRIPTION
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command 
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in 
-  the CLI without the need to patch and update the whole CLI.
-
 ALIASES
-  $ mycli plugins:add
+  $ vtex plugins:add
 
 EXAMPLES
-  $ mycli plugins:install myplugin 
-  $ mycli plugins:install https://github.com/someuser/someplugin
-  $ mycli plugins:install someuser/someplugin
+  vtex plugins install lighthouse
+  vtex plugins install https://github.com/vtex/cli-plugin-someplugin
+  vtex plugins install @vtex/cli-plugin-someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.2/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.0/src/commands/plugins/install.ts)_
 
-## `mycli plugins:link PLUGIN`
+## `vtex plugins link PLUGIN`
 
-links a plugin into the CLI for development
+Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ mycli plugins:link PLUGIN
+  $ vtex plugins link PLUGIN
 
 ARGUMENTS
-  PATH  [default: .] path to plugin
-
-OPTIONS
-  -h, --help     show CLI help
-  -v, --verbose
-
-DESCRIPTION
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello' 
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-EXAMPLE
-  $ mycli plugins:link myplugin
-```
-
-_See code: [src/commands/plugins/link.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.2/src/commands/plugins/link.ts)_
-
-## `mycli plugins:list`
-
-list installed plugins
-
-```
-USAGE
-  $ mycli plugins:list
-
-OPTIONS
-  --core  show core plugins
-
-EXAMPLE
-  $ mycli plugins list
-```
-
-_See code: [src/commands/plugins/list.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.2/src/commands/plugins/list.ts)_
-
-## `mycli plugins:source PLUGIN`
-
-List all plugins from VTEX
-
-```
-USAGE
-  $ mycli plugins:source PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
+  PATH  [default: .] Plugin path.
 
 OPTIONS
   -h, --help     show CLI help
   -v, --verbose
 
 EXAMPLE
-  $ mycli plugins:source myplugin
+  vtex plugins link myplugin
 ```
 
-_See code: [src/commands/plugins/source.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.2/src/commands/plugins/source.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.0/src/commands/plugins/link.ts)_
 
-## `mycli plugins:uninstall PLUGIN...`
+## `vtex plugins:list`
 
-removes a plugin from the CLI
+Lists all plugins installed on your machine.
 
 ```
 USAGE
-  $ mycli plugins:uninstall PLUGIN...
+  $ vtex plugins:list
+
+OPTIONS
+  --core  Shows core plugins.
+
+EXAMPLE
+  vtex plugins list
+```
+
+_See code: [src/commands/plugins/list.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.0/src/commands/plugins/list.ts)_
+
+## `vtex plugins source PLUGIN`
+
+Lists all plugins supported by [38;2;139;195;74mVTEX[39m.
+
+```
+USAGE
+  $ vtex plugins source PLUGIN
 
 ARGUMENTS
-  PLUGIN  plugin to uninstall
+  PATH  [default: .] Plugin path.
+
+OPTIONS
+  -h, --help     show CLI help
+  -v, --verbose
+
+EXAMPLE
+  vtex plugins source myplugin
+```
+
+_See code: [src/commands/plugins/source.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.0/src/commands/plugins/source.ts)_
+
+## `vtex plugins uninstall PLUGIN`
+
+Removes a plugin from the CLI
+
+```
+USAGE
+  $ vtex plugins uninstall PLUGIN
+
+ARGUMENTS
+  PLUGIN  Plugin to uninstall.
 
 OPTIONS
   -h, --help     show CLI help
   -v, --verbose
 
 ALIASES
-  $ mycli plugins:unlink
-  $ mycli plugins:remove
+  $ vtex plugins:unlink
+  $ vtex plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.2/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.0/src/commands/plugins/uninstall.ts)_
 
-## `mycli plugins:update`
+## `vtex plugins:update`
 
-update installed plugins
+Updates all plugins installed on your machine.
 
 ```
 USAGE
-  $ mycli plugins:update
+  $ vtex plugins:update
 
 OPTIONS
   -h, --help     show CLI help
   -v, --verbose
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.10.2/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.0/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
