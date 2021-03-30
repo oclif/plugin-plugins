@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [1.11.1] - 2021-03-30
+### Fixed
+
+-[oclif-dev manifest] Add `--color=256` to force using collor on file
 ## [1.11.0] - 2021-03-15
 ### Changed
 

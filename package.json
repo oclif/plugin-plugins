@@ -1,7 +1,7 @@
 {
   "name": "@vtex/cli-plugin-plugins",
   "description": "plugins plugin for toolbelt",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "author": "vtex",
   "bugs": "https://github.com/vtex/cli-plugin-plugins/issues",
   "dependencies": {
@@ -84,10 +84,10 @@
     "pretest": "yarn build --noEmit && tsc -p test --noEmit",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "posttest": "yarn lint",
-    "prepublishOnly": "yarn run build && oclif-dev manifest && oclif-dev readme",
+    "prepublishOnly": "yarn run build && oclif-dev manifest --color=256 && oclif-dev readme",
     "postpublish": "yarn run clean",
     "preversion": "yarn run clean",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest --color=256 && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md"
   },
   "types": "lib/index.d.ts"
