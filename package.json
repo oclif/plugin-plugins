@@ -1,7 +1,7 @@
 {
   "name": "@vtex/cli-plugin-plugins",
   "description": "plugins plugin for toolbelt",
-  "version": "1.11.1",
+  "version": "1.13.0",
   "author": "vtex",
   "bugs": "https://github.com/vtex/cli-plugin-plugins/issues",
   "dependencies": {

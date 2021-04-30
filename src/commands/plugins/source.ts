@@ -29,9 +29,8 @@ export default class PluginsSource extends Command {
   plugins = new Plugins(this.config);
 
   async run() {
-    const remoteCommands: string[] = FeatureFlag.getSingleton()
-      .getFeatureFlagInfo<string[]>("REMOTE_COMMANDS")
-      .sort();
+    const remoteCommands = FeatureFlag.getSingleton()
+    .getFeatureFlagInfo<Array<{ name: string, description: string }>>("REMOTE_COMMANDS");
     let allPlugins: IPlugin[] = this.config.plugins;
     allPlugins = allPlugins.filter(
       (p) =>
@@ -46,11 +45,11 @@ export default class PluginsSource extends Command {
     const plugins: string[] = allPlugins.map((p) => {
       return p.name;
     });
-    for (let command of remoteCommands) {
-      if (plugins.includes(command)) {
-        command = `${chalk.green(command)}`;
+    for (const command of remoteCommands) {
+      if (plugins.includes(command.name)) {
+        command.name = `${chalk.green(command.name)}`;
       }
-      console.log(`• ${command}`);
+      console.log(`• ${command.name} - ${command.description}`);
     }
   }
 }

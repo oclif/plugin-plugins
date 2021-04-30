@@ -113,7 +113,7 @@ EXAMPLES
   vtex plugins install @vtex/cli-plugin-someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.1/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.13.0/src/commands/plugins/install.ts)_
 
 ## `vtex plugins link PLUGIN`
 
@@ -134,7 +134,7 @@ EXAMPLE
   vtex plugins link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.1/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.13.0/src/commands/plugins/link.ts)_
 
 ## `vtex plugins:list`
 
@@ -151,7 +151,7 @@ EXAMPLE
   vtex plugins list
 ```
 
-_See code: [src/commands/plugins/list.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.1/src/commands/plugins/list.ts)_
+_See code: [src/commands/plugins/list.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.13.0/src/commands/plugins/list.ts)_
 
 ## `vtex plugins source PLUGIN`
 
@@ -172,7 +172,7 @@ EXAMPLE
   vtex plugins source myplugin
 ```
 
-_See code: [src/commands/plugins/source.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.1/src/commands/plugins/source.ts)_
+_See code: [src/commands/plugins/source.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.13.0/src/commands/plugins/source.ts)_
 
 ## `vtex plugins uninstall PLUGIN`
 
@@ -194,7 +194,7 @@ ALIASES
   $ vtex plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.1/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.13.0/src/commands/plugins/uninstall.ts)_
 
 ## `vtex plugins:update`
 
@@ -209,5 +209,5 @@ OPTIONS
   -v, --verbose
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.11.1/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/vtex/cli-plugin-plugins/blob/v1.13.0/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
