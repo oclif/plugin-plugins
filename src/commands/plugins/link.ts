@@ -1,5 +1,5 @@
 import { Command, flags } from "@oclif/command";
-import * as chalk from "chalk";
+import chalk from "chalk";
 import cli from "cli-ux";
 import { ColorifyConstants } from "vtex";
 
