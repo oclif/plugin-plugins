@@ -3,10 +3,10 @@ import {CLIError} from '@oclif/errors'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
-import HTTP from 'http-call'
 import loadJSON from 'load-json-file'
 import * as path from 'path'
 import * as semver from 'semver'
+import {exec} from 'child_process'
 
 import {uniq, uniqWith} from './util'
 import Yarn from './yarn'
@@ -240,20 +240,22 @@ export default class Plugins {
   }
 
   private async npmHasPackage(name: string): Promise<boolean> {
-    try {
-      const http: typeof HTTP = require('http-call').HTTP
-      const url = `${this.npmRegistry}/${name.replace('/', '%2f')}`
-      await http.get(url)
-      return true
-    } catch (error) {
-      this.debug(error)
-
-      if (error.statusCode === 404) {
-        return false
-      }
-
-      throw error
-    }
+    return new Promise((resolve, reject) => {
+      exec(`npm show ${name} dist-tags`, {
+        encoding: 'utf-8',
+        maxBuffer: 2048 * 2048,
+      }, error => {
+        if (error) {
+          try {
+            return resolve(false)
+          } catch {
+            reject(new Error(`Could not run npm show for ${name}`))
+          }
+        } else {
+          return resolve(true)
+        }
+      })
+    })
   }
 
   private async savePJSON(pjson: Config.PJSON.User) {
