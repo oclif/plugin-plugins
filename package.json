@@ -20,6 +20,7 @@
     "yarn": "^1.21.1"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^12.1.4",
     "@oclif/config": "^1.12.11",
     "@oclif/dev-cli": "^1.21.3",
     "@oclif/plugin-help": "^3.1.0",
@@ -31,11 +32,13 @@
     "@types/semver": "^7.3.1",
     "@types/supports-color": "^7.2.0",
     "chai": "^4.2.0",
+    "commitlint": "^12.1.4",
     "eslint": "^7.3.1",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.2.0",
     "fancy-test": "^1.4.1",
     "globby": "^11.0.1",
+    "husky": "6",
     "mocha": "^8.2.1",
     "nock": "^13.0.3",
     "ts-node": "^9.0.0",
@@ -71,6 +74,7 @@
   "repository": "oclif/plugin-plugins",
   "scripts": {
     "build": "rm -rf lib && tsc",
+    "commitlint": "commitlint",
     "clean": "rm -f oclif.manifest.json",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "pretest": "yarn build --noEmit && tsc -p test --noEmit",
