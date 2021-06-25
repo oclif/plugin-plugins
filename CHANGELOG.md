@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.10.1](https://github.com/oclif/plugin-plugins/compare/v1.10.0...v1.10.1) (2021-06-25)
+
+
+### Bug Fixes
+
+* install should use npm to check registry ([#283](https://github.com/oclif/plugin-plugins/issues/283)) ([a2e8180](https://github.com/oclif/plugin-plugins/commit/a2e8180ee045507f76dba33892fafc55d756de66))
+
 # [1.10.0](https://github.com/oclif/plugin-plugins/compare/v1.9.5...v1.10.0) (2021-02-26)
 
 
