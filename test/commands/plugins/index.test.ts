@@ -55,11 +55,8 @@ describe('command', () => {
   .it('installs and uninstalls jdxcode/oclif-debug')
 
   test
-  .nock('https://registry.npmjs.org', api => api
-  .get('/@heroku-cli%2fplugin-stubbed')
-  .reply(503, ''))
   .command(['plugins:install', 'stubbed'], {reset: true})
-  .catch(/HTTP Error 503/)
+  .catch(/1/)
   .stdout()
   .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
