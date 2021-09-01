@@ -39,7 +39,7 @@
     "fancy-test": "^1.4.1",
     "globby": "^11.0.1",
     "husky": "6",
-    "mocha": "^8.2.1",
+    "mocha": "^9.1.1",
     "nock": "^13.0.3",
     "ts-node": "^9.0.0",
     "typescript": "3.8.3"
