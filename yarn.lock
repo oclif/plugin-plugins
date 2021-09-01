@@ -2323,7 +2323,7 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-load-json-file@^5.0.0, load-json-file@^5.2.0:
+load-json-file@^5.0.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-5.2.0.tgz#1553627a18bf7b08cd7ec232d63981239085a578"
   integrity sha512-HvjIlM2Y/RDHk1X6i4sGgaMTrAsnNrgQCJtuf5PEhbOV6MCJuMVZLMdlJRE0JGLMkF7b6O5zs9LcDxKIUt9CbQ==
@@ -2332,6 +2332,11 @@ load-json-file@^5.0.0, load-json-file@^5.2.0:
     parse-json "^4.0.0"
     pify "^3.0.0"
     strip-bom "^3.0.0"
+
+load-json-file@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-7.0.0.tgz#3a0f1aec57e7ee33fcc13b5ca7337f47b51f46cf"
+  integrity sha512-V1bSvOa1sP8wZTZkDmt/JOxOogqsD8XqMuKMpMFRMokVs6eOULZizhyQohlfQg3CGCYqNBZg0oYoYIADt1limQ==
 
 locate-path@^2.0.0:
   version "2.0.0"
