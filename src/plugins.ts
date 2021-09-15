@@ -30,14 +30,10 @@ export default class Plugins {
       const pjson = await loadJSON<Config.PJSON>(this.pjsonPath)
       return {
         ...initPJSON,
-        oclif: {
-          ...initPJSON.oclif,
-          ...pjson.oclif,
-        },
         dependencies: {},
         ...pjson,
       }
-    } catch (error) {
+    } catch (error: any) {
       this.debug(error)
       if (error.code !== 'ENOENT') process.emitWarning(error)
       return initPJSON
@@ -87,7 +83,7 @@ export default class Plugins {
         await this.add({name, tag: range || tag, type: 'user'})
       }
       return plugin
-    } catch (error) {
+    } catch (error: any) {
       await this.uninstall(name).catch(error => this.debug(error))
 
       if (String(error).includes('EACCES')) {
@@ -140,7 +136,7 @@ export default class Plugins {
       if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.yarn.exec(['remove', name], {cwd: this.config.dataDir, verbose: this.verbose})
       }
-    } catch (error) {
+    } catch (error: any) {
       cli.warn(error)
     } finally {
       await this.remove(name)
@@ -191,7 +187,7 @@ export default class Plugins {
     try {
       const f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
       return f.nodeVersion
-    } catch (error) {
+    } catch (error: any) {
       if (error.code !== 'ENOENT') cli.warn(error)
     }
   }
