@@ -1,4 +1,4 @@
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 import * as chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -28,9 +28,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   ];
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    verbose: flags.boolean({char: 'v'}),
-    force: flags.boolean({
+    help: Flags.help({char: 'h'}),
+    verbose: Flags.boolean({char: 'v'}),
+    force: Flags.boolean({
       char: 'f',
       description: 'yarn install with force flag',
     }),
@@ -44,7 +44,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
   async run() {
-    const {flags, argv} = this.parse(PluginsInstall)
+    const {flags, argv} = await this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv) {

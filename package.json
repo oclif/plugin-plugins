@@ -6,8 +6,6 @@
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
     "@oclif/color": "^0.x",
-    "@oclif/command": "^1.5.12",
-    "@oclif/errors": "^1.2.2",
     "chalk": "^4.1.0",
     "cli-ux": "^5.2.1",
     "debug": "^4.1.0",
@@ -21,8 +19,6 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
-    "@oclif/config": "^1.12.11",
-    "@oclif/dev-cli": "^1.21.3",
     "@oclif/plugin-help": "^3.1.0",
     "@oclif/test": "^1.2.4",
     "@types/chai": "^4.1.7",
@@ -41,6 +37,7 @@
     "husky": "6",
     "mocha": "^8.2.1",
     "nock": "^13.0.3",
+    "oclif": "^2.0.0-main.5",
     "ts-node": "^9.0.0",
     "typescript": "4.4.3"
   },
@@ -80,10 +77,10 @@
     "pretest": "yarn build --noEmit && tsc -p test --noEmit",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "posttest": "yarn lint",
-    "prepublishOnly": "yarn run build && oclif-dev manifest && oclif-dev readme",
+    "prepublishOnly": "yarn run build && oclif manifest && oclif readme",
     "postpublish": "yarn run clean",
     "preversion": "yarn run clean",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif readme && git add README.md"
   },
   "types": "lib/index.d.ts"
 }

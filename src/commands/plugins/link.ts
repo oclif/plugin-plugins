@@ -1,4 +1,4 @@
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 import * as chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -18,14 +18,14 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
   static args = [{name: 'path', description: 'path to plugin', required: true, default: '.'}]
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    verbose: flags.boolean({char: 'v'}),
+    help: Flags.help({char: 'h'}),
+    verbose: Flags.boolean({char: 'v'}),
   }
 
   plugins = new Plugins(this.config)
 
   async run() {
-    const {flags, args} = this.parse(PluginsLink)
+    const {flags, args} = await this.parse(PluginsLink)
     this.plugins.verbose = flags.verbose
     cli.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
     await this.plugins.link(args.path)

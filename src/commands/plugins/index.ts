@@ -1,6 +1,5 @@
 import color from '@oclif/color'
-import {Command, flags} from '@oclif/command'
-import {Plugin} from '@oclif/config'
+import {Command, Flags, Plugin} from '@oclif/core'
 import {cli} from 'cli-ux'
 
 import Plugins from '../../plugins'
@@ -8,7 +7,7 @@ import {sortBy} from '../../util'
 
 export default class PluginsIndex extends Command {
   static flags = {
-    core: flags.boolean({description: 'show core plugins'}),
+    core: Flags.boolean({description: 'show core plugins'}),
   }
 
   static description = 'list installed plugins'
@@ -18,7 +17,7 @@ export default class PluginsIndex extends Command {
   plugins = new Plugins(this.config)
 
   async run() {
-    const {flags} = this.parse(PluginsIndex)
+    const {flags} = await this.parse(PluginsIndex)
     let plugins = this.config.plugins
     sortBy(plugins, p => this.plugins.friendlyName(p.name))
     if (!flags.core) {

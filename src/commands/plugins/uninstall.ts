@@ -1,5 +1,4 @@
-import {Command, flags} from '@oclif/command'
-import {Plugin} from '@oclif/config'
+import {Command, Flags, Plugin} from '@oclif/core'
 import * as chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -20,8 +19,8 @@ export default class PluginsUninstall extends Command {
   static args = [{name: 'plugin', description: 'plugin to uninstall'}]
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    verbose: flags.boolean({char: 'v'}),
+    help: Flags.help({char: 'h'}),
+    verbose: Flags.boolean({char: 'v'}),
   }
 
   static aliases = ['plugins:unlink', 'plugins:remove']
@@ -32,7 +31,7 @@ export default class PluginsUninstall extends Command {
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
   async run() {
-    const {flags, argv} = this.parse(PluginsUninstall)
+    const {flags, argv} = await this.parse(PluginsUninstall)
     this.plugins = new Plugins(this.config)
     if (flags.verbose) this.plugins.verbose = true
     if (argv.length === 0) argv.push('.')
