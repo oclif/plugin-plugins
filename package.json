@@ -6,6 +6,7 @@
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
     "@oclif/color": "^0.x",
+    "@oclif/core": "^0.5.39",
     "chalk": "^4.1.0",
     "cli-ux": "^5.2.1",
     "debug": "^4.1.0",
