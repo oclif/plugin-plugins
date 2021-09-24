@@ -1,5 +1,4 @@
-import * as Config from '@oclif/config'
-import {CLIError} from '@oclif/errors'
+import {Errors, Config,  Interfaces} from '@oclif/core'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
@@ -11,7 +10,7 @@ import {exec} from 'child_process'
 import {uniq, uniqWith} from './util'
 import Yarn from './yarn'
 
-const initPJSON: Config.PJSON.User = {private: true, oclif: {schema: 1, plugins: []}, dependencies: {}}
+const initPJSON: Interfaces.PJSON.User = {private: true, oclif: {schema: 1, plugins: []}, dependencies: {}}
 
 export default class Plugins {
   verbose = false
@@ -20,14 +19,14 @@ export default class Plugins {
 
   private readonly debug: any
 
-  constructor(public config: Config.IConfig) {
+  constructor(public config: Interfaces.Config) {
     this.yarn = new Yarn({config})
     this.debug = require('debug')('@oclif/plugins')
   }
 
-  async pjson(): Promise<Config.PJSON.User> {
+  async pjson(): Promise<Interfaces.PJSON.User> {
     try {
-      const pjson = await loadJSON<Config.PJSON>(this.pjsonPath)
+      const pjson = await loadJSON<Interfaces.PJSON>(this.pjsonPath)
       return {
         ...initPJSON,
         dependencies: {},
@@ -45,13 +44,13 @@ export default class Plugins {
     return this.normalizePlugins(pjson.oclif.plugins)
   }
 
-  async install(name: string, {tag = 'latest', force = false} = {}): Promise<Config.IConfig> {
+  async install(name: string, {tag = 'latest', force = false} = {}): Promise<Interfaces.Config> {
     try {
       const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
       await this.createPJSON()
       let plugin
       const add = force ? ['add', '--force'] : ['add']
-      const invalidPluginError = new CLIError('plugin is invalid', {
+      const invalidPluginError = new Errors.CLIError('plugin is invalid', {
         suggestions: [
           'Plugin failed to install because it does not appear to be a valid CLI plugin.\nIf you are sure it is, contact the CLI developer noting this error.',
         ],
@@ -87,7 +86,7 @@ export default class Plugins {
       await this.uninstall(name).catch(error => this.debug(error))
 
       if (String(error).includes('EACCES')) {
-        throw new CLIError(error, {
+        throw new Errors.CLIError(error, {
           suggestions: [
             `Plugin failed to install because of a permissions error.\nDoes your current user own the directory ${this.config.dataDir}?`,
           ],
@@ -110,13 +109,13 @@ export default class Plugins {
     const c = await Config.load(path.resolve(p))
     cli.action.start(`${this.config.name}: linking plugin ${c.name}`)
     if (!c.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
-      throw new CLIError('plugin is not a valid oclif plugin')
+      throw new Errors.CLIError('plugin is not a valid oclif plugin')
     }
     await this.refresh(c.root, {prod: false})
     await this.add({type: 'link', name: c.name, root: c.root})
   }
 
-  async add(plugin: Config.PJSON.PluginTypes) {
+  async add(plugin: Interfaces.PJSON.PluginTypes) {
     const pjson = await this.pjson()
     pjson.oclif.plugins = uniq([...pjson.oclif.plugins || [], plugin]) as any
     await this.savePJSON(pjson)
@@ -147,7 +146,7 @@ export default class Plugins {
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
   async update() {
-    let plugins = (await this.list()).filter((p): p is Config.PJSON.PluginTypes.User => p.type === 'user')
+    let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
 
@@ -254,16 +253,16 @@ export default class Plugins {
     })
   }
 
-  private async savePJSON(pjson: Config.PJSON.User) {
+  private async savePJSON(pjson: Interfaces.PJSON.User) {
     pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
     const fs: typeof fse = require('fs-extra')
     await fs.outputJSON(this.pjsonPath, pjson, {spaces: 2})
   }
 
-  private normalizePlugins(input: Config.PJSON.User['oclif']['plugins']) {
+  private normalizePlugins(input: Interfaces.PJSON.User['oclif']['plugins']) {
     let plugins = (input || []).map(p => {
       if (typeof p === 'string') {
-        return {name: p, type: 'user', tag: 'latest'} as Config.PJSON.PluginTypes.User
+        return {name: p, type: 'user', tag: 'latest'} as Interfaces.PJSON.PluginTypes.User
       }
       return p
     })

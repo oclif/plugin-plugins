@@ -1,4 +1,4 @@
-import {IConfig} from '@oclif/config'
+import {Interfaces} from '@oclif/core'
 import ux from 'cli-ux'
 import NpmRunPath from 'npm-run-path'
 import * as path from 'path'
@@ -6,9 +6,9 @@ import * as path from 'path'
 const debug = require('debug')('cli:yarn')
 
 export default class Yarn {
-  config: IConfig
+  config: Interfaces.Config
 
-  constructor({config}: { config: IConfig }) {
+  constructor({config}: { config: Interfaces.Config }) {
     this.config = config
   }
 

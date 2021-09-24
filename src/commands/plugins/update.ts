@@ -1,4 +1,4 @@
-import {Command, flags} from '@oclif/command'
+import {Command, Flags} from '@oclif/core'
 
 import Plugins from '../../plugins'
 
@@ -10,14 +10,14 @@ export default class PluginsUpdate extends Command {
   static description = 'update installed plugins'
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    verbose: flags.boolean({char: 'v'}),
+    help: Flags.help({char: 'h'}),
+    verbose: Flags.boolean({char: 'v'}),
   }
 
   plugins = new Plugins(this.config)
 
   async run() {
-    const {flags} = this.parse(PluginsUpdate)
+    const {flags} = await this.parse(PluginsUpdate)
     this.plugins.verbose = flags.verbose
     await this.plugins.update()
   }

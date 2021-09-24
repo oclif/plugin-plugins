@@ -1,6 +1,5 @@
 import * as path from 'path'
-import {Command, flags} from '@oclif/command'
-import {Plugin} from '@oclif/config'
+import {Command, Flags, Plugin} from '@oclif/core'
 import * as chalk from 'chalk'
 import {exec} from 'child_process'
 import * as fs from 'fs-extra'
@@ -36,8 +35,8 @@ export default class PluginsInspect extends Command {
   ];
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    verbose: flags.boolean({char: 'v'}),
+    help: Flags.help({char: 'h'}),
+    verbose: Flags.boolean({char: 'v'}),
   };
 
   plugins = new Plugins(this.config);
@@ -49,7 +48,7 @@ export default class PluginsInspect extends Command {
   /* eslint-disable no-await-in-loop */
   async run() {
     this.allDeps = await this.npmList(this.config.root, 3)
-    const {flags, argv} = this.parse(PluginsInspect)
+    const {flags, argv} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv) {
