@@ -5,7 +5,7 @@ import cli from 'cli-ux'
 import Plugins from '../../plugins'
 
 export default class PluginsUninstall extends Command {
-  static description = 'removes a plugin from the CLI'
+  static description = 'Removes a plugin from the CLI.'
 
   static usage = 'plugins:uninstall PLUGIN...'
 

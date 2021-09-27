@@ -7,7 +7,7 @@ export default class PluginsUpdate extends Command {
 
   static command = 'update'
 
-  static description = 'update installed plugins'
+  static description = 'Update installed plugins.'
 
   static flags = {
     help: Flags.help({char: 'h'}),
