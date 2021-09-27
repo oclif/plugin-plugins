@@ -12,7 +12,7 @@ describe('command', () => {
   .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
   .stdout()
   .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls @oclif/example-plugin-ts')
 
   test
@@ -23,7 +23,7 @@ describe('command', () => {
   .command(['plugins:uninstall', '@oclif/example-plugin-ts@latest'], {reset: true})
   .stdout()
   .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls @oclif/example-plugin-ts with tags')
 
   test
@@ -37,7 +37,7 @@ describe('command', () => {
   .command(['plugins:uninstall', 'oclif-debug'])
   .stdout()
   .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs via an alias')
 
   test
@@ -51,7 +51,7 @@ describe('command', () => {
   .command(['plugins:uninstall', 'oclif-debug'])
   .stdout()
   .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls jdxcode/oclif-debug')
 
   test
@@ -59,7 +59,7 @@ describe('command', () => {
   .catch(/1/)
   .stdout()
   .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('does not install if unsure if scoped package does not exist')
   // test
   // .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
@@ -80,6 +80,6 @@ describe('command', () => {
   // .command(['plugins:uninstall', 'heroku-debug'])
   // .stdout()
   // .command(['plugins'])
-  // .do(output => expect(output.stdout).to.equal('no plugins installed\n'))
+  // .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   // .it('installs and uninstalls heroku-debug')
 })

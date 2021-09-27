@@ -5,7 +5,7 @@ import cli from 'cli-ux'
 import Plugins from '../../plugins'
 
 export default class PluginsInstall extends Command {
-  static description = `installs a plugin into the CLI
+  static description = `Installs a plugin into the CLI.
 Can be installed from npm or a git url.
 
 Installation of a user-installed plugin will override a core plugin.
@@ -24,7 +24,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static strict = false;
 
   static args = [
-    {name: 'plugin', description: 'plugin to install', required: true},
+    {name: 'plugin', description: 'Plugin to install.', required: true},
   ];
 
   static flags = {
@@ -32,7 +32,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     verbose: Flags.boolean({char: 'v'}),
     force: Flags.boolean({
       char: 'f',
-      description: 'yarn install with force flag',
+      description: 'Run yarn install with force flag.',
     }),
   };
 
