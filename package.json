@@ -78,7 +78,7 @@
     "pretest": "yarn build --noEmit && tsc -p test --noEmit",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "posttest": "yarn lint",
-    "prepublishOnly": "yarn run build && oclif manifest && oclif readme",
+    "prepublishOnly": "yarn run build && oclif manifest . && oclif readme",
     "postpublish": "yarn run clean",
     "preversion": "yarn run clean",
     "version": "oclif readme && git add README.md"
