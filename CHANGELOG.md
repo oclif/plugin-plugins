@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/oclif/plugin-plugins/compare/v1.10.1...v2.0.0) (2021-09-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* require node 12+ (#323)
+
+### Features
+
+* use oclif/core ([#327](https://github.com/oclif/plugin-plugins/issues/327)) ([0a26dde](https://github.com/oclif/plugin-plugins/commit/0a26ddef9220dcaf12da4c9b0164bf2cae51aebc))
+
+
+### Bug Fixes
+
+* adjust help text to new style guide ([#328](https://github.com/oclif/plugin-plugins/issues/328)) ([e8f1244](https://github.com/oclif/plugin-plugins/commit/e8f1244c29c089f350526fec8a9bdd02d3a8b049))
+
+
+### build
+
+* require node 12+ ([#323](https://github.com/oclif/plugin-plugins/issues/323)) ([2c0356c](https://github.com/oclif/plugin-plugins/commit/2c0356cf3245ec5861cdc74c93e7a49561b049bb))
+
 ### [1.10.1](https://github.com/oclif/plugin-plugins/compare/v1.10.0...v1.10.1) (2021-06-25)
 
 

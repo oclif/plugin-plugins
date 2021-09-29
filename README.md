@@ -89,16 +89,19 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 ## `mycli plugins`
 
-list installed plugins
+List installed plugins.
 
 ```
 USAGE
-  $ mycli plugins
+  $ mycli plugins [--core]
 
-OPTIONS
-  --core  show core plugins
+FLAGS
+  --core  Show core plugins.
 
-EXAMPLE
+DESCRIPTION
+  List installed plugins.
+
+EXAMPLES
   $ mycli plugins
 ```
 
@@ -106,20 +109,23 @@ _See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugi
 
 ## `mycli plugins:inspect PLUGIN...`
 
-displays installation properties of a plugin
+Displays installation properties of a plugin.
 
 ```
 USAGE
   $ mycli plugins:inspect PLUGIN...
 
 ARGUMENTS
-  PLUGIN  [default: .] plugin to inspect
+  PLUGIN  [default: .] Plugin to inspect.
 
-OPTIONS
+FLAGS
   -h, --help     show CLI help
   -v, --verbose
 
-EXAMPLE
+DESCRIPTION
+  Displays installation properties of a plugin.
+
+EXAMPLES
   $ mycli plugins:inspect myplugin
 ```
 
@@ -127,27 +133,29 @@ _See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plu
 
 ## `mycli plugins:install PLUGIN...`
 
-installs a plugin into the CLI
+Installs a plugin into the CLI.
 
 ```
 USAGE
   $ mycli plugins:install PLUGIN...
 
 ARGUMENTS
-  PLUGIN  plugin to install
+  PLUGIN  Plugin to install.
 
-OPTIONS
-  -f, --force    yarn install with force flag
+FLAGS
+  -f, --force    Run yarn install with force flag.
   -h, --help     show CLI help
   -v, --verbose
 
 DESCRIPTION
+  Installs a plugin into the CLI.
+
   Can be installed from npm or a git url.
 
   Installation of a user-installed plugin will override a core plugin.
 
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command 
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in 
+  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
+  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
   the CLI without the need to patch and update the whole CLI.
 
 ALIASES
@@ -155,7 +163,9 @@ ALIASES
 
 EXAMPLES
   $ mycli plugins:install myplugin 
+
   $ mycli plugins:install https://github.com/someuser/someplugin
+
   $ mycli plugins:install someuser/someplugin
 ```
 
@@ -163,7 +173,7 @@ _See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plu
 
 ## `mycli plugins:link PLUGIN`
 
-links a plugin into the CLI for development
+Links a plugin into the CLI for development.
 
 ```
 USAGE
@@ -172,17 +182,19 @@ USAGE
 ARGUMENTS
   PATH  [default: .] path to plugin
 
-OPTIONS
+FLAGS
   -h, --help     show CLI help
   -v, --verbose
 
 DESCRIPTION
+  Links a plugin into the CLI for development.
+
   Installation of a linked plugin will override a user-installed or core plugin.
 
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello' 
+  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
   command will override the user-installed or core plugin implementation. This is useful for development work.
 
-EXAMPLE
+EXAMPLES
   $ mycli plugins:link myplugin
 ```
 
@@ -190,7 +202,7 @@ _See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugin
 
 ## `mycli plugins:uninstall PLUGIN...`
 
-removes a plugin from the CLI
+Removes a plugin from the CLI.
 
 ```
 USAGE
@@ -199,9 +211,12 @@ USAGE
 ARGUMENTS
   PLUGIN  plugin to uninstall
 
-OPTIONS
+FLAGS
   -h, --help     show CLI help
   -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
 
 ALIASES
   $ mycli plugins:unlink
@@ -212,15 +227,18 @@ _See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-p
 
 ## `mycli plugins:update`
 
-update installed plugins
+Update installed plugins.
 
 ```
 USAGE
-  $ mycli plugins:update
+  $ mycli plugins:update [-h] [-v]
 
-OPTIONS
+FLAGS
   -h, --help     show CLI help
   -v, --verbose
+
+DESCRIPTION
+  Update installed plugins.
 ```
 
 _See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v1.10.1/src/commands/plugins/update.ts)_
