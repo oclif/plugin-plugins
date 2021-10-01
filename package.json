@@ -34,7 +34,7 @@
     "chai": "^4.2.0",
     "commitlint": "^12.1.4",
     "eslint": "^7.3.1",
-    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif": "^4.0.0",
     "eslint-config-oclif-typescript": "^0.2.0",
     "fancy-test": "^1.4.1",
     "globby": "^11.0.1",
