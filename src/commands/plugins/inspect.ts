@@ -1,22 +1,18 @@
 import * as path from 'path'
 import {Command, Flags, Plugin} from '@oclif/core'
 import * as chalk from 'chalk'
-import {exec} from 'child_process'
 import * as fs from 'fs-extra'
+import {cli} from 'cli-ux'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
 
-const TAB = '  '
-
-type Dependencies = {
-  [key: string]: unknown;
-  from?: string;
-  version?: string;
-  name?: string;
-  dependencies: {
-    [key: string]: Dependencies;
-  };
+function trimUntil(fsPath: string, part: string): string {
+  const parts = fsPath.split(path.sep)
+  const indicies = parts.reduce((a, e, i) => (e === part) ? a.concat([i]) : a, [] as number[])
+  const partIndex = Math.max(...indicies)
+  if (partIndex === -1) return fsPath
+  return parts.slice(0, partIndex + 1).join(path.sep)
 }
 
 export default class PluginsInspect extends Command {
@@ -41,13 +37,10 @@ export default class PluginsInspect extends Command {
 
   plugins = new Plugins(this.config);
 
-  allDeps: Dependencies = {dependencies: {}};
-
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
   async run() {
-    this.allDeps = await this.npmList(this.config.root, 3)
     const {flags, argv} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -61,7 +54,7 @@ export default class PluginsInspect extends Command {
       const pluginName = await this.parsePluginName(name)
 
       try {
-        await this.inspect(pluginName)
+        await this.inspect(pluginName, flags.verbose)
       } catch (error) {
         this.log(chalk.bold.red('failed'))
         throw error
@@ -88,77 +81,58 @@ export default class PluginsInspect extends Command {
     throw new Error(`${pluginName} not installed`)
   }
 
-  async inspect(pluginName: string) {
+  async inspect(pluginName: string, verbose = false) {
     const plugin = this.findPlugin(pluginName)
-    this.log(chalk.bold.cyan(plugin.name))
+    const tree = cli.tree()
+    const pluginHeader = chalk.bold.cyan(plugin.name)
+    tree.insert(pluginHeader)
+    tree.nodes[pluginHeader].insert(`version ${plugin.version}`)
+    if (plugin.tag) tree.nodes[pluginHeader].insert(`tag ${plugin.tag}`)
+    if (plugin.pjson.homepage) tree.nodes[pluginHeader].insert(`homepage ${plugin.pjson.homepage}`)
+    tree.nodes[pluginHeader].insert(`location ${plugin.root}`)
 
-    this.log(`${TAB}version: ${plugin.version}`)
-    if (plugin.tag) this.log(`${TAB}tag: ${plugin.tag}`)
-    if (plugin.pjson.homepage) this.log(`${TAB}homepage: ${plugin.pjson.homepage}`)
-    this.log(`${TAB}location: ${plugin.root}`)
-
-    this.log(`${TAB}commands:`)
+    tree.nodes[pluginHeader].insert('commands')
     const commands = sortBy(plugin.commandIDs, c => c)
-    commands.forEach(cmd => this.log(`${TAB.repeat(2)}${cmd}`))
+    commands.forEach(cmd => tree.nodes[pluginHeader].nodes.commands.insert(cmd))
 
-    const dependencies = plugin.root.includes(this.config.root) ?
-      this.findDepInTree(plugin).dependencies :
-      (await this.npmList(plugin.root)).dependencies
+    const dependencies = Object.assign({}, plugin.pjson.dependencies)
 
-    this.log(`${TAB}dependencies:`)
+    tree.nodes[pluginHeader].insert('dependencies')
     const deps = sortBy(Object.keys(dependencies), d => d)
     for (const dep of deps) {
       // eslint-disable-next-line no-await-in-loop
-      const version = dependencies[dep].version || await this.findDepInSharedModules(plugin, dep)
-      const from = dependencies[dep].from ?
-        dependencies[dep].from!.split('@').reverse()[0] :
-        null
+      const {version, pkgPath} = await this.findDep(plugin, dep)
+      if (!version) continue
 
-      if (from) this.log(`${TAB.repeat(2)}${dep}: ${from} => ${version}`)
-      else this.log(`${TAB.repeat(2)}${dep}: ${version}`)
+      const from = dependencies[dep] ?? null
+      const versionMsg = chalk.dim(from ? `${from} => ${version}` : version)
+      const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
+
+      tree.nodes[pluginHeader].nodes.dependencies.insert(msg)
     }
+    tree.display()
   }
 
-  async findDepInSharedModules(plugin: Plugin, dependency: string): Promise<string> {
-    const sharedModulePath = path.join(plugin.root.replace(plugin.name, ''), ...dependency.split('/'), 'package.json')
-    const pkgJson = JSON.parse(await fs.readFile(sharedModulePath, 'utf-8'))
-    return pkgJson.version as string
-  }
-
-  findDepInTree(plugin: Plugin): Dependencies {
-    if (plugin.name === this.allDeps.name) return this.allDeps
-    const plugins = [plugin.name]
-    let p = plugin
-    while (p.parent) {
-      plugins.push(p.parent.name)
-      p = p.parent
+  async findDep(plugin: Plugin, dependency: string): Promise<{ version: string | null; pkgPath: string | null}> {
+    const dependencyPath = path.join(...dependency.split('/'))
+    let start = path.join(plugin.root, 'node_modules')
+    const paths = [start]
+    while ((start.match(/node_modules/g) || []).length > 1) {
+      start = trimUntil(path.dirname(start), 'node_modules')
+      paths.push(start)
     }
 
-    let dependencies = this.allDeps
-    for (const plg of plugins.reverse()) {
-      dependencies = dependencies.dependencies[plg]
+    for (const p of paths) {
+      const fullPath = path.join(p, dependencyPath)
+      const pkgJsonPath = path.join(fullPath, 'package.json')
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, 'utf-8'))
+        return {version: pkgJson.version as string, pkgPath: fullPath}
+      } catch {
+        // try the next path
+      }
     }
-    return dependencies
-  }
-
-  async npmList(cwd: string, depth = 0): Promise<Dependencies> {
-    return new Promise((resolve, reject) => {
-      exec(`npm list --json --depth ${depth}`, {
-        cwd,
-        encoding: 'utf-8',
-        maxBuffer: 2048 * 2048,
-      }, (error, stdout) => {
-        if (error) {
-          try {
-            const parsed = JSON.parse(stdout)
-            if (parsed) resolve(parsed)
-          } catch {
-            reject(new Error(`Could not get dependencies for ${cwd}`))
-          }
-        } else {
-          resolve(JSON.parse(stdout))
-        }
-      })
-    })
+    return {version: null, pkgPath: null}
   }
 }
