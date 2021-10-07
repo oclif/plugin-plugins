@@ -2,11 +2,10 @@ import * as path from 'path'
 import {Command, Flags, Plugin} from '@oclif/core'
 import * as chalk from 'chalk'
 import * as fs from 'fs-extra'
+import {cli} from 'cli-ux'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
-
-const TAB = '  '
 
 function trimUntil(fsPath: string, part: string): string {
   const parts = fsPath.split(path.sep)
@@ -84,20 +83,21 @@ export default class PluginsInspect extends Command {
 
   async inspect(pluginName: string, verbose = false) {
     const plugin = this.findPlugin(pluginName)
-    this.log(chalk.bold.cyan(plugin.name))
+    const tree = cli.tree()
+    const pluginHeader = chalk.bold.cyan(plugin.name)
+    tree.insert(pluginHeader)
+    tree.nodes[pluginHeader].insert(`version ${plugin.version}`)
+    if (plugin.tag) tree.nodes[pluginHeader].insert(`tag ${plugin.tag}`)
+    if (plugin.pjson.homepage) tree.nodes[pluginHeader].insert(`homepage ${plugin.pjson.homepage}`)
+    tree.nodes[pluginHeader].insert(`location ${plugin.root}`)
 
-    this.log(`${TAB}version: ${plugin.version}`)
-    if (plugin.tag) this.log(`${TAB}tag: ${plugin.tag}`)
-    if (plugin.pjson.homepage) this.log(`${TAB}homepage: ${plugin.pjson.homepage}`)
-    this.log(`${TAB}location: ${plugin.root}`)
-
-    this.log(`${TAB}commands:`)
+    tree.nodes[pluginHeader].insert('commands')
     const commands = sortBy(plugin.commandIDs, c => c)
-    commands.forEach(cmd => this.log(`${TAB.repeat(2)}${cmd}`))
+    commands.forEach(cmd => tree.nodes[pluginHeader].nodes.commands.insert(cmd))
 
     const dependencies = Object.assign({}, plugin.pjson.dependencies)
 
-    this.log(`${TAB}dependencies:`)
+    tree.nodes[pluginHeader].insert('dependencies')
     const deps = sortBy(Object.keys(dependencies), d => d)
     for (const dep of deps) {
       // eslint-disable-next-line no-await-in-loop
@@ -105,11 +105,12 @@ export default class PluginsInspect extends Command {
       if (!version) continue
 
       const from = dependencies[dep] ?? null
-      const msg = from ? `${TAB.repeat(2)}${dep}: ${from} => ${version}` : `${TAB.repeat(2)}${dep}: ${version}`
+      const versionMsg = chalk.dim(from ? `${from} => ${version}` : version)
+      const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
 
-      if (verbose) this.log(`${msg} (${pkgPath})`)
-      else this.log(msg)
+      tree.nodes[pluginHeader].nodes.dependencies.insert(msg)
     }
+    tree.display()
   }
 
   async findDep(plugin: Plugin, dependency: string): Promise<{ version: string | null; pkgPath: string | null}> {
