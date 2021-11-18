@@ -35,7 +35,7 @@ export default class PluginsInspect extends Command {
     {name: 'plugin', description: 'plugin to inspect', required: true, default: '.'},
   ];
 
-  static flags = {
+  static flags: flags.Input<any> = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
   };

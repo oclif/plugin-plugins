@@ -9,7 +9,7 @@ export default class PluginsUpdate extends Command {
 
   static description = 'update installed plugins'
 
-  static flags = {
+  static flags: flags.Input<any> = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
   }
