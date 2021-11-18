@@ -19,7 +19,7 @@ export default class PluginsUninstall extends Command {
 
   static args = [{name: 'plugin', description: 'plugin to uninstall'}]
 
-  static flags = {
+  static flags: flags.Input<any> = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
   }

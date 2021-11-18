@@ -17,7 +17,7 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
 
   static args = [{name: 'path', description: 'path to plugin', required: true, default: '.'}]
 
-  static flags = {
+  static flags: flags.Input<any> = {
     help: flags.help({char: 'h'}),
     verbose: flags.boolean({char: 'v'}),
   }

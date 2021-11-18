@@ -7,7 +7,7 @@ import Plugins from '../../plugins'
 import {sortBy} from '../../util'
 
 export default class PluginsIndex extends Command {
-  static flags = {
+  static flags: flags.Input<any> = {
     core: flags.boolean({description: 'show core plugins'}),
   }
 
