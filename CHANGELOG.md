@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.5](https://github.com/oclif/plugin-plugins/compare/v1.10.4...v1.10.5) (2021-12-01)
+
+
+### Bug Fixes
+
+* remove lodash.template transient dep ([#372](https://github.com/oclif/plugin-plugins/issues/372)) ([dd4f11b](https://github.com/oclif/plugin-plugins/commit/dd4f11bba1d7cec5bdafc3e4f02be18855d8e059))
+
 ### [1.10.4](https://github.com/oclif/plugin-plugins/compare/v1.10.3...v1.10.4) (2021-11-29)
 
 
