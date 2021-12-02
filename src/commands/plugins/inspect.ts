@@ -40,7 +40,7 @@ export default class PluginsInspect extends Command {
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
-  async run() {
+  async run(): Promise<void> {
     const {flags, argv} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -49,6 +49,7 @@ export default class PluginsInspect extends Command {
         const pkgJson = JSON.parse(await fs.readFile('package.json', 'utf-8'))
         name = pkgJson.name
       }
+
       if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] || name
       const pluginName = await this.parsePluginName(name)
@@ -69,6 +70,7 @@ export default class PluginsInspect extends Command {
       const [name] = input.split('@')
       return '@' + name
     }
+
     const [splitName] = input.split('@')
     const name = await this.plugins.maybeUnfriendlyName(splitName)
     return name
@@ -81,7 +83,7 @@ export default class PluginsInspect extends Command {
     throw new Error(`${pluginName} not installed`)
   }
 
-  async inspect(pluginName: string, verbose = false) {
+  async inspect(pluginName: string, verbose = false): Promise<void> {
     const plugin = this.findPlugin(pluginName)
     const tree = cli.tree()
     const pluginHeader = chalk.bold.cyan(plugin.name)
@@ -110,6 +112,7 @@ export default class PluginsInspect extends Command {
 
       tree.nodes[pluginHeader].nodes.dependencies.insert(msg)
     }
+
     tree.display()
   }
 
@@ -133,6 +136,7 @@ export default class PluginsInspect extends Command {
         // try the next path
       }
     }
+
     return {version: null, pkgPath: null}
   }
 }

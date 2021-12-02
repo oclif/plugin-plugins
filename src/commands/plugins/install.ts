@@ -43,7 +43,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
-  async run() {
+  async run(): Promise<void> {
     const {flags, argv} = await this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -72,6 +72,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         cli.action.stop(chalk.bold.red('failed'))
         throw error
       }
+
       cli.action.stop(`installed v${plugin.version}`)
     }
   }
@@ -81,15 +82,18 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     if (input.startsWith('git+ssh://') || input.endsWith('.git')) {
       return {url: input, type: 'repo'}
     }
+
     if (input.includes('@') && input.includes('/')) {
       input = input.slice(1)
       const [name, tag = 'latest'] = input.split('@')
       return {name: '@' + name, tag, type: 'npm'}
     }
+
     if (input.includes('/')) {
       if (input.includes(':')) return {url: input, type: 'repo'}
       return {url: `https://github.com/${input}`, type: 'repo'}
     }
+
     const [splitName, tag = 'latest'] = input.split('@')
     const name = await this.plugins.maybeUnfriendlyName(splitName)
     return {name, tag, type: 'npm'}

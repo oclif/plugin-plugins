@@ -1,4 +1,4 @@
-import {Command, Flags, Plugin} from '@oclif/core'
+import {Command, Flags, Plugin, Interfaces} from '@oclif/core'
 import * as chalk from 'chalk'
 import cli from 'cli-ux'
 
@@ -30,7 +30,7 @@ export default class PluginsUninstall extends Command {
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
-  async run() {
+  async run(): Promise<void> {
     const {flags, argv} = await this.parse(PluginsUninstall)
     this.plugins = new Plugins(this.config)
     if (flags.verbose) this.plugins.verbose = true
@@ -44,14 +44,18 @@ export default class PluginsUninstall extends Command {
         if (p) {
           if (p && p.parent) return this.error(`${friendly} is installed via plugin ${p.parent!.name}, uninstall ${p.parent!.name} instead`)
         }
+
         return this.error(`${friendly} is not installed`)
       }
+
       try {
-        await this.plugins.uninstall(unfriendly.name)
+        const {name} = unfriendly as Interfaces.PJSON.User | Interfaces.PJSON.PluginTypes.Link
+        await this.plugins.uninstall(name)
       } catch (error) {
         cli.action.stop(chalk.bold.red('failed'))
         throw error
       }
+
       cli.action.stop()
     }
   }

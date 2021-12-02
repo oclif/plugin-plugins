@@ -1,4 +1,4 @@
-import {Errors, Config,  Interfaces} from '@oclif/core'
+import {Errors, Config, Interfaces} from '@oclif/core'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
@@ -39,7 +39,7 @@ export default class Plugins {
     }
   }
 
-  async list() {
+  async list(): Promise<(Interfaces.PJSON.PluginTypes.User | Interfaces.PJSON.PluginTypes.Link)[]> {
     const pjson = await this.pjson()
     return this.normalizePlugins(pjson.oclif.plugins)
   }
@@ -65,6 +65,7 @@ export default class Plugins {
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
           throw invalidPluginError
         }
+
         await this.add({name, url, type: 'user'})
       } else {
         // npm
@@ -73,14 +74,17 @@ export default class Plugins {
         if (unfriendly && await this.npmHasPackage(unfriendly)) {
           name = unfriendly
         }
+
         await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
         plugin = await Config.load({devPlugins: false, userPlugins: false, root: path.join(this.config.dataDir, 'node_modules', name), name})
         if (!plugin.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
           throw invalidPluginError
         }
+
         await this.refresh(plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
       }
+
       return plugin
     } catch (error: any) {
       await this.uninstall(name).catch(error => this.debug(error))
@@ -98,30 +102,31 @@ export default class Plugins {
   }
 
   // if yarn.lock exists, fetch locked dependencies
-  async refresh(root: string, {prod = true}: {prod?: boolean} = {}) {
+  async refresh(root: string, {prod = true}: {prod?: boolean} = {}): Promise<void> {
     if (fs.existsSync(path.join(root, 'yarn.lock'))) {
       // use yarn.lock to fetch dependencies
       await this.yarn.exec(prod ? ['--prod'] : [], {cwd: root, verbose: this.verbose})
     }
   }
 
-  async link(p: string) {
+  async link(p: string): Promise<void> {
     const c = await Config.load(path.resolve(p))
     cli.action.start(`${this.config.name}: linking plugin ${c.name}`)
     if (!c.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
       throw new Errors.CLIError('plugin is not a valid oclif plugin')
     }
+
     await this.refresh(c.root, {prod: false})
     await this.add({type: 'link', name: c.name, root: c.root})
   }
 
-  async add(plugin: Interfaces.PJSON.PluginTypes) {
+  async add(plugin: Interfaces.PJSON.PluginTypes): Promise<void> {
     const pjson = await this.pjson()
     pjson.oclif.plugins = uniq([...pjson.oclif.plugins || [], plugin]) as any
     await this.savePJSON(pjson)
   }
 
-  async remove(name: string) {
+  async remove(name: string): Promise<void> {
     const pjson = await this.pjson()
     if (pjson.dependencies) delete pjson.dependencies[name]
     pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
@@ -129,7 +134,7 @@ export default class Plugins {
     await this.savePJSON(pjson)
   }
 
-  async uninstall(name: string) {
+  async uninstall(name: string): Promise<void> {
     try {
       const pjson = await this.pjson()
       if ((pjson.oclif.plugins || []).find(p => typeof p === 'object' && p.type === 'user' && p.name === name)) {
@@ -145,7 +150,7 @@ export default class Plugins {
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ugnored
   /* eslint-disable no-await-in-loop */
-  async update() {
+  async update(): Promise<void> {
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
     cli.action.start(`${this.config.name}: Updating plugins`)
@@ -163,23 +168,26 @@ export default class Plugins {
     if (plugins.find(p => Boolean(p.url))) {
       await this.yarn.exec(['upgrade'], {cwd: this.config.dataDir, verbose: this.verbose})
     }
+
     const npmPlugins = plugins.filter(p => !p.url)
     if (npmPlugins.length > 0) {
       await this.yarn.exec(['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)], {cwd: this.config.dataDir, verbose: this.verbose})
     }
+
     for (const p of plugins) {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
     }
+
     cli.action.stop()
   }
   /* eslint-enable no-await-in-loop */
 
-  async hasPlugin(name: string) {
+  async hasPlugin(name: string): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.User | boolean> {
     const list = await this.list()
     const friendly = list.find(p => this.friendlyName(p.name) === this.friendlyName(name))
     const unfriendly = list.find(p => this.unfriendlyName(p.name) === this.unfriendlyName(name))
     const link = list.find(p => p.type === 'link' && path.resolve(p.root) === path.resolve(name))
-    return friendly ?? unfriendly ?? link ?? false
+    return (friendly ?? unfriendly ?? link ?? false) as Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.User | boolean
   }
 
   async yarnNodeVersion(): Promise<string | undefined> {
@@ -204,6 +212,7 @@ export default class Plugins {
     if (unfriendly && await this.npmHasPackage(unfriendly)) {
       return unfriendly
     }
+
     this.debug(`expanded package name ${unfriendly} not found, using given package name ${name}`)
     return name
   }
@@ -259,11 +268,12 @@ export default class Plugins {
     await fs.outputJSON(this.pjsonPath, pjson, {spaces: 2})
   }
 
-  private normalizePlugins(input: Interfaces.PJSON.User['oclif']['plugins']) {
+  private normalizePlugins(input: Interfaces.PJSON.User['oclif']['plugins']): (Interfaces.PJSON.PluginTypes.User | Interfaces.PJSON.PluginTypes.Link)[] {
     let plugins = (input || []).map(p => {
       if (typeof p === 'string') {
         return {name: p, type: 'user', tag: 'latest'} as Interfaces.PJSON.PluginTypes.User
       }
+
       return p
     })
     plugins = uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
