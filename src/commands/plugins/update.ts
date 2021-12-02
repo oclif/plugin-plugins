@@ -16,7 +16,7 @@ export default class PluginsUpdate extends Command {
 
   plugins = new Plugins(this.config)
 
-  async run() {
+  async run(): Promise<void> {
     const {flags} = await this.parse(PluginsUpdate)
     this.plugins.verbose = flags.verbose
     await this.plugins.update()

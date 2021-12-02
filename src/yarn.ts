@@ -43,6 +43,7 @@ export default class Yarn {
     })
   }
 
+  // eslint-disable-next-line default-param-last
   async exec(args: string[] = [], opts: {cwd: string; verbose: boolean}): Promise<void> {
     const cwd = opts.cwd
     if (args[0] !== 'run') {
@@ -57,6 +58,7 @@ export default class Yarn {
       if (opts.verbose) {
         args.push('--verbose')
       }
+
       if (this.config.npmRegistry) {
         args.push(`--registry=${this.config.npmRegistry}`)
       }
@@ -73,6 +75,7 @@ export default class Yarn {
     if (opts.verbose) {
       process.stderr.write(`${cwd}: ${this.bin} ${args.join(' ')}`)
     }
+
     debug(`${cwd}: ${this.bin} ${args.join(' ')}`)
     try {
       await this.fork(this.bin, args, options)
@@ -84,6 +87,7 @@ export default class Yarn {
         debug('EAI_AGAIN')
         return this.exec([...args, networkConcurrency], opts)
       }
+
       throw error
     }
   }

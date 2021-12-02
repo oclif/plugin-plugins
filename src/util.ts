@@ -17,6 +17,7 @@ export function sortBy<T>(arr: T[], fn: (i: T) => sortBy.Types | sortBy.Types[])
 
   return arr.sort((a, b) => compare(fn(a), fn(b)))
 }
+
 export namespace sortBy {
   export type Types = string | number | undefined | boolean
 }
