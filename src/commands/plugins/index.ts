@@ -37,7 +37,7 @@ export default class PluginsIndex extends Command {
       this.log(this.formatPlugin(plugin))
       if (plugin.children && plugin.children.length > 0) {
         const tree = this.createTree(plugin)
-        tree.display(cli.log)
+        tree.display()
       }
     }
   }
