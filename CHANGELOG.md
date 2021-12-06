@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.7](https://github.com/oclif/plugin-plugins/compare/v2.0.6...v2.0.7) (2021-12-06)
+
+
+### Bug Fixes
+
+* bump deps ([#376](https://github.com/oclif/plugin-plugins/issues/376)) ([e6155a1](https://github.com/oclif/plugin-plugins/commit/e6155a15feea93b894e935a92f9c0c9485b344fd))
+
 ### [2.0.6](https://github.com/oclif/plugin-plugins/compare/v2.0.5...v2.0.6) (2021-12-02)
 
 
