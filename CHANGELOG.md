@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.8](https://github.com/oclif/plugin-plugins/compare/v1.10.7...v1.10.8) (2021-12-06)
+
+
+### Bug Fixes
+
+* dep bumps ([#378](https://github.com/oclif/plugin-plugins/issues/378)) ([558e23c](https://github.com/oclif/plugin-plugins/commit/558e23c5d1c25b671fb7b9535e155f7ffc39ea5b))
+
 ### [1.10.7](https://github.com/oclif/plugin-plugins/compare/v1.10.6...v1.10.7) (2021-12-06)
 
 
