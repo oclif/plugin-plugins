@@ -20,7 +20,7 @@
     "yarn": "^1.21.1"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^12.1.4",
+    "@commitlint/config-conventional": "^15.0.0",
     "@oclif/config": "^1.18.2",
     "@oclif/dev-cli": "^1.26.7",
     "@oclif/plugin-help": "^3.2.13",
