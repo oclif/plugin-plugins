@@ -4,5 +4,18 @@
     "oclif-typescript"
   ],
   "rules": {
+    "@typescript-eslint/no-empty-function": "off",
+    "node/no-extraneous-import": "off",
+    "unicorn/prefer-module": "off",
+    "unicorn/prefer-ternary": "off",
+    "unicorn/prefer-array-some": "off",
+    "unicorn/consistent-function-scoping": "off",
+    "unicorn/consistent-destructuring": "off",
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/prefer-spread": "off",
+    "unicorn/import-style": "off",
+    "unicorn/no-array-for-each": "off",
+    "unicorn/no-lonely-if": "off",
+    "unicorn/no-array-reduce": "off"
   }
 }

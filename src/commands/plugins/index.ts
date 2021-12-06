@@ -16,17 +16,19 @@ export default class PluginsIndex extends Command {
 
   plugins = new Plugins(this.config)
 
-  async run() {
+  async run(): Promise<void> {
     const {flags} = await this.parse(PluginsIndex)
     let plugins = this.config.plugins
     sortBy(plugins, p => this.plugins.friendlyName(p.name))
     if (!flags.core) {
       plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
     }
+
     if (plugins.length === 0) {
       this.log('No plugins installed.')
       return
     }
+
     this.display(plugins as Plugin[])
   }
 
@@ -35,7 +37,7 @@ export default class PluginsIndex extends Command {
       this.log(this.formatPlugin(plugin))
       if (plugin.children && plugin.children.length > 0) {
         const tree = this.createTree(plugin)
-        tree.display(this.log)
+        tree.display()
       }
     }
   }
@@ -46,6 +48,7 @@ export default class PluginsIndex extends Command {
       const name = this.formatPlugin(p)
       tree.insert(name, this.createTree(p))
     }
+
     return tree
   }
 

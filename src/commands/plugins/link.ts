@@ -24,7 +24,7 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
 
   plugins = new Plugins(this.config)
 
-  async run() {
+  async run(): Promise<void> {
     const {flags, args} = await this.parse(PluginsLink)
     this.plugins.verbose = flags.verbose
     cli.action.start(`Linking plugin ${chalk.cyan(args.path)}`)

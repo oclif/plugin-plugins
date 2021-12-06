@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.6](https://github.com/oclif/plugin-plugins/compare/v2.0.5...v2.0.6) (2021-12-02)
+
+
+### Bug Fixes
+
+* use default logger for tree display ([8bfb2d4](https://github.com/oclif/plugin-plugins/commit/8bfb2d408657d6948a14b343a3789390b4fa3f2c))
+
+### [2.0.5](https://github.com/oclif/plugin-plugins/compare/v2.0.4...v2.0.5) (2021-12-02)
+
+
+### Bug Fixes
+
+* use cli.log for tree display ([eaff55f](https://github.com/oclif/plugin-plugins/commit/eaff55f245bb8292e19d6f0df253d79cefcb10c2))
+
+### [2.0.4](https://github.com/oclif/plugin-plugins/compare/v2.0.3...v2.0.4) (2021-12-02)
+
+### [2.0.3](https://github.com/oclif/plugin-plugins/compare/v2.0.2...v2.0.3) (2021-12-02)
+
+
+### Bug Fixes
+
+* bump deps ([#374](https://github.com/oclif/plugin-plugins/issues/374)) ([29990ed](https://github.com/oclif/plugin-plugins/commit/29990eddea9255378f4da4fbee924a0f3db217e9))
+
 ### [2.0.2](https://github.com/oclif/plugin-plugins/compare/v2.0.1...v2.0.2) (2021-11-29)
 
 
