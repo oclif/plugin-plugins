@@ -4,11 +4,11 @@
 plugins plugin for oclif
 
 [![Version](https://img.shields.io/npm/v/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
-[![CircleCI](https://circleci.com/gh/oclif/plugin-plugins/tree/master.svg?style=shield)](https://circleci.com/gh/oclif/plugin-plugins/tree/master)
-[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/oclif/plugin-plugins?branch=master&svg=true)](https://ci.appveyor.com/project/oclif/plugin-plugins/branch/master)
+[![CircleCI](https://circleci.com/gh/oclif/plugin-plugins/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/plugin-plugins/tree/main)
+[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/oclif/plugin-plugins?branch=main&svg=true)](https://ci.appveyor.com/project/oclif/plugin-plugins/branch/main)
 [![Known Vulnerabilities](https://snyk.io/test/github/oclif/plugin-plugins/badge.svg)](https://snyk.io/test/github/oclif/plugin-plugins)
 [![Downloads/week](https://img.shields.io/npm/dw/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
-[![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/master/package.json)
+[![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/main/package.json)
 
 <!-- toc -->
 * [What is this?](#what-is-this)
@@ -80,12 +80,18 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 # Commands
 <!-- commands -->
-* [`mycli plugins`](#mycli-plugins)
-* [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
-* [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-* [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
-* [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
-* [`mycli plugins:update`](#mycli-pluginsupdate)
+- [@oclif/plugin-plugins](#oclifplugin-plugins)
+- [What is this?](#what-is-this)
+- [Usage](#usage)
+- [Friendly names](#friendly-names)
+- [Aliases](#aliases)
+- [Commands](#commands)
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
+  - [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
+  - [`mycli plugins:update`](#mycli-pluginsupdate)
 
 ## `mycli plugins`
 
@@ -162,7 +168,7 @@ ALIASES
   $ mycli plugins:add
 
 EXAMPLES
-  $ mycli plugins:install myplugin 
+  $ mycli plugins:install myplugin
 
   $ mycli plugins:install https://github.com/someuser/someplugin
 
