@@ -21,7 +21,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
     "@oclif/plugin-help": "5.1.9",
-    "@oclif/test": "2.0.2",
+    "@oclif/test": "2.0.3",
     "@types/chai": "^4.1.7",
     "@types/fs-extra": "^9.0",
     "@types/mocha": "^8.0.0",
