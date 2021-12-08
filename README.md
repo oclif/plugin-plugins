@@ -105,7 +105,7 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.9/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -129,7 +129,7 @@ EXAMPLES
   $ mycli plugins:inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.9/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -169,7 +169,7 @@ EXAMPLES
   $ mycli plugins:install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.9/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -198,7 +198,7 @@ EXAMPLES
   $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.9/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -223,7 +223,7 @@ ALIASES
   $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.9/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -241,5 +241,5 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.9/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

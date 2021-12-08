@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.11](https://github.com/oclif/plugin-plugins/compare/v2.0.10...v2.0.11) (2021-12-08)
+
+
+### Bug Fixes
+
+* align deps ([#384](https://github.com/oclif/plugin-plugins/issues/384)) ([379501c](https://github.com/oclif/plugin-plugins/commit/379501ccf80e7cb4588d63ab7d0bd4472d751742))
+
 ### [2.0.10](https://github.com/oclif/plugin-plugins/compare/v2.0.9...v2.0.10) (2021-12-08)
 
 
