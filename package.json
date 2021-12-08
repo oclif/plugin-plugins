@@ -38,7 +38,7 @@
     "husky": "6",
     "mocha": "^9.1.3",
     "nock": "^13.0.3",
-    "oclif": "2.0.0-main.19",
+    "oclif": "2.0.0",
     "ts-node": "^10.4.0",
     "typescript": "4.4.3"
   },
