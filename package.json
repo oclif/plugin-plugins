@@ -16,7 +16,7 @@
     "npm-run-path": "^4.0.1",
     "semver": "^7.3.2",
     "tslib": "^2.0.0",
-    "yarn": "^1.21.1"
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
