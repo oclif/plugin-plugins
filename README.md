@@ -80,18 +80,12 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 # Commands
 <!-- commands -->
-- [@oclif/plugin-plugins](#oclifplugin-plugins)
-- [What is this?](#what-is-this)
-- [Usage](#usage)
-- [Friendly names](#friendly-names)
-- [Aliases](#aliases)
-- [Commands](#commands)
-  - [`mycli plugins`](#mycli-plugins)
-  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
-  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-  - [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
-  - [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
-  - [`mycli plugins:update`](#mycli-pluginsupdate)
+* [`mycli plugins`](#mycli-plugins)
+* [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+* [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+* [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
+* [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
+* [`mycli plugins:update`](#mycli-pluginsupdate)
 
 ## `mycli plugins`
 
@@ -111,7 +105,7 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -135,7 +129,7 @@ EXAMPLES
   $ mycli plugins:inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -168,14 +162,14 @@ ALIASES
   $ mycli plugins:add
 
 EXAMPLES
-  $ mycli plugins:install myplugin
+  $ mycli plugins:install myplugin 
 
   $ mycli plugins:install https://github.com/someuser/someplugin
 
   $ mycli plugins:install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -204,7 +198,7 @@ EXAMPLES
   $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -229,7 +223,7 @@ ALIASES
   $ mycli plugins:remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins:update`
 
@@ -247,5 +241,5 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.10/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
