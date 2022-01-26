@@ -1,6 +1,5 @@
-import {Command, Flags} from '@oclif/core'
+import {Command, Flags, CliUx} from '@oclif/core'
 import * as chalk from 'chalk'
-import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
@@ -57,7 +56,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       })
       try {
         if (p.type === 'npm') {
-          cli.action.start(
+          CliUx.ux.action.start(
             `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`,
           )
           plugin = await this.plugins.install(p.name, {
@@ -65,15 +64,15 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
             force: flags.force,
           })
         } else {
-          cli.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
+          CliUx.ux.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
           plugin = await this.plugins.install(p.url, {force: flags.force})
         }
       } catch (error) {
-        cli.action.stop(chalk.bold.red('failed'))
+        CliUx.ux.action.stop(chalk.bold.red('failed'))
         throw error
       }
 
-      cli.action.stop(`installed v${plugin.version}`)
+      CliUx.ux.action.stop(`installed v${plugin.version}`)
     }
   }
   /* eslint-enable no-await-in-loop */

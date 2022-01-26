@@ -1,8 +1,7 @@
 import * as path from 'path'
-import {Command, Flags, Plugin} from '@oclif/core'
+import {Command, Flags, Plugin, CliUx} from '@oclif/core'
 import * as chalk from 'chalk'
 import * as fs from 'fs-extra'
-import {cli} from 'cli-ux'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
@@ -85,7 +84,7 @@ export default class PluginsInspect extends Command {
 
   async inspect(pluginName: string, verbose = false): Promise<void> {
     const plugin = this.findPlugin(pluginName)
-    const tree = cli.tree()
+    const tree = CliUx.ux.tree()
     const pluginHeader = chalk.bold.cyan(plugin.name)
     tree.insert(pluginHeader)
     tree.nodes[pluginHeader].insert(`version ${plugin.version}`)

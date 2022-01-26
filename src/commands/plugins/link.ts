@@ -1,6 +1,5 @@
-import {Command, Flags} from '@oclif/core'
+import {Command, Flags, CliUx} from '@oclif/core'
 import * as chalk from 'chalk'
-import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
@@ -27,8 +26,8 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
   async run(): Promise<void> {
     const {flags, args} = await this.parse(PluginsLink)
     this.plugins.verbose = flags.verbose
-    cli.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
+    CliUx.ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
     await this.plugins.link(args.path)
-    cli.action.stop()
+    CliUx.ux.action.stop()
   }
 }
