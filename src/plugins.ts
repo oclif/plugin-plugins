@@ -1,5 +1,4 @@
-import {Errors, Config, Interfaces} from '@oclif/core'
-import cli from 'cli-ux'
+import {Errors, Config, Interfaces, CliUx} from '@oclif/core'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
 import loadJSON from 'load-json-file'
@@ -111,7 +110,7 @@ export default class Plugins {
 
   async link(p: string): Promise<void> {
     const c = await Config.load(path.resolve(p))
-    cli.action.start(`${this.config.name}: linking plugin ${c.name}`)
+    CliUx.ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     if (!c.valid && !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')) {
       throw new Errors.CLIError('plugin is not a valid oclif plugin')
     }
@@ -141,7 +140,7 @@ export default class Plugins {
         await this.yarn.exec(['remove', name], {cwd: this.config.dataDir, verbose: this.verbose})
       }
     } catch (error: any) {
-      cli.warn(error)
+      CliUx.ux.warn(error)
     } finally {
       await this.remove(name)
     }
@@ -153,7 +152,7 @@ export default class Plugins {
   async update(): Promise<void> {
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
-    cli.action.start(`${this.config.name}: Updating plugins`)
+    CliUx.ux.action.start(`${this.config.name}: Updating plugins`)
 
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -178,7 +177,7 @@ export default class Plugins {
       await this.refresh(path.join(this.config.dataDir, 'node_modules', p.name))
     }
 
-    cli.action.stop()
+    CliUx.ux.action.stop()
   }
   /* eslint-enable no-await-in-loop */
 
@@ -195,7 +194,7 @@ export default class Plugins {
       const f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
       return f.nodeVersion
     } catch (error: any) {
-      if (error.code !== 'ENOENT') cli.warn(error)
+      if (error.code !== 'ENOENT') CliUx.ux.warn(error)
     }
   }
 

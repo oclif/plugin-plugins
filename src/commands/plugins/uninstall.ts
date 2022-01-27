@@ -1,6 +1,5 @@
-import {Command, Flags, Plugin, Interfaces} from '@oclif/core'
+import {Command, Flags, Plugin, Interfaces, CliUx} from '@oclif/core'
 import * as chalk from 'chalk'
-import cli from 'cli-ux'
 
 import Plugins from '../../plugins'
 
@@ -37,7 +36,7 @@ export default class PluginsUninstall extends Command {
     if (argv.length === 0) argv.push('.')
     for (const plugin of argv) {
       const friendly = this.removeTags(this.plugins.friendlyName(plugin))
-      cli.action.start(`Uninstalling ${friendly}`)
+      CliUx.ux.action.start(`Uninstalling ${friendly}`)
       const unfriendly = await this.plugins.hasPlugin(this.removeTags(plugin))
       if (!unfriendly) {
         const p = this.config.plugins.find(p => p.name === plugin) as Plugin | undefined
@@ -52,11 +51,11 @@ export default class PluginsUninstall extends Command {
         const {name} = unfriendly as Interfaces.PJSON.User | Interfaces.PJSON.PluginTypes.Link
         await this.plugins.uninstall(name)
       } catch (error) {
-        cli.action.stop(chalk.bold.red('failed'))
+        CliUx.ux.action.stop(chalk.bold.red('failed'))
         throw error
       }
 
-      cli.action.stop()
+      CliUx.ux.action.stop()
     }
   }
   /* eslint-enable no-await-in-loop */

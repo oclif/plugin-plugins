@@ -1,6 +1,5 @@
 import color from '@oclif/color'
-import {Command, Flags, Plugin} from '@oclif/core'
-import {cli} from 'cli-ux'
+import {Command, Flags, Plugin, CliUx} from '@oclif/core'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
@@ -43,7 +42,7 @@ export default class PluginsIndex extends Command {
   }
 
   private createTree(plugin: Plugin) {
-    const tree = cli.tree()
+    const tree = CliUx.ux.tree()
     for (const p of plugin.children) {
       const name = this.formatPlugin(p)
       tree.insert(name, this.createTree(p))
