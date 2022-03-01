@@ -626,7 +626,7 @@
     supports-color "^8.1.1"
     tslib "^2"
 
-"@oclif/core@^1.0.10", "@oclif/core@^1.0.8", "@oclif/core@^1.1.1", "@oclif/core@^1.2.0", "@oclif/core@^1.2.1":
+"@oclif/core@^1.0.8", "@oclif/core@^1.1.1", "@oclif/core@^1.2.0", "@oclif/core@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.2.1.tgz#d6c9bb0d61feb2f36e3cee0b6c38e49256a23848"
   integrity sha512-f/U7yvfsEdHazhlGkB6XZldzQvoHJA7Ge0l9xpXsJG1Txj9EZhnuXJgOm4p+vyGXkODnH8x5rNkxwFMsJvPiUA==
@@ -666,12 +666,12 @@
   resolved "https://registry.yarnpkg.com/@oclif/linewrap/-/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
   integrity sha512-Ups2dShK52xXa8w6iBWLgcjPJWjais6KPJQq3gQ/88AY6BXoTX+MIGFPrWQO1KLMiQfoTpcLnUwloN4brrVUHw==
 
-"@oclif/plugin-help@^5.1.10":
-  version "5.1.10"
-  resolved "https://registry.npmjs.org/@oclif/plugin-help/-/plugin-help-5.1.10.tgz#465aa0397da723c39536780f6f7c1ad9cbd1671e"
-  integrity sha512-ngurn/3kQVCw1Df5TJEURjxU+w7iA9z3Pskw8dJorfnd0Xibe/qlPg+VYV3hB7EhTbV82EVfZ5DhQYD5YvoxeA==
+"@oclif/plugin-help@^5.1.10", "@oclif/plugin-help@^5.1.11":
+  version "5.1.11"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-5.1.11.tgz#9c546959e0dc1b4db107b77686264e71680b9434"
+  integrity sha512-rWw1tIldlv54zMG804kHmftkaS007IMUkSclLX5sWtAyTrKM0HE730HmIg6ucbeFBrj0pXeDO1mXG/RZAC98tw==
   dependencies:
-    "@oclif/core" "^1.0.10"
+    "@oclif/core" "^1.2.0"
 
 "@oclif/plugin-not-found@^2.2.3":
   version "2.2.4"
