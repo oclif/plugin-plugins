@@ -8,8 +8,8 @@ import {sortBy} from '../../util'
 
 function trimUntil(fsPath: string, part: string): string {
   const parts = fsPath.split(path.sep)
-  const indicies = parts.reduce((a, e, i) => (e === part) ? a.concat([i]) : a, [] as number[])
-  const partIndex = Math.max(...indicies)
+  const indices = parts.reduce((a, e, i) => (e === part) ? a.concat([i]) : a, [] as number[])
+  const partIndex = Math.max(...indices)
   if (partIndex === -1) return fsPath
   return parts.slice(0, partIndex + 1).join(path.sep)
 }
@@ -37,7 +37,7 @@ export default class PluginsInspect extends Command {
   plugins = new Plugins(this.config);
 
   // In this case we want these operations to happen
-  // sequentially so the `no-await-in-loop` rule is ugnored
+  // sequentially so the `no-await-in-loop` rule is ignored
   /* eslint-disable no-await-in-loop */
   async run(): Promise<void> {
     const {flags, argv} = await this.parse(PluginsInspect)
