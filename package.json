@@ -5,8 +5,8 @@
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
-    "@oclif/color": "^1.0.1",
-    "@oclif/core": "^1.20.0",
+    "@oclif/color": "^1.0.2",
+    "@oclif/core": "^1.21.0",
     "chalk": "^4.1.2",
     "debug": "^4.3.4",
     "fs-extra": "^9.0",
