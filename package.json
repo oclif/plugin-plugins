@@ -1,7 +1,7 @@
 {
   "name": "@oclif/plugin-plugins",
   "description": "plugins plugin for oclif",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
     "@oclif/plugin-help": "^5.1.19",
-    "@oclif/test": "^2.2.13",
+    "@oclif/test": "^2.2.15",
     "@types/chai": "^4.3.4",
     "@types/fs-extra": "^9.0",
     "@types/mocha": "^8.2.3",
