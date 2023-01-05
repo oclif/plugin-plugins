@@ -1,6 +1,7 @@
 *-debug.log
 *-error.log
 .oclif.manifest.json
+.vscode/settings.json
 /.nyc_output
 /coverage
 /coverage.lcov
