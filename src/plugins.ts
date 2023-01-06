@@ -155,7 +155,7 @@ export default class Plugins {
     await this.refresh(c.root, {prod: false})
     await this.add({type: 'link', name: c.name, root: c.root})
     // if the plugin has typescript in devDeps, we will also compile it
-    if ((await this.pjson()).devDependencies?.typescript) {
+    if (c.pjson.devDependencies?.typescript) {
       await this.yarn.exec(['tsc', '-p', '.', '--incremental', '--skipLibCheck'], {cwd: this.config.dataDir, verbose: this.verbose})
     }
   }
