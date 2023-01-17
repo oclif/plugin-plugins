@@ -1,4 +1,4 @@
-import {Command, Flags, CliUx} from '@oclif/core'
+import {Command, Flags, ux, Args} from '@oclif/core'
 import * as chalk from 'chalk'
 
 import Plugins from '../../plugins'
@@ -22,9 +22,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
   static strict = false;
 
-  static args = [
-    {name: 'plugin', description: 'Plugin to install.', required: true},
-  ];
+  static args = {
+    plugin: Args.string({description: 'Plugin to install.', required: true}),
+  };
 
   static flags = {
     help: Flags.help({char: 'h'}),
@@ -46,7 +46,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     const {flags, argv} = await this.parse(PluginsInstall)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
-    for (let name of argv) {
+    for (let name of argv as string[]) {
       if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] || name
       const p = await this.parsePlugin(name)
@@ -56,7 +56,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       })
       try {
         if (p.type === 'npm') {
-          CliUx.ux.action.start(
+          ux.action.start(
             `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`,
           )
           plugin = await this.plugins.install(p.name, {
@@ -64,15 +64,15 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
             force: flags.force,
           })
         } else {
-          CliUx.ux.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
+          ux.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
           plugin = await this.plugins.install(p.url, {force: flags.force})
         }
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed'))
+        ux.action.stop(chalk.bold.red('failed'))
         throw error
       }
 
-      CliUx.ux.action.stop(`installed v${plugin.version}`)
+      ux.action.stop(`installed v${plugin.version}`)
     }
   }
   /* eslint-enable no-await-in-loop */

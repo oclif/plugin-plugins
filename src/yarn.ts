@@ -1,4 +1,4 @@
-import {Interfaces, CliUx} from '@oclif/core'
+import {Interfaces, ux} from '@oclif/core'
 import NpmRunPath from 'npm-run-path'
 import * as path from 'path'
 
@@ -23,7 +23,7 @@ export default class Yarn {
       forked.stdout.setEncoding('utf8')
       forked.stdout.on('data', (d: any) => {
         if (options.verbose) process.stdout.write(d)
-        else CliUx.ux.action.status = d.replace(/\n$/, '').split('\n').pop()
+        else ux.action.status = d.replace(/\n$/, '').split('\n').pop()
       })
 
       forked.on('error', reject)

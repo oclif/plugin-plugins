@@ -1,4 +1,4 @@
-import {Command, Flags, Plugin, Interfaces, CliUx} from '@oclif/core'
+import {Command, Flags, Plugin, Interfaces, ux, Args} from '@oclif/core'
 import * as chalk from 'chalk'
 
 import Plugins from '../../plugins'
@@ -15,7 +15,9 @@ export default class PluginsUninstall extends Command {
 
   static variableArgs = true
 
-  static args = [{name: 'plugin', description: 'plugin to uninstall'}]
+  static args = {
+    plugin: Args.string({description: 'plugin to uninstall'}),
+  }
 
   static flags = {
     help: Flags.help({char: 'h'}),
@@ -34,9 +36,9 @@ export default class PluginsUninstall extends Command {
     this.plugins = new Plugins(this.config)
     if (flags.verbose) this.plugins.verbose = true
     if (argv.length === 0) argv.push('.')
-    for (const plugin of argv) {
+    for (const plugin of argv as string[]) {
       const friendly = this.removeTags(this.plugins.friendlyName(plugin))
-      CliUx.ux.action.start(`Uninstalling ${friendly}`)
+      ux.action.start(`Uninstalling ${friendly}`)
       const unfriendly = await this.plugins.hasPlugin(this.removeTags(plugin))
       if (!unfriendly) {
         const p = this.config.plugins.find(p => p.name === plugin) as Plugin | undefined
@@ -51,11 +53,11 @@ export default class PluginsUninstall extends Command {
         const {name} = unfriendly as Interfaces.PJSON.User | Interfaces.PJSON.PluginTypes.Link
         await this.plugins.uninstall(name)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed'))
+        ux.action.stop(chalk.bold.red('failed'))
         throw error
       }
 
-      CliUx.ux.action.stop()
+      ux.action.stop()
     }
   }
   /* eslint-enable no-await-in-loop */

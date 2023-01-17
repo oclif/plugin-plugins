@@ -1,5 +1,5 @@
 import * as path from 'path'
-import {Command, Flags, Plugin, CliUx} from '@oclif/core'
+import {Args, Command, Flags, Plugin, ux} from '@oclif/core'
 import * as chalk from 'chalk'
 import * as fs from 'fs-extra'
 
@@ -25,9 +25,13 @@ export default class PluginsInspect extends Command {
 
   static strict = false;
 
-  static args = [
-    {name: 'plugin', description: 'Plugin to inspect.', required: true, default: '.'},
-  ];
+  static args = {
+    plugin: Args.string({
+      description: 'Plugin to inspect.',
+      required: true,
+      default: '.',
+    }),
+  }
 
   static flags = {
     help: Flags.help({char: 'h'}),
@@ -43,7 +47,7 @@ export default class PluginsInspect extends Command {
     const {flags, argv} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
-    for (let name of argv) {
+    for (let name of argv as string[]) {
       if (name === '.') {
         const pkgJson = JSON.parse(await fs.readFile('package.json', 'utf-8'))
         name = pkgJson.name
@@ -84,7 +88,7 @@ export default class PluginsInspect extends Command {
 
   async inspect(pluginName: string, verbose = false): Promise<void> {
     const plugin = this.findPlugin(pluginName)
-    const tree = CliUx.ux.tree()
+    const tree = ux.tree()
     const pluginHeader = chalk.bold.cyan(plugin.name)
     tree.insert(pluginHeader)
     tree.nodes[pluginHeader].insert(`version ${plugin.version}`)
