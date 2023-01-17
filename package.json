@@ -20,7 +20,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
     "@oclif/plugin-help": "^5.1.22",
-    "@oclif/test": "^2.2.19",
+    "@oclif/test": "^2.2.21",
     "@types/chai": "^4.3.4",
     "@types/fs-extra": "^9.0",
     "@types/mocha": "^8.2.3",
@@ -76,7 +76,7 @@
     "clean": "shx rm -f oclif.manifest.json",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "pretest": "yarn build && tsc -p test --noEmit",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "mocha \"test/**/*.test.ts\"",
     "posttest": "yarn lint",
     "prepublishOnly": "yarn run build && oclif manifest . && oclif readme",
     "postpublish": "yarn run clean",
