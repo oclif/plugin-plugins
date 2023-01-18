@@ -4035,10 +4035,10 @@ object-treeify@^1.1.33:
   resolved "https://registry.yarnpkg.com/object-treeify/-/object-treeify-1.1.33.tgz#f06fece986830a3cba78ddd32d4c11d1f76cdf40"
   integrity sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A==
 
-oclif@^3.4.4:
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/oclif/-/oclif-3.4.4.tgz#6fd092f72ef206b17a3b2c0b77868c5b3f5da9c9"
-  integrity sha512-+30GvwIFaN7PuZIhqRwzoyxhnYjL65a0d2QzDhebKzNcChZTdONK9S0dbTnjrEjlGfiWAb7luvYdNC8OznL+XA==
+oclif@^3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/oclif/-/oclif-3.4.5.tgz#0eb96914c6edb9f727767e1433a694783680df54"
+  integrity sha512-eBgRPGPDtH1UJSIZ6UGIv5c0vRUxw4iGTjADPpPrd46pQx0yGImOxjLCjIVZzNOftajXeqpc7o0NJAwGU/cFWQ==
   dependencies:
     "@oclif/core" "^1.24.1"
     "@oclif/plugin-help" "^5.1.19"
