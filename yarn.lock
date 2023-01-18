@@ -646,10 +646,10 @@
     widest-line "^3.1.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^1.24.1":
-  version "1.24.1"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.24.1.tgz#b10324fc8dfbe70539a4479509b25a9dd867aed3"
-  integrity sha512-CQFCsj9fUALfTNGXR9qaP3yXiF9TuL6GKph1NwXMe2yzpAE4Zz8X8uFpi916rE3oAHEPX6bR9fhdUiBGgDBuGw==
+"@oclif/core@^1.24.2":
+  version "1.24.2"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.24.2.tgz#1d2e4b8b27db7e98b0c1d7b367934196a2f2c202"
+  integrity sha512-0wfAa6HG4sJ4j5c4/GV4BWZwALtJyw2ZO6titnrWKcowxU1BWd8mBM45ilTPnDhClMowz7+8EtK4kqUGc1rNwA==
   dependencies:
     "@oclif/linewrap" "^1.0.0"
     "@oclif/screen" "^3.0.4"
@@ -4035,12 +4035,12 @@ object-treeify@^1.1.33:
   resolved "https://registry.yarnpkg.com/object-treeify/-/object-treeify-1.1.33.tgz#f06fece986830a3cba78ddd32d4c11d1f76cdf40"
   integrity sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A==
 
-oclif@^3.4.5:
-  version "3.4.5"
-  resolved "https://registry.yarnpkg.com/oclif/-/oclif-3.4.5.tgz#0eb96914c6edb9f727767e1433a694783680df54"
-  integrity sha512-eBgRPGPDtH1UJSIZ6UGIv5c0vRUxw4iGTjADPpPrd46pQx0yGImOxjLCjIVZzNOftajXeqpc7o0NJAwGU/cFWQ==
+oclif@^3.4.6:
+  version "3.4.6"
+  resolved "https://registry.yarnpkg.com/oclif/-/oclif-3.4.6.tgz#794e048b31b4e5728ee6ef21d4bbbc45966e4c03"
+  integrity sha512-YyGMDil2JpfC9OcB76Gtcd5LqwwOeAgb8S7mVHf/6Qecjqor8QbbvcSwZvB1e1TqjlD1JUhDPqBiFeVe/WOdWg==
   dependencies:
-    "@oclif/core" "^1.24.1"
+    "@oclif/core" "^1.24.2"
     "@oclif/plugin-help" "^5.1.19"
     "@oclif/plugin-not-found" "^2.3.7"
     "@oclif/plugin-warn-if-update-available" "^2.0.14"
