@@ -1,4 +1,4 @@
-import {Errors, Config, Interfaces, CliUx} from '@oclif/core'
+import {Errors, Config, Interfaces, ux} from '@oclif/core'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
 import loadJSON from 'load-json-file'
@@ -143,7 +143,7 @@ export default class Plugins {
 
   async link(p: string): Promise<void> {
     const c = await Config.load(path.resolve(p))
-    CliUx.ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
+    ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     if (
       !c.valid &&
       !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')
@@ -189,7 +189,7 @@ export default class Plugins {
         })
       }
     } catch (error: any) {
-      CliUx.ux.warn(error)
+      ux.warn(error)
     } finally {
       await this.remove(name)
     }
@@ -203,7 +203,7 @@ export default class Plugins {
       (p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user',
     )
     if (plugins.length === 0) return
-    CliUx.ux.action.start(`${this.config.name}: Updating plugins`)
+    ux.action.start(`${this.config.name}: Updating plugins`)
 
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -236,7 +236,7 @@ export default class Plugins {
       )
     }
 
-    CliUx.ux.action.stop()
+    ux.action.stop()
   }
   /* eslint-enable no-await-in-loop */
 
@@ -268,7 +268,7 @@ export default class Plugins {
       )
       return f.nodeVersion
     } catch (error: any) {
-      if (error.code !== 'ENOENT') CliUx.ux.warn(error)
+      if (error.code !== 'ENOENT') ux.warn(error)
     }
   }
 

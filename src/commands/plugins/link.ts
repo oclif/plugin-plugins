@@ -1,4 +1,4 @@
-import {Command, Flags, CliUx} from '@oclif/core'
+import {Args, Command, Flags, ux} from '@oclif/core'
 import * as chalk from 'chalk'
 
 import Plugins from '../../plugins'
@@ -14,7 +14,9 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
 
   static examples = ['$ <%= config.bin %> plugins:link <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
 
-  static args = [{name: 'path', description: 'path to plugin', required: true, default: '.'}]
+  static args = {
+    path: Args.string({name: 'path', description: 'path to plugin', required: true, default: '.'}),
+  }
 
   static flags = {
     help: Flags.help({char: 'h'}),
@@ -26,8 +28,8 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
   async run(): Promise<void> {
     const {flags, args} = await this.parse(PluginsLink)
     this.plugins.verbose = flags.verbose
-    CliUx.ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
+    ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
     await this.plugins.link(args.path)
-    CliUx.ux.action.stop()
+    ux.action.stop()
   }
 }
