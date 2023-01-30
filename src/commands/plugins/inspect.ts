@@ -25,6 +25,8 @@ export default class PluginsInspect extends Command {
 
   static strict = false;
 
+  static enableJsonFlag = true;
+
   static args = {
     plugin: Args.string({
       description: 'Plugin to inspect.',
@@ -43,10 +45,11 @@ export default class PluginsInspect extends Command {
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   /* eslint-disable no-await-in-loop */
-  async run(): Promise<void> {
+  async run(): Promise<Plugin[]> {
     const {flags, argv} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
+    const plugins: Plugin[] = []
     for (let name of argv as string[]) {
       if (name === '.') {
         const pkgJson = JSON.parse(await fs.readFile('package.json', 'utf-8'))
@@ -58,12 +61,14 @@ export default class PluginsInspect extends Command {
       const pluginName = await this.parsePluginName(name)
 
       try {
-        await this.inspect(pluginName, flags.verbose)
+        plugins.push(await this.inspect(pluginName, flags.verbose))
       } catch (error) {
         this.log(chalk.bold.red('failed'))
         throw error
       }
     }
+
+    return plugins
   }
   /* eslint-enable no-await-in-loop */
 
@@ -86,7 +91,7 @@ export default class PluginsInspect extends Command {
     throw new Error(`${pluginName} not installed`)
   }
 
-  async inspect(pluginName: string, verbose = false): Promise<void> {
+  async inspect(pluginName: string, verbose = false): Promise<Plugin> {
     const plugin = this.findPlugin(pluginName)
     const tree = ux.tree()
     const pluginHeader = chalk.bold.cyan(plugin.name)
@@ -116,7 +121,8 @@ export default class PluginsInspect extends Command {
       tree.nodes[pluginHeader].nodes.dependencies.insert(msg)
     }
 
-    tree.display()
+    if (!this.jsonEnabled()) tree.display()
+    return plugin
   }
 
   async findDep(plugin: Plugin, dependency: string): Promise<{ version: string | null; pkgPath: string | null}> {
