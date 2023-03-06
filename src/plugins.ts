@@ -223,9 +223,14 @@ export default class Plugins {
     }
 
     const npmPlugins = plugins.filter(p => !p.url)
+    const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
+
     if (npmPlugins.length > 0) {
       await this.yarn.exec(
-        ['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)],
+        ['add', ...npmPlugins.map(p => {
+          const tag = jitPlugins[p.name] ?? p.tag
+          return `${p.name}@${tag}`
+        })],
         {cwd: this.config.dataDir, verbose: this.verbose},
       )
     }
