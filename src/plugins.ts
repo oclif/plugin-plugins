@@ -156,7 +156,11 @@ export default class Plugins {
     await this.add({type: 'link', name: c.name, root: c.root})
     // if the plugin has typescript in devDeps, we will also compile it
     if (c.pjson.devDependencies?.typescript) {
-      await this.yarn.exec(['run', 'tsc', '-p', '.', '--incremental', '--skipLibCheck'], {cwd: path.resolve(p), verbose: this.verbose})
+      try {
+        await this.yarn.exec(['run', 'tsc', '-p', '.', '--incremental', '--skipLibCheck'], {cwd: path.resolve(p), verbose: this.verbose})
+      } catch {
+        this.debug('typescript compilation failed')
+      }
     }
   }
 
@@ -223,9 +227,14 @@ export default class Plugins {
     }
 
     const npmPlugins = plugins.filter(p => !p.url)
+    const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
+
     if (npmPlugins.length > 0) {
       await this.yarn.exec(
-        ['add', ...npmPlugins.map(p => `${p.name}@${p.tag}`)],
+        ['add', ...npmPlugins.map(p => {
+          const tag = jitPlugins[p.name] ?? p.tag
+          return `${p.name}@${tag}`
+        })],
         {cwd: this.config.dataDir, verbose: this.verbose},
       )
     }
@@ -312,10 +321,6 @@ export default class Plugins {
 
   private get pjsonPath() {
     return path.join(this.config.dataDir, 'package.json')
-  }
-
-  private get npmRegistry(): string {
-    return this.config.npmRegistry || 'https://registry.npmjs.org'
   }
 
   private async npmHasPackage(name: string): Promise<boolean> {
