@@ -154,14 +154,6 @@ export default class Plugins {
     // refresh will cause yarn.lock to install dependencies, including devDeps
     await this.refresh(c.root, {prod: false})
     await this.add({type: 'link', name: c.name, root: c.root})
-    // if the plugin has typescript in devDeps, we will also compile it
-    if (c.pjson.devDependencies?.typescript) {
-      try {
-        await this.yarn.exec(['run', 'tsc', '-p', '.', '--incremental', '--skipLibCheck'], {cwd: path.resolve(p), verbose: this.verbose})
-      } catch {
-        this.debug('typescript compilation failed')
-      }
-    }
   }
 
   async add(plugin: Interfaces.PJSON.PluginTypes): Promise<void> {
