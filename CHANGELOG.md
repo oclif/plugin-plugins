@@ -1,3 +1,12 @@
+## [2.4.2](https://github.com/oclif/plugin-plugins/compare/2.4.1...2.4.2) (2023-03-16)
+
+
+### Bug Fixes
+
+* remove TS compile step for linked plugins ([#569](https://github.com/oclif/plugin-plugins/issues/569)) ([0d72c61](https://github.com/oclif/plugin-plugins/commit/0d72c618f9342fed7696b43f8596b8c3e2410c53))
+
+
+
 ## [2.4.1](https://github.com/oclif/plugin-plugins/compare/2.4.0...2.4.1) (2023-03-11)
 
 
