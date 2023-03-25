@@ -2356,10 +2356,10 @@ external-editor@^3.0.3:
     iconv-lite "^0.4.24"
     tmp "^0.0.33"
 
-fancy-test@^2.0.10, fancy-test@^2.0.13:
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/fancy-test/-/fancy-test-2.0.13.tgz#861323fe91f5f4b3d6d2e53104756f64274d7dfe"
-  integrity sha512-n+rbO0zU861qNT4L3vIy2CEZlsmLR1sp8sy/uZDEOdmRtfnBBwN9OgT37X0zhQJZTlu2vkdKRu51BsyekgB13Q==
+fancy-test@^2.0.13, fancy-test@^2.0.15:
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/fancy-test/-/fancy-test-2.0.15.tgz#d2949d7a4b889030389e46402289c754be69ffbb"
+  integrity sha512-yCtzWue60qfQd+b16dVUNE8kWCyQHNHUALnrue32M/ZxwH2AXjzjxdzA5YCe48kFlzqIi/tSxOuJa8TkU8Px1g==
   dependencies:
     "@types/chai" "*"
     "@types/lodash" "*"
