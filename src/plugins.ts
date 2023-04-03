@@ -352,9 +352,10 @@ export default class Plugins {
   private isValidPlugin(p: Config): boolean {
     if (p.valid) return true
 
-    // check if this plugin was loaded by `plugin-legacy`
     if (!this.config.plugins.find(p => p.name === '@oclif/plugin-legacy') ||
-        Object.getPrototypeOf(p) === 'PluginLegacy'
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore check if this plugin was loaded by `plugin-legacy`
+      p._base.includes('@oclif/plugin-legacy')
     ) {
       return true
     }
