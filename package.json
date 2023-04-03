@@ -1,7 +1,7 @@
 {
   "name": "@oclif/plugin-plugins",
   "description": "plugins plugin for oclif",
-  "version": "2.4.4-beta.2",
+  "version": "2.4.4-beta.3",
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {

@@ -1,3 +1,12 @@
+## [2.4.4-beta.3](https://github.com/oclif/plugin-plugins/compare/2.4.4-beta.1...2.4.4-beta.3) (2023-04-03)
+
+
+### Bug Fixes
+
+* bump version ([2881cfe](https://github.com/oclif/plugin-plugins/commit/2881cfeba8f0b295277e89e02c04dfa99d2113df))
+
+
+
 ## [2.4.4-beta.1](https://github.com/oclif/plugin-plugins/compare/2.4.3...2.4.4-beta.1) (2023-04-03)
 
 
