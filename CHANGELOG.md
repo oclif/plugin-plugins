@@ -1,3 +1,12 @@
+## [2.4.4-beta.1](https://github.com/oclif/plugin-plugins/compare/2.4.3...2.4.4-beta.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* handle legacy plugins ([4ccb2fb](https://github.com/oclif/plugin-plugins/commit/4ccb2fb8ce6d8e04fa11ca414da4000af8a09827))
+
+
+
 ## [2.4.3](https://github.com/oclif/plugin-plugins/compare/2.4.2...2.4.3) (2023-03-18)
 
 
