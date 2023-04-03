@@ -1,3 +1,13 @@
+## [2.4.4-beta.4](https://github.com/oclif/plugin-plugins/compare/2.4.4-beta.3...2.4.4-beta.4) (2023-04-03)
+
+
+### Bug Fixes
+
+* check class instance ([55ac4dc](https://github.com/oclif/plugin-plugins/commit/55ac4dce3dc71dfd988e46eb7d31dd7702334ee0))
+* just check base prop ([1b4868f](https://github.com/oclif/plugin-plugins/commit/1b4868f740dbc0136e64157d0f37717d21e86d73))
+
+
+
 ## [2.4.4-beta.3](https://github.com/oclif/plugin-plugins/compare/2.4.4-beta.1...2.4.4-beta.3) (2023-04-03)
 
 
