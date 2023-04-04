@@ -58,11 +58,6 @@ export default class Plugins {
       await this.createPJSON()
       let plugin
       const add = force ? ['add', '--force'] : ['add']
-      const invalidPluginError = new Errors.CLIError('plugin is invalid', {
-        suggestions: [
-          'Plugin failed to install because it does not appear to be a valid CLI plugin.\nIf you are sure it is, contact the CLI developer noting this error.',
-        ],
-      })
       if (name.includes(':')) {
         // url
         const url = name
@@ -77,12 +72,8 @@ export default class Plugins {
           name,
         })
         await this.refresh(plugin.root)
-        if (
-          !plugin.valid &&
-          !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')
-        ) {
-          throw invalidPluginError
-        }
+
+        this.isValidPlugin(plugin)
 
         await this.add({name, url, type: 'user'})
       } else {
@@ -100,12 +91,8 @@ export default class Plugins {
           root: path.join(this.config.dataDir, 'node_modules', name),
           name,
         })
-        if (
-          !plugin.valid &&
-          !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')
-        ) {
-          throw invalidPluginError
-        }
+
+        this.isValidPlugin(plugin)
 
         await this.refresh(plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
@@ -144,12 +131,7 @@ export default class Plugins {
   async link(p: string): Promise<void> {
     const c = await Config.load(path.resolve(p))
     ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
-    if (
-      !c.valid &&
-      !this.config.plugins.find(p => p.name === '@oclif/plugin-legacy')
-    ) {
-      throw new Errors.CLIError('plugin is not a valid oclif plugin')
-    }
+    this.isValidPlugin(c)
 
     // refresh will cause yarn.lock to install dependencies, including devDeps
     await this.refresh(c.root, {prod: false})
@@ -365,5 +347,23 @@ export default class Plugins {
         (a.type === 'link' && b.type === 'link' && a.root === b.root),
     )
     return plugins
+  }
+
+  private isValidPlugin(p: Config): boolean {
+    if (p.valid) return true
+
+    if (!this.config.plugins.find(p => p.name === '@oclif/plugin-legacy') ||
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore check if this plugin was loaded by `plugin-legacy`
+      p._base.includes('@oclif/plugin-legacy')
+    ) {
+      return true
+    }
+
+    throw new Errors.CLIError('plugin is invalid', {
+      suggestions: [
+        'Plugin failed to install because it does not appear to be a valid CLI plugin.\nIf you are sure it is, contact the CLI developer noting this error.',
+      ],
+    })
   }
 }
