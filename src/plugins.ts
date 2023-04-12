@@ -4,6 +4,7 @@ import * as fse from 'fs-extra'
 import loadJSON from 'load-json-file'
 import * as path from 'path'
 import * as semver from 'semver'
+import HTTP from 'http-call'
 import {exec} from 'child_process'
 
 import {uniq, uniqWith} from './util'
@@ -315,7 +316,28 @@ export default class Plugins {
     return path.join(this.config.dataDir, 'package.json')
   }
 
-  private async npmHasPackage(name: string): Promise<boolean> {
+  private get npmRegistry(): string {
+    return this.config.npmRegistry || 'https://registry.npmjs.org'
+  }
+
+  private async checkNpmPackageHTTP(name: string): Promise<boolean> {
+    try {
+      const http: typeof HTTP = require('http-call').HTTP
+      const url = `${this.npmRegistry}/${name.replace('/', '%2f')}`
+      await http.get(url)
+      return true
+    } catch (error: any) {
+      this.debug(error)
+
+      if (error.statusCode === 404) {
+        return false
+      }
+
+      throw error
+    }
+  }
+
+  private async checkNpmPackageScript(name: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       exec(
         `npm show ${name} dist-tags`,
@@ -336,6 +358,15 @@ export default class Plugins {
         },
       )
     })
+  }
+
+  private async npmHasPackage(name: string): Promise<boolean> {
+    try {
+      await this.checkNpmPackageScript(name)
+      return true
+    } catch {
+      return false
+    }
   }
 
   private async savePJSON(pjson: Interfaces.PJSON.User) {
