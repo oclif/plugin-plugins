@@ -1,28 +1,18 @@
-## [2.4.4-beta.4](https://github.com/oclif/plugin-plugins/compare/2.4.4-beta.3...2.4.4-beta.4) (2023-04-03)
+## [2.4.5](https://github.com/oclif/plugin-plugins/compare/2.4.4...2.4.5) (2023-04-15)
 
 
 ### Bug Fixes
 
-* check class instance ([55ac4dc](https://github.com/oclif/plugin-plugins/commit/55ac4dce3dc71dfd988e46eb7d31dd7702334ee0))
-* just check base prop ([1b4868f](https://github.com/oclif/plugin-plugins/commit/1b4868f740dbc0136e64157d0f37717d21e86d73))
+* **deps:** bump @oclif/core from 2.8.0 to 2.8.2 ([3bcc135](https://github.com/oclif/plugin-plugins/commit/3bcc13587b6201fafa30dcc7577f1c4339236b70))
 
 
 
-## [2.4.4-beta.3](https://github.com/oclif/plugin-plugins/compare/2.4.4-beta.1...2.4.4-beta.3) (2023-04-03)
-
-
-### Bug Fixes
-
-* bump version ([2881cfe](https://github.com/oclif/plugin-plugins/commit/2881cfeba8f0b295277e89e02c04dfa99d2113df))
-
-
-
-## [2.4.4-beta.1](https://github.com/oclif/plugin-plugins/compare/2.4.3...2.4.4-beta.1) (2023-04-03)
+## [2.4.4](https://github.com/oclif/plugin-plugins/compare/2.4.3...2.4.4) (2023-04-04)
 
 
 ### Bug Fixes
 
-* handle legacy plugins ([4ccb2fb](https://github.com/oclif/plugin-plugins/commit/4ccb2fb8ce6d8e04fa11ca414da4000af8a09827))
+* handle legacy plugins ([#582](https://github.com/oclif/plugin-plugins/issues/582)) ([3c50914](https://github.com/oclif/plugin-plugins/commit/3c5091447bfe9aa7d25a0a7621f14e8762ce1e21))
 
 
 
