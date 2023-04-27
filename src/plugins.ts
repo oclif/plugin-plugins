@@ -303,23 +303,25 @@ export default class Plugins {
 
     this.debug(`Using node executable located at: ${nodeExecutable}`)
     this.debug(`Using npm executable located at: ${npmCli}`)
-    this.debug(`npm pkg name: ${name}`)
 
     const command = `${nodeExecutable} ${npmCli} show ${name} dist-tags`
 
-    const npmShowResult = shelljs.exec(command, {
-      silent: true,
-      async: false,
-      encoding: 'utf8',
-    })
+    try {
+      const npmShowResult = shelljs.exec(command, {
+        silent: true,
+        async: false,
+        encoding: 'utf8',
+      })
+      if (npmShowResult.code !== 0) {
+        this.debug(npmShowResult.stderr)
+        return false
+      }
 
-    if (npmShowResult.code !== 0) {
-      this.debug(npmShowResult.stderr)
+      this.debug(`Found ${name} in the registry.`)
+      return true
+    } catch {
       throw new Error(`Could not run npm show for ${name}`)
     }
-
-    this.debug(`Found ${name} in the registry.`)
-    return true
   }
 
   private async savePJSON(pjson: Interfaces.PJSON.User) {
