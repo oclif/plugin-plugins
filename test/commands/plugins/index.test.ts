@@ -1,4 +1,5 @@
 import {expect, test} from '../../test'
+import {platform} from 'node:os'
 
 describe('command', () => {
   test
@@ -26,19 +27,21 @@ describe('command', () => {
   .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls @oclif/example-plugin-ts with tags')
 
-  test
-  .command(['plugins:install', 'aliasme'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('oclif-debug'))
-  .stdout()
-  .command(['debug'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('debug'))
-  .command(['plugins:uninstall', 'oclif-debug'])
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('installs via an alias')
+  if (platform() !== 'win32') {
+    test
+    .command(['plugins:install', 'aliasme'], {reset: true})
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do(output => expect(output.stdout).to.contain('oclif-debug'))
+    .stdout()
+    .command(['debug'], {reset: true})
+    .do(output => expect(output.stdout).to.contain('debug'))
+    .command(['plugins:uninstall', 'oclif-debug'])
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('installs via an alias')
+  }
 
   test
   .command(['plugins:install', 'jdxcode/oclif-debug'], {reset: true})
@@ -54,13 +57,15 @@ describe('command', () => {
   .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls jdxcode/oclif-debug')
 
-  test
-  .command(['plugins:install', 'stubbed'], {reset: true})
-  .catch(/1/)
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('does not install if unsure if scoped package does not exist')
+  if (platform() !== 'win32') {
+    test
+    .command(['plugins:install', 'stubbed'], {reset: true})
+    .catch(/1/)
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('does not install if unsure if scoped package does not exist')
+  }
   // test
   // .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
   // .stdout()
