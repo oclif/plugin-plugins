@@ -1,5 +1,6 @@
-import {Command, Flags, ux, Args} from '@oclif/core'
+import {Command, Flags, ux, Args, Errors} from '@oclif/core'
 import * as chalk from 'chalk'
+import * as validateNpmPkgName from 'validate-npm-package-name'
 
 import Plugins from '../../plugins'
 
@@ -49,6 +50,12 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     for (let name of argv as string[]) {
       if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] || name
+
+      const res = validateNpmPkgName(name)
+      if (!res.validForNewPackages) {
+        throw new Errors.CLIError('Invalid npm package name')
+      }
+
       const p = await this.parsePlugin(name)
       let plugin
       await this.config.runHook('plugins:preinstall', {

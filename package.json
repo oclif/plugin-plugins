@@ -17,6 +17,7 @@
     "semver": "^7.5.0",
     "shelljs": "^0.8.5",
     "tslib": "^2.4.1",
+    "validate-npm-package-name": "^5.0.0",
     "yarn": "^1.22.18"
   },
   "devDependencies": {
@@ -30,6 +31,7 @@
     "@types/semver": "^7.3.13",
     "@types/shelljs": "^0.8.12",
     "@types/supports-color": "^7.2.0",
+    "@types/validate-npm-package-name": "^4.0.0",
     "chai": "^4.3.7",
     "commitlint": "^12.1.4",
     "eslint": "^7.31.0",
