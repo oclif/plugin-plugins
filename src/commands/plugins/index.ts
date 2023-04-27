@@ -1,4 +1,4 @@
-import color from '@oclif/color'
+import * as chalk from 'chalk'
 import {Command, Flags, Plugin, ux} from '@oclif/core'
 
 import Plugins from '../../plugins'
@@ -52,13 +52,13 @@ export default class PluginsIndex extends Command {
   }
 
   private formatPlugin(plugin: any): string {
-    let output = `${this.plugins.friendlyName(plugin.name)} ${color.dim(plugin.version)}`
+    let output = `${this.plugins.friendlyName(plugin.name)} ${chalk.dim(plugin.version)}`
     if (plugin.type !== 'user')
-      output += color.dim(` (${plugin.type})`)
+      output += chalk.dim(` (${plugin.type})`)
     if (plugin.type === 'link')
       output += ` ${plugin.root}`
     else if (plugin.tag && plugin.tag !== 'latest')
-      output += color.dim(` (${String(plugin.tag)})`)
+      output += chalk.dim(` (${String(plugin.tag)})`)
     return output
   }
 }

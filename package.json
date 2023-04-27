@@ -5,12 +5,10 @@
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
-    "@oclif/color": "^1.0.4",
     "@oclif/core": "^2.8.2",
     "chalk": "^4.1.2",
     "debug": "^4.3.4",
     "fs-extra": "^9.0",
-    "http-call": "^5.2.2",
     "load-json-file": "^5.3.0",
     "npm": "^9.6.5",
     "npm-run-path": "^4.0.1",
