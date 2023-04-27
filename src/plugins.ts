@@ -1,12 +1,12 @@
 import {Errors, Config, Interfaces, ux} from '@oclif/core'
+import * as shelljs from 'shelljs'
 import * as fs from 'fs'
 import * as fse from 'fs-extra'
 import loadJSON from 'load-json-file'
 import * as path from 'path'
 import * as semver from 'semver'
-import {exec} from 'child_process'
 
-import {uniq, uniqWith} from './util'
+import {uniq, uniqWith, findNode, findNpm} from './util'
 import Yarn from './yarn'
 
 const initPJSON: Interfaces.PJSON.User = {
@@ -298,26 +298,28 @@ export default class Plugins {
   }
 
   private async npmHasPackage(name: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      exec(
-        `npm show ${name} dist-tags`,
-        {
-          encoding: 'utf-8',
-          maxBuffer: 2048 * 2048,
-        },
-        error => {
-          if (error) {
-            try {
-              return resolve(false)
-            } catch {
-              reject(new Error(`Could not run npm show for ${name}`))
-            }
-          } else {
-            return resolve(true)
-          }
-        },
-      )
+    const nodeExecutable = findNode(this.config.root)
+    const npmCli = await findNpm()
+
+    this.debug(`Using node executable located at: ${nodeExecutable}`)
+    this.debug(`Using npm executable located at: ${npmCli}`)
+    this.debug(`npm pkg name: ${name}`)
+
+    const command = `${nodeExecutable} ${npmCli} show ${name} dist-tags`
+
+    const npmShowResult = shelljs.exec(command, {
+      silent: true,
+      async: false,
+      encoding: 'utf8',
     })
+
+    if (npmShowResult.code !== 0) {
+      this.debug(npmShowResult.stderr)
+      throw new Error(`Could not run npm show for ${name}`)
+    }
+
+    this.debug(`Found ${name} in the registry.`)
+    return true
   }
 
   private async savePJSON(pjson: Interfaces.PJSON.User) {
