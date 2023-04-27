@@ -1,3 +1,12 @@
+## [2.4.8](https://github.com/oclif/plugin-plugins/compare/2.4.7...2.4.8) (2023-04-27)
+
+
+### Bug Fixes
+
+* use internal npm for pkg checks ([#595](https://github.com/oclif/plugin-plugins/issues/595)) ([947ea8b](https://github.com/oclif/plugin-plugins/commit/947ea8bdcc4277c78a69189fa8079f81076245b6))
+
+
+
 ## [2.4.7](https://github.com/oclif/plugin-plugins/compare/2.4.6...2.4.7) (2023-04-22)
 
 
