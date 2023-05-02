@@ -1,7 +1,7 @@
 {
   "name": "@oclif/plugin-plugins",
   "description": "plugins plugin for oclif",
-  "version": "2.4.8",
+  "version": "3.0.0",
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
@@ -48,7 +48,7 @@
     "typescript": "4.9.5"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16"
   },
   "files": [
     "oclif.manifest.json",
