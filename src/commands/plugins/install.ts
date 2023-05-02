@@ -1,4 +1,5 @@
-import {Command, Flags, ux, Args} from '@oclif/core'
+import {Command, Flags, ux, Args, Errors} from '@oclif/core'
+import * as validate from 'validate-npm-package-name'
 import * as chalk from 'chalk'
 
 import Plugins from '../../plugins'
@@ -85,6 +86,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     if (input.includes('@') && input.includes('/')) {
       input = input.slice(1)
       const [name, tag = 'latest'] = input.split('@')
+      validateNpmPkgName('@' + name)
       return {name: '@' + name, tag, type: 'npm'}
     }
 
@@ -95,6 +97,13 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
     const [splitName, tag = 'latest'] = input.split('@')
     const name = await this.plugins.maybeUnfriendlyName(splitName)
+    validateNpmPkgName(name)
     return {name, tag, type: 'npm'}
+  }
+}
+
+function validateNpmPkgName(name:string): void {
+  if (!validate(name).validForNewPackages) {
+    throw new Errors.CLIError('Invalid npm package name.')
   }
 }
