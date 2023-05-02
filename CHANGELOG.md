@@ -1,3 +1,12 @@
+## [3.0.1](https://github.com/oclif/plugin-plugins/compare/2.4.8...3.0.1) (2023-05-02)
+
+
+### Bug Fixes
+
+* validate plugin name before install ([#597](https://github.com/oclif/plugin-plugins/issues/597)) ([4c328f7](https://github.com/oclif/plugin-plugins/commit/4c328f79c12035d2f49d8e60ac5062c4f1cef4c8))
+
+
+
 ## [2.4.8](https://github.com/oclif/plugin-plugins/compare/2.4.7...2.4.8) (2023-04-27)
 
 
