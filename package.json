@@ -12,7 +12,7 @@
     "fs-extra": "^9.0",
     "http-call": "^5.2.2",
     "load-json-file": "^5.3.0",
-    "npm": "^9.6.5",
+    "npm": "^9.6.6",
     "npm-run-path": "^4.0.1",
     "semver": "^7.5.0",
     "shelljs": "^0.8.5",
