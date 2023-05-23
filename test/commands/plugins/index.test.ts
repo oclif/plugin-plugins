@@ -3,6 +3,9 @@ import {platform} from 'node:os'
 
 describe('command', () => {
   test
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
   .stdout()
   .command(['plugins'], {reset: true})

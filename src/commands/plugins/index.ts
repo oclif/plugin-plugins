@@ -29,7 +29,7 @@ export default class PluginsIndex extends Command {
       return []
     }
 
-    if (!this.jsonEnabled) {
+    if (!this.jsonEnabled()) {
       this.display(plugins as Plugin[])
     }
 
