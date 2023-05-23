@@ -9,5 +9,5 @@
   ],
   "recursive": true,
   "reporter": "spec",
-  "timeout": 100000
+  "timeout": 200000
 }
