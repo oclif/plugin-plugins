@@ -1,3 +1,12 @@
+# [3.1.0](https://github.com/oclif/plugin-plugins/compare/3.0.1...3.1.0) (2023-05-24)
+
+
+### Features
+
+* json output for plugins list ([#609](https://github.com/oclif/plugin-plugins/issues/609)) ([f274f3f](https://github.com/oclif/plugin-plugins/commit/f274f3f6c6d0da9b7de02d6d842dc575163e2a9d))
+
+
+
 ## [3.0.1](https://github.com/oclif/plugin-plugins/compare/2.4.8...3.0.1) (2023-05-02)
 
 
