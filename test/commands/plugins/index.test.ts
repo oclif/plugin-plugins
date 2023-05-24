@@ -3,6 +3,9 @@ import {platform} from 'node:os'
 
 describe('command', () => {
   test
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
   .stdout()
   .command(['plugins'], {reset: true})
@@ -15,6 +18,20 @@ describe('command', () => {
   .command(['plugins'], {reset: true})
   .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls @oclif/example-plugin-ts')
+
+  test
+  .command(['plugins', '--json'], {reset: true})
+  .do(output => expect((output.returned)).to.deep.equal([]))
+  .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
+  .command(['plugins', '--json'], {reset: true})
+  .do(output => expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.have.property('type', 'user'))
+  .stdout()
+  .command(['hello'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('hello world'))
+  .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
+  .command(['plugins', '--json'], {reset: true})
+  .do(output => expect((output.returned)).to.deep.equal([]))
+  .it('installs and uninstalls @oclif/example-plugin-ts (--json)')
 
   test
   .command(['plugins:install', '@oclif/example-plugin-ts@latest'], {reset: true})

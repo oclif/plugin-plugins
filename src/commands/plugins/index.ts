@@ -5,6 +5,7 @@ import Plugins from '../../plugins'
 import {sortBy} from '../../util'
 
 export default class PluginsIndex extends Command {
+  static enableJsonFlag = true
   static flags = {
     core: Flags.boolean({description: 'Show core plugins.'}),
   }
@@ -15,7 +16,7 @@ export default class PluginsIndex extends Command {
 
   plugins = new Plugins(this.config)
 
-  async run(): Promise<void> {
+  async run(): Promise<ReturnType<Plugins['list']>> {
     const {flags} = await this.parse(PluginsIndex)
     let plugins = this.config.plugins
     sortBy(plugins, p => this.plugins.friendlyName(p.name))
@@ -25,10 +26,14 @@ export default class PluginsIndex extends Command {
 
     if (plugins.length === 0) {
       this.log('No plugins installed.')
-      return
+      return []
     }
 
-    this.display(plugins as Plugin[])
+    if (!this.jsonEnabled()) {
+      this.display(plugins as Plugin[])
+    }
+
+    return this.plugins.list()
   }
 
   private display(plugins: Plugin[]) {
