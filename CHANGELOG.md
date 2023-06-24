@@ -1,3 +1,12 @@
+## [3.1.4](https://github.com/oclif/plugin-plugins/compare/3.1.3...3.1.4) (2023-06-24)
+
+
+### Bug Fixes
+
+* **deps:** bump semver and @types/semver ([8a8e22e](https://github.com/oclif/plugin-plugins/commit/8a8e22e716d2e073db6dcf5e5aebcb86b86c99cf))
+
+
+
 ## [3.1.3](https://github.com/oclif/plugin-plugins/compare/3.1.2...3.1.3) (2023-06-17)
 
 
