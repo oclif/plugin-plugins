@@ -1,3 +1,12 @@
+## [3.1.6](https://github.com/oclif/plugin-plugins/compare/3.1.5...3.1.6) (2023-07-01)
+
+
+### Bug Fixes
+
+* **deps:** bump npm from 9.6.7 to 9.7.2 ([bbdae57](https://github.com/oclif/plugin-plugins/commit/bbdae57fde0487d2d41521c6f4f3f283e55005cd))
+
+
+
 ## [3.1.5](https://github.com/oclif/plugin-plugins/compare/3.1.4...3.1.5) (2023-06-24)
 
 
