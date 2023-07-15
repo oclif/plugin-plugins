@@ -817,10 +817,10 @@
     widest-line "^3.1.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^2.8.0", "@oclif/core@^2.8.4", "@oclif/core@^2.8.5", "@oclif/core@^2.8.7":
-  version "2.8.7"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.8.7.tgz#e3fb73477cfb9e72c89bc68701d04953c084c0e8"
-  integrity sha512-WTZUFgANYGyHQOmGc2YsczEdqdlG2/ZEfqksHnuYbz3egozpka/R9LrFwNfWPZETi9ydzcjDWwJKUGQmJG3ixA==
+"@oclif/core@^2.8.0", "@oclif/core@^2.8.11", "@oclif/core@^2.8.4", "@oclif/core@^2.8.7":
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.9.3.tgz#d20478d03b57713e5a6d9582027f97e83e8be496"
+  integrity sha512-0KLiVpXCJivAjLoj/LAXQf85MtGzyforyPkgNJQEP6QQugnuq2kHcG+DojWEQYz0sADXT2259EdPibslEThUMg==
   dependencies:
     "@types/cli-progress" "^3.11.0"
     ansi-escapes "^4.3.2"
@@ -841,7 +841,8 @@
     natural-orderby "^2.0.3"
     object-treeify "^1.1.33"
     password-prompt "^1.1.2"
-    semver "^7.3.7"
+    semver "^7.5.3"
+    slice-ansi "^4.0.0"
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
     supports-color "^8.1.1"
@@ -892,13 +893,13 @@
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-3.0.4.tgz#663db0ecaf23f3184e7f01886ed578060e4a7f1c"
   integrity sha512-IMsTN1dXEXaOSre27j/ywGbBjrzx0FNd1XmuhCWCB9NTPrhWI1Ifbz+YLSEcstfQfocYsrbrIessxXb2oon4lA==
 
-"@oclif/test@^2.3.22":
-  version "2.3.22"
-  resolved "https://registry.yarnpkg.com/@oclif/test/-/test-2.3.22.tgz#5c7278fbc339e5a43c5529f5d367615dccd5955f"
-  integrity sha512-0wLW8YnLS9Gvipgu64ZtzPmi7HfyJkPziU/tfW8T/4lQyalDvL8MS05+1UPR6V6hXu86Ehg0CbWJDeU4TB+e1Q==
+"@oclif/test@^2.3.28":
+  version "2.3.28"
+  resolved "https://registry.yarnpkg.com/@oclif/test/-/test-2.3.28.tgz#e5169994e31977368d204fb9546930b27afc81e4"
+  integrity sha512-Eee3efwfHHdgZIwOUGFEe8p4d8YEWFYKHoAezxdXzXVOtV4L9r7Oq6KH8dXGBy8yjYDleydwn0PqoZGhFeLxYQ==
   dependencies:
-    "@oclif/core" "^2.8.5"
-    fancy-test "^2.0.25"
+    "@oclif/core" "^2.8.11"
+    fancy-test "^2.0.28"
 
 "@octokit/auth-token@^2.4.4":
   version "2.5.0"
@@ -2780,7 +2781,7 @@ external-editor@^3.0.3:
     iconv-lite "^0.4.24"
     tmp "^0.0.33"
 
-fancy-test@^2.0.25, fancy-test@^2.0.28:
+fancy-test@^2.0.28:
   version "2.0.28"
   resolved "https://registry.yarnpkg.com/fancy-test/-/fancy-test-2.0.28.tgz#16b9899210ce98011270cd28b87fd88e2765f3b0"
   integrity sha512-UjTjYRlfdUEkvjIMKZlpqALjkgC3GzjUgWDg9KRv/ulxIqppvQUWMt5mOUmqlrSRlGF/Wj7HyFkWKzz5RujpFg==
