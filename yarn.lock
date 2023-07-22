@@ -817,7 +817,7 @@
     widest-line "^3.1.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^2.8.0", "@oclif/core@^2.8.4", "@oclif/core@^2.8.7", "@oclif/core@^2.9.3":
+"@oclif/core@^2.8.4", "@oclif/core@^2.8.7", "@oclif/core@^2.9.3":
   version "2.9.4"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.9.4.tgz#5b22415e238fc3e0db08b0350b85b417ead6e6ff"
   integrity sha512-eFRRpV+tJ6nMkhay2M9IppjSF3atRrgj6Qo83qUslaFSAW3NAl4mIhx1mKmTwQx5rgSrar03xICtSAWJ6gZtag==
@@ -858,12 +858,12 @@
   resolved "https://registry.yarnpkg.com/@oclif/linewrap/-/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
   integrity sha512-Ups2dShK52xXa8w6iBWLgcjPJWjais6KPJQq3gQ/88AY6BXoTX+MIGFPrWQO1KLMiQfoTpcLnUwloN4brrVUHw==
 
-"@oclif/plugin-help@^5.1.19", "@oclif/plugin-help@^5.2.9":
-  version "5.2.9"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-5.2.9.tgz#badbafdfe3f98ac78a5a3b79582e081d4b64c4b7"
-  integrity sha512-0J3oowPURZJ4Dn1p1WpQ46E4+CoV20KTn1cvsNiDl6Hmbw+qoljKQnArJJzNFeZQxWo4R7/S42PrzKJTVYh68Q==
+"@oclif/plugin-help@^5.1.19", "@oclif/plugin-help@^5.2.14":
+  version "5.2.14"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-5.2.14.tgz#c89f623712fc7d74f01fd2c9d909434b335a2e7b"
+  integrity sha512-7hMLc6zqxeRfG4nvHHQPpbaBj60efM3ULFkCpHZkdLms/ezIkNo40F661QuraIjMP/NN+U6VSfBCGuPkRyxVkA==
   dependencies:
-    "@oclif/core" "^2.8.0"
+    "@oclif/core" "^2.9.3"
 
 "@oclif/plugin-not-found@^2.3.7":
   version "2.3.15"
