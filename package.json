@@ -14,7 +14,7 @@
     "load-json-file": "^5.3.0",
     "npm": "^9.7.2",
     "npm-run-path": "^4.0.1",
-    "semver": "^7.5.3",
+    "semver": "^7.5.4",
     "shelljs": "^0.8.5",
     "tslib": "^2.6.0",
     "validate-npm-package-name": "^5.0.0",
