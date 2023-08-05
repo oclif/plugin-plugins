@@ -1,3 +1,12 @@
+## [3.1.10](https://github.com/oclif/plugin-plugins/compare/3.1.9...3.1.10) (2023-08-05)
+
+
+### Bug Fixes
+
+* **deps:** bump tslib from 2.6.0 to 2.6.1 ([95298ad](https://github.com/oclif/plugin-plugins/commit/95298addf81e13690ce355ba578a9f49e893b1f5))
+
+
+
 ## [3.1.9](https://github.com/oclif/plugin-plugins/compare/3.1.8...3.1.9) (2023-08-05)
 
 
