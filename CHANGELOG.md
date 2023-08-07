@@ -1,3 +1,12 @@
+# [3.2.0](https://github.com/oclif/plugin-plugins/compare/3.1.10...3.2.0) (2023-08-07)
+
+
+### Features
+
+* use spawn instead of fork ([#638](https://github.com/oclif/plugin-plugins/issues/638)) ([e3e745b](https://github.com/oclif/plugin-plugins/commit/e3e745b9c93c6f137d8605fdd6d6fd9e2173307f))
+
+
+
 ## [3.1.10](https://github.com/oclif/plugin-plugins/compare/3.1.9...3.1.10) (2023-08-05)
 
 
