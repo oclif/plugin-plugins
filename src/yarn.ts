@@ -44,7 +44,7 @@ export default class Yarn {
 
   spawn(executable: string, args: string[] = [], options: any = {}): Promise<void> {
     return new Promise((resolve, reject) => {
-      const spawned = spawn(executable, args, options)
+      const spawned = spawn(executable, args, {...options, shell: true})
       spawned.stderr.on('data', (d: any) => process.stderr.write(d))
       spawned.stdout.setEncoding('utf8')
       spawned.stdout.on('data', (d: any) => {
