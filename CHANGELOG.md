@@ -1,3 +1,12 @@
+## [3.2.1](https://github.com/oclif/plugin-plugins/compare/3.2.0...3.2.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* add shell option to spawn ([b7ba429](https://github.com/oclif/plugin-plugins/commit/b7ba4299b1b3bf9b31fc71fca3c2b9f062cbe193))
+
+
+
 # [3.2.0](https://github.com/oclif/plugin-plugins/compare/3.1.10...3.2.0) (2023-08-07)
 
 
