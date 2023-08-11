@@ -1,3 +1,12 @@
+## [3.2.4](https://github.com/oclif/plugin-plugins/compare/3.2.3...3.2.4) (2023-08-11)
+
+
+### Bug Fixes
+
+* remove ts-node/esm loader from execArgv when using child_process.fork ([167419a](https://github.com/oclif/plugin-plugins/commit/167419ae34be6b84931c8b3e5716626a70ce99f4))
+
+
+
 ## [3.2.3](https://github.com/oclif/plugin-plugins/compare/3.2.2...3.2.3) (2023-08-11)
 
 
