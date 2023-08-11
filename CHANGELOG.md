@@ -1,3 +1,12 @@
+## [3.2.3](https://github.com/oclif/plugin-plugins/compare/3.2.2...3.2.3) (2023-08-11)
+
+
+### Bug Fixes
+
+* more yarn debugging ([1a733da](https://github.com/oclif/plugin-plugins/commit/1a733daed2e92e01c111f511c5df61adeeaf37e9))
+
+
+
 ## [3.2.2](https://github.com/oclif/plugin-plugins/compare/3.2.1...3.2.2) (2023-08-11)
 
 
