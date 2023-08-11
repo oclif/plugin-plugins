@@ -54,6 +54,7 @@ export default class Plugins {
     {tag = 'latest', force = false} = {},
   ): Promise<Interfaces.Config> {
     try {
+      this.debug(`installing plugin ${name}`)
       const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
       await this.createPJSON()
       let plugin
@@ -85,12 +86,15 @@ export default class Plugins {
         }
 
         await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
+
+        this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
           devPlugins: false,
           userPlugins: false,
           root: path.join(this.config.dataDir, 'node_modules', name),
           name,
         })
+        this.debug(`finished loading plugin ${name} at root ${plugin.root}`)
 
         this.isValidPlugin(plugin)
 
@@ -100,6 +104,7 @@ export default class Plugins {
 
       return plugin
     } catch (error: any) {
+      this.debug('error installing plugin:', error)
       await this.uninstall(name).catch(error => this.debug(error))
 
       if (String(error).includes('EACCES')) {
@@ -120,11 +125,14 @@ export default class Plugins {
     {prod = true}: { prod?: boolean } = {},
   ): Promise<void> {
     if (fs.existsSync(path.join(root, 'yarn.lock'))) {
+      this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
       // use yarn.lock to fetch dependencies
       await this.yarn.exec(prod ? ['--prod'] : [], {
         cwd: root,
         verbose: this.verbose,
       })
+    } else {
+      this.debug(`no yarn.lock exists at ${root}. Skipping dependency refresh`)
     }
   }
 
@@ -289,6 +297,7 @@ export default class Plugins {
 
   private async createPJSON() {
     if (!fs.existsSync(this.pjsonPath)) {
+      this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
       await this.savePJSON(initPJSON)
     }
   }
@@ -326,8 +335,8 @@ export default class Plugins {
 
   private async savePJSON(pjson: Interfaces.PJSON.User) {
     pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
-    const fs: typeof fse = require('fs-extra')
-    await fs.outputJSON(this.pjsonPath, pjson, {spaces: 2})
+    this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
+    await fse.outputJSON(this.pjsonPath, pjson, {spaces: 2})
   }
 
   private normalizePlugins(

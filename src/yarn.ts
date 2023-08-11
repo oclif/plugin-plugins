@@ -108,8 +108,9 @@ export default class Yarn {
         await this.spawn(this.bin, args, options) :
         await this.fork(this.bin, args, options)
 
-      debug('done')
+      debug('yarn done')
     } catch (error: any) {
+      debug('yarn error', error)
       // to-do: https://github.com/yarnpkg/yarn/issues/2191
       const networkConcurrency = '--network-concurrency=1'
       if (error.message.includes('EAI_AGAIN') && !args.includes(networkConcurrency)) {
