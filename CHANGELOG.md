@@ -1,3 +1,12 @@
+## [3.2.5](https://github.com/oclif/plugin-plugins/compare/3.2.4...3.2.5) (2023-08-11)
+
+
+### Bug Fixes
+
+* remove debug that logs all env vars ([8c27903](https://github.com/oclif/plugin-plugins/commit/8c27903097f1de4f2dba465464489a284694d5f3))
+
+
+
 ## [3.2.4](https://github.com/oclif/plugin-plugins/compare/3.2.3...3.2.4) (2023-08-11)
 
 
