@@ -17,7 +17,6 @@ export default class Yarn {
   }
 
   fork(modulePath: string, args: string[] = [], options: any = {}): Promise<void> {
-    debug('child_process.fork options:', options)
     return new Promise((resolve, reject) => {
       const forked = fork(modulePath, args, options)
       forked.stderr?.on('data', (d: any) => process.stderr.write(d))
@@ -44,7 +43,6 @@ export default class Yarn {
   }
 
   spawn(executable: string, args: string[] = [], options: any = {}): Promise<void> {
-    debug('child_process.spawn options:', options)
     return new Promise((resolve, reject) => {
       const spawned = spawn(executable, args, {...options, shell: true})
       spawned.stderr.setEncoding('utf8')
