@@ -17,6 +17,7 @@ export default class Yarn {
   }
 
   fork(modulePath: string, args: string[] = [], options: any = {}): Promise<void> {
+    debug('child_process.fork options:', options)
     return new Promise((resolve, reject) => {
       const forked = fork(modulePath, args, options)
       forked.stderr?.on('data', (d: any) => process.stderr.write(d))
@@ -43,6 +44,7 @@ export default class Yarn {
   }
 
   spawn(executable: string, args: string[] = [], options: any = {}): Promise<void> {
+    debug('child_process.spawn options:', options)
     return new Promise((resolve, reject) => {
       const spawned = spawn(executable, args, {...options, shell: true})
       spawned.stderr.setEncoding('utf8')
@@ -100,6 +102,9 @@ export default class Yarn {
       cwd,
       stdio: [0, null, null, 'ipc'],
       env: npmRunPath.env({cwd, env: process.env}),
+      // Remove --loader ts-node/esm from execArgv so that the subprocess doesn't fail if it can't find ts-node.
+      // The ts-node/esm loader isn't need to execute yarn commands anyways.
+      execArgv: process.execArgv.join(' ').replace('--loader ts-node/esm', '').split(' ').filter(Boolean),
     }
 
     if (opts.verbose) {
