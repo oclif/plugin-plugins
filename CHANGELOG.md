@@ -1,3 +1,12 @@
+## [3.2.2](https://github.com/oclif/plugin-plugins/compare/3.2.1...3.2.2) (2023-08-11)
+
+
+### Bug Fixes
+
+* add more debug logs ([08604cf](https://github.com/oclif/plugin-plugins/commit/08604cff3fc07e6044d23d596d9037a90b5da3bb))
+
+
+
 ## [3.2.1](https://github.com/oclif/plugin-plugins/compare/3.2.0...3.2.1) (2023-08-10)
 
 
