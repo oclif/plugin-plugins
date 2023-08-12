@@ -772,10 +772,10 @@
     read-package-json-fast "^3.0.0"
     which "^3.0.0"
 
-"@oclif/color@^1.0.3", "@oclif/color@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@oclif/color/-/color-1.0.4.tgz#07e54e3bd76a29e77d6ad71aef33222fe4f728e7"
-  integrity sha512-HEcVnSzpQkjskqWJyVN3tGgR0H0F8GrBmDjgQ1N0ZwwktYa4y9kfV07P/5vt5BjPXNyslXHc4KAO8Bt7gmErCA==
+"@oclif/color@^1.0.10", "@oclif/color@^1.0.3":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@oclif/color/-/color-1.0.10.tgz#e83e3a30fffc93076281398cbeaa4f761c4df09e"
+  integrity sha512-INWEDAL3SzzR3pIhkrqk22HV6JravLUeRZXAIpoQqIeLReauaibCVcNTzOlt0z0S8YrqRhksc54ZxZC4Oa8xBw==
   dependencies:
     ansi-styles "^4.2.1"
     chalk "^4.1.0"
