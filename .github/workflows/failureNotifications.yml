@@ -5,6 +5,7 @@ on:
     workflows:
       - version, tag and github release
       - publish
+      - update-npm-version
     types:
       - completed
 
