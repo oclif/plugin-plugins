@@ -85,7 +85,7 @@ export default class PluginsInspect extends Command {
   }
 
   findPlugin(pluginName: string): Plugin {
-    const pluginConfig = this.config.plugins.find(plg => plg.name === pluginName)
+    const pluginConfig = this.config.getPluginsList().find(plg => plg.name === pluginName)
 
     if (pluginConfig) return pluginConfig as Plugin
     throw new Error(`${pluginName} not installed`)
