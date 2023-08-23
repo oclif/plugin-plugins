@@ -22,7 +22,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
     "@oclif/plugin-help": "^5.2.17",
-    "@oclif/test": "^2.4.4",
+    "@oclif/test": "^2.4.7",
     "@types/chai": "^4.3.4",
     "@types/fs-extra": "^9.0",
     "@types/mocha": "^8.2.3",
@@ -61,7 +61,6 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "scope": "heroku-cli",
     "hooks": {
       "update": "./lib/hooks/update.js"
     },
