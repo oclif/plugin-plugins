@@ -24,6 +24,7 @@ jobs:
       # Push changes if 'git status' is not empty
       - run: |
           if [[ -n $(git status --short) ]]; then
+            yarn test
             git add -A
             git commit -m "fix: update npm version"
             git push
