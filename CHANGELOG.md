@@ -1,3 +1,12 @@
+# [3.3.0](https://github.com/oclif/plugin-plugins/compare/3.2.7...3.3.0) (2023-08-23)
+
+
+### Features
+
+* prep for @oclif/core v3 ([#646](https://github.com/oclif/plugin-plugins/issues/646)) ([c175ab2](https://github.com/oclif/plugin-plugins/commit/c175ab276e89a150560267d2901e830e57d2ff02))
+
+
+
 ## [3.2.7](https://github.com/oclif/plugin-plugins/compare/3.2.6...3.2.7) (2023-08-19)
 
 
