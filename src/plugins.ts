@@ -15,6 +15,15 @@ const initPJSON: Interfaces.PJSON.User = {
   dependencies: {},
 }
 
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    await fs.promises.access(filePath)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export default class Plugins {
   verbose = false;
 
@@ -124,15 +133,23 @@ export default class Plugins {
     root: string,
     {prod = true}: { prod?: boolean } = {},
   ): Promise<void> {
-    if (fs.existsSync(path.join(root, 'yarn.lock'))) {
-      this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
+    const doRefresh = async () => {
       // use yarn.lock to fetch dependencies
       await this.yarn.exec(prod ? ['--prod'] : [], {
         cwd: root,
         verbose: this.verbose,
       })
+    }
+
+    if (await fileExists(path.join(root, 'deps.lock'))) {
+      this.debug(`deps.lock exists at ${root}. Installing prod dependencies`)
+      await fs.promises.rename(path.join(root, 'deps.lock'), path.join(root, 'yarn.lock'))
+      await doRefresh()
+    } else if (await fileExists(path.join(root, 'yarn.lock'))) {
+      this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
+      await doRefresh()
     } else {
-      this.debug(`no yarn.lock exists at ${root}. Skipping dependency refresh`)
+      this.debug(`no yarn.lock or deps.lock exists at ${root}. Skipping dependency refresh`)
     }
   }
 
