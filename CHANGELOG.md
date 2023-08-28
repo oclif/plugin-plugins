@@ -1,3 +1,12 @@
+## [3.3.1](https://github.com/oclif/plugin-plugins/compare/3.3.0...3.3.1) (2023-08-28)
+
+
+### Bug Fixes
+
+* update npm version ([9545ec7](https://github.com/oclif/plugin-plugins/commit/9545ec725d42b409a4043b4298ab053a87c4a861))
+
+
+
 # [3.3.0](https://github.com/oclif/plugin-plugins/compare/3.2.7...3.3.0) (2023-08-23)
 
 
