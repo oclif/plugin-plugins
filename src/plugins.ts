@@ -1,7 +1,6 @@
 import {Errors, Config, Interfaces, ux} from '@oclif/core'
 import * as shelljs from 'shelljs'
 import * as fs from 'fs'
-import * as fse from 'fs-extra'
 import loadJSON from 'load-json-file'
 import * as path from 'path'
 import * as semver from 'semver'
@@ -336,7 +335,7 @@ export default class Plugins {
   private async savePJSON(pjson: Interfaces.PJSON.User) {
     pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
     this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
-    await fse.outputJSON(this.pjsonPath, pjson, {spaces: 2})
+    await fs.promises.writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
   }
 
   private normalizePlugins(
