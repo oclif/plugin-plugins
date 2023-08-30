@@ -335,6 +335,7 @@ export default class Plugins {
   private async savePJSON(pjson: Interfaces.PJSON.User) {
     pjson.oclif.plugins = this.normalizePlugins(pjson.oclif.plugins)
     this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
+    await fs.promises.mkdir(path.dirname(this.pjsonPath), {recursive: true})
     await fs.promises.writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
   }
 
