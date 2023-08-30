@@ -141,15 +141,16 @@ export default class Plugins {
       })
     }
 
-    if (await fileExists(path.join(root, 'deps.lock'))) {
-      this.debug(`deps.lock exists at ${root}. Installing prod dependencies`)
-      await fs.promises.rename(path.join(root, 'deps.lock'), path.join(root, 'yarn.lock'))
+    if (await fileExists(path.join(root, 'oclif.lock'))) {
+      this.debug(`oclif.lock exists at ${root}. Installing prod dependencies`)
+      await fs.promises.rename(path.join(root, 'oclif.lock'), path.join(root, 'yarn.lock'))
       await doRefresh()
+      await fs.promises.unlink(path.join(root, 'yarn.lock'))
     } else if (await fileExists(path.join(root, 'yarn.lock'))) {
       this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
       await doRefresh()
     } else {
-      this.debug(`no yarn.lock or deps.lock exists at ${root}. Skipping dependency refresh`)
+      this.debug(`no yarn.lock or oclif.lock exists at ${root}. Skipping dependency refresh`)
     }
   }
 
