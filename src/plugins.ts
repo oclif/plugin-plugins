@@ -15,6 +15,15 @@ const initPJSON: Interfaces.PJSON.User = {
   dependencies: {},
 }
 
+async function fileExists(filePath: string): Promise<boolean> {
+  try {
+    await fs.promises.access(filePath)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export default class Plugins {
   verbose = false;
 
@@ -119,20 +128,43 @@ export default class Plugins {
     }
   }
 
-  // if yarn.lock exists, fetch locked dependencies
+  /**
+   * If a yarn.lock or oclif.lock exists at the root, refresh dependencies by
+   * rerunning yarn. If options.prod is true, only install production dependencies.
+   *
+   * As of v9 npm will always ignore the yarn.lock during `npm pack`]
+   * (see https://github.com/npm/cli/issues/6738). To get around this plugins can
+   * rename yarn.lock to oclif.lock before running `npm pack`.
+   *
+   * We still check for the existence of yarn.lock since it could be included if a plugin was
+   * packed using yarn or v8 of npm. Plugins installed directly from a git url will also
+   * have a yarn.lock.
+   *
+   * @param root string
+   * @param options {prod?: boolean}
+   * @returns Promise<void>
+   */
   async refresh(
     root: string,
     {prod = true}: { prod?: boolean } = {},
   ): Promise<void> {
-    if (fs.existsSync(path.join(root, 'yarn.lock'))) {
-      this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
-      // use yarn.lock to fetch dependencies
+    const doRefresh = async () => {
       await this.yarn.exec(prod ? ['--prod'] : [], {
         cwd: root,
         verbose: this.verbose,
       })
+    }
+
+    if (await fileExists(path.join(root, 'yarn.lock'))) {
+      this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
+      await doRefresh()
+    } else if (await fileExists(path.join(root, 'oclif.lock'))) {
+      this.debug(`oclif.lock exists at ${root}. Installing prod dependencies`)
+      await fs.promises.rename(path.join(root, 'oclif.lock'), path.join(root, 'yarn.lock'))
+      await doRefresh()
+      await fs.promises.unlink(path.join(root, 'yarn.lock'))
     } else {
-      this.debug(`no yarn.lock exists at ${root}. Skipping dependency refresh`)
+      this.debug(`no yarn.lock or oclif.lock exists at ${root}. Skipping dependency refresh`)
     }
   }
 
