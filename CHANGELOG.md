@@ -1,3 +1,12 @@
+# [3.4.0](https://github.com/oclif/plugin-plugins/compare/3.3.2...3.4.0) (2023-09-01)
+
+
+### Features
+
+* check for renamed yarn.lock during install ([#648](https://github.com/oclif/plugin-plugins/issues/648)) ([9830b0a](https://github.com/oclif/plugin-plugins/commit/9830b0a03bbd98549e129d8f669fa9cd48ef3e5e))
+
+
+
 ## [3.3.2](https://github.com/oclif/plugin-plugins/compare/3.3.1...3.3.2) (2023-08-29)
 
 
