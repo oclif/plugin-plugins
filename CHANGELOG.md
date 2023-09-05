@@ -1,3 +1,12 @@
+## [3.4.2](https://github.com/oclif/plugin-plugins/compare/3.4.1...3.4.2) (2023-09-05)
+
+
+### Bug Fixes
+
+* no fs-extra ([#653](https://github.com/oclif/plugin-plugins/issues/653)) ([1c2389d](https://github.com/oclif/plugin-plugins/commit/1c2389d4ccf5009ff6039b842c223e8dc0ead377))
+
+
+
 ## [3.4.1](https://github.com/oclif/plugin-plugins/compare/3.4.0...3.4.1) (2023-09-05)
 
 
