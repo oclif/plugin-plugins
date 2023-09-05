@@ -1,8 +1,7 @@
 import * as path from 'path'
 import {Args, Command, Flags, Plugin, ux} from '@oclif/core'
 import * as chalk from 'chalk'
-import * as fs from 'fs-extra'
-
+import {readFile} from 'fs/promises'
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
 
@@ -52,7 +51,7 @@ export default class PluginsInspect extends Command {
     const plugins: Plugin[] = []
     for (let name of argv as string[]) {
       if (name === '.') {
-        const pkgJson = JSON.parse(await fs.readFile('package.json', 'utf-8'))
+        const pkgJson = JSON.parse(await readFile('package.json', 'utf-8'))
         name = pkgJson.name
       }
 
@@ -134,12 +133,14 @@ export default class PluginsInspect extends Command {
       paths.push(start)
     }
 
+    // TODO: use promise.any to check the paths in parallel
+    // requires node >= 16
     for (const p of paths) {
       const fullPath = path.join(p, dependencyPath)
       const pkgJsonPath = path.join(fullPath, 'package.json')
       try {
         // eslint-disable-next-line no-await-in-loop
-        const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, 'utf-8'))
+        const pkgJson = JSON.parse(await readFile(pkgJsonPath, 'utf-8'))
         return {version: pkgJson.version as string, pkgPath: fullPath}
       } catch {
         // try the next path
