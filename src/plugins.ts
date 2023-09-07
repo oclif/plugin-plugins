@@ -163,8 +163,7 @@ export default class Plugins {
       pluginRoots.push(...userPluginsRoots)
     }
 
-    const deduped = [...new Set(roots)]
-
+    const deduped = [...new Set(pluginRoots)]
     await Promise.all(deduped.map(async r => {
       if (await fileExists(path.join(r, 'yarn.lock'))) {
         this.debug(`yarn.lock exists at ${r}. Installing prod dependencies`)
