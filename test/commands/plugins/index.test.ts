@@ -95,6 +95,17 @@ describe('command', () => {
   .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
   .it('installs and uninstalls plugin with oclif.lock')
 
+  test
+  .command(['plugins:install', '@salesforce/plugin-custom-metadata@2.2.0'], {reset: true})
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.contain('custom-metadata'))
+  .command(['plugins:uninstall', '@salesforce/plugin-custom-metadata'])
+  .stdout()
+  .command(['plugins'], {reset: true})
+  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
+  .it('installs and uninstalls specific plugin version with oclif.lock')
+
   // test
   // .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
   // .stdout()
