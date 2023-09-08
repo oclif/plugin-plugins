@@ -13,6 +13,9 @@ function trimUntil(fsPath: string, part: string): string {
   return parts.slice(0, partIndex + 1).join(path.sep)
 }
 
+type Dependencies = Record<string, {from: string, version: string}>
+type PluginWithDeps = Plugin & {deps: Dependencies}
+
 export default class PluginsInspect extends Command {
   static description = 'Displays installation properties of a plugin.';
 
@@ -44,11 +47,11 @@ export default class PluginsInspect extends Command {
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   /* eslint-disable no-await-in-loop */
-  async run(): Promise<Plugin[]> {
+  async run(): Promise<PluginWithDeps[]> {
     const {flags, argv} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
-    const plugins: Plugin[] = []
+    const plugins: PluginWithDeps[] = []
     for (let name of argv as string[]) {
       if (name === '.') {
         const pkgJson = JSON.parse(await readFile('package.json', 'utf-8'))
@@ -90,7 +93,7 @@ export default class PluginsInspect extends Command {
     throw new Error(`${pluginName} not installed`)
   }
 
-  async inspect(pluginName: string, verbose = false): Promise<Plugin> {
+  async inspect(pluginName: string, verbose = false): Promise<PluginWithDeps> {
     const plugin = this.findPlugin(pluginName)
     const tree = ux.tree()
     const pluginHeader = chalk.bold.cyan(plugin.name)
@@ -108,6 +111,7 @@ export default class PluginsInspect extends Command {
 
     tree.nodes[pluginHeader].insert('dependencies')
     const deps = sortBy(Object.keys(dependencies), d => d)
+    const depsJson: Dependencies = {}
     for (const dep of deps) {
       // eslint-disable-next-line no-await-in-loop
       const {version, pkgPath} = await this.findDep(plugin, dep)
@@ -118,10 +122,12 @@ export default class PluginsInspect extends Command {
       const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
 
       tree.nodes[pluginHeader].nodes.dependencies.insert(msg)
+      depsJson[dep] = {from, version}
     }
 
     if (!this.jsonEnabled()) tree.display()
-    return plugin
+
+    return {...plugin, deps: depsJson} as PluginWithDeps
   }
 
   async findDep(plugin: Plugin, dependency: string): Promise<{ version: string | null; pkgPath: string | null}> {
