@@ -20,7 +20,7 @@ jobs:
         with:
           max_attempts: 3
           retry_wait_seconds: 60
-          command: npm install -g @salesforce/cli@$latest --omit=dev
+          command: npm install -g @salesforce/cli@$nightly --omit=dev
           timeout_minutes: 60
       - name: Link plugin
         run: |
@@ -36,7 +36,12 @@ jobs:
           retry_on: error
           timeout_minutes: 60
       - name: Check for locked deps
-        run: sf plugins inspect custom-metadata
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: |
+            sf plugins:inspect custom-metadata
+            [[ $(sf plugins:inspect custom-metadata --json | jq -r "first.deps.\"@salesforce\/core\".version" != "5.26.0" ]] && echo @salesforce/core version is not locked at 5.26.0 && exit 1
+
 
   unit-tests:
     uses: oclif/github-workflows/.github/workflows/unitTest.yml@main
