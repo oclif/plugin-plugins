@@ -11,6 +11,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{matrix.os}}
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: lts/*
@@ -21,7 +22,12 @@ jobs:
           retry_wait_seconds: 60
           command: npm install -g @salesforce/cli@$latest --omit=dev
           timeout_minutes: 60
-      - name: Run NUT (with retries)
+      - name: Link plugin
+        run: |
+          yarn && yarn build
+          sf plugins link .
+          sf plugins --core
+      - name: Run Install (with retries)
         uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd
         with:
           max_attempts: 3
@@ -29,6 +35,8 @@ jobs:
           command: sf plugins install custom-metadata@2.2.1
           retry_on: error
           timeout_minutes: 60
+      - name: Check for locked deps
+        run: sf plugins inspect custom-metadata
 
   unit-tests:
     uses: oclif/github-workflows/.github/workflows/unitTest.yml@main
