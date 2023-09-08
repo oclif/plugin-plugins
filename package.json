@@ -78,6 +78,7 @@
     "lint": "eslint . --ext .ts --config .eslintrc",
     "pretest": "yarn build && tsc -p test --noEmit",
     "test": "mocha \"test/**/*.test.ts\"",
+    "test:integration": "mocha \"test/**/*.integration.ts\"",
     "posttest": "yarn lint",
     "prepublishOnly": "yarn run build && oclif manifest . && oclif readme",
     "postpublish": "yarn run clean",
