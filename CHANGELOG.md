@@ -1,3 +1,12 @@
+# [3.5.0](https://github.com/oclif/plugin-plugins/compare/3.4.2...3.5.0) (2023-09-08)
+
+
+### Features
+
+* integration tests ([#659](https://github.com/oclif/plugin-plugins/issues/659)) ([f06fbd8](https://github.com/oclif/plugin-plugins/commit/f06fbd8ddd756ecb50bb31d7f7b3ac131e9d4185))
+
+
+
 ## [3.4.2](https://github.com/oclif/plugin-plugins/compare/3.4.1...3.4.2) (2023-09-05)
 
 
