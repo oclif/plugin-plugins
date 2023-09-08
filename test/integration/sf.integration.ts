@@ -68,4 +68,24 @@ describe('sf Integration', () => {
 
     expect(plugin.deps).to.deep.equal(expected)
   })
+
+  it('should keep locked deps despite other plugin installs', async () => {
+    const result = await exec('sf plugins install settings')
+    expect(result.code).to.equal(0)
+
+    const inspectResult = await exec('sf plugins inspect custom-metadata --json')
+    const [plugin] = JSON.parse(inspectResult.stdout)
+
+    const expected = {
+      '@oclif/core': {from: '^2.15.0', version: '2.15.0'},
+      '@salesforce/core': {from: '^5.2.0', version: '5.2.6'},
+      '@salesforce/sf-plugins-core': {from: '^3.1.20', version: '3.1.21'},
+      '@salesforce/ts-types': {from: '^2.0.6', version: '2.0.7'},
+      'csv-parse': {from: '^5.4.0', version: '5.4.0'},
+      'fast-xml-parser': {from: '^4.2.7', version: '4.2.7'},
+      tslib: {from: '^2', version: '2.6.2'},
+    }
+
+    expect(plugin.deps).to.deep.equal(expected)
+  })
 })
