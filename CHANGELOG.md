@@ -1,3 +1,12 @@
+# [3.6.0](https://github.com/oclif/plugin-plugins/compare/3.5.0...3.6.0) (2023-09-11)
+
+
+### Features
+
+* refresh user plugins after any install ([#657](https://github.com/oclif/plugin-plugins/issues/657)) ([85c6b5c](https://github.com/oclif/plugin-plugins/commit/85c6b5cae51e1303b8ed97620cb23a128aef0a6b))
+
+
+
 # [3.5.0](https://github.com/oclif/plugin-plugins/compare/3.4.2...3.5.0) (2023-09-08)
 
 
