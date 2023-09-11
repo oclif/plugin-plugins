@@ -1,9 +1,10 @@
+/* eslint-disable no-await-in-loop */
 import {Errors, Config, Interfaces, ux} from '@oclif/core'
 import * as shelljs from 'shelljs'
 import * as fs from 'fs'
 import loadJSON from 'load-json-file'
 import * as path from 'path'
-import * as semver from 'semver'
+import {validRange, gt, valid} from 'semver'
 
 import {uniq, uniqWith, findNode, findNpm} from './util'
 import Yarn from './yarn'
@@ -80,14 +81,14 @@ export default class Plugins {
           root: path.join(this.config.dataDir, 'node_modules', name),
           name,
         })
-        await this.refresh(plugin.root)
+        await this.refresh({all: true, prod: true}, plugin.root)
 
         this.isValidPlugin(plugin)
 
         await this.add({name, url, type: 'user'})
       } else {
         // npm
-        const range = semver.validRange(tag)
+        const range = validRange(tag)
         const unfriendly = this.unfriendlyName(name)
         if (unfriendly && (await this.npmHasPackage(unfriendly))) {
           name = unfriendly
@@ -106,7 +107,7 @@ export default class Plugins {
 
         this.isValidPlugin(plugin)
 
-        await this.refresh(plugin.root)
+        await this.refresh({all: true, prod: true}, plugin.root)
         await this.add({name, tag: range || tag, type: 'user'})
       }
 
@@ -133,38 +134,48 @@ export default class Plugins {
    *
    * As of v9 npm will always ignore the yarn.lock during `npm pack`]
    * (see https://github.com/npm/cli/issues/6738). To get around this plugins can
-   * rename yarn.lock to oclif.lock before running `npm pack`.
+   * rename yarn.lock to oclif.lock before running `npm pack` using `oclif lock`.
    *
    * We still check for the existence of yarn.lock since it could be included if a plugin was
    * packed using yarn or v8 of npm. Plugins installed directly from a git url will also
    * have a yarn.lock.
    *
-   * @param root string
-   * @param options {prod?: boolean}
+   * @param options {prod: boolean, all: boolean}
+   * @param roots string[]
    * @returns Promise<void>
    */
   async refresh(
-    root: string,
-    {prod = true}: { prod?: boolean } = {},
+    options: { prod: boolean; all: boolean },
+    ...roots: string[]
   ): Promise<void> {
-    const doRefresh = async () => {
-      await this.yarn.exec(prod ? ['--prod'] : [], {
+    const doRefresh = async (root: string) => {
+      await this.yarn.exec(options.prod ? ['--prod'] : [], {
         cwd: root,
         verbose: this.verbose,
       })
     }
 
-    if (await fileExists(path.join(root, 'yarn.lock'))) {
-      this.debug(`yarn.lock exists at ${root}. Installing prod dependencies`)
-      await doRefresh()
-    } else if (await fileExists(path.join(root, 'oclif.lock'))) {
-      this.debug(`oclif.lock exists at ${root}. Installing prod dependencies`)
-      await fs.promises.rename(path.join(root, 'oclif.lock'), path.join(root, 'yarn.lock'))
-      await doRefresh()
-      await fs.promises.unlink(path.join(root, 'yarn.lock'))
-    } else {
-      this.debug(`no yarn.lock or oclif.lock exists at ${root}. Skipping dependency refresh`)
+    const pluginRoots = [...roots]
+    if (options.all) {
+      const userPluginsRoots = this.config.getPluginsList()
+      .filter(p => p.type === 'user')
+      .map(p => p.root)
+      pluginRoots.push(...userPluginsRoots)
     }
+
+    const deduped = [...new Set(pluginRoots)]
+    await Promise.all(deduped.map(async r => {
+      if (await fileExists(path.join(r, 'yarn.lock'))) {
+        this.debug(`yarn.lock exists at ${r}. Installing prod dependencies`)
+        await doRefresh(r)
+      } else if (await fileExists(path.join(r, 'oclif.lock'))) {
+        this.debug(`oclif.lock exists at ${r}. Installing prod dependencies`)
+        await fs.promises.rename(path.join(r, 'oclif.lock'), path.join(r, 'yarn.lock'))
+        await doRefresh(r)
+      } else {
+        this.debug(`no yarn.lock or oclif.lock exists at ${r}. Skipping dependency refresh`)
+      }
+    }))
   }
 
   async link(p: string): Promise<void> {
@@ -173,13 +184,13 @@ export default class Plugins {
     this.isValidPlugin(c)
 
     // refresh will cause yarn.lock to install dependencies, including devDeps
-    await this.refresh(c.root, {prod: false})
+    await this.refresh({prod: false, all: false}, c.root)
     await this.add({type: 'link', name: c.name, root: c.root})
   }
 
-  async add(plugin: Interfaces.PJSON.PluginTypes): Promise<void> {
+  async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
     const pjson = await this.pjson()
-    pjson.oclif.plugins = uniq([...(pjson.oclif.plugins || []), plugin]) as any
+    pjson.oclif.plugins = uniq([...(pjson.oclif.plugins || []), ...plugins]) as any
     await this.savePJSON(pjson)
   }
 
@@ -212,9 +223,6 @@ export default class Plugins {
     }
   }
 
-  // In this case we want these operations to happen
-  // sequentially so the `no-await-in-loop` rule is ignored
-  /* eslint-disable no-await-in-loop */
   async update(): Promise<void> {
     let plugins = (await this.list()).filter(
       (p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user',
@@ -241,23 +249,30 @@ export default class Plugins {
 
     const npmPlugins = plugins.filter(p => !p.url)
     const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
-
+    const modifiedPlugins: Interfaces.PJSON.PluginTypes[] = []
     if (npmPlugins.length > 0) {
       await this.yarn.exec(
         ['add', ...npmPlugins.map(p => {
+          // a not valid tag indicates that it's a dist-tag like 'latest'
+          if (!valid(p.tag)) return `${p.name}@${p.tag}`
+
+          if (p.tag && valid(p.tag) && jitPlugins[p.name] && gt(p.tag, jitPlugins[p.name])) {
+            // The user has installed a version of the JIT plugin that is newer than the one
+            // specified by the root plugin's JIT configuration. In this case, we want to
+            // keep the version installed by the user.
+            return `${p.name}@${p.tag}`
+          }
+
           const tag = jitPlugins[p.name] ?? p.tag
+          modifiedPlugins.push({...p, tag})
           return `${p.name}@${tag}`
         })],
         {cwd: this.config.dataDir, verbose: this.verbose},
       )
     }
 
-    for (const p of plugins) {
-      await this.refresh(
-        path.join(this.config.dataDir, 'node_modules', p.name),
-      )
-    }
-
+    await this.refresh({all: true, prod: true})
+    await this.add(...modifiedPlugins)
     ux.action.stop()
   }
   /* eslint-enable no-await-in-loop */
@@ -321,10 +336,6 @@ export default class Plugins {
     if (!match) return name
     return match[1]
   }
-
-  // private async loadPlugin(plugin: Config.PJSON.PluginTypes) {
-  //   return Config.load({...plugin as any, root: this.config.dataDir})
-  // }
 
   private async createPJSON() {
     if (!fs.existsSync(this.pjsonPath)) {
