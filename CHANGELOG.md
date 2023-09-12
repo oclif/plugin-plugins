@@ -1,3 +1,12 @@
+## [3.6.1](https://github.com/oclif/plugin-plugins/compare/3.6.0...3.6.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* update npm version ([74d5030](https://github.com/oclif/plugin-plugins/commit/74d5030874de52d61dd392360376ec9d7cecbf30))
+
+
+
 # [3.6.0](https://github.com/oclif/plugin-plugins/compare/3.5.0...3.6.0) (2023-09-11)
 
 
