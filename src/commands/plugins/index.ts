@@ -4,7 +4,7 @@ import {Command, Flags, Interfaces, Plugin, ux} from '@oclif/core'
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
 
-type JitPlugin =  {name: string; version: string; type: 'jit'}
+type JitPlugin =  {name: string; version: string; type: string}
 type PluginsJson = Array<Interfaces.Plugin | JitPlugin>
 
 export default class PluginsIndex extends Command {
@@ -32,17 +32,20 @@ export default class PluginsIndex extends Command {
       return []
     }
 
+    const results = this.config.getPluginsList()
+    const userAndLinkedPlugins = new Set(results.filter(p => p.type === 'user' || p.type === 'link').map(p => p.name))
     const jitPluginsConfig = this.config.pjson.oclif.jitPlugins ?? {}
 
-    const jitPlugins: JitPlugin[] = Object.entries(jitPluginsConfig).map(([name, version]) => ({name: this.plugins.friendlyName(name), version, type: 'jit'}))
+    const jitPlugins: JitPlugin[] = Object.entries(jitPluginsConfig)
+    .map(([name, version]) => ({name, version, type: 'jit'}))
+    .filter(p => !userAndLinkedPlugins.has(p.name))
+
     sortBy(jitPlugins, p => p.name)
 
     if (!this.jsonEnabled()) {
       this.display(plugins as Plugin[])
       this.displayJitPlugins(jitPlugins)
     }
-
-    const results = this.config.getPluginsList()
 
     return [...results, ...jitPlugins]
   }
@@ -61,7 +64,7 @@ export default class PluginsIndex extends Command {
     if (jitPlugins.length === 0) return
     this.log(chalk.dim('\nUninstalled JIT Plugins:'))
     for (const {name, version} of jitPlugins) {
-      this.log(`${name} ${chalk.dim(version)}`)
+      this.log(`${this.plugins.friendlyName(name)} ${chalk.dim(version)}`)
     }
   }
 
