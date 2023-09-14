@@ -1,4 +1,4 @@
-import {Command, Flags, ux, Args, Errors} from '@oclif/core'
+import {Command, Flags, ux, Args, Errors, Interfaces} from '@oclif/core'
 import * as validate from 'validate-npm-package-name'
 import * as chalk from 'chalk'
 
@@ -34,17 +34,22 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       char: 'f',
       description: 'Run yarn install with force flag.',
     }),
+    jit: Flags.boolean({
+      hidden: true,
+    }),
   };
 
   static aliases = ['plugins:add'];
 
   plugins = new Plugins(this.config);
+  flags!: Interfaces.InferredFlags<typeof PluginsInstall.flags>;
 
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   /* eslint-disable no-await-in-loop */
   async run(): Promise<void> {
     const {flags, argv} = await this.parse(PluginsInstall)
+    this.flags = flags
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {
@@ -98,6 +103,16 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     const [splitName, tag = 'latest'] = input.split('@')
     const name = await this.plugins.maybeUnfriendlyName(splitName)
     validateNpmPkgName(name)
+
+    if (this.flags.jit) {
+      const jitVersion = this.config.pjson.oclif?.jitPlugins?.[name]
+      if (jitVersion && input.includes('@')) {
+        this.warn(`--jit flag is present. Ignoring tag ${tag} and using the version specified in package.json (${jitVersion}).`)
+      }
+
+      return {name, tag: jitVersion ?? tag, type: 'npm'}
+    }
+
     return {name, tag, type: 'npm'}
   }
 }

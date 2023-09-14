@@ -90,6 +90,10 @@ export default class PluginsInspect extends Command {
     const pluginConfig = this.config.getPluginsList().find(plg => plg.name === pluginName)
 
     if (pluginConfig) return pluginConfig as Plugin
+    if (this.config.pjson.oclif.jitPlugins?.[pluginName]) {
+      this.warn(`Plugin ${pluginName} is a JIT plugin. It will be installed the first time you run one of it's commands.`)
+    }
+
     throw new Error(`${pluginName} not installed`)
   }
 
