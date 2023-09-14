@@ -36,6 +36,29 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     }),
     jit: Flags.boolean({
       hidden: true,
+      parse: async (input, ctx) => {
+        if (input === false || input === undefined) return input
+
+        const requestedPlugins = ctx.argv.filter(a => !a.startsWith('-'))
+        if (requestedPlugins.length === 0) return input
+
+        const jitPluginsConfig = ctx.config.pjson.oclif.jitPlugins ?? {}
+        if (Object.keys(jitPluginsConfig).length === 0) return input
+
+        const plugins = new Plugins(ctx.config)
+
+        const nonJitPlugins = await Promise.all(requestedPlugins.map(async plugin => {
+          const name = await plugins.maybeUnfriendlyName(plugin)
+          return {name, jit: Boolean(jitPluginsConfig[name])}
+        }))
+
+        const nonJitPluginsNames = nonJitPlugins.filter(p => !p.jit).map(p => p.name)
+        if (nonJitPluginsNames.length > 0) {
+          throw new Errors.CLIError(`The following plugins are not JIT plugins: ${nonJitPluginsNames.join(', ')}`)
+        }
+
+        return input
+      },
     }),
   };
 
