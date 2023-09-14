@@ -131,7 +131,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       const jitVersion = this.config.pjson.oclif?.jitPlugins?.[name]
       if (jitVersion) {
         if (input.includes('@')) this.warn(`--jit flag is present along side a tag. Ignoring tag ${tag} and using the version specified in package.json (${jitVersion}).`)
-        return {name, tag: jitVersion ?? tag, type: 'npm'}
+        return {name, tag: jitVersion, type: 'npm'}
       }
 
       this.warn(`--jit flag is present but ${name} is not a JIT plugin. Installing ${tag} instead.`)
