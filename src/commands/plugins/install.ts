@@ -1,4 +1,4 @@
-import {Command, Flags, ux, Args, Errors} from '@oclif/core'
+import {Command, Flags, ux, Args, Errors, Interfaces} from '@oclif/core'
 import * as validate from 'validate-npm-package-name'
 import * as chalk from 'chalk'
 
@@ -34,17 +34,45 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       char: 'f',
       description: 'Run yarn install with force flag.',
     }),
+    jit: Flags.boolean({
+      hidden: true,
+      parse: async (input, ctx) => {
+        if (input === false || input === undefined) return input
+
+        const requestedPlugins = ctx.argv.filter(a => !a.startsWith('-'))
+        if (requestedPlugins.length === 0) return input
+
+        const jitPluginsConfig = ctx.config.pjson.oclif.jitPlugins ?? {}
+        if (Object.keys(jitPluginsConfig).length === 0) return input
+
+        const plugins = new Plugins(ctx.config)
+
+        const nonJitPlugins = await Promise.all(requestedPlugins.map(async plugin => {
+          const name = await plugins.maybeUnfriendlyName(plugin)
+          return {name, jit: Boolean(jitPluginsConfig[name])}
+        }))
+
+        const nonJitPluginsNames = nonJitPlugins.filter(p => !p.jit).map(p => p.name)
+        if (nonJitPluginsNames.length > 0) {
+          throw new Errors.CLIError(`The following plugins are not JIT plugins: ${nonJitPluginsNames.join(', ')}`)
+        }
+
+        return input
+      },
+    }),
   };
 
   static aliases = ['plugins:add'];
 
   plugins = new Plugins(this.config);
+  flags!: Interfaces.InferredFlags<typeof PluginsInstall.flags>;
 
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   /* eslint-disable no-await-in-loop */
   async run(): Promise<void> {
     const {flags, argv} = await this.parse(PluginsInstall)
+    this.flags = flags
     if (flags.verbose) this.plugins.verbose = true
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {
@@ -58,7 +86,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       try {
         if (p.type === 'npm') {
           ux.action.start(
-            `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`,
+            `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name) + '@' + p.tag)}`,
           )
           plugin = await this.plugins.install(p.name, {
             tag: p.tag,
@@ -79,25 +107,47 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   /* eslint-enable no-await-in-loop */
 
   async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {url: string; type: 'repo'}> {
+    // git ssh url
     if (input.startsWith('git+ssh://') || input.endsWith('.git')) {
       return {url: input, type: 'repo'}
     }
 
-    if (input.includes('@') && input.includes('/')) {
-      input = input.slice(1)
-      const [name, tag = 'latest'] = input.split('@')
-      validateNpmPkgName('@' + name)
-      return {name: '@' + name, tag, type: 'npm'}
+    const getNameAndTag = async (input: string): Promise<{name: string; tag: string}> => {
+      const regexAtSymbolNotAtBeginning = /(?<!^)@/
+      const [splitName, tag = 'latest'] = input.split(regexAtSymbolNotAtBeginning)
+      const name = splitName.startsWith('@') ? splitName : await this.plugins.maybeUnfriendlyName(splitName)
+      validateNpmPkgName(name)
+
+      if (this.flags.jit) {
+        const jitVersion = this.config.pjson.oclif?.jitPlugins?.[name]
+        if (jitVersion) {
+          if (regexAtSymbolNotAtBeginning.test(input)) this.warn(`--jit flag is present along side a tag. Ignoring tag ${tag} and using the version specified in package.json (${jitVersion}).`)
+          return {name, tag: jitVersion}
+        }
+
+        this.warn(`--jit flag is present but ${name} is not a JIT plugin. Installing ${tag} instead.`)
+        return {name, tag}
+      }
+
+      return {name, tag}
+    }
+
+    // scoped npm package, e.g. @oclif/plugin-version
+    if (input.startsWith('@') && input.includes('/')) {
+      const {name, tag} = await getNameAndTag(input)
+      return {name, tag, type: 'npm'}
     }
 
     if (input.includes('/')) {
+      // github url, e.g. https://github.com/oclif/plugin-version
       if (input.includes(':')) return {url: input, type: 'repo'}
+      // github org/repo, e.g. oclif/plugin-version
       return {url: `https://github.com/${input}`, type: 'repo'}
     }
 
-    const [splitName, tag = 'latest'] = input.split('@')
-    const name = await this.plugins.maybeUnfriendlyName(splitName)
-    validateNpmPkgName(name)
+    // unscoped npm package, e.g. my-oclif-plugin
+    // friendly plugin name, e.g. version instead of @oclif/plugin-version (requires `scope` to be set in root plugin's package.json)
+    const {name, tag} = await getNameAndTag(input)
     return {name, tag, type: 'npm'}
   }
 }

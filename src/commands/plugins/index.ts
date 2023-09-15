@@ -1,8 +1,11 @@
 import * as chalk from 'chalk'
-import {Command, Flags, Plugin, ux} from '@oclif/core'
+import {Command, Flags, Interfaces, Plugin, ux} from '@oclif/core'
 
 import Plugins from '../../plugins'
 import {sortBy} from '../../util'
+
+type JitPlugin =  {name: string; version: string; type: string}
+type PluginsJson = Array<Interfaces.Plugin | JitPlugin>
 
 export default class PluginsIndex extends Command {
   static enableJsonFlag = true
@@ -16,7 +19,7 @@ export default class PluginsIndex extends Command {
 
   plugins = new Plugins(this.config)
 
-  async run(): Promise<ReturnType<Plugins['list']>> {
+  async run(): Promise<PluginsJson> {
     const {flags} = await this.parse(PluginsIndex)
     let plugins = this.config.getPluginsList()
     sortBy(plugins, p => this.plugins.friendlyName(p.name))
@@ -29,11 +32,22 @@ export default class PluginsIndex extends Command {
       return []
     }
 
+    const results = this.config.getPluginsList()
+    const userAndLinkedPlugins = new Set(results.filter(p => p.type === 'user' || p.type === 'link').map(p => p.name))
+    const jitPluginsConfig = this.config.pjson.oclif.jitPlugins ?? {}
+
+    const jitPlugins: JitPlugin[] = Object.entries(jitPluginsConfig)
+    .map(([name, version]) => ({name, version, type: 'jit'}))
+    .filter(p => !userAndLinkedPlugins.has(p.name))
+
+    sortBy(jitPlugins, p => p.name)
+
     if (!this.jsonEnabled()) {
       this.display(plugins as Plugin[])
+      this.displayJitPlugins(jitPlugins)
     }
 
-    return this.plugins.list()
+    return [...results, ...jitPlugins]
   }
 
   private display(plugins: Plugin[]) {
@@ -43,6 +57,14 @@ export default class PluginsIndex extends Command {
         const tree = this.createTree(plugin)
         tree.display()
       }
+    }
+  }
+
+  private displayJitPlugins(jitPlugins: JitPlugin[]) {
+    if (jitPlugins.length === 0) return
+    this.log(chalk.dim('\nUninstalled JIT Plugins:'))
+    for (const {name, version} of jitPlugins) {
+      this.log(`${this.plugins.friendlyName(name)} ${chalk.dim(version)}`)
     }
   }
 

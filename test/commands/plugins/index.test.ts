@@ -20,15 +20,18 @@ describe('command', () => {
   .it('installs and uninstalls @oclif/example-plugin-ts')
 
   test
+  .stdout()
   .command(['plugins', '--json'], {reset: true})
   .do(output => expect((output.returned)).to.deep.equal([]))
   .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
+  .stdout()
   .command(['plugins', '--json'], {reset: true})
   .do(output => expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.have.property('type', 'user'))
   .stdout()
   .command(['hello'], {reset: true})
   .do(output => expect(output.stdout).to.contain('hello world'))
   .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
+  .stdout()
   .command(['plugins', '--json'], {reset: true})
   .do(output => expect((output.returned)).to.deep.equal([]))
   .it('installs and uninstalls @oclif/example-plugin-ts (--json)')
