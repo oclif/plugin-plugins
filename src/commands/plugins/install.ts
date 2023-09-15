@@ -86,7 +86,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       try {
         if (p.type === 'npm') {
           ux.action.start(
-            `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name))}`,
+            `Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name) + '@' + p.tag)}`,
           )
           plugin = await this.plugins.install(p.name, {
             tag: p.tag,
@@ -107,37 +107,47 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   /* eslint-enable no-await-in-loop */
 
   async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {url: string; type: 'repo'}> {
+    // git ssh url
     if (input.startsWith('git+ssh://') || input.endsWith('.git')) {
       return {url: input, type: 'repo'}
     }
 
-    if (input.includes('@') && input.includes('/')) {
-      input = input.slice(1)
-      const [name, tag = 'latest'] = input.split('@')
-      validateNpmPkgName('@' + name)
-      return {name: '@' + name, tag, type: 'npm'}
-    }
+    const getNameAndTag = async (input: string): Promise<{name: string; tag: string}> => {
+      const regexAtSymbolNotAtBeginning = /(?<!^)@/
+      const [splitName, tag = 'latest'] = input.split(regexAtSymbolNotAtBeginning)
+      const name = splitName.startsWith('@') ? splitName : await this.plugins.maybeUnfriendlyName(splitName)
+      validateNpmPkgName(name)
 
-    if (input.includes('/')) {
-      if (input.includes(':')) return {url: input, type: 'repo'}
-      return {url: `https://github.com/${input}`, type: 'repo'}
-    }
+      if (this.flags.jit) {
+        const jitVersion = this.config.pjson.oclif?.jitPlugins?.[name]
+        if (jitVersion) {
+          if (regexAtSymbolNotAtBeginning.test(input)) this.warn(`--jit flag is present along side a tag. Ignoring tag ${tag} and using the version specified in package.json (${jitVersion}).`)
+          return {name, tag: jitVersion}
+        }
 
-    const [splitName, tag = 'latest'] = input.split('@')
-    const name = await this.plugins.maybeUnfriendlyName(splitName)
-    validateNpmPkgName(name)
-
-    if (this.flags.jit) {
-      const jitVersion = this.config.pjson.oclif?.jitPlugins?.[name]
-      if (jitVersion) {
-        if (input.includes('@')) this.warn(`--jit flag is present along side a tag. Ignoring tag ${tag} and using the version specified in package.json (${jitVersion}).`)
-        return {name, tag: jitVersion, type: 'npm'}
+        this.warn(`--jit flag is present but ${name} is not a JIT plugin. Installing ${tag} instead.`)
+        return {name, tag}
       }
 
-      this.warn(`--jit flag is present but ${name} is not a JIT plugin. Installing ${tag} instead.`)
+      return {name, tag}
+    }
+
+    // scoped npm package, e.g. @oclif/plugin-version
+    if (input.startsWith('@') && input.includes('/')) {
+      const {name, tag} = await getNameAndTag(input)
       return {name, tag, type: 'npm'}
     }
 
+    if (input.includes('/')) {
+      // github url, e.g. https://github.com/oclif/plugin-version
+      if (input.includes(':')) return {url: input, type: 'repo'}
+      // github org/repo, e.g. oclif/plugin-version
+      return {url: `https://github.com/${input}`, type: 'repo'}
+    }
+
+    // unscoped npm package, e.g. my-oclif-plugin
+    // friendly plugin name, e.g. version instead of @oclif/plugin-version (requires `scope` to be set in root plugin's package.json)
+    const {name, tag} = await getNameAndTag(input)
     return {name, tag, type: 'npm'}
   }
 }
