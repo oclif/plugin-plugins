@@ -1,3 +1,20 @@
+# [3.7.0](https://github.com/oclif/plugin-plugins/compare/3.6.1...3.7.0) (2023-09-15)
+
+
+### Bug Fixes
+
+* clean up ([3c2b6be](https://github.com/oclif/plugin-plugins/commit/3c2b6be4c42aecbcfeeab98e7cade4b763b94722))
+* remove install jit plugins from list ([d7c50bd](https://github.com/oclif/plugin-plugins/commit/d7c50bd78833485bd9d6174d0a4f9458666559b9))
+* warn if --jit used with non jit plugin ([26c5d4c](https://github.com/oclif/plugin-plugins/commit/26c5d4cae34b43bcc31c833f8fe4d2fe078c226a))
+
+
+### Features
+
+* incorporate jit plugins ([8b48a8c](https://github.com/oclif/plugin-plugins/commit/8b48a8c6aca37e041f924767c0232c48bea84acd))
+* use parse to prevent --jit on non-jit plugins ([71c7453](https://github.com/oclif/plugin-plugins/commit/71c74533d6bda15943ad6e3fab03ff696fb126a6))
+
+
+
 ## [3.6.1](https://github.com/oclif/plugin-plugins/compare/3.6.0...3.6.1) (2023-09-12)
 
 
