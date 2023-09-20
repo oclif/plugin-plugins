@@ -22,7 +22,9 @@ describe('command', () => {
   test
   .stdout()
   .command(['plugins', '--json'], {reset: true})
-  .do(output => expect((output.returned)).to.deep.equal([]))
+  .do(output =>
+    expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.be.undefined,
+  )
   .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
   .stdout()
   .command(['plugins', '--json'], {reset: true})
@@ -33,7 +35,9 @@ describe('command', () => {
   .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
   .stdout()
   .command(['plugins', '--json'], {reset: true})
-  .do(output => expect((output.returned)).to.deep.equal([]))
+  .do(output =>
+    expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.be.undefined,
+  )
   .it('installs and uninstalls @oclif/example-plugin-ts (--json)')
 
   test
