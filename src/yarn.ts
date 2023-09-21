@@ -51,7 +51,6 @@ export default class Yarn {
       const port = this.config.scopedEnvVar('NETWORK_MUTEX_PORT')
       const optionalPort = port ? `:${port}` : ''
       const mutex = this.config.scopedEnvVar('USE_NETWORK_MUTEX') ? `network${optionalPort}` : `file:${path.join(cwd, 'yarn.lock')}`
-      console.log('mutex', mutex);
       const cacheDir = path.join(this.config.cacheDir, 'yarn')
       args = [
         ...args,
