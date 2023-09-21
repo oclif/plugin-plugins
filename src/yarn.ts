@@ -46,11 +46,17 @@ export default class Yarn {
   async exec(args: string[] = [], opts: {cwd: string; verbose: boolean}): Promise<void> {
     const cwd = opts.cwd
     if (args[0] !== 'run') {
+      // https://classic.yarnpkg.com/lang/en/docs/cli/#toc-concurrency-and-mutex
+      // Default port is: 31997
+      const port = this.config.scopedEnvVar('NETWORK_MUTEX_PORT')
+      const optionalPort = port ? `:${port}` : ''
+      const mutex = this.config.scopedEnvVar('USE_NETWORK_MUTEX') ? `network${optionalPort}` : `file:${path.join(cwd, 'yarn.lock')}`
+      console.log('mutex', mutex);
       const cacheDir = path.join(this.config.cacheDir, 'yarn')
       args = [
         ...args,
         '--non-interactive',
-        `--mutex=file:${path.join(cwd, 'yarn.lock')}`,
+        `--mutex=${mutex}`,
         `--preferred-cache-folder=${cacheDir}`,
         '--check-files',
       ]
