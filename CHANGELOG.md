@@ -1,3 +1,12 @@
+# [3.8.0](https://github.com/oclif/plugin-plugins/compare/3.7.1...3.8.0) (2023-09-22)
+
+
+### Features
+
+* yarn network mutex ([68a3054](https://github.com/oclif/plugin-plugins/commit/68a30542b4758b0393d45e4242bcd77d4dc6cbad))
+
+
+
 ## [3.7.1](https://github.com/oclif/plugin-plugins/compare/3.7.0...3.7.1) (2023-09-19)
 
 
