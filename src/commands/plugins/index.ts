@@ -27,10 +27,7 @@ export default class PluginsIndex extends Command {
       plugins = plugins.filter(p => p.type !== 'core' && p.type !== 'dev')
     }
 
-    if (plugins.length === 0) {
-      this.log('No plugins installed.')
-      return []
-    }
+    if (plugins.length === 0) this.log('No plugins installed.')
 
     const results = this.config.getPluginsList()
     const userAndLinkedPlugins = new Set(results.filter(p => p.type === 'user' || p.type === 'link').map(p => p.name))
