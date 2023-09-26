@@ -1,3 +1,12 @@
+## [3.8.2](https://github.com/oclif/plugin-plugins/compare/3.8.1...3.8.2) (2023-09-26)
+
+
+### Bug Fixes
+
+* dont exit early if no user plugins ([abe4c0c](https://github.com/oclif/plugin-plugins/commit/abe4c0c0db187bc8626bc630d19f43ac92b6c2c5))
+
+
+
 ## [3.8.1](https://github.com/oclif/plugin-plugins/compare/3.8.0...3.8.1) (2023-09-26)
 
 
