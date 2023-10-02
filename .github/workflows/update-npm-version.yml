@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   schedule:
     # Tuesday 7a central (12 UTC)
-    - cron: '0 12 * * 2'
+    - cron: "0 12 * * 2"
 
 jobs:
   update-npm:
@@ -21,7 +21,10 @@ jobs:
         with:
           node-version: lts/*
       - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
-      - run: yarn add npm@$(npm -v)
+      - run: |
+          echo "package.json npm version: $(jq '.dependencies.npm' package.json)"
+          echo "GHA Node LTS npm version: $(node -v)"
+          yarn add npm@$(npm -v)
       - uses: salesforcecli/github-workflows/.github/actions/gitConfig@main
       # Push changes if 'git status' is not empty
       - run: |
