@@ -23,7 +23,7 @@ jobs:
       - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
       - run: |
           echo "package.json npm version: $(jq '.dependencies.npm' package.json)"
-          echo "GHA Node LTS npm version: $(node -v)"
+          echo "GHA Node LTS npm version: $(npm -v)"
           yarn add npm@$(npm -v)
       - uses: salesforcecli/github-workflows/.github/actions/gitConfig@main
       # Push changes if 'git status' is not empty
