@@ -30,4 +30,4 @@ jobs:
         run: yarn test:integration
 
   unit-tests:
-    uses: oclif/github-workflows/.github/workflows/unitTest.yml@main
+    uses: salesforcecli/github-workflows/.github/workflows/unitTest.yml@main
