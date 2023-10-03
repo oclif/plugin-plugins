@@ -22,7 +22,7 @@ jobs:
           node-version: lts/*
       - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
       - run: |
-          echo "package.json npm version: $(jq '.dependencies.npm' package.json)"
+          echo "package.json npm version: $(jq -r '.dependencies.npm' package.json)"
           echo "GHA Node LTS npm version: $(npm -v)"
           yarn add npm@$(npm -v)
       - uses: salesforcecli/github-workflows/.github/actions/gitConfig@main
