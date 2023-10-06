@@ -178,13 +178,13 @@ export default class Plugins {
     }))
   }
 
-  async link(p: string): Promise<void> {
+  async link(p: string, {install}: {install: boolean}): Promise<void> {
     const c = await Config.load(path.resolve(p))
     ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     this.isValidPlugin(c)
 
     // refresh will cause yarn.lock to install dependencies, including devDeps
-    await this.refresh({prod: false, all: false}, c.root)
+    if (install) await this.refresh({prod: false, all: false}, c.root)
     await this.add({type: 'link', name: c.name, root: c.root})
   }
 
