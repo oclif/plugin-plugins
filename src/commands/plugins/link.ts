@@ -21,6 +21,11 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
   static flags = {
     help: Flags.help({char: 'h'}),
     verbose: Flags.boolean({char: 'v'}),
+    install: Flags.boolean({
+      default: true,
+      allowNo: true,
+      description: 'Install dependencies after linking the plugin.',
+    }),
   }
 
   plugins = new Plugins(this.config)
@@ -29,7 +34,7 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
     const {flags, args} = await this.parse(PluginsLink)
     this.plugins.verbose = flags.verbose
     ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
-    await this.plugins.link(args.path)
+    await this.plugins.link(args.path, {install: flags.install})
     ux.action.stop()
   }
 }
