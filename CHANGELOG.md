@@ -1,3 +1,12 @@
+# [3.9.0](https://github.com/oclif/plugin-plugins/compare/3.8.4...3.9.0) (2023-10-09)
+
+
+### Features
+
+* allow --no-install on plugins link ([#679](https://github.com/oclif/plugin-plugins/issues/679)) ([f4ded5a](https://github.com/oclif/plugin-plugins/commit/f4ded5a8b21a6f9a4a18534740b7ac28b29366f3))
+
+
+
 ## [3.8.4](https://github.com/oclif/plugin-plugins/compare/3.8.3...3.8.4) (2023-10-03)
 
 
