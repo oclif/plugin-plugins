@@ -9,7 +9,6 @@
     "chalk": "^5.3.0",
     "debug": "^4.3.4",
     "http-call": "^5.2.2",
-    "load-json-file": "^5.3.0",
     "npm": "9.8.1",
     "npm-run-path": "^4.0.1",
     "semver": "^7.5.4",
@@ -21,7 +20,6 @@
     "@commitlint/config-conventional": "^17.8.0",
     "@oclif/plugin-help": "^6",
     "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^3.0.2",
     "@types/chai": "^4.3.6",
     "@types/debug": "^4.1.9",
     "@types/glob": "^8.1.0",
@@ -29,6 +27,7 @@
     "@types/node": "^18",
     "@types/semver": "^7.5.3",
     "@types/shelljs": "^0.8.13",
+    "@types/sinon": "^10.0.19",
     "@types/supports-color": "^7.2.0",
     "@types/validate-npm-package-name": "^4.0.0",
     "chai": "^4.3.10",
@@ -37,7 +36,6 @@
     "eslint-config-oclif": "^5.0.0",
     "eslint-config-oclif-typescript": "^3.0.6",
     "eslint-config-prettier": "^9.0.0",
-    "fancy-test": "^3.0.1",
     "globby": "^11.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.0.1",
@@ -46,6 +44,7 @@
     "oclif": "^4.0.2",
     "prettier": "^3.0.3",
     "shx": "^0.3.4",
+    "sinon": "^16.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
@@ -72,10 +71,11 @@
       "@oclif/plugin-help"
     ],
     "aliases": {
-      "aliasme": "oclif-debug"
+      "aliasme": "@oclif/plugin-test-esm-1"
     },
     "bin": "mycli",
     "flexibleTaxonomy": true,
+    "scope": "oclif",
     "topicSeparator": " "
   },
   "repository": "oclif/plugin-plugins",
@@ -90,8 +90,10 @@
     "prepublishOnly": "yarn run build && oclif lock && oclif manifest . && oclif readme",
     "pretest": "yarn build && tsc -p test --noEmit",
     "preversion": "yarn run clean",
-    "test": "mocha \"test/**/*.test.ts\"",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "test:integration": "mocha \"test/**/*.integration.ts\"",
+    "test:integration:sf": "mocha \"test/**/sf.integration.ts\"",
+    "test:integration:install": "mocha \"test/**/install.integration.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "type": "module",

@@ -3,7 +3,6 @@ import * as fsPromises from 'node:fs/promises'
 import {createRequire} from 'node:module'
 import {type} from 'node:os'
 import * as path from 'node:path'
-import * as shelljs from 'shelljs'
 
 type Types = boolean | number | string | undefined
 
@@ -58,8 +57,9 @@ const isExecutable = (filepath: string): boolean => {
  * @param root - The root path of the CLI (this.config.root).
  * @returns The path to the node executable.
  */
-export function findNode(root: string): string {
+export async function findNode(root: string): Promise<string> {
   const cliBinDirs = [path.join(root, 'bin'), path.join(root, 'client', 'bin')].filter((p) => fs.existsSync(p))
+  const {default: shelljs} = await import('shelljs')
 
   if (cliBinDirs.length > 0) {
     // Find the node executable

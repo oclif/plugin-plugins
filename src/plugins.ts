@@ -1,19 +1,26 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
-import loadJSON from 'load-json-file'
 import * as fs from 'node:fs'
+import {readFile} from 'node:fs/promises'
 import * as path from 'node:path'
 import {gt, valid, validRange} from 'semver'
-import * as shelljs from 'shelljs'
 
 import {findNode, findNpm, uniq, uniqWith} from './util.js'
 import Yarn from './yarn.js'
 
-const initPJSON: Interfaces.PJSON.User = {
+type UserPJSON = {
+  dependencies: Record<string, string>
+  oclif: {
+    plugins: Array<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User>
+    schema: number
+  }
+  private: boolean
+}
+
+const initPJSON: UserPJSON = {
   dependencies: {},
   oclif: {plugins: [], schema: 1},
   private: true,
-  version: '',
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -39,9 +46,14 @@ export default class Plugins {
 
   async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
     const pjson = await this.pjson()
-    pjson.oclif.plugins = uniq([...(pjson.oclif.plugins || []), ...plugins]) as typeof pjson.oclif.plugins
 
-    await this.savePJSON(pjson)
+    await this.savePJSON({
+      ...pjson,
+      oclif: {
+        ...pjson.oclif,
+        plugins: uniq([...(pjson.oclif.plugins || []), ...plugins]) as typeof pjson.oclif.plugins,
+      },
+    })
   }
 
   friendlyName(name: string): string {
@@ -141,7 +153,7 @@ export default class Plugins {
 
   async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
     const pjson = await this.pjson()
-    return this.normalizePlugins(pjson.oclif.plugins)
+    return pjson.oclif.plugins
   }
 
   async maybeUnfriendlyName(name: string): Promise<string> {
@@ -155,19 +167,17 @@ export default class Plugins {
     return name
   }
 
-  async pjson(): Promise<Interfaces.PJSON.User> {
-    try {
-      const pjson = await loadJSON<Interfaces.PJSON.User>(this.pjsonPath)
-      return {
-        ...initPJSON,
-        dependencies: {},
-        ...pjson,
-      }
-    } catch (error: unknown) {
-      this.debug(error)
-      const err = error as Error & {code?: string}
-      if (err.code !== 'ENOENT') process.emitWarning(err)
-      return initPJSON
+  async pjson(): Promise<UserPJSON> {
+    const pjson = await this.readPJSON()
+    const plugins = pjson ? this.normalizePlugins(pjson.oclif.plugins) : []
+    return {
+      ...initPJSON,
+      ...pjson,
+      oclif: {
+        ...initPJSON.oclif,
+        ...pjson?.oclif,
+        plugins,
+      },
     }
   }
 
@@ -228,9 +238,7 @@ export default class Plugins {
       ...pjson,
       oclif: {
         ...pjson.oclif,
-        plugins: this.normalizePlugins(pjson.oclif.plugins).filter(
-          (p) => p.name !== name,
-        ) as typeof pjson.oclif.plugins,
+        plugins: pjson.oclif.plugins.filter((p) => p.name !== name),
       },
     })
   }
@@ -245,7 +253,6 @@ export default class Plugins {
   async uninstall(name: string): Promise<void> {
     try {
       const pjson = await this.pjson()
-      // @ts-expect-error because typescript doesn't think plugins could ever be an object
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.yarn.exec(['remove', name], {
           cwd: this.config.dataDir,
@@ -316,16 +323,6 @@ export default class Plugins {
     ux.action.stop()
   }
 
-  async yarnNodeVersion(): Promise<string | undefined> {
-    try {
-      const f = await loadJSON<{nodeVersion: string}>(path.join(this.config.dataDir, 'node_modules', '.yarn-integrity'))
-      return f.nodeVersion
-    } catch (error: unknown) {
-      const err = error as Error & {code?: string}
-      if (err.code !== 'ENOENT') ux.warn(err)
-    }
-  }
-
   private async createPJSON() {
     if (!fs.existsSync(this.pjsonPath)) {
       this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
@@ -373,7 +370,7 @@ export default class Plugins {
   }
 
   private async npmHasPackage(name: string): Promise<boolean> {
-    const nodeExecutable = findNode(this.config.root)
+    const nodeExecutable = await findNode(this.config.root)
     const npmCli = await findNpm()
 
     this.debug(`Using node executable located at: ${nodeExecutable}`)
@@ -382,6 +379,7 @@ export default class Plugins {
     const command = `${nodeExecutable} ${npmCli} show ${name} dist-tags`
 
     try {
+      const {default: shelljs} = await import('shelljs')
       const npmShowResult = shelljs.exec(command, {
         async: false,
         encoding: 'utf8',
@@ -403,16 +401,19 @@ export default class Plugins {
     return path.join(this.config.dataDir, 'package.json')
   }
 
-  private async savePJSON(pjson: Interfaces.PJSON.User) {
-    const updated = {
-      ...pjson,
-      oclif: {
-        ...pjson.oclif,
-        plugins: this.normalizePlugins(pjson.oclif.plugins),
-      },
+  private async readPJSON(): Promise<Interfaces.PJSON.User | undefined> {
+    try {
+      return JSON.parse(await readFile(this.pjsonPath, 'utf8')) as Interfaces.PJSON.User
+    } catch (error: unknown) {
+      this.debug(error)
+      const err = error as Error & {code?: string}
+      if (err.code !== 'ENOENT') process.emitWarning(err)
     }
-    this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(updated, null, 2))
+  }
+
+  private async savePJSON(pjson: UserPJSON) {
+    this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
     await fs.promises.mkdir(path.dirname(this.pjsonPath), {recursive: true})
-    await fs.promises.writeFile(this.pjsonPath, JSON.stringify(updated, null, 2))
+    await fs.promises.writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
   }
 }
