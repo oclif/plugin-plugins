@@ -31,6 +31,7 @@ jobs:
       strategy:
         matrix:
           os: [ubuntu-latest, windows-latest]
+          test: ['test:integration:install', 'test:integration:link']
       runs-on: ${{matrix.os}}
       steps:
         - uses: actions/checkout@v3
@@ -40,7 +41,7 @@ jobs:
         - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
         - run: yarn build
         - name: Run tests
-          run: yarn test:integration:install
+          run: yarn ${{matrix.test}}
 
   unit-tests:
     uses: salesforcecli/github-workflows/.github/workflows/unitTest.yml@main

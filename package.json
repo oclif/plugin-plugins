@@ -94,6 +94,7 @@
     "test:integration": "mocha \"test/**/*.integration.ts\"",
     "test:integration:sf": "mocha \"test/**/sf.integration.ts\"",
     "test:integration:install": "mocha \"test/**/install.integration.ts\"",
+    "test:integration:link": "mocha \"test/**/link.integration.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "type": "module",
