@@ -5,7 +5,7 @@ import {rm} from 'node:fs/promises'
 export const test = Fancy.test
   // eslint-disable-next-line unicorn/prefer-top-level-await
   .finally(async () => {
-    const config = await Config.load()
+    const config = await Config.load(process.cwd())
     await Promise.all([
       // fs.remove(config.cacheDir),
       rm(config.configDir, {force: true, recursive: true}),
