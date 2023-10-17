@@ -1,17 +1,16 @@
+import {expect} from 'chai'
+import chalk from 'chalk'
 import {exec as cpExec} from 'node:child_process'
 import {mkdir} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
 
-import {expect} from 'chai'
-import {dim} from 'chalk'
-
-async function exec(command: string): Promise<{stdout: string, stderr: string, code: number}> {
+async function exec(command: string): Promise<{code: number; stderr: string; stdout: string}> {
   return new Promise((resolve, reject) => {
     cpExec(command, (error, stdout, stderr) => {
       if (error) {
         reject(error)
       } else {
-        resolve({stdout, stderr, code: 0})
+        resolve({code: 0, stderr, stdout})
       }
     })
   })
@@ -20,7 +19,7 @@ async function exec(command: string): Promise<{stdout: string, stderr: string, c
 async function ensureSfExists(): Promise<boolean> {
   try {
     const {stdout} = await exec('sf --version')
-    console.log('sf version:', dim(stdout.trim()))
+    console.log('sf version:', chalk.dim(stdout.trim()))
     return true
   } catch {
     return false
@@ -39,9 +38,9 @@ describe('sf Integration', () => {
     mkdir(process.env.SF_CACHE_DIR, {recursive: true})
     mkdir(process.env.SF_CONFIG_DIR, {recursive: true})
 
-    console.log('process.env.SF_DATA_DIR:', dim(process.env.SF_DATA_DIR))
-    console.log('process.env.SF_CACHE_DIR:', dim(process.env.SF_CACHE_DIR))
-    console.log('process.env.SF_CONFIG_DIR:', dim(process.env.SF_CONFIG_DIR))
+    console.log('process.env.SF_DATA_DIR:', chalk.dim(process.env.SF_DATA_DIR))
+    console.log('process.env.SF_CACHE_DIR:', chalk.dim(process.env.SF_CACHE_DIR))
+    console.log('process.env.SF_CONFIG_DIR:', chalk.dim(process.env.SF_CONFIG_DIR))
 
     await exec('sf plugins link')
     const {stdout} = await exec('sf plugins --core')

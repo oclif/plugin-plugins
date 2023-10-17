@@ -5,29 +5,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  integration-tests:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{matrix.os}}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: lts/*
-      - name: Install sf
-        uses: nick-fields/retry@943e742917ac94714d2f408a0e8320f2d1fcafcd
-        with:
-          max_attempts: 3
-          retry_wait_seconds: 60
-          command: npm install -g @salesforce/cli@$nightly --omit=dev
-          timeout_minutes: 60
-      - name: Build project
-        run: |
-          yarn
-          yarn build
-      - name: Run tests
-        run: yarn test:integration
-
-  unit-tests:
-    uses: salesforcecli/github-workflows/.github/workflows/unitTest.yml@main
+  yarn-lockfile-check:
+    uses: salesforcecli/github-workflows/.github/workflows/lockFileCheck.yml@main
+  linux-unit-tests:
+    needs: yarn-lockfile-check
+    uses: salesforcecli/github-workflows/.github/workflows/unitTestsLinux.yml@main
+  windows-unit-tests:
+    needs: linux-unit-tests
+    uses: salesforcecli/github-workflows/.github/workflows/unitTestsWindows.yml@main

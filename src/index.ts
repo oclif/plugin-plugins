@@ -1,1 +1,1 @@
-export {default} from './plugins'
+export {default} from './plugins.js'

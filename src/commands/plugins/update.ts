@@ -1,12 +1,8 @@
 import {Command, Flags} from '@oclif/core'
 
-import Plugins from '../../plugins'
+import Plugins from '../../plugins.js'
 
 export default class PluginsUpdate extends Command {
-  static topic = 'plugins'
-
-  static command = 'update'
-
   static description = 'Update installed plugins.'
 
   static flags = {

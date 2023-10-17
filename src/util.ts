@@ -1,31 +1,30 @@
-import * as shelljs from 'shelljs'
-import {type} from 'os'
-import * as fs from 'fs'
-import * as fsPromises from 'fs/promises'
+import * as fs from 'node:fs'
+import * as fsPromises from 'node:fs/promises'
+import {createRequire} from 'node:module'
+import {type} from 'node:os'
 import * as path from 'node:path'
+import * as shelljs from 'shelljs'
 
-export function sortBy<T>(arr: T[], fn: (i: T) => sortBy.Types | sortBy.Types[]): T[] {
-  function compare(a: sortBy.Types | sortBy.Types[], b: sortBy.Types | sortBy.Types[]): number {
-    a = a === undefined ? 0 : a
-    b = b === undefined ? 0 : b
+type Types = boolean | number | string | undefined
 
-    if (Array.isArray(a) && Array.isArray(b)) {
-      if (a.length === 0 && b.length === 0) return 0
-      const diff = compare(a[0], b[0])
-      if (diff !== 0) return diff
-      return compare(a.slice(1), b.slice(1))
-    }
+function compare(a: Types | Types[], b: Types | Types[]): number {
+  a = a === undefined ? 0 : a
+  b = b === undefined ? 0 : b
 
-    if (a < b) return -1
-    if (a > b) return 1
-    return 0
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length === 0 && b.length === 0) return 0
+    const diff = compare(a[0], b[0])
+    if (diff !== 0) return diff
+    return compare(a.slice(1), b.slice(1))
   }
 
-  return arr.sort((a, b) => compare(fn(a), fn(b)))
+  if (a < b) return -1
+  if (a > b) return 1
+  return 0
 }
 
-export namespace sortBy {
-  export type Types = string | number | undefined | boolean
+export function sortBy<T>(arr: T[], fn: (i: T) => Types | Types[]): T[] {
+  return arr.sort((a, b) => compare(fn(a), fn(b)))
 }
 
 export function uniq<T>(arr: T[]): T[] {
@@ -33,9 +32,23 @@ export function uniq<T>(arr: T[]): T[] {
 }
 
 export function uniqWith<T>(arr: T[], fn: (a: T, b: T) => boolean): T[] {
-  return arr.filter((a, i) => {
-    return !arr.find((b, j) => j > i && fn(a, b))
-  })
+  return arr.filter((a, i) => !arr.some((b, j) => j > i && fn(a, b)))
+}
+
+const isExecutable = (filepath: string): boolean => {
+  if (type() === 'Windows_NT') return filepath.endsWith('node.exe')
+
+  try {
+    if (filepath.endsWith('node')) {
+      // This checks if the filepath is executable on Mac or Linux, if it is not it errors.
+      fs.accessSync(filepath, fs.constants.X_OK)
+      return true
+    }
+  } catch {
+    return false
+  }
+
+  return false
 }
 
 /**
@@ -46,23 +59,7 @@ export function uniqWith<T>(arr: T[], fn: (a: T, b: T) => boolean): T[] {
  * @returns The path to the node executable.
  */
 export function findNode(root: string): string {
-  const isExecutable = (filepath: string): boolean => {
-    if (type() === 'Windows_NT') return filepath.endsWith('node.exe')
-
-    try {
-      if (filepath.endsWith('node')) {
-        // This checks if the filepath is executable on Mac or Linux, if it is not it errors.
-        fs.accessSync(filepath, fs.constants.X_OK)
-        return true
-      }
-    } catch {
-      return false
-    }
-
-    return false
-  }
-
-  const cliBinDirs = [path.join(root, 'bin'), path.join(root, 'client', 'bin')].filter(p => fs.existsSync(p))
+  const cliBinDirs = [path.join(root, 'bin'), path.join(root, 'client', 'bin')].filter((p) => fs.existsSync(p))
 
   if (cliBinDirs.length > 0) {
     // Find the node executable
@@ -91,6 +88,7 @@ export function findNode(root: string): string {
  * @returns The path to the `npm/bin/npm-cli.js` file.
  */
 export async function findNpm(): Promise<string> {
+  const require = createRequire(import.meta.url)
   const npmPjsonPath = require.resolve('npm/package.json')
   const npmPjson = JSON.parse(await fsPromises.readFile(npmPjsonPath, {encoding: 'utf8'}))
   const npmPath = npmPjsonPath.slice(0, Math.max(0, npmPjsonPath.lastIndexOf(path.sep)))

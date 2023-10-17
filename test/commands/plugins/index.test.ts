@@ -1,117 +1,127 @@
-import {expect, test} from '../../test'
 import {platform} from 'node:os'
+
+import {expect, test} from '../../test.js'
 
 describe('command', () => {
   test
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('@oclif/example-plugin-ts '))
-  .stdout()
-  .command(['hello'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('hello world'))
-  .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('installs and uninstalls @oclif/example-plugin-ts')
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.contain('@oclif/example-plugin-ts '))
+    .stdout()
+    .command(['hello'], {reset: true})
+    .do((output) => expect(output.stdout).to.contain('hello world'))
+    .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('installs and uninstalls @oclif/example-plugin-ts')
 
   test
-  .stdout()
-  .command(['plugins', '--json'], {reset: true})
-  .do(output =>
-    expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.be.undefined,
-  )
-  .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
-  .stdout()
-  .command(['plugins', '--json'], {reset: true})
-  .do(output => expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.have.property('type', 'user'))
-  .stdout()
-  .command(['hello'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('hello world'))
-  .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
-  .stdout()
-  .command(['plugins', '--json'], {reset: true})
-  .do(output =>
-    expect((output.returned as [{name: string}]).find(o => o.name === '@oclif/example-plugin-ts')).to.be.undefined,
-  )
-  .it('installs and uninstalls @oclif/example-plugin-ts (--json)')
+    .stdout()
+    .command(['plugins', '--json'], {reset: true})
+    .do(
+      (output) =>
+        expect((output.returned as [{name: string}]).find((o) => o.name === '@oclif/example-plugin-ts')).to.be
+          .undefined,
+    )
+    .command(['plugins:install', '@oclif/example-plugin-ts'], {reset: true})
+    .stdout()
+    .command(['plugins', '--json'], {reset: true})
+    .do((output) =>
+      expect((output.returned as [{name: string}]).find((o) => o.name === '@oclif/example-plugin-ts')).to.have.property(
+        'type',
+        'user',
+      ),
+    )
+    .stdout()
+    .command(['hello'], {reset: true})
+    .do((output) => expect(output.stdout).to.contain('hello world'))
+    .command(['plugins:uninstall', '@heroku-cli/plugin-@oclif/example-plugin-ts'])
+    .stdout()
+    .command(['plugins', '--json'], {reset: true})
+    .do(
+      (output) =>
+        expect((output.returned as [{name: string}]).find((o) => o.name === '@oclif/example-plugin-ts')).to.be
+          .undefined,
+    )
+    .it('installs and uninstalls @oclif/example-plugin-ts (--json)')
 
   test
-  .command(['plugins:install', '@oclif/example-plugin-ts@latest'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('@oclif/example-plugin-ts'))
-  .command(['plugins:uninstall', '@oclif/example-plugin-ts@latest'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('installs and uninstalls @oclif/example-plugin-ts with tags')
+    .command(['plugins:install', '@oclif/example-plugin-ts@latest'], {reset: true})
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.contain('@oclif/example-plugin-ts'))
+    .command(['plugins:uninstall', '@oclif/example-plugin-ts@latest'], {reset: true})
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('installs and uninstalls @oclif/example-plugin-ts with tags')
 
   if (platform() !== 'win32') {
     test
-    .command(['plugins:install', 'aliasme'], {reset: true})
+      .command(['plugins:install', 'aliasme'], {reset: true})
+      .stdout()
+      .command(['plugins'], {reset: true})
+      .do((output) => expect(output.stdout).to.contain('oclif-debug'))
+      .stdout()
+      .command(['debug'], {reset: true})
+      .do((output) => expect(output.stdout).to.contain('debug'))
+      .command(['plugins:uninstall', 'oclif-debug'])
+      .stdout()
+      .command(['plugins'], {reset: true})
+      .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+      .it('installs via an alias')
+  }
+
+  test
+    .command(['plugins:install', 'jdxcode/oclif-debug'], {reset: true})
     .stdout()
     .command(['plugins'], {reset: true})
-    .do(output => expect(output.stdout).to.contain('oclif-debug'))
+    .do((output) => expect(output.stdout).to.contain('oclif-debug'))
     .stdout()
     .command(['debug'], {reset: true})
-    .do(output => expect(output.stdout).to.contain('debug'))
+    .do((output) => expect(output.stdout).to.contain('debug'))
     .command(['plugins:uninstall', 'oclif-debug'])
     .stdout()
     .command(['plugins'], {reset: true})
-    .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-    .it('installs via an alias')
-  }
-
-  test
-  .command(['plugins:install', 'jdxcode/oclif-debug'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('oclif-debug'))
-  .stdout()
-  .command(['debug'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('debug'))
-  .command(['plugins:uninstall', 'oclif-debug'])
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('installs and uninstalls jdxcode/oclif-debug')
+    .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('installs and uninstalls jdxcode/oclif-debug')
 
   if (platform() !== 'win32') {
     test
-    .command(['plugins:install', 'stubbed'], {reset: true})
-    .catch(/1/)
-    .stdout()
-    .command(['plugins'], {reset: true})
-    .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-    .it('does not install if unsure if scoped package does not exist')
+      .command(['plugins:install', 'stubbed'], {reset: true})
+      .catch(/1/)
+      .stdout()
+      .command(['plugins'], {reset: true})
+      .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+      .it('does not install if unsure if scoped package does not exist')
   }
 
   test
-  .command(['plugins:install', '@salesforce/plugin-custom-metadata'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('custom-metadata'))
-  .command(['plugins:uninstall', '@salesforce/plugin-custom-metadata'])
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('installs and uninstalls plugin with oclif.lock')
+    .command(['plugins:install', '@salesforce/plugin-custom-metadata'], {reset: true})
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.contain('custom-metadata'))
+    .command(['plugins:uninstall', '@salesforce/plugin-custom-metadata'])
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('installs and uninstalls plugin with oclif.lock')
 
   test
-  .command(['plugins:install', '@salesforce/plugin-custom-metadata@2.2.0'], {reset: true})
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.contain('custom-metadata'))
-  .command(['plugins:uninstall', '@salesforce/plugin-custom-metadata'])
-  .stdout()
-  .command(['plugins'], {reset: true})
-  .do(output => expect(output.stdout).to.equal('No plugins installed.\n'))
-  .it('installs and uninstalls specific plugin version with oclif.lock')
+    .command(['plugins:install', '@salesforce/plugin-custom-metadata@2.2.0'], {reset: true})
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.contain('custom-metadata'))
+    .command(['plugins:uninstall', '@salesforce/plugin-custom-metadata'])
+    .stdout()
+    .command(['plugins'], {reset: true})
+    .do((output) => expect(output.stdout).to.equal('No plugins installed.\n'))
+    .it('installs and uninstalls specific plugin version with oclif.lock')
 
   // test
   // .command(['plugins:install', 'heroku-debug@beta'], {reset: true})
