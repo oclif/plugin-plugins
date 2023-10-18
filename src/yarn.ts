@@ -32,13 +32,13 @@ export default class Yarn {
         : `file:${path.join(cwd, 'yarn.lock')}`
       const cacheDir = path.join(this.config.cacheDir, 'yarn')
       args = [...args, '--non-interactive', `--mutex=${mutex}`, `--preferred-cache-folder=${cacheDir}`, '--check-files']
-      if (verbose) {
-        args.push('--verbose')
-      }
 
-      if (this.config.npmRegistry) {
-        args.push(`--registry=${this.config.npmRegistry}`)
-      }
+      const networkTimeout = this.config.scopedEnvVar('NETWORK_TIMEOUT')
+      if (networkTimeout) args.push(`--network-timeout=${networkTimeout}`)
+
+      if (verbose) args.push('--verbose')
+
+      if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
     }
 
     const npmRunPath: typeof NpmRunPath = require('npm-run-path')
