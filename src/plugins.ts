@@ -61,11 +61,10 @@ export default class Plugins {
     const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return name
     const match = name.match(`@${scope}/${pluginPrefix ?? 'plugin'}-(.+)`)
-    if (!match) return name
-    return match[1]
+    return match?.[1] ?? name
   }
 
-  async hasPlugin(name: string): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.User | boolean> {
+  async hasPlugin(name: string): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.User | false> {
     const list = await this.list()
     const friendly = list.find((p) => this.friendlyName(p.name) === this.friendlyName(name))
     const unfriendly = list.find((p) => this.unfriendlyName(p.name) === this.unfriendlyName(name))
@@ -73,7 +72,7 @@ export default class Plugins {
     return (friendly ?? unfriendly ?? link ?? false) as
       | Interfaces.PJSON.PluginTypes.Link
       | Interfaces.PJSON.User
-      | boolean
+      | false
   }
 
   async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {

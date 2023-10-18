@@ -7,7 +7,8 @@ export const update: Hook<'update'> = async function () {
   try {
     await plugins.update()
   } catch (error: unknown) {
-    const {message} = error as {message: string}
-    this.error(message)
+    if (error instanceof Error) {
+      this.error(error.message)
+    }
   }
 }

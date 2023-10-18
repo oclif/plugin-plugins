@@ -100,11 +100,6 @@ export default class Yarn {
           reject(new Error(`${modulePath} ${args.join(' ')} exited with code ${code}`))
         }
       })
-
-      // Fix windows bug with node-gyp hanging for input forever
-      // if (this.config.windows) {
-      //   forked.stdin.write('\n')
-      // }
     })
   }
 }

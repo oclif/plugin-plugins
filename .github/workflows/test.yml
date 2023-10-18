@@ -20,7 +20,7 @@ jobs:
         with:
           max_attempts: 3
           retry_wait_seconds: 60
-          command: npm install -g @salesforce/cli@$nightly --omit=dev
+          command: npm install -g @salesforce/cli@nightly --omit=dev
           timeout_minutes: 60
       - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
       - run: yarn build

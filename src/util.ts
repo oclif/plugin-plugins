@@ -4,25 +4,25 @@ import {createRequire} from 'node:module'
 import {type} from 'node:os'
 import * as path from 'node:path'
 
-type Types = boolean | number | string | undefined
+type CompareTypes = boolean | number | string | undefined
 
-function compare(a: Types | Types[], b: Types | Types[]): number {
-  a = a === undefined ? 0 : a
-  b = b === undefined ? 0 : b
+function compare(a: CompareTypes | CompareTypes[], b: CompareTypes | CompareTypes[]): number {
+  const itemA = a === undefined ? 0 : a
+  const itemB = b === undefined ? 0 : b
 
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a.length === 0 && b.length === 0) return 0
-    const diff = compare(a[0], b[0])
+  if (Array.isArray(itemA) && Array.isArray(itemB)) {
+    if (itemA.length === 0 && itemB.length === 0) return 0
+    const diff = compare(itemA[0], itemB[0])
     if (diff !== 0) return diff
-    return compare(a.slice(1), b.slice(1))
+    return compare(itemA.slice(1), itemB.slice(1))
   }
 
-  if (a < b) return -1
-  if (a > b) return 1
+  if (itemA < itemB) return -1
+  if (itemA > itemB) return 1
   return 0
 }
 
-export function sortBy<T>(arr: T[], fn: (i: T) => Types | Types[]): T[] {
+export function sortBy<T>(arr: T[], fn: (i: T) => CompareTypes | CompareTypes[]): T[] {
   return arr.sort((a, b) => compare(fn(a), fn(b)))
 }
 

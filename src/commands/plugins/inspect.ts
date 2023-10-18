@@ -9,7 +9,10 @@ import {sortBy} from '../../util.js'
 function trimUntil(fsPath: string, part: string): string {
   const parts = fsPath.split(path.sep)
   // eslint-disable-next-line unicorn/no-array-reduce
-  const indices = parts.reduce((a, e, i) => (e === part ? [...a, i] : a), [] as number[])
+  const indices = parts.reduce<number[]>(
+    (result, current, index) => (current === part ? [...result, index] : result),
+    [],
+  )
   const partIndex = Math.max(...indices)
   if (partIndex === -1) return fsPath
   return parts.slice(0, partIndex + 1).join(path.sep)
@@ -50,7 +53,7 @@ export default class PluginsInspect extends Command {
     const dependencyPath = path.join(...dependency.split('/'))
     let start = path.join(plugin.root, 'node_modules')
     const paths = [start]
-    while ((start.match(/node_modules/g) || []).length > 1) {
+    while ((start.match(/node_modules/g) ?? []).length > 1) {
       start = trimUntil(path.dirname(start), 'node_modules')
       paths.push(start)
     }
@@ -122,23 +125,11 @@ export default class PluginsInspect extends Command {
     return {...plugin, deps: depsJson} as PluginWithDeps
   }
 
-  async parsePluginName(input: string): Promise<string> {
-    if (input.includes('@') && input.includes('/')) {
-      input = input.slice(1)
-      const [name] = input.split('@')
-      return '@' + name
-    }
-
-    const [splitName] = input.split('@')
-    const name = await this.plugins.maybeUnfriendlyName(splitName)
-    return name
-  }
-
   /* eslint-disable no-await-in-loop */
   async run(): Promise<PluginWithDeps[]> {
     const {argv, flags} = await this.parse(PluginsInspect)
     if (flags.verbose) this.plugins.verbose = true
-    const aliases = this.config.pjson.oclif.aliases || {}
+    const aliases = this.config.pjson.oclif.aliases ?? {}
     const plugins: PluginWithDeps[] = []
     for (let name of argv as string[]) {
       if (name === '.') {
@@ -147,8 +138,9 @@ export default class PluginsInspect extends Command {
       }
 
       if (aliases[name] === null) this.error(`${name} is blocked`)
-      name = aliases[name] || name
-      const pluginName = await this.parsePluginName(name)
+      name = aliases[name] ?? name
+      const pluginName = (await this.plugins.maybeUnfriendlyName(name)) ?? name
+      console.log(name, pluginName)
 
       try {
         plugins.push(await this.inspect(pluginName, flags.verbose))

@@ -1,8 +1,23 @@
 /* eslint-disable no-await-in-loop */
-import {Args, Command, Flags, Interfaces, Plugin, ux} from '@oclif/core'
+import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
 import Plugins from '../../plugins.js'
+
+function removeTags(plugin: string): string {
+  if (plugin.includes('@')) {
+    const chunked = plugin.split('@')
+    const last = chunked.at(-1)
+
+    if (!last?.includes('/') && chunked.length > 1) {
+      chunked.pop()
+    }
+
+    return chunked.join('@')
+  }
+
+  return plugin
+}
 
 export default class PluginsUninstall extends Command {
   static aliases = ['plugins:unlink', 'plugins:remove']
@@ -37,12 +52,12 @@ export default class PluginsUninstall extends Command {
     if (flags.verbose) this.plugins.verbose = true
     if (argv.length === 0) argv.push('.')
     for (const plugin of argv as string[]) {
-      const friendly = this.removeTags(this.plugins.friendlyName(plugin))
+      const friendly = removeTags(this.plugins.friendlyName(plugin))
       ux.action.start(`Uninstalling ${friendly}`)
-      const unfriendly = await this.plugins.hasPlugin(this.removeTags(plugin))
+      const unfriendly = await this.plugins.hasPlugin(removeTags(plugin))
       if (!unfriendly) {
-        const p = this.config.getPluginsList().find((p) => p.name === plugin) as Plugin | undefined
-        if (p && p && p.parent)
+        const p = this.config.getPluginsList().find((p) => p.name === plugin)
+        if (p?.parent)
           return this.error(
             `${friendly} is installed via plugin ${p.parent!.name}, uninstall ${p.parent!.name} instead`,
           )
@@ -51,7 +66,7 @@ export default class PluginsUninstall extends Command {
       }
 
       try {
-        const {name} = unfriendly as Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.User
+        const {name} = unfriendly
         await this.plugins.uninstall(name)
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))
@@ -60,20 +75,5 @@ export default class PluginsUninstall extends Command {
 
       ux.action.stop()
     }
-  }
-
-  private removeTags(plugin: string) {
-    if (plugin.includes('@')) {
-      const chunked = plugin.split('@')
-      const last = chunked.at(-1)
-
-      if (!last?.includes('/') && chunked.length > 1) {
-        chunked.pop()
-      }
-
-      return chunked.join('@')
-    }
-
-    return plugin
   }
 }
