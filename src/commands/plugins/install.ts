@@ -59,7 +59,16 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         return input
       },
     }),
-    verbose: Flags.boolean({char: 'v'}),
+    silent: Flags.boolean({
+      char: 's',
+      description: 'Silences yarn output.',
+      exclusive: ['verbose'],
+    }),
+    verbose: Flags.boolean({
+      char: 'v',
+      description: 'Show verbose yarn output.',
+      exclusive: ['silent'],
+    }),
   }
 
   static strict = false
@@ -124,7 +133,8 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(PluginsInstall)
     this.flags = flags
-    if (flags.verbose) this.plugins.verbose = true
+    if (flags.verbose && !flags.silent) this.plugins.verbose = true
+    if (flags.silent && !flags.verbose) this.plugins.silent = true
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {
       if (aliases[name] === null) this.error(`${name} is blocked`)

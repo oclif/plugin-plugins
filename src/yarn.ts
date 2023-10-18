@@ -20,8 +20,8 @@ export default class Yarn {
     return require.resolve('yarn/bin/yarn.js')
   }
 
-  async exec(args: string[] = [], opts: {cwd: string; verbose: boolean}): Promise<void> {
-    const {cwd, verbose} = opts
+  async exec(args: string[] = [], opts: {cwd: string; silent: boolean; verbose: boolean}): Promise<void> {
+    const {cwd, silent, verbose} = opts
     if (args[0] !== 'run') {
       // https://classic.yarnpkg.com/lang/en/docs/cli/#toc-concurrency-and-mutex
       // Default port is: 31997
@@ -36,7 +36,8 @@ export default class Yarn {
       const networkTimeout = this.config.scopedEnvVar('NETWORK_TIMEOUT')
       if (networkTimeout) args.push(`--network-timeout=${networkTimeout}`)
 
-      if (verbose) args.push('--verbose')
+      if (verbose && !silent) args.push('--verbose')
+      if (silent && !verbose) args.push('--silent')
 
       if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
     }
@@ -82,7 +83,9 @@ export default class Yarn {
   fork(modulePath: string, args: string[] = [], options: Record<string, unknown> = {}): Promise<void> {
     return new Promise((resolve, reject) => {
       const forked = fork(modulePath, args, options)
-      forked.stderr?.on('data', (d) => process.stderr.write(d))
+      forked.stderr?.on('data', (d) => {
+        if (!options.silent) process.stderr.write(d)
+      })
       forked.stdout?.setEncoding('utf8')
       forked.stdout?.on('data', (d) => {
         if (options.verbose) process.stdout.write(d)

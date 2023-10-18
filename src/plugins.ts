@@ -33,6 +33,7 @@ async function fileExists(filePath: string): Promise<boolean> {
 }
 
 export default class Plugins {
+  silent = false
   verbose = false
 
   readonly yarn: Yarn
@@ -78,7 +79,7 @@ export default class Plugins {
   async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
     try {
       this.debug(`installing plugin ${name}`)
-      const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
+      const yarnOpts = {cwd: this.config.dataDir, silent: this.silent, verbose: this.verbose}
       await this.createPJSON()
       let plugin
       const add = force ? ['add', '--force'] : ['add']
@@ -104,7 +105,7 @@ export default class Plugins {
           // CJS plugins can be auto-transpiled at runtime but ESM plugins
           // cannot. To support ESM plugins we need to compile them after
           // installing them.
-          await this.yarn.exec(['run', 'tsc'], {cwd: plugin.root, verbose: this.verbose})
+          await this.yarn.exec(['run', 'tsc'], {...yarnOpts, cwd: plugin.root})
         } catch (error) {
           this.debug(error)
         }
@@ -210,6 +211,7 @@ export default class Plugins {
     const doRefresh = async (root: string) => {
       await this.yarn.exec(options.prod ? ['--prod'] : [], {
         cwd: root,
+        silent: this.silent,
         verbose: this.verbose,
       })
     }
@@ -265,6 +267,7 @@ export default class Plugins {
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.yarn.exec(['remove', name], {
           cwd: this.config.dataDir,
+          silent: this.silent,
           verbose: this.verbose,
         })
       }
@@ -296,6 +299,7 @@ export default class Plugins {
     if (plugins.some((p) => Boolean(p.url))) {
       await this.yarn.exec(['upgrade'], {
         cwd: this.config.dataDir,
+        silent: this.silent,
         verbose: this.verbose,
       })
     }
@@ -323,7 +327,7 @@ export default class Plugins {
             return `${p.name}@${tag}`
           }),
         ],
-        {cwd: this.config.dataDir, verbose: this.verbose},
+        {cwd: this.config.dataDir, silent: this.silent, verbose: this.verbose},
       )
     }
 
