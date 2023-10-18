@@ -19,6 +19,8 @@ describe('install/uninstall integration tests', () => {
   const configDir = join(tmpdir(), 'plugin-plugins-tests', 'config')
   const dataDir = join(tmpdir(), 'plugin-plugins-tests', 'data')
 
+  const cwd = process.cwd()
+
   before(async () => {
     try {
       await Promise.all([
@@ -47,22 +49,22 @@ describe('install/uninstall integration tests', () => {
 
   describe('basic', () => {
     it('should return "No Plugins" if no plugins are installed', async () => {
-      await PluginsIndex.run([], process.cwd())
+      await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
     })
 
     it('should install plugin', async () => {
-      await PluginsInstall.run(['@oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsInstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
     })
 
     it('should uninstall plugin', async () => {
-      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
@@ -70,17 +72,17 @@ describe('install/uninstall integration tests', () => {
 
   describe('tagged', () => {
     it('should install plugin from a tag', async () => {
-      await PluginsInstall.run(['@oclif/plugin-test-esm-1@latest'], process.cwd())
+      await PluginsInstall.run(['@oclif/plugin-test-esm-1@latest'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
     })
 
     it('should uninstall plugin', async () => {
-      await PluginsUninstall.run(['@oclif/plugin-test-esm-1@latest'], process.cwd())
+      await PluginsUninstall.run(['@oclif/plugin-test-esm-1@latest'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
@@ -88,17 +90,17 @@ describe('install/uninstall integration tests', () => {
 
   describe('alias', () => {
     it('should install aliased plugin', async () => {
-      await PluginsInstall.run(['aliasme'], process.cwd())
+      await PluginsInstall.run(['aliasme'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
     })
 
     it('should uninstall aliased plugin', async () => {
-      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
@@ -106,9 +108,9 @@ describe('install/uninstall integration tests', () => {
 
   describe('github org/repo', () => {
     it('should install plugin from github org/repo', async () => {
-      await PluginsInstall.run(['oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsInstall.run(['oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
 
@@ -118,9 +120,9 @@ describe('install/uninstall integration tests', () => {
     })
 
     it('should uninstall plugin from github', async () => {
-      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
@@ -128,9 +130,9 @@ describe('install/uninstall integration tests', () => {
 
   describe('github url', () => {
     it('should install plugin from github url', async () => {
-      await PluginsInstall.run(['https://github.com/oclif/plugin-test-esm-1.git'], process.cwd())
+      await PluginsInstall.run(['https://github.com/oclif/plugin-test-esm-1.git'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
 
@@ -140,9 +142,9 @@ describe('install/uninstall integration tests', () => {
     })
 
     it('should uninstall plugin from github', async () => {
-      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
@@ -150,9 +152,9 @@ describe('install/uninstall integration tests', () => {
 
   describe('github tagged url', () => {
     it('should install plugin from github tagged url', async () => {
-      await PluginsInstall.run(['https://github.com/oclif/plugin-test-esm-1.git#0.5.4'], process.cwd())
+      await PluginsInstall.run(['https://github.com/oclif/plugin-test-esm-1.git#0.5.4'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
       expect(stubs.stdout.firstCall.firstArg).to.include('0.5.4')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
@@ -163,9 +165,9 @@ describe('install/uninstall integration tests', () => {
     })
 
     it('should uninstall plugin from github', async () => {
-      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], process.cwd())
+      await PluginsUninstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
@@ -173,17 +175,17 @@ describe('install/uninstall integration tests', () => {
 
   describe('oclif.lock', () => {
     it('should install plugin with oclif.lock', async () => {
-      await PluginsInstall.run(['@salesforce/plugin-custom-metadata'], process.cwd())
+      await PluginsInstall.run(['@salesforce/plugin-custom-metadata'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('@salesforce/plugin-custom-metadata')
       expect(result.some((r) => r.name === '@salesforce/plugin-custom-metadata')).to.be.true
     })
 
     it('should uninstall plugin with oclif.lock', async () => {
-      await PluginsUninstall.run(['@salesforce/plugin-custom-metadata'], process.cwd())
+      await PluginsUninstall.run(['@salesforce/plugin-custom-metadata'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@salesforce/plugin-custom-metadata')).to.be.false
     })
@@ -192,17 +194,17 @@ describe('install/uninstall integration tests', () => {
   describe('non-existent plugin', () => {
     it('should not install non-existent plugin', async () => {
       try {
-        await PluginsInstall.run(['@oclif/DOES_NOT_EXIST'], process.cwd())
+        await PluginsInstall.run(['@oclif/DOES_NOT_EXIST'], cwd)
       } catch {}
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/DOES_NOT_EXIST')).to.be.false
     })
 
     it('should handle uninstalling a non-existent plugin', async () => {
       try {
-        await PluginsUninstall.run(['@oclif/DOES_NOT_EXIST'], process.cwd())
+        await PluginsUninstall.run(['@oclif/DOES_NOT_EXIST'], cwd)
       } catch (error) {
         const err = error as CLIError
         expect(err.message).to.equal('@oclif/DOES_NOT_EXIST is not installed')
@@ -212,17 +214,17 @@ describe('install/uninstall integration tests', () => {
 
   describe('scoped plugin', () => {
     it('should install scoped plugin', async () => {
-      await PluginsInstall.run(['test-esm-1'], process.cwd())
+      await PluginsInstall.run(['test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.include('test-esm')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
     })
 
     it('should uninstall scoped plugin', async () => {
-      await PluginsUninstall.run(['test-esm-1'], process.cwd())
+      await PluginsUninstall.run(['test-esm-1'], cwd)
 
-      const result = await PluginsIndex.run([], process.cwd())
+      const result = await PluginsIndex.run([], cwd)
       expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })

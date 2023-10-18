@@ -28,6 +28,7 @@ describe('link/unlink integration tests', () => {
   const dataDir = join(tmpdir(), 'plugin-plugins-tests', 'data')
   const pluginDir = join(tmpdir(), 'plugin-plugins-tests', 'plugin')
   const repo = 'https://github.com/oclif/plugin-test-esm-1.git'
+  const cwd = process.cwd()
 
   before(async () => {
     try {
@@ -61,22 +62,22 @@ describe('link/unlink integration tests', () => {
   })
 
   it('should return "No Plugins" if no plugins are linked', async () => {
-    await PluginsIndex.run([], process.cwd())
+    await PluginsIndex.run([], cwd)
     expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
   })
 
   it('should link plugin', async () => {
-    await PluginsLink.run([pluginDir, '--no-install'], process.cwd())
+    await PluginsLink.run([pluginDir, '--no-install'], cwd)
 
-    const result = await PluginsIndex.run([], process.cwd())
+    const result = await PluginsIndex.run([], cwd)
     expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
     expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
   })
 
   it('should unlink plugin', async () => {
-    await PluginsUninstall.run([pluginDir], process.cwd())
+    await PluginsUninstall.run([pluginDir], cwd)
 
-    await PluginsIndex.run([], process.cwd())
+    await PluginsIndex.run([], cwd)
     expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
   })
 })
