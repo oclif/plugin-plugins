@@ -58,9 +58,9 @@ export default class Plugins {
   }
 
   friendlyName(name: string): string {
-    const {scope} = this.config.pjson.oclif
+    const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return name
-    const match = name.match(`@${scope}/plugin-(.+)`)
+    const match = name.match(`@${scope}/${pluginPrefix ?? 'plugin'}-(.+)`)
     if (!match) return name
     return match[1]
   }
@@ -256,9 +256,9 @@ export default class Plugins {
 
   unfriendlyName(name: string): string | undefined {
     if (name.includes('@')) return
-    const {scope} = this.config.pjson.oclif
+    const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return
-    return `@${scope}/plugin-${name}`
+    return `@${scope}/${pluginPrefix ?? 'plugin'}-${name}`
   }
 
   async uninstall(name: string): Promise<void> {

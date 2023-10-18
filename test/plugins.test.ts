@@ -35,6 +35,10 @@ describe('Plugins', () => {
   beforeEach(async () => {
     sandbox = createSandbox()
     config = await Config.load(process.cwd())
+    config.pjson.oclif = {
+      ...config.pjson.oclif,
+      pluginPrefix: undefined,
+    }
     plugins = new Plugins(config)
     // @ts-expect-error because savePJSON is private
     saveStub = sandbox.stub(plugins, 'savePJSON').resolves()
@@ -85,6 +89,11 @@ describe('Plugins', () => {
       sandbox.stub(config.pjson.oclif, 'scope').value(null)
       expect(plugins.friendlyName(linkedPlugin.name)).to.equal('@oclif/plugin-linked')
     })
+
+    it('should return friendly name for plugin when pluginPrefix is defined', () => {
+      sandbox.stub(config.pjson.oclif, 'pluginPrefix').value('foo')
+      expect(plugins.friendlyName('@oclif/foo-bar')).to.equal('bar')
+    })
   })
 
   describe('unfriendlyName', () => {
@@ -99,6 +108,11 @@ describe('Plugins', () => {
     it('should return undefined when scope is not defined', () => {
       sandbox.stub(config.pjson.oclif, 'scope').value(null)
       expect(plugins.unfriendlyName(linkedPlugin.name)).to.be.undefined
+    })
+
+    it('should return full name when pluginPrefix is defined', () => {
+      sandbox.stub(config.pjson.oclif, 'pluginPrefix').value('foo')
+      expect(plugins.unfriendlyName('bar')).to.equal('@oclif/foo-bar')
     })
   })
 
