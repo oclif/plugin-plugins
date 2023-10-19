@@ -19,7 +19,7 @@ async function exec(cmd: string, opts?: {cwd?: string}) {
   })
 }
 
-describe('link/unlink integration tests', () => {
+;(process.platform === 'win32' ? describe.skip : describe)('link/unlink integration tests', () => {
   let sandbox: SinonSandbox
   let stubs: ReturnType<typeof ux.makeStubs>
 
@@ -32,12 +32,15 @@ describe('link/unlink integration tests', () => {
 
   before(async () => {
     try {
-      await Promise.all([
-        rm(cacheDir, {force: true, recursive: true}),
-        rm(configDir, {force: true, recursive: true}),
-        rm(dataDir, {force: true, recursive: true}),
-        rm(pluginDir, {force: true, recursive: true}),
-      ])
+      // no need to clear out directories in CI since they'll always be empty
+      if (!process.env.CI) {
+        await Promise.all([
+          rm(cacheDir, {force: true, recursive: true}),
+          rm(configDir, {force: true, recursive: true}),
+          rm(dataDir, {force: true, recursive: true}),
+          rm(pluginDir, {force: true, recursive: true}),
+        ])
+      }
     } catch {}
 
     await exec(`git clone ${repo} ${pluginDir} --depth 1`)

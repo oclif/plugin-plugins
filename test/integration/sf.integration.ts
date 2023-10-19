@@ -39,9 +39,9 @@ describe('sf Integration', () => {
     console.log('process.env.SF_CACHE_DIR:', chalk.dim(process.env.SF_CACHE_DIR))
     console.log('process.env.SF_CONFIG_DIR:', chalk.dim(process.env.SF_CONFIG_DIR))
 
-    // no need to clear out directories in CI since they'll always be empty
     try {
-      if (process.env.CI) {
+      // no need to clear out directories in CI since they'll always be empty
+      if (!process.env.CI) {
         await Promise.all([
           rm(process.env.SF_DATA_DIR, {force: true, recursive: true}),
           rm(process.env.SF_CACHE_DIR, {force: true, recursive: true}),
