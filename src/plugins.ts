@@ -337,7 +337,7 @@ export default class Plugins {
   }
 
   private async createPJSON() {
-    if (await fileExists(this.pjsonPath)) {
+    if (!(await fileExists(this.pjsonPath))) {
       this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
       await this.savePJSON(initPJSON)
     }
