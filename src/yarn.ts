@@ -2,7 +2,7 @@ import {Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {fork} from 'node:child_process'
 import {createRequire} from 'node:module'
-import * as path from 'node:path'
+import {join} from 'node:path'
 import NpmRunPath from 'npm-run-path'
 
 import {WarningsCache} from './util.js'
@@ -38,8 +38,8 @@ export default class Yarn {
       const optionalPort = port ? `:${port}` : ''
       const mutex = this.config.scopedEnvVar('USE_NETWORK_MUTEX')
         ? `network${optionalPort}`
-        : `file:${path.join(cwd, 'yarn.lock')}`
-      const cacheDir = path.join(this.config.cacheDir, 'yarn')
+        : `file:${join(cwd, 'yarn.lock')}`
+      const cacheDir = join(this.config.cacheDir, 'yarn')
       args = [...args, '--non-interactive', `--mutex=${mutex}`, `--preferred-cache-folder=${cacheDir}`, '--check-files']
 
       const networkTimeout = this.config.scopedEnvVar('NETWORK_TIMEOUT')

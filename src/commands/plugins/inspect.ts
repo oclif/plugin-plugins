@@ -1,13 +1,13 @@
 import {Args, Command, Flags, Plugin, ux} from '@oclif/core'
 import chalk from 'chalk'
 import {readFile} from 'node:fs/promises'
-import * as path from 'node:path'
+import {dirname, join, sep} from 'node:path'
 
 import Plugins from '../../plugins.js'
 import {sortBy} from '../../util.js'
 
 function trimUntil(fsPath: string, part: string): string {
-  const parts = fsPath.split(path.sep)
+  const parts = fsPath.split(sep)
   // eslint-disable-next-line unicorn/no-array-reduce
   const indices = parts.reduce<number[]>(
     (result, current, index) => (current === part ? [...result, index] : result),
@@ -15,7 +15,7 @@ function trimUntil(fsPath: string, part: string): string {
   )
   const partIndex = Math.max(...indices)
   if (partIndex === -1) return fsPath
-  return parts.slice(0, partIndex + 1).join(path.sep)
+  return parts.slice(0, partIndex + 1).join(sep)
 }
 
 type Dependencies = Record<string, {from: string; version: string}>
@@ -50,19 +50,19 @@ export default class PluginsInspect extends Command {
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   async findDep(plugin: Plugin, dependency: string): Promise<{pkgPath: null | string; version: null | string}> {
-    const dependencyPath = path.join(...dependency.split('/'))
-    let start = path.join(plugin.root, 'node_modules')
+    const dependencyPath = join(...dependency.split('/'))
+    let start = join(plugin.root, 'node_modules')
     const paths = [start]
     while ((start.match(/node_modules/g) ?? []).length > 1) {
-      start = trimUntil(path.dirname(start), 'node_modules')
+      start = trimUntil(dirname(start), 'node_modules')
       paths.push(start)
     }
 
     // TODO: use promise.any to check the paths in parallel
     // requires node >= 16
     for (const p of paths) {
-      const fullPath = path.join(p, dependencyPath)
-      const pkgJsonPath = path.join(fullPath, 'package.json')
+      const fullPath = join(p, dependencyPath)
+      const pkgJsonPath = join(fullPath, 'package.json')
       try {
         // eslint-disable-next-line no-await-in-loop
         const pkgJson = JSON.parse(await readFile(pkgJsonPath, 'utf8'))

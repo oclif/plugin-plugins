@@ -1,8 +1,7 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
-import * as fs from 'node:fs'
-import {readFile} from 'node:fs/promises'
-import * as path from 'node:path'
+import {access, mkdir, readFile, rename, writeFile} from 'node:fs/promises'
+import {dirname, join, resolve} from 'node:path'
 import {gt, valid, validRange} from 'semver'
 
 import {findNode, findNpm, uniq, uniqWith} from './util.js'
@@ -25,7 +24,7 @@ const initPJSON: UserPJSON = {
 
 async function fileExists(filePath: string): Promise<boolean> {
   try {
-    await fs.promises.access(filePath)
+    await access(filePath)
     return true
   } catch {
     return false
@@ -68,7 +67,7 @@ export default class Plugins {
     const list = await this.list()
     const friendly = list.find((p) => this.friendlyName(p.name) === this.friendlyName(name))
     const unfriendly = list.find((p) => this.unfriendlyName(p.name) === this.unfriendlyName(name))
-    const link = list.find((p) => p.type === 'link' && path.resolve(p.root) === path.resolve(name))
+    const link = list.find((p) => p.type === 'link' && resolve(p.root) === resolve(name))
     return (friendly ?? unfriendly ?? link ?? false) as
       | Interfaces.PJSON.PluginTypes.Link
       | Interfaces.PJSON.User
@@ -91,7 +90,7 @@ export default class Plugins {
         plugin = await Config.load({
           devPlugins: false,
           name,
-          root: path.join(this.config.dataDir, 'node_modules', name),
+          root: join(this.config.dataDir, 'node_modules', name),
           userPlugins: false,
         })
         await this.refresh({all: true, prod: true}, plugin.root)
@@ -124,7 +123,7 @@ export default class Plugins {
         plugin = await Config.load({
           devPlugins: false,
           name,
-          root: path.join(this.config.dataDir, 'node_modules', name),
+          root: join(this.config.dataDir, 'node_modules', name),
           userPlugins: false,
         })
         this.debug(`finished loading plugin ${name} at root ${plugin.root}`)
@@ -153,7 +152,7 @@ export default class Plugins {
   }
 
   async link(p: string, {install}: {install: boolean}): Promise<void> {
-    const c = await Config.load(path.resolve(p))
+    const c = await Config.load(resolve(p))
     ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     this.isValidPlugin(c)
 
@@ -231,12 +230,12 @@ export default class Plugins {
     const deduped = [...new Set(pluginRoots)]
     await Promise.all(
       deduped.map(async (r) => {
-        if (await fileExists(path.join(r, 'yarn.lock'))) {
+        if (await fileExists(join(r, 'yarn.lock'))) {
           this.debug(`yarn.lock exists at ${r}. Installing prod dependencies`)
           await doRefresh(r)
-        } else if (await fileExists(path.join(r, 'oclif.lock'))) {
+        } else if (await fileExists(join(r, 'oclif.lock'))) {
           this.debug(`oclif.lock exists at ${r}. Installing prod dependencies`)
-          await fs.promises.rename(path.join(r, 'oclif.lock'), path.join(r, 'yarn.lock'))
+          await rename(join(r, 'oclif.lock'), join(r, 'yarn.lock'))
           await doRefresh(r)
         } else {
           this.debug(`no yarn.lock or oclif.lock exists at ${r}. Skipping dependency refresh`)
@@ -338,7 +337,7 @@ export default class Plugins {
   }
 
   private async createPJSON() {
-    if (!fs.existsSync(this.pjsonPath)) {
+    if (await fileExists(this.pjsonPath)) {
       this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
       await this.savePJSON(initPJSON)
     }
@@ -411,7 +410,7 @@ export default class Plugins {
   }
 
   private get pjsonPath() {
-    return path.join(this.config.dataDir, 'package.json')
+    return join(this.config.dataDir, 'package.json')
   }
 
   private async readPJSON(): Promise<Interfaces.PJSON.User | undefined> {
@@ -426,7 +425,7 @@ export default class Plugins {
 
   private async savePJSON(pjson: UserPJSON) {
     this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
-    await fs.promises.mkdir(path.dirname(this.pjsonPath), {recursive: true})
-    await fs.promises.writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
+    await mkdir(dirname(this.pjsonPath), {recursive: true})
+    await writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
   }
 }
