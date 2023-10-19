@@ -116,6 +116,8 @@ export default class Plugins {
           name = unfriendly
         }
 
+        // validate that the package name exists in the npm registry before installing
+        await this.npmHasPackage(name, true)
         await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
 
         this.debug(`loading plugin ${name}...`)
@@ -381,7 +383,7 @@ export default class Plugins {
     )
   }
 
-  private async npmHasPackage(name: string): Promise<boolean> {
+  private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
     const nodeExecutable = await findNode(this.config.root)
     const npmCli = await findNpm()
 
@@ -390,23 +392,22 @@ export default class Plugins {
 
     const command = `${nodeExecutable} ${npmCli} show ${name} dist-tags`
 
+    let npmShowResult
     try {
       const {default: shelljs} = await import('shelljs')
-      const npmShowResult = shelljs.exec(command, {
-        async: false,
-        encoding: 'utf8',
-        silent: true,
-      })
-      if (npmShowResult.code !== 0) {
-        this.debug(npmShowResult.stderr)
-        return false
-      }
-
-      this.debug(`Found ${name} in the registry.`)
-      return true
+      npmShowResult = shelljs.exec(command, {silent: true})
     } catch {
-      throw new Error(`Could not run npm show for ${name}`)
+      throw new Errors.CLIError(`Could not run npm show for ${name}`)
     }
+
+    if (npmShowResult?.code !== 0) {
+      this.debug(npmShowResult?.stderr)
+      if (throwOnNotFound) throw new Errors.CLIError(`${name} does not exist in the registry.`)
+      return false
+    }
+
+    this.debug(`Found ${name} in the registry.`)
+    return true
   }
 
   private get pjsonPath() {
