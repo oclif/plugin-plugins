@@ -140,7 +140,6 @@ export default class PluginsInspect extends Command {
       if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] ?? name
       const pluginName = (await this.plugins.maybeUnfriendlyName(name)) ?? name
-      console.log(name, pluginName)
 
       try {
         plugins.push(await this.inspect(pluginName, flags.verbose))

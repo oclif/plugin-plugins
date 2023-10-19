@@ -1,6 +1,7 @@
 import {ux} from '@oclif/core'
 import {CLIError} from '@oclif/core/lib/errors/index.js'
 import {expect} from 'chai'
+import chalk from 'chalk'
 import {existsSync} from 'node:fs'
 import {rm} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
@@ -18,6 +19,10 @@ describe('install/uninstall integration tests', () => {
   const cacheDir = join(tmpdir(), 'plugin-plugins-tests', 'cache')
   const configDir = join(tmpdir(), 'plugin-plugins-tests', 'config')
   const dataDir = join(tmpdir(), 'plugin-plugins-tests', 'data')
+
+  console.log('process.env.MYCLI_DATA_DIR:', chalk.dim(dataDir))
+  console.log('process.env.MYCLI_CACHE_DIR:', chalk.dim(cacheDir))
+  console.log('process.env.MYCLI_CONFIG_DIR:', chalk.dim(configDir))
 
   const cwd = process.cwd()
 

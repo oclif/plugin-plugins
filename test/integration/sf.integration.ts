@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import chalk from 'chalk'
 import {exec as cpExec} from 'node:child_process'
-import {mkdir} from 'node:fs/promises'
+import {rm} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
 
 async function exec(command: string): Promise<{code: number; stderr: string; stdout: string}> {
@@ -34,13 +34,16 @@ describe('sf Integration', () => {
     process.env.SF_DATA_DIR = join(tmp, 'data')
     process.env.SF_CACHE_DIR = join(tmp, 'cache')
     process.env.SF_CONFIG_DIR = join(tmp, 'config')
-    mkdir(process.env.SF_DATA_DIR, {recursive: true})
-    mkdir(process.env.SF_CACHE_DIR, {recursive: true})
-    mkdir(process.env.SF_CONFIG_DIR, {recursive: true})
 
     console.log('process.env.SF_DATA_DIR:', chalk.dim(process.env.SF_DATA_DIR))
     console.log('process.env.SF_CACHE_DIR:', chalk.dim(process.env.SF_CACHE_DIR))
     console.log('process.env.SF_CONFIG_DIR:', chalk.dim(process.env.SF_CONFIG_DIR))
+
+    await Promise.all([
+      rm(process.env.SF_DATA_DIR, {force: true, recursive: true}),
+      rm(process.env.SF_CACHE_DIR, {force: true, recursive: true}),
+      rm(process.env.SF_CONFIG_DIR, {force: true, recursive: true}),
+    ])
 
     await exec('sf plugins link')
     const {stdout} = await exec('sf plugins --core')
