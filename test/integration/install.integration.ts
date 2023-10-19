@@ -29,7 +29,7 @@ describe('install/uninstall integration tests', () => {
   before(async () => {
     try {
       // no need to clear out directories in CI since they'll always be empty
-      if (process.env.CI) {
+      if (!process.env.CI) {
         await Promise.all([
           rm(cacheDir, {force: true, recursive: true}),
           rm(configDir, {force: true, recursive: true}),

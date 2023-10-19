@@ -19,7 +19,7 @@ async function exec(cmd: string, opts?: {cwd?: string}) {
   })
 }
 
-;(process.platform === 'win32' ? describe.skip : describe)('link/unlink integration tests', () => {
+describe('link/unlink integration tests', () => {
   let sandbox: SinonSandbox
   let stubs: ReturnType<typeof ux.makeStubs>
 
