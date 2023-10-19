@@ -1,8 +1,10 @@
+/* eslint-disable no-await-in-loop */
 import {Args, Command, Errors, Flags, Interfaces, ux} from '@oclif/core'
 import chalk from 'chalk'
 import validate from 'validate-npm-package-name'
 
 import Plugins from '../../plugins.js'
+import {WarningsCache} from '../../util.js'
 
 export default class PluginsInstall extends Command {
   static aliases = ['plugins:add']
@@ -127,9 +129,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     const {name, tag} = await getNameAndTag(input)
     return {name, tag, type: 'npm'}
   }
-  /* eslint-enable no-await-in-loop */
 
-  /* eslint-disable no-await-in-loop */
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(PluginsInstall)
     this.flags = flags
@@ -157,10 +157,15 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         }
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))
+        WarningsCache.getInstance().flush()
         throw error
       }
 
       ux.action.stop(`installed v${plugin.version}`)
+
+      WarningsCache.getInstance().flush()
+
+      ux.log(chalk.green(`Successfully installed ${plugin.name} v${plugin.version}`))
     }
   }
 }

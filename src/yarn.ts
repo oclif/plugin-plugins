@@ -5,9 +5,18 @@ import {createRequire} from 'node:module'
 import * as path from 'node:path'
 import NpmRunPath from 'npm-run-path'
 
+import {WarningsCache} from './util.js'
+
 const debug = makeDebug('cli:yarn')
 
 const require = createRequire(import.meta.url)
+
+type YarnExecOptions = {
+  cwd: string
+  noSpinner?: boolean
+  silent: boolean
+  verbose: boolean
+}
 
 export default class Yarn {
   config: Interfaces.Config
@@ -20,7 +29,7 @@ export default class Yarn {
     return require.resolve('yarn/bin/yarn.js')
   }
 
-  async exec(args: string[] = [], opts: {cwd: string; silent: boolean; verbose: boolean}): Promise<void> {
+  async exec(args: string[] = [], opts: YarnExecOptions): Promise<void> {
     const {cwd, silent, verbose} = opts
     if (args[0] !== 'run') {
       // https://classic.yarnpkg.com/lang/en/docs/cli/#toc-concurrency-and-mutex
@@ -80,16 +89,30 @@ export default class Yarn {
     }
   }
 
-  fork(modulePath: string, args: string[] = [], options: Record<string, unknown> = {}): Promise<void> {
+  fork(modulePath: string, args: string[] = [], options: YarnExecOptions): Promise<void> {
+    const cache = WarningsCache.getInstance()
+
     return new Promise((resolve, reject) => {
       const forked = fork(modulePath, args, options)
-      forked.stderr?.on('data', (d) => {
-        if (!options.silent) process.stderr.write(d)
+      forked.stderr?.on('data', (d: Buffer) => {
+        if (!options.silent)
+          cache.add(
+            ...d
+              .toString()
+              .split('\n')
+              .map((i) =>
+                i
+                  .trim()
+                  .replace(/^warning/, '')
+                  .trim(),
+              )
+              .filter(Boolean),
+          )
       })
       forked.stdout?.setEncoding('utf8')
       forked.stdout?.on('data', (d) => {
         if (options.verbose) process.stdout.write(d)
-        else ux.action.status = d.replace(/\n$/, '').split('\n').pop()
+        else if (!options.noSpinner) ux.action.status = d.replace(/\n$/, '').split('\n').pop()
       })
 
       forked.on('error', reject)

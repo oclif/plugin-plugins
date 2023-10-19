@@ -1,3 +1,4 @@
+import {ux} from '@oclif/core'
 import * as fs from 'node:fs'
 import * as fsPromises from 'node:fs/promises'
 import {createRequire} from 'node:module'
@@ -93,4 +94,30 @@ export async function findNpm(): Promise<string> {
   const npmPjson = JSON.parse(await fsPromises.readFile(npmPjsonPath, {encoding: 'utf8'}))
   const npmPath = npmPjsonPath.slice(0, Math.max(0, npmPjsonPath.lastIndexOf(path.sep)))
   return path.join(npmPath, npmPjson.bin.npm)
+}
+
+export class WarningsCache {
+  private static cache: string[] = []
+  private static instance: WarningsCache
+  public static getInstance(): WarningsCache {
+    if (!WarningsCache.instance) {
+      WarningsCache.instance = new WarningsCache()
+    }
+
+    return WarningsCache.instance
+  }
+
+  public add(...warnings: string[]): void {
+    for (const warning of warnings) {
+      if (!WarningsCache.cache.includes(warning)) {
+        WarningsCache.cache.push(warning)
+      }
+    }
+  }
+
+  public flush(): void {
+    for (const warning of WarningsCache.cache) {
+      ux.warn(warning)
+    }
+  }
 }

@@ -209,9 +209,11 @@ export default class Plugins {
    * @returns Promise<void>
    */
   async refresh(options: {all: boolean; prod: boolean}, ...roots: string[]): Promise<void> {
+    ux.action.status = 'Refreshing user plugins...'
     const doRefresh = async (root: string) => {
       await this.yarn.exec(options.prod ? ['--prod'] : [], {
         cwd: root,
+        noSpinner: true,
         silent: this.silent,
         verbose: this.verbose,
       })
@@ -283,7 +285,6 @@ export default class Plugins {
     // eslint-disable-next-line unicorn/no-await-expression-member
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
-    ux.action.start(`${this.config.name}: Updating plugins`)
 
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -334,7 +335,6 @@ export default class Plugins {
 
     await this.refresh({all: true, prod: true})
     await this.add(...modifiedPlugins)
-    ux.action.stop()
   }
 
   private async createPJSON() {

@@ -2,6 +2,7 @@ import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
 import Plugins from '../../plugins.js'
+import {WarningsCache} from '../../util.js'
 
 export default class PluginsLink extends Command {
   static args = {
@@ -36,5 +37,7 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
     ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
     await this.plugins.link(args.path, {install: flags.install})
     ux.action.stop()
+
+    WarningsCache.getInstance().flush()
   }
 }
