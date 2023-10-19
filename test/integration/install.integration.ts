@@ -4,8 +4,7 @@ import {expect} from 'chai'
 import chalk from 'chalk'
 import {existsSync} from 'node:fs'
 import {rm} from 'node:fs/promises'
-import {tmpdir} from 'node:os'
-import {join} from 'node:path'
+import {join, resolve} from 'node:path'
 import {SinonSandbox, createSandbox, match} from 'sinon'
 
 import PluginsIndex from '../../src/commands/plugins/index.js'
@@ -16,9 +15,10 @@ describe('install/uninstall integration tests', () => {
   let sandbox: SinonSandbox
   let stubs: ReturnType<typeof ux.makeStubs>
 
-  const cacheDir = join(tmpdir(), 'plugin-plugins-tests', 'cache')
-  const configDir = join(tmpdir(), 'plugin-plugins-tests', 'config')
-  const dataDir = join(tmpdir(), 'plugin-plugins-tests', 'data')
+  const tmp = resolve('tmp', 'install-integration')
+  const cacheDir = join(tmp, 'plugin-plugins-tests', 'cache')
+  const configDir = join(tmp, 'plugin-plugins-tests', 'config')
+  const dataDir = join(tmp, 'plugin-plugins-tests', 'data')
 
   console.log('process.env.MYCLI_DATA_DIR:', chalk.dim(dataDir))
   console.log('process.env.MYCLI_CACHE_DIR:', chalk.dim(cacheDir))
@@ -28,11 +28,14 @@ describe('install/uninstall integration tests', () => {
 
   before(async () => {
     try {
-      await Promise.all([
-        rm(cacheDir, {force: true, recursive: true}),
-        rm(configDir, {force: true, recursive: true}),
-        rm(dataDir, {force: true, recursive: true}),
-      ])
+      // no need to clear out directories in CI since they'll always be empty
+      if (process.env.CI) {
+        await Promise.all([
+          rm(cacheDir, {force: true, recursive: true}),
+          rm(configDir, {force: true, recursive: true}),
+          rm(dataDir, {force: true, recursive: true}),
+        ])
+      }
     } catch {}
   })
 
