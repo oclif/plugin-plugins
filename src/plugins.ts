@@ -63,15 +63,16 @@ export default class Plugins {
     return match?.[1] ?? name
   }
 
-  async hasPlugin(name: string): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.User | false> {
+  async hasPlugin(
+    name: string,
+  ): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User | false> {
     const list = await this.list()
-    const friendly = list.find((p) => this.friendlyName(p.name) === this.friendlyName(name))
-    const unfriendly = list.find((p) => this.unfriendlyName(p.name) === this.unfriendlyName(name))
-    const link = list.find((p) => p.type === 'link' && resolve(p.root) === resolve(name))
-    return (friendly ?? unfriendly ?? link ?? false) as
-      | Interfaces.PJSON.PluginTypes.Link
-      | Interfaces.PJSON.User
-      | false
+    return (
+      list.find((p) => this.friendlyName(p.name) === this.friendlyName(name)) ?? // friendly
+      list.find((p) => this.unfriendlyName(p.name) === this.unfriendlyName(name)) ?? // unfriendly
+      list.find((p) => p.type === 'link' && resolve(p.root) === resolve(name)) ?? // link
+      false
+    )
   }
 
   async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
