@@ -19,7 +19,21 @@ function trimUntil(fsPath: string, part: string): string {
 }
 
 type Dependencies = Record<string, {from: string; version: string}>
-type PluginWithDeps = Plugin & {deps: Dependencies}
+type PluginWithDeps = Omit<
+  Plugin,
+  | '_commandsDir'
+  | '_debug'
+  | '_manifest'
+  | 'addErrorScope'
+  | 'commandIDs'
+  | 'commandsDir'
+  | 'findCommand'
+  | 'flexibleTaxonomy'
+  | 'load'
+  | 'topics'
+  | 'warn'
+  | 'warned'
+> & {deps: Dependencies}
 
 export default class PluginsInspect extends Command {
   static args = {
@@ -47,8 +61,6 @@ export default class PluginsInspect extends Command {
 
   plugins = new Plugins(this.config)
 
-  // In this case we want these operations to happen
-  // sequentially so the `no-await-in-loop` rule is ignored
   async findDep(plugin: Plugin, dependency: string): Promise<{pkgPath: null | string; version: null | string}> {
     const dependencyPath = join(...dependency.split('/'))
     let start = join(plugin.root, 'node_modules')
@@ -58,21 +70,18 @@ export default class PluginsInspect extends Command {
       paths.push(start)
     }
 
-    // TODO: use promise.any to check the paths in parallel
-    // requires node >= 16
-    for (const p of paths) {
-      const fullPath = join(p, dependencyPath)
-      const pkgJsonPath = join(fullPath, 'package.json')
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        const pkgJson = JSON.parse(await readFile(pkgJsonPath, 'utf8'))
-        return {pkgPath: fullPath, version: pkgJson.version as string}
-      } catch {
-        // try the next path
-      }
+    try {
+      return await Promise.any(
+        paths.map(async (p) => {
+          const fullPath = join(p, dependencyPath)
+          const pkgJsonPath = join(fullPath, 'package.json')
+          const pkgJson = JSON.parse(await readFile(pkgJsonPath, 'utf8'))
+          return {pkgPath: fullPath, version: pkgJson.version as string}
+        }),
+      )
+    } catch {
+      return {pkgPath: null, version: null}
     }
-
-    return {pkgPath: null, version: null}
   }
 
   findPlugin(pluginName: string): Plugin {
@@ -122,7 +131,7 @@ export default class PluginsInspect extends Command {
 
     if (!this.jsonEnabled()) tree.display()
 
-    return {...plugin, deps: depsJson} as PluginWithDeps
+    return {...plugin, deps: depsJson}
   }
 
   /* eslint-disable no-await-in-loop */
