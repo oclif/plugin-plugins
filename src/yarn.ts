@@ -3,6 +3,7 @@ import makeDebug from 'debug'
 import {fork} from 'node:child_process'
 import {createRequire} from 'node:module'
 import {join} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import NpmRunPath from 'npm-run-path'
 
 import {WarningsCache} from './util.js'
@@ -26,7 +27,7 @@ export default class Yarn {
   }
 
   async exec(args: string[] = [], opts: YarnExecOptions): Promise<void> {
-    const bin = require.resolve('yarn/bin/yarn.js')
+    const bin = require.resolve('yarn/bin/yarn.js', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
     debug('yarn binary path', bin)
     const {cwd, silent, verbose} = opts
     if (args[0] !== 'run') {
