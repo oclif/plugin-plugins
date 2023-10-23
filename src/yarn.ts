@@ -3,7 +3,6 @@ import makeDebug from 'debug'
 import {fork} from 'node:child_process'
 import {createRequire} from 'node:module'
 import {join} from 'node:path'
-import {fileURLToPath} from 'node:url'
 import NpmRunPath from 'npm-run-path'
 
 import {WarningsCache} from './util.js'
@@ -20,16 +19,15 @@ type YarnExecOptions = {
 }
 
 export default class Yarn {
-  private bin: string
   private config: Interfaces.Config
 
   constructor({config}: {config: Interfaces.Config}) {
     this.config = config
-    this.bin = require.resolve('yarn/bin/yarn.js', {paths: [fileURLToPath(import.meta.url), config.root]})
-    debug('yarn binary path', this.bin)
   }
 
   async exec(args: string[] = [], opts: YarnExecOptions): Promise<void> {
+    const bin = require.resolve('yarn/bin/yarn.js')
+    debug('yarn binary path', bin)
     const {cwd, silent, verbose} = opts
     if (args[0] !== 'run') {
       // https://classic.yarnpkg.com/lang/en/docs/cli/#toc-concurrency-and-mutex
@@ -68,12 +66,12 @@ export default class Yarn {
     }
 
     if (verbose) {
-      process.stderr.write(`${cwd}: ${this.bin} ${args.join(' ')}`)
+      process.stderr.write(`${cwd}: ${bin} ${args.join(' ')}`)
     }
 
-    debug(`${cwd}: ${this.bin} ${args.join(' ')}`)
+    debug(`${cwd}: ${bin} ${args.join(' ')}`)
     try {
-      await this.fork(this.bin, args, options)
+      await this.fork(bin, args, options)
       debug('yarn done')
     } catch (error: unknown) {
       const {message} = error as Error & {message: string}
