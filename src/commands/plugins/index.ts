@@ -46,7 +46,7 @@ export default class PluginsIndex extends Command {
       this.displayJitPlugins(jitPlugins)
     }
 
-    return [...results, ...jitPlugins]
+    return [...results.filter((p) => !p.parent), ...jitPlugins]
   }
 
   private createTree(plugin: Plugin) {
