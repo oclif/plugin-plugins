@@ -16,13 +16,7 @@ plugins plugin for oclif
 - [Aliases](#aliases)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
-  - [`mycli plugins`](#mycli-plugins)
-  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
-  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-  - [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
-  - [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
-  - [`mycli plugins:update`](#mycli-pluginsupdate)
-  <!-- tocstop -->
+<!-- tocstop -->
 
 # What is this?
 
@@ -94,16 +88,26 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 <!-- commands -->
 
+- [`mycli plugins`](#mycli-plugins)
+- [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+- [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+- [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
+- [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
+- [`mycli plugins update`](#mycli-plugins-update)
+
 ## `mycli plugins`
 
 List installed plugins.
 
 ```
 USAGE
-  $ mycli plugins [--core]
+  $ mycli plugins [--json] [--core]
 
 FLAGS
   --core  Show core plugins.
+
+GLOBAL FLAGS
+  --json  Format output as json.
 
 DESCRIPTION
   List installed plugins.
@@ -112,7 +116,7 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.12/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/3.9.4-qa.0/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -129,6 +133,9 @@ FLAGS
   -h, --help     Show CLI help.
   -v, --verbose
 
+GLOBAL FLAGS
+  --json  Format output as json.
+
 DESCRIPTION
   Displays installation properties of a plugin.
 
@@ -136,7 +143,7 @@ EXAMPLES
   $ mycli plugins:inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.12/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/3.9.4-qa.0/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -152,11 +159,11 @@ ARGUMENTS
 FLAGS
   -f, --force    Run yarn install with force flag.
   -h, --help     Show CLI help.
-  -v, --verbose
+  -s, --silent   Silences yarn output.
+  -v, --verbose  Show verbose yarn output.
 
 DESCRIPTION
   Installs a plugin into the CLI.
-
   Can be installed from npm or a git url.
 
   Installation of a user-installed plugin will override a core plugin.
@@ -165,8 +172,9 @@ DESCRIPTION
   will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
   the CLI without the need to patch and update the whole CLI.
 
+
 ALIASES
-  $ mycli plugins:add
+  $ mycli plugins add
 
 EXAMPLES
   $ mycli plugins:install myplugin
@@ -176,7 +184,7 @@ EXAMPLES
   $ mycli plugins:install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.12/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/3.9.4-qa.0/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -190,22 +198,23 @@ ARGUMENTS
   PATH  [default: .] path to plugin
 
 FLAGS
-  -h, --help     Show CLI help.
+  -h, --help      Show CLI help.
   -v, --verbose
+  --[no-]install  Install dependencies after linking the plugin.
 
 DESCRIPTION
   Links a plugin into the CLI for development.
-
   Installation of a linked plugin will override a user-installed or core plugin.
 
   e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
   command will override the user-installed or core plugin implementation. This is useful for development work.
 
+
 EXAMPLES
   $ mycli plugins:link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.12/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/3.9.4-qa.0/src/commands/plugins/link.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -226,19 +235,19 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ mycli plugins:unlink
-  $ mycli plugins:remove
+  $ mycli plugins unlink
+  $ mycli plugins remove
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.12/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/3.9.4-qa.0/src/commands/plugins/uninstall.ts)_
 
-## `mycli plugins:update`
+## `mycli plugins update`
 
 Update installed plugins.
 
 ```
 USAGE
-  $ mycli plugins:update [-h] [-v]
+  $ mycli plugins update [-h] [-v]
 
 FLAGS
   -h, --help     Show CLI help.
@@ -248,6 +257,6 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v2.0.12/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/3.9.4-qa.0/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->

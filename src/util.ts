@@ -97,7 +97,7 @@ export async function findNpm(): Promise<string> {
 }
 
 export class WarningsCache {
-  private static cache: string[] = []
+  private static cache = new Set<string>()
   private static instance: WarningsCache
   public static getInstance(): WarningsCache {
     if (!WarningsCache.instance) {
@@ -109,9 +109,7 @@ export class WarningsCache {
 
   public add(...warnings: string[]): void {
     for (const warning of warnings) {
-      if (!WarningsCache.cache.includes(warning)) {
-        WarningsCache.cache.push(warning)
-      }
+      WarningsCache.cache.add(warning)
     }
   }
 
