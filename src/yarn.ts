@@ -57,11 +57,11 @@ export default class Yarn {
       // The ts-node/esm loader isn't need to execute yarn commands anyways.
       execArgv: process.execArgv
         .join(' ')
+        // Remove --loader ts-node/esm from execArgv so that the subprocess doesn't fail if it can't find ts-node.
         .replace('--loader ts-node/esm', '')
         .replace('--loader=ts-node/esm', '')
         .split(' ')
         .filter(Boolean),
-      // Remove --loader ts-node/esm from execArgv so that the subprocess doesn't fail if it can't find ts-node.
       stdio: [0, null, null, 'ipc'],
     }
 
