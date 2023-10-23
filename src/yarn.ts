@@ -19,14 +19,12 @@ type YarnExecOptions = {
 }
 
 export default class Yarn {
-  config: Interfaces.Config
+  private bin: string
+  private config: Interfaces.Config
 
   constructor({config}: {config: Interfaces.Config}) {
     this.config = config
-  }
-
-  get bin(): string {
-    return require.resolve('yarn/bin/yarn.js')
+    this.bin = require.resolve('yarn/bin/yarn.js')
   }
 
   async exec(args: string[] = [], opts: YarnExecOptions): Promise<void> {
@@ -93,7 +91,9 @@ export default class Yarn {
     const cache = WarningsCache.getInstance()
 
     return new Promise((resolve, reject) => {
-      const forked = fork(modulePath, args, options)
+      // YARN_IGNORE_PATH=1 prevents yarn from resolving to the globally configured yarn binary.
+      // In other words, it ensures that it resolves to the yarn binary that is available in the node_modules directory.
+      const forked = fork(modulePath, args, {...options, env: {...process.env, YARN_IGNORE_PATH: '1'}})
       forked.stderr?.on('data', (d: Buffer) => {
         if (!options.silent)
           cache.add(
