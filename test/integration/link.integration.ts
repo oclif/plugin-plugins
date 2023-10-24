@@ -4,7 +4,7 @@ import {exec as cpExec} from 'node:child_process'
 import {rm} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import {join} from 'node:path'
-import {SinonSandbox, createSandbox} from 'sinon'
+import {SinonSandbox, SinonStub, createSandbox} from 'sinon'
 
 import PluginsIndex from '../../src/commands/plugins/index.js'
 import PluginsLink from '../../src/commands/plugins/link.js'
@@ -21,7 +21,7 @@ async function exec(cmd: string, opts?: {cwd?: string}) {
 
 describe('link/unlink integration tests', () => {
   let sandbox: SinonSandbox
-  let stubs: ReturnType<typeof ux.makeStubs>
+  let stdoutStub: SinonStub
 
   const cacheDir = join(tmpdir(), 'plugin-plugins-tests', 'cache')
   const configDir = join(tmpdir(), 'plugin-plugins-tests', 'config')
@@ -50,7 +50,7 @@ describe('link/unlink integration tests', () => {
 
   beforeEach(() => {
     sandbox = createSandbox()
-    stubs = ux.makeStubs(sandbox)
+    stdoutStub = sandbox.stub(ux.write, 'stdout')
     process.env.MYCLI_CACHE_DIR = cacheDir
     process.env.MYCLI_CONFIG_DIR = configDir
     process.env.MYCLI_DATA_DIR = dataDir
@@ -66,14 +66,14 @@ describe('link/unlink integration tests', () => {
 
   it('should return "No Plugins" if no plugins are linked', async () => {
     await PluginsIndex.run([], cwd)
-    expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
+    expect(stdoutStub.firstCall.firstArg).to.equal('No plugins installed.\n')
   })
 
   it('should link plugin', async () => {
     await PluginsLink.run([pluginDir, '--no-install'], cwd)
 
     const result = await PluginsIndex.run([], cwd)
-    expect(stubs.stdout.firstCall.firstArg).to.include('test-esm-1')
+    expect(stdoutStub.firstCall.firstArg).to.include('test-esm-1')
     expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
   })
 
@@ -81,6 +81,6 @@ describe('link/unlink integration tests', () => {
     await PluginsUninstall.run([pluginDir], cwd)
 
     await PluginsIndex.run([], cwd)
-    expect(stubs.stdout.firstCall.firstArg).to.equal('No plugins installed.\n')
+    expect(stdoutStub.firstCall.firstArg).to.equal('No plugins installed.\n')
   })
 })

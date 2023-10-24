@@ -651,10 +651,41 @@
     wordwrap "^1.0.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^3.0.4", "@oclif/core@^3.2.1", "@oclif/core@^3.4.0":
+"@oclif/core@^3.0.4", "@oclif/core@^3.2.1":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.4.0.tgz#5400ad77061b4828e2d1b70c5091b38bf25ed389"
   integrity sha512-+5S7xBa8zPE0iaStTwLgPWP2xwp17bCypMruJW8rti3rueF/4dR+4JHZ6izbRjWGbtD20Ty3nt3e/UhpCYMVQQ==
+  dependencies:
+    ansi-escapes "^4.3.2"
+    ansi-styles "^4.3.0"
+    cardinal "^2.1.1"
+    chalk "^4.1.2"
+    clean-stack "^3.0.1"
+    cli-progress "^3.12.0"
+    debug "^4.3.4"
+    ejs "^3.1.9"
+    get-package-type "^0.1.0"
+    globby "^11.1.0"
+    hyperlinker "^1.0.0"
+    indent-string "^4.0.0"
+    is-wsl "^2.2.0"
+    js-yaml "^3.14.1"
+    natural-orderby "^2.0.3"
+    object-treeify "^1.1.33"
+    password-prompt "^1.1.2"
+    slice-ansi "^4.0.0"
+    string-width "^4.2.3"
+    strip-ansi "^6.0.1"
+    supports-color "^8.1.1"
+    supports-hyperlinks "^2.2.0"
+    widest-line "^3.1.0"
+    wordwrap "^1.0.0"
+    wrap-ansi "^7.0.0"
+
+"@oclif/core@^3.7.1":
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.7.1.tgz#42ee427261d10fc404c999bb0ac9021af69843c3"
+  integrity sha512-dBfx45jPyKjt7vdFPo7Byt0MbMoL3Pxm7UrnQAGSxocA/yK1UYrdtkzgZd+9Cntpaw5KRVPxB7crIETMFF7WRQ==
   dependencies:
     ansi-escapes "^4.3.2"
     ansi-styles "^4.3.0"
