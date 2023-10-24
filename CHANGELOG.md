@@ -1,3 +1,12 @@
+## [3.9.4](https://github.com/oclif/plugin-plugins/compare/3.9.3...3.9.4) (2023-10-24)
+
+
+### Bug Fixes
+
+* update npm version ([1cb870b](https://github.com/oclif/plugin-plugins/commit/1cb870ba826d1d9e5f95a94468e66b76198363dd))
+
+
+
 ## [3.9.3](https://github.com/oclif/plugin-plugins/compare/3.9.2...3.9.3) (2023-10-18)
 
 
