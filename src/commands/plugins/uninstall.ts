@@ -3,7 +3,7 @@ import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
 import Plugins from '../../plugins.js'
-import {WarningsCache} from '../../util.js'
+import {YarnMessagesCache} from '../../util.js'
 
 function removeTags(plugin: string): string {
   if (plugin.includes('@')) {
@@ -76,7 +76,7 @@ export default class PluginsUninstall extends Command {
 
       ux.action.stop()
 
-      WarningsCache.getInstance().flush()
+      YarnMessagesCache.getInstance().flush()
     }
   }
 }

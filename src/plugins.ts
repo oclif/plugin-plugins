@@ -214,8 +214,8 @@ export default class Plugins {
       await this.yarn.exec(options.prod ? ['--prod'] : [], {
         cwd: root,
         noSpinner: true,
-        silent: this.silent,
-        verbose: this.verbose,
+        silent: true,
+        verbose: false,
       })
     }
 

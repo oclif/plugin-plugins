@@ -1,4 +1,4 @@
-import {ux} from '@oclif/core'
+import {Interfaces, ux} from '@oclif/core'
 import * as fs from 'node:fs'
 import * as fsPromises from 'node:fs/promises'
 import {createRequire} from 'node:module'
@@ -96,26 +96,56 @@ export async function findNpm(): Promise<string> {
   return path.join(npmPath, npmPjson.bin.npm)
 }
 
-export class WarningsCache {
-  private static cache = new Set<string>()
-  private static instance: WarningsCache
-  public static getInstance(): WarningsCache {
-    if (!WarningsCache.instance) {
-      WarningsCache.instance = new WarningsCache()
+export class YarnMessagesCache {
+  private static errors = new Set<string>()
+  private static instance: YarnMessagesCache
+  private static warnings = new Set<string>()
+  public static getInstance(): YarnMessagesCache {
+    if (!YarnMessagesCache.instance) {
+      YarnMessagesCache.instance = new YarnMessagesCache()
     }
 
-    return WarningsCache.instance
+    return YarnMessagesCache.instance
   }
 
-  public add(...warnings: string[]): void {
+  public addErrors(...errors: string[]): void {
+    for (const err of errors) {
+      YarnMessagesCache.errors.add(err)
+    }
+  }
+
+  public addWarnings(...warnings: string[]): void {
     for (const warning of warnings) {
-      WarningsCache.cache.add(warning)
+      // Skip workspaces warning because it's likely the fault of a transitive dependency and not actionable
+      // https://github.com/yarnpkg/yarn/issues/8580
+      if (warning.includes('Workspaces can only be enabled in private projects.')) continue
+      YarnMessagesCache.warnings.add(warning)
     }
   }
 
-  public flush(): void {
-    for (const warning of WarningsCache.cache) {
+  public flush(plugin?: Interfaces.Config | undefined): void {
+    if (YarnMessagesCache.warnings.size === 0) return
+
+    for (const warning of YarnMessagesCache.warnings) {
       ux.warn(warning)
+    }
+
+    if (plugin) {
+      ux.log(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`)
+
+      if (plugin.pjson.bugs || plugin.pjson.repository) {
+        ux.log(
+          `We suggest that you create an issue at ${
+            plugin.pjson.bugs ?? plugin.pjson.repository
+          } and ask the plugin owners to address them.\n`,
+        )
+      }
+    }
+
+    if (YarnMessagesCache.errors.size === 0) return
+    ux.log('\nThe following errors occurred:')
+    for (const err of YarnMessagesCache.errors) {
+      ux.error(err, {exit: false})
     }
   }
 }

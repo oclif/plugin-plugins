@@ -6,7 +6,7 @@ import {join} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import NpmRunPath from 'npm-run-path'
 
-import {WarningsCache} from './util.js'
+import {YarnMessagesCache} from './util.js'
 
 const debug = makeDebug('cli:yarn')
 
@@ -89,26 +89,29 @@ export default class Yarn {
   }
 
   fork(modulePath: string, args: string[] = [], options: YarnExecOptions): Promise<void> {
-    const cache = WarningsCache.getInstance()
+    const cache = YarnMessagesCache.getInstance()
 
     return new Promise((resolve, reject) => {
       // YARN_IGNORE_PATH=1 prevents yarn from resolving to the globally configured yarn binary.
       // In other words, it ensures that it resolves to the yarn binary that is available in the node_modules directory.
       const forked = fork(modulePath, args, {...options, env: {...process.env, YARN_IGNORE_PATH: '1'}})
       forked.stderr?.on('data', (d: Buffer) => {
-        if (!options.silent)
-          cache.add(
-            ...d
-              .toString()
-              .split('\n')
-              .map((i) =>
-                i
-                  .trim()
-                  .replace(/^warning/, '')
-                  .trim(),
-              )
-              .filter(Boolean),
-          )
+        if (!options.silent) {
+          const str = d.toString()
+          if (str.startsWith('error')) cache.addErrors(str)
+          else
+            cache.addWarnings(
+              ...str
+                .split('\n')
+                .map((i) =>
+                  i
+                    .trim()
+                    .replace(/^warning/, '')
+                    .trim(),
+                )
+                .filter(Boolean),
+            )
+        }
       })
       forked.stdout?.setEncoding('utf8')
       forked.stdout?.on('data', (d) => {

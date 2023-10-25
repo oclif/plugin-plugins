@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import validate from 'validate-npm-package-name'
 
 import Plugins from '../../plugins.js'
-import {WarningsCache} from '../../util.js'
+import {YarnMessagesCache} from '../../util.js'
 
 export default class PluginsInstall extends Command {
   static aliases = ['plugins:add']
@@ -157,15 +157,15 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         }
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))
-        WarningsCache.getInstance().flush()
+        YarnMessagesCache.getInstance().flush(plugin)
         throw error
       }
 
       ux.action.stop(`installed v${plugin.version}`)
 
-      WarningsCache.getInstance().flush()
+      YarnMessagesCache.getInstance().flush(plugin)
 
-      ux.log(chalk.green(`Successfully installed ${plugin.name} v${plugin.version}`))
+      ux.log(chalk.green(`\nSuccessfully installed ${plugin.name} v${plugin.version}`))
     }
   }
 }
