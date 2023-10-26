@@ -1,17 +1,16 @@
+import {expect} from 'chai'
+import chalk from 'chalk'
 import {exec as cpExec} from 'node:child_process'
-import {mkdir} from 'node:fs/promises'
+import {rm} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
 
-import {expect} from 'chai'
-import {dim} from 'chalk'
-
-async function exec(command: string): Promise<{stdout: string, stderr: string, code: number}> {
+async function exec(command: string): Promise<{code: number; stderr: string; stdout: string}> {
   return new Promise((resolve, reject) => {
     cpExec(command, (error, stdout, stderr) => {
       if (error) {
         reject(error)
       } else {
-        resolve({stdout, stderr, code: 0})
+        resolve({code: 0, stderr, stdout})
       }
     })
   })
@@ -20,7 +19,7 @@ async function exec(command: string): Promise<{stdout: string, stderr: string, c
 async function ensureSfExists(): Promise<boolean> {
   try {
     const {stdout} = await exec('sf --version')
-    console.log('sf version:', dim(stdout.trim()))
+    console.log('sf version:', chalk.dim(stdout.trim()))
     return true
   } catch {
     return false
@@ -31,19 +30,27 @@ describe('sf Integration', () => {
   before(async () => {
     await ensureSfExists()
 
-    const tmp = resolve('tmp')
+    const tmp = resolve('tmp', 'sf-integration')
     process.env.SF_DATA_DIR = join(tmp, 'data')
     process.env.SF_CACHE_DIR = join(tmp, 'cache')
     process.env.SF_CONFIG_DIR = join(tmp, 'config')
-    mkdir(process.env.SF_DATA_DIR, {recursive: true})
-    mkdir(process.env.SF_CACHE_DIR, {recursive: true})
-    mkdir(process.env.SF_CONFIG_DIR, {recursive: true})
 
-    console.log('process.env.SF_DATA_DIR:', dim(process.env.SF_DATA_DIR))
-    console.log('process.env.SF_CACHE_DIR:', dim(process.env.SF_CACHE_DIR))
-    console.log('process.env.SF_CONFIG_DIR:', dim(process.env.SF_CONFIG_DIR))
+    console.log('process.env.SF_DATA_DIR:', chalk.dim(process.env.SF_DATA_DIR))
+    console.log('process.env.SF_CACHE_DIR:', chalk.dim(process.env.SF_CACHE_DIR))
+    console.log('process.env.SF_CONFIG_DIR:', chalk.dim(process.env.SF_CONFIG_DIR))
 
-    await exec('sf plugins link')
+    try {
+      // no need to clear out directories in CI since they'll always be empty
+      if (!process.env.CI) {
+        await Promise.all([
+          rm(process.env.SF_DATA_DIR, {force: true, recursive: true}),
+          rm(process.env.SF_CACHE_DIR, {force: true, recursive: true}),
+          rm(process.env.SF_CONFIG_DIR, {force: true, recursive: true}),
+        ])
+      }
+    } catch {}
+
+    await exec('sf plugins link --no-install')
     const {stdout} = await exec('sf plugins --core')
     expect(stdout).to.contain('@oclif/plugin-plugins')
     expect(stdout).to.contain(`(link) ${process.cwd()}`)

@@ -1,31 +1,30 @@
-import * as shelljs from 'shelljs'
-import {type} from 'os'
-import * as fs from 'fs'
-import * as fsPromises from 'fs/promises'
+import {Interfaces, ux} from '@oclif/core'
+import * as fs from 'node:fs'
+import * as fsPromises from 'node:fs/promises'
+import {createRequire} from 'node:module'
+import {type} from 'node:os'
 import * as path from 'node:path'
 
-export function sortBy<T>(arr: T[], fn: (i: T) => sortBy.Types | sortBy.Types[]): T[] {
-  function compare(a: sortBy.Types | sortBy.Types[], b: sortBy.Types | sortBy.Types[]): number {
-    a = a === undefined ? 0 : a
-    b = b === undefined ? 0 : b
+type CompareTypes = boolean | number | string | undefined
 
-    if (Array.isArray(a) && Array.isArray(b)) {
-      if (a.length === 0 && b.length === 0) return 0
-      const diff = compare(a[0], b[0])
-      if (diff !== 0) return diff
-      return compare(a.slice(1), b.slice(1))
-    }
+function compare(a: CompareTypes | CompareTypes[], b: CompareTypes | CompareTypes[]): number {
+  const itemA = a === undefined ? 0 : a
+  const itemB = b === undefined ? 0 : b
 
-    if (a < b) return -1
-    if (a > b) return 1
-    return 0
+  if (Array.isArray(itemA) && Array.isArray(itemB)) {
+    if (itemA.length === 0 && itemB.length === 0) return 0
+    const diff = compare(itemA[0], itemB[0])
+    if (diff !== 0) return diff
+    return compare(itemA.slice(1), itemB.slice(1))
   }
 
-  return arr.sort((a, b) => compare(fn(a), fn(b)))
+  if (itemA < itemB) return -1
+  if (itemA > itemB) return 1
+  return 0
 }
 
-export namespace sortBy {
-  export type Types = string | number | undefined | boolean
+export function sortBy<T>(arr: T[], fn: (i: T) => CompareTypes | CompareTypes[]): T[] {
+  return arr.sort((a, b) => compare(fn(a), fn(b)))
 }
 
 export function uniq<T>(arr: T[]): T[] {
@@ -33,9 +32,23 @@ export function uniq<T>(arr: T[]): T[] {
 }
 
 export function uniqWith<T>(arr: T[], fn: (a: T, b: T) => boolean): T[] {
-  return arr.filter((a, i) => {
-    return !arr.find((b, j) => j > i && fn(a, b))
-  })
+  return arr.filter((a, i) => !arr.some((b, j) => j > i && fn(a, b)))
+}
+
+const isExecutable = (filepath: string): boolean => {
+  if (type() === 'Windows_NT') return filepath.endsWith('node.exe')
+
+  try {
+    if (filepath.endsWith('node')) {
+      // This checks if the filepath is executable on Mac or Linux, if it is not it errors.
+      fs.accessSync(filepath, fs.constants.X_OK)
+      return true
+    }
+  } catch {
+    return false
+  }
+
+  return false
 }
 
 /**
@@ -45,24 +58,9 @@ export function uniqWith<T>(arr: T[], fn: (a: T, b: T) => boolean): T[] {
  * @param root - The root path of the CLI (this.config.root).
  * @returns The path to the node executable.
  */
-export function findNode(root: string): string {
-  const isExecutable = (filepath: string): boolean => {
-    if (type() === 'Windows_NT') return filepath.endsWith('node.exe')
-
-    try {
-      if (filepath.endsWith('node')) {
-        // This checks if the filepath is executable on Mac or Linux, if it is not it errors.
-        fs.accessSync(filepath, fs.constants.X_OK)
-        return true
-      }
-    } catch {
-      return false
-    }
-
-    return false
-  }
-
-  const cliBinDirs = [path.join(root, 'bin'), path.join(root, 'client', 'bin')].filter(p => fs.existsSync(p))
+export async function findNode(root: string): Promise<string> {
+  const cliBinDirs = [path.join(root, 'bin'), path.join(root, 'client', 'bin')].filter((p) => fs.existsSync(p))
+  const {default: shelljs} = await import('shelljs')
 
   if (cliBinDirs.length > 0) {
     // Find the node executable
@@ -91,8 +89,63 @@ export function findNode(root: string): string {
  * @returns The path to the `npm/bin/npm-cli.js` file.
  */
 export async function findNpm(): Promise<string> {
+  const require = createRequire(import.meta.url)
   const npmPjsonPath = require.resolve('npm/package.json')
   const npmPjson = JSON.parse(await fsPromises.readFile(npmPjsonPath, {encoding: 'utf8'}))
   const npmPath = npmPjsonPath.slice(0, Math.max(0, npmPjsonPath.lastIndexOf(path.sep)))
   return path.join(npmPath, npmPjson.bin.npm)
+}
+
+export class YarnMessagesCache {
+  private static errors = new Set<string>()
+  private static instance: YarnMessagesCache
+  private static warnings = new Set<string>()
+  public static getInstance(): YarnMessagesCache {
+    if (!YarnMessagesCache.instance) {
+      YarnMessagesCache.instance = new YarnMessagesCache()
+    }
+
+    return YarnMessagesCache.instance
+  }
+
+  public addErrors(...errors: string[]): void {
+    for (const err of errors) {
+      YarnMessagesCache.errors.add(err)
+    }
+  }
+
+  public addWarnings(...warnings: string[]): void {
+    for (const warning of warnings) {
+      // Skip workspaces warning because it's likely the fault of a transitive dependency and not actionable
+      // https://github.com/yarnpkg/yarn/issues/8580
+      if (warning.includes('Workspaces can only be enabled in private projects.')) continue
+      YarnMessagesCache.warnings.add(warning)
+    }
+  }
+
+  public flush(plugin?: Interfaces.Config | undefined): void {
+    if (YarnMessagesCache.warnings.size === 0) return
+
+    for (const warning of YarnMessagesCache.warnings) {
+      ux.warn(warning)
+    }
+
+    if (plugin) {
+      ux.log(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`)
+
+      if (plugin.pjson.bugs || plugin.pjson.repository) {
+        ux.log(
+          `We suggest that you create an issue at ${
+            plugin.pjson.bugs ?? plugin.pjson.repository
+          } and ask the plugin owners to address them.\n`,
+        )
+      }
+    }
+
+    if (YarnMessagesCache.errors.size === 0) return
+    ux.log('\nThe following errors occurred:')
+    for (const err of YarnMessagesCache.errors) {
+      ux.error(err, {exit: false})
+    }
+  }
 }
