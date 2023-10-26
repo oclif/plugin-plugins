@@ -50,7 +50,7 @@ describe('sf Integration', () => {
       }
     } catch {}
 
-    await exec('sf plugins link')
+    await exec('sf plugins link --no-install')
     const {stdout} = await exec('sf plugins --core')
     expect(stdout).to.contain('@oclif/plugin-plugins')
     expect(stdout).to.contain(`(link) ${process.cwd()}`)
