@@ -34,6 +34,10 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       char: 'f',
       description: 'Run yarn install with force flag.',
     }),
+    'ignore-engines': Flags.boolean({
+      hidden: true,
+      description: 'Ignore engine checks during the install.',
+    }),
     jit: Flags.boolean({
       hidden: true,
       parse: async (input, ctx) => {
@@ -91,10 +95,14 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
           plugin = await this.plugins.install(p.name, {
             tag: p.tag,
             force: flags.force,
+            ignoreEngines: flags['ignore-engines'],
           })
         } else {
           ux.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
-          plugin = await this.plugins.install(p.url, {force: flags.force})
+          plugin = await this.plugins.install(p.url, {
+            force: flags.force,
+            ignoreEngines: flags['ignore-engines'],
+          })
         }
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))

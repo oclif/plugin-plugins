@@ -60,14 +60,16 @@ export default class Plugins {
 
   async install(
     name: string,
-    {tag = 'latest', force = false} = {},
+    {tag = 'latest', force = false, ignoreEngines = false} = {},
   ): Promise<Interfaces.Config> {
     try {
       this.debug(`installing plugin ${name}`)
       const yarnOpts = {cwd: this.config.dataDir, verbose: this.verbose}
       await this.createPJSON()
       let plugin
-      const add = force ? ['add', '--force'] : ['add']
+      const useForce = force ? ['--force'] : []
+      const useIgnoreEngines = ignoreEngines ? ['--ignore-engines'] : []
+      const add = ['add', ...useForce, ...useIgnoreEngines]
       if (name.includes(':')) {
         // url
         const url = name
