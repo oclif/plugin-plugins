@@ -5,6 +5,7 @@ on:
     workflows:
       - create-github-release
       - publish
+      - update-npm-version
     types:
       - completed
 
