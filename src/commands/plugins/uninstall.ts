@@ -39,7 +39,7 @@ export default class PluginsUninstall extends Command {
     $ <%- config.bin %> plugins:uninstall <%- config.pjson.oclif.examplePlugin || "myplugin" %>
   `
 
-  static static = false
+  static strict = false
 
   static usage = 'plugins:uninstall PLUGIN...'
 
