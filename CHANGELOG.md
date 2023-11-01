@@ -1,3 +1,9 @@
+## [4.0.2](https://github.com/oclif/plugin-plugins/compare/4.0.1...4.0.2) (2023-11-01)
+
+### Bug Fixes
+
+- use strict=false ([#700](https://github.com/oclif/plugin-plugins/issues/700)) ([17afd99](https://github.com/oclif/plugin-plugins/commit/17afd9916334e2cb3c3e754d99bdcd63fafe345a))
+
 ## [4.0.1](https://github.com/oclif/plugin-plugins/compare/3.9.4...4.0.1) (2023-10-26)
 
 ### Bug Fixes
