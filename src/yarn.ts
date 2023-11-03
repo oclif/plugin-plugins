@@ -92,9 +92,18 @@ export default class Yarn {
     const cache = YarnMessagesCache.getInstance()
 
     return new Promise((resolve, reject) => {
-      // YARN_IGNORE_PATH=1 prevents yarn from resolving to the globally configured yarn binary.
-      // In other words, it ensures that it resolves to the yarn binary that is available in the node_modules directory.
-      const forked = fork(modulePath, args, {...options, env: {...process.env, YARN_IGNORE_PATH: '1'}})
+      const forked = fork(modulePath, args, {
+        ...options,
+        env: {
+          ...process.env,
+          // Disable husky hooks because a plugin might be trying to install them, which will
+          // break the install since the install location isn't a .git directory.
+          HUSKY: '0',
+          // YARN_IGNORE_PATH=1 prevents yarn from resolving to the globally configured yarn binary.
+          // In other words, it ensures that it resolves to the yarn binary that is available in the node_modules directory.
+          YARN_IGNORE_PATH: '1',
+        },
+      })
       forked.stderr?.on('data', (d: Buffer) => {
         if (!options.silent) {
           const str = d.toString()

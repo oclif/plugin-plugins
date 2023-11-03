@@ -88,29 +88,17 @@ export default class Plugins {
         await this.yarn.exec([...add, url], yarnOpts)
         const {dependencies} = await this.pjson()
         name = Object.entries(dependencies ?? {}).find(([, u]) => u === url)![0]
-        const root = join(this.config.dataDir, 'node_modules', name)
         plugin = await Config.load({
           devPlugins: false,
           name,
-          root,
+          root: join(this.config.dataDir, 'node_modules', name),
           userPlugins: false,
         })
-        await this.refresh({all: true, prod: true})
+        await this.refresh({all: true, prod: true}, plugin.root)
 
         this.isValidPlugin(plugin)
 
         await this.add({name, type: 'user', url})
-
-        if (plugin.getPluginsList().find((p) => p.root === root)?.moduleType === 'module') {
-          try {
-            // CJS plugins can be auto-transpiled at runtime but ESM plugins
-            // cannot. To support ESM plugins we need to compile them after
-            // installing them.
-            await this.yarn.exec(['run', 'tsc'], {...yarnOpts, cwd: plugin.root})
-          } catch (error) {
-            this.debug(error)
-          }
-        }
       } else {
         // npm
         const range = validRange(tag)
@@ -223,12 +211,10 @@ export default class Plugins {
 
     const pluginRoots = [...roots]
     if (options.all) {
-      const plugins = await this.list()
-      const userPluginsRoots = plugins
-        .filter((p) => p.type === 'user' && !p.url)
-        .map((p) => this.config.plugins.get(p.name)?.root)
-        // eslint-disable-next-line unicorn/prefer-native-coercion-functions
-        .filter((r): r is string => Boolean(r))
+      const userPluginsRoots = this.config
+        .getPluginsList()
+        .filter((p) => p.type === 'user')
+        .map((p) => p.root)
       pluginRoots.push(...userPluginsRoots)
     }
 
