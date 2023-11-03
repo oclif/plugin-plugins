@@ -85,7 +85,7 @@ export default class Plugins {
       if (name.includes(':')) {
         // url
         const url = name
-        await this.yarn.exec([...add, '--ignore-scripts', url], yarnOpts)
+        await this.yarn.exec([...add, url], yarnOpts)
         const {dependencies} = await this.pjson()
         name = Object.entries(dependencies ?? {}).find(([, u]) => u === url)![0]
         const root = join(this.config.dataDir, 'node_modules', name)
@@ -106,7 +106,6 @@ export default class Plugins {
             // CJS plugins can be auto-transpiled at runtime but ESM plugins
             // cannot. To support ESM plugins we need to compile them after
             // installing them.
-            await this.yarn.exec(['install'], {...yarnOpts, cwd: plugin.root})
             await this.yarn.exec(['run', 'tsc'], {...yarnOpts, cwd: plugin.root})
           } catch (error) {
             this.debug(error)
@@ -178,7 +177,6 @@ export default class Plugins {
       return unfriendly
     }
 
-    this.debug(`expanded package name ${unfriendly} not found, using given package name ${name}`)
     return name
   }
 
