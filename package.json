@@ -28,7 +28,7 @@
     "@types/sinon": "^10.0.19",
     "@types/validate-npm-package-name": "^4.0.0",
     "chai": "^4.3.10",
-    "commitlint": "^17.8.0",
+    "commitlint": "^17.8.1",
     "eslint": "^8.52.0",
     "eslint-config-oclif": "^5.0.0",
     "eslint-config-oclif-typescript": "^3.0.11",
