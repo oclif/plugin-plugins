@@ -5,7 +5,7 @@
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
-    "@oclif/core": "^3.7.1",
+    "@oclif/core": "^3.10.2",
     "chalk": "^5.3.0",
     "debug": "^4.3.4",
     "npm": "9.8.1",
@@ -81,7 +81,7 @@
     "lint": "eslint . --ext .ts",
     "postpublish": "yarn run clean",
     "posttest": "yarn lint",
-    "prepare": "husky install && yarn build && oclif manifest",
+    "prepare": "husky install && yarn build",
     "prepublishOnly": "yarn run build && oclif lock && oclif manifest . && oclif readme",
     "pretest": "yarn build && tsc -p test --noEmit",
     "preversion": "yarn run clean",
