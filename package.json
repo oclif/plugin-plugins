@@ -81,7 +81,7 @@
     "lint": "eslint . --ext .ts",
     "postpublish": "yarn run clean",
     "posttest": "yarn lint",
-    "prepare": "husky install && yarn build && yarn oclif manifest",
+    "prepare": "husky install && yarn build && oclif manifest",
     "prepublishOnly": "yarn run build && oclif lock && oclif manifest . && oclif readme",
     "pretest": "yarn build && tsc -p test --noEmit",
     "preversion": "yarn run clean",
