@@ -180,6 +180,7 @@ export default class Plugins {
       return unfriendly
     }
 
+    this.debug(`expanded package name ${unfriendly} not found, using given package name ${name}`)
     return name
   }
 
