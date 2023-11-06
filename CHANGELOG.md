@@ -1,3 +1,9 @@
+## [4.0.3](https://github.com/oclif/plugin-plugins/compare/4.0.2...4.0.3) (2023-11-06)
+
+### Bug Fixes
+
+- HUSKY=0 on github installs ([#702](https://github.com/oclif/plugin-plugins/issues/702)) ([69129c9](https://github.com/oclif/plugin-plugins/commit/69129c978761c6c12a1e85196059b4a5a23f9727))
+
 ## [4.0.2](https://github.com/oclif/plugin-plugins/compare/4.0.1...4.0.2) (2023-11-01)
 
 ### Bug Fixes
