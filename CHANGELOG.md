@@ -1,3 +1,9 @@
+# [4.1.0](https://github.com/oclif/plugin-plugins/compare/4.0.3...4.1.0) (2023-11-07)
+
+### Features
+
+- add plugins reset cmd ([6d5d4a2](https://github.com/oclif/plugin-plugins/commit/6d5d4a28f1ed2b150eece0a7d6957690ed04e708))
+
 ## [4.0.3](https://github.com/oclif/plugin-plugins/compare/4.0.2...4.0.3) (2023-11-06)
 
 ### Bug Fixes
