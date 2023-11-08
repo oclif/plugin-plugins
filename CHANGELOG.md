@@ -1,3 +1,9 @@
+## [4.1.1](https://github.com/oclif/plugin-plugins/compare/4.1.0...4.1.1) (2023-11-08)
+
+### Bug Fixes
+
+- can now install legacy plugins if @oclif/plugin-legacy in plugins ([#708](https://github.com/oclif/plugin-plugins/issues/708)) ([41566b6](https://github.com/oclif/plugin-plugins/commit/41566b6a9d446f4b446ee1cf430e0c29203c0f17))
+
 # [4.1.0](https://github.com/oclif/plugin-plugins/compare/4.0.3...4.1.0) (2023-11-07)
 
 ### Features
