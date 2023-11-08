@@ -165,7 +165,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
       YarnMessagesCache.getInstance().flush(plugin)
 
-      ux.log(chalk.green(`\nSuccessfully installed ${plugin.name} v${plugin.version}`))
+      this.log(chalk.green(`\nSuccessfully installed ${plugin.name} v${plugin.version}`))
     }
   }
 }
