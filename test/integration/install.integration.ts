@@ -236,4 +236,15 @@ describe('install/uninstall integration tests', () => {
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.false
     })
   })
+
+  describe('legacy plugin', () => {
+    it('should install legacy plugin', async () => {
+      await PluginsInstall.run(['@oclif/plugin-legacy'], cwd)
+      await PluginsInstall.run(['@heroku-cli/plugin-ps-exec', '--silent'], cwd)
+
+      const result = await PluginsIndex.run([], cwd)
+      expect(stdoutStub.calledWith(match('@heroku-cli/plugin-ps-exec'))).to.be.true
+      expect(result.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
+    })
+  })
 })
