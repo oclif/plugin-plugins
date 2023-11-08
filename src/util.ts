@@ -131,10 +131,10 @@ export class YarnMessagesCache {
     }
 
     if (plugin) {
-      ux.log(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`)
+      ux.logToStderr(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`)
 
       if (plugin.pjson.bugs || plugin.pjson.repository) {
-        ux.log(
+        ux.logToStderr(
           `We suggest that you create an issue at ${
             plugin.pjson.bugs ?? plugin.pjson.repository
           } and ask the plugin owners to address them.\n`,
@@ -143,7 +143,7 @@ export class YarnMessagesCache {
     }
 
     if (YarnMessagesCache.errors.size === 0) return
-    ux.log('\nThe following errors occurred:')
+    ux.logToStderr('\nThe following errors occurred:')
     for (const err of YarnMessagesCache.errors) {
       ux.error(err, {exit: false})
     }
