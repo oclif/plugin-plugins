@@ -1,3 +1,9 @@
+## [4.1.2](https://github.com/oclif/plugin-plugins/compare/4.1.1...4.1.2) (2023-11-08)
+
+### Bug Fixes
+
+- all error and warnings to stderr, this.log in commands ([6bdba67](https://github.com/oclif/plugin-plugins/commit/6bdba67c25a25fff0635b78d7dea43a6ff2a36bf))
+
 ## [4.1.1](https://github.com/oclif/plugin-plugins/compare/4.1.0...4.1.1) (2023-11-08)
 
 ### Bug Fixes
