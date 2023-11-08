@@ -354,7 +354,7 @@ export default class Plugins {
     if (p.valid) return true
 
     if (
-      !this.config.plugins.get('@oclif/plugin-legacy') ||
+      this.config.plugins.get('@oclif/plugin-legacy') ||
       // @ts-expect-error because _base is private
       p._base.includes('@oclif/plugin-legacy')
     ) {
