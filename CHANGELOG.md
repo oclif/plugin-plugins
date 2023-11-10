@@ -1,3 +1,9 @@
+## [4.1.4](https://github.com/oclif/plugin-plugins/compare/4.1.3...4.1.4) (2023-11-10)
+
+### Bug Fixes
+
+- enable --json for plugins install ([#712](https://github.com/oclif/plugin-plugins/issues/712)) ([59785cd](https://github.com/oclif/plugin-plugins/commit/59785cd7221c65e9ba13988b47af505c3f39d52f))
+
 ## [4.1.3](https://github.com/oclif/plugin-plugins/compare/4.1.2...4.1.3) (2023-11-10)
 
 ### Bug Fixes
