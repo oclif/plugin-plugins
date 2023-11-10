@@ -1,3 +1,9 @@
+## [4.1.3](https://github.com/oclif/plugin-plugins/compare/4.1.2...4.1.3) (2023-11-10)
+
+### Bug Fixes
+
+- handle spaces in node bin path ([#711](https://github.com/oclif/plugin-plugins/issues/711)) ([0e5f43e](https://github.com/oclif/plugin-plugins/commit/0e5f43e50bb1c9d1ee0648f3415de6b8dd1e7614))
+
 ## [4.1.2](https://github.com/oclif/plugin-plugins/compare/4.1.1...4.1.2) (2023-11-08)
 
 ### Bug Fixes
