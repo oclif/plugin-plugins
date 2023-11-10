@@ -73,7 +73,10 @@ export async function findNode(root: string): Promise<string> {
 
   // Check to see if node is installed
   const nodeShellString = shelljs.which('node')
-  if (nodeShellString?.code === 0 && nodeShellString?.stdout) return nodeShellString.stdout
+  if (nodeShellString?.code === 0 && nodeShellString?.stdout) {
+    // wrap node path in double quotes to deal with spaces
+    return `"${nodeShellString.stdout}"`
+  }
 
   const err = new Error('Cannot locate node executable.')
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
