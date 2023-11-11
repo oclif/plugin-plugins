@@ -1,3 +1,9 @@
+## [4.1.5](https://github.com/oclif/plugin-plugins/compare/4.1.4...4.1.5) (2023-11-11)
+
+### Bug Fixes
+
+- **deps:** bump npm from 9.8.1 to 9.9.1 ([#717](https://github.com/oclif/plugin-plugins/issues/717)) ([31e197f](https://github.com/oclif/plugin-plugins/commit/31e197f4fbe35e278fd3bab87a30f0d57338507e))
+
 ## [4.1.4](https://github.com/oclif/plugin-plugins/compare/4.1.3...4.1.4) (2023-11-10)
 
 ### Bug Fixes
