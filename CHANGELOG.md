@@ -1,3 +1,9 @@
+## [4.1.7](https://github.com/oclif/plugin-plugins/compare/4.1.6...4.1.7) (2023-11-13)
+
+### Bug Fixes
+
+- use templates for examples ([#719](https://github.com/oclif/plugin-plugins/issues/719)) ([c2a3f43](https://github.com/oclif/plugin-plugins/commit/c2a3f4360c116e69e2cb9ab807e527d5364c5804))
+
 ## [4.1.6](https://github.com/oclif/plugin-plugins/compare/4.1.5...4.1.6) (2023-11-13)
 
 ### Bug Fixes
