@@ -48,7 +48,7 @@ export default class PluginsInspect extends Command {
 
   static enableJsonFlag = true
 
-  static examples = ['$ <%= config.bin %> plugins:inspect <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
+  static examples = ['<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
 
   static flags = {
     help: Flags.help({char: 'h'}),

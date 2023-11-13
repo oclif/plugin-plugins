@@ -24,9 +24,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   public static enableJsonFlag = true
 
   static examples = [
-    '$ <%= config.bin %> plugins:install <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
-    '$ <%= config.bin %> plugins:install https://github.com/someuser/someplugin',
-    '$ <%= config.bin %> plugins:install someuser/someplugin',
+    '<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
+    '<%= config.bin %> <%= command.id %> https://github.com/someuser/someplugin',
+    '<%= config.bin %> <%= command.id %> someuser/someplugin',
   ]
 
   static flags = {

@@ -29,15 +29,12 @@ export default class PluginsUninstall extends Command {
 
   static description = 'Removes a plugin from the CLI.'
 
+  static examples = ['<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %>']
+
   static flags = {
     help: Flags.help({char: 'h'}),
     verbose: Flags.boolean({char: 'v'}),
   }
-
-  static help = `
-  Example:
-    $ <%- config.bin %> plugins:uninstall <%- config.pjson.oclif.examplePlugin || "myplugin" %>
-  `
 
   static strict = false
 
