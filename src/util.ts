@@ -127,19 +127,31 @@ export class YarnMessagesCache {
 
   public flush(plugin?: Interfaces.Config | undefined): void {
     if (YarnMessagesCache.warnings.size === 0) return
+    let count = 0
 
     for (const warning of YarnMessagesCache.warnings) {
-      ux.warn(warning)
+      if (!plugin) {
+        ux.warn(warning)
+        count += 1
+        return
+      }
+
+      // If flushing for a specific plugin, only show warnings that are specific to that plugin.
+      if (warning.startsWith(plugin.name) || warning.startsWith(`"${plugin.name}`)) {
+        count += 1
+        ux.warn(warning)
+      }
     }
 
-    if (plugin) {
+    if (plugin && count > 0) {
       ux.logToStderr(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`)
 
       if (plugin.pjson.bugs || plugin.pjson.repository) {
         ux.logToStderr(
-          `We suggest that you create an issue at ${
-            plugin.pjson.bugs ?? plugin.pjson.repository
-          } and ask the plugin owners to address them.\n`,
+          `We suggest that you create an issue at ${extractIssuesLocation(
+            plugin.pjson.bugs,
+            plugin.pjson.repository,
+          )} and ask the plugin owners to address them.\n`,
         )
       }
     }
@@ -149,5 +161,18 @@ export class YarnMessagesCache {
     for (const err of YarnMessagesCache.errors) {
       ux.error(err, {exit: false})
     }
+  }
+}
+
+export function extractIssuesLocation(
+  bugs: {url: string} | string | undefined,
+  repository: {type: string; url: string} | string | undefined,
+): string | undefined {
+  if (bugs) {
+    return typeof bugs === 'string' ? bugs : bugs.url
+  }
+
+  if (repository) {
+    return typeof repository === 'string' ? repository : repository.url.replace('git+', '').replace('.git', '')
   }
 }
