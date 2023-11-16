@@ -1,3 +1,9 @@
+## [4.1.8](https://github.com/oclif/plugin-plugins/compare/4.1.7...4.1.8) (2023-11-16)
+
+### Bug Fixes
+
+- scope install warnings to plugin being installed ([#721](https://github.com/oclif/plugin-plugins/issues/721)) ([51f7721](https://github.com/oclif/plugin-plugins/commit/51f772132151c3579486710615498812c6e7ec39))
+
 ## [4.1.7](https://github.com/oclif/plugin-plugins/compare/4.1.6...4.1.7) (2023-11-13)
 
 ### Bug Fixes
