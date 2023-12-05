@@ -1,3 +1,9 @@
+## [4.1.9](https://github.com/oclif/plugin-plugins/compare/4.1.8...4.1.9) (2023-12-05)
+
+### Bug Fixes
+
+- bump npm, skip lib checks ([cf44c8d](https://github.com/oclif/plugin-plugins/commit/cf44c8d034576a67a2b930c4245b80ee4f94eaef))
+
 ## [4.1.8](https://github.com/oclif/plugin-plugins/compare/4.1.7...4.1.8) (2023-11-16)
 
 ### Bug Fixes
