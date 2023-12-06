@@ -13,7 +13,7 @@
     "semver": "^7.5.4",
     "shelljs": "^0.8.5",
     "validate-npm-package-name": "^5.0.0",
-    "yarn": "^1.22.18"
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.8.1",
