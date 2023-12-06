@@ -1,3 +1,9 @@
+## [4.1.10](https://github.com/oclif/plugin-plugins/compare/4.1.9...4.1.10) (2023-12-06)
+
+### Bug Fixes
+
+- **deps:** bump yarn from 1.22.19 to 1.22.21 ([#732](https://github.com/oclif/plugin-plugins/issues/732)) ([08399d7](https://github.com/oclif/plugin-plugins/commit/08399d7b2f2589c91ffac7128c5f7d99f6e2667f))
+
 ## [4.1.9](https://github.com/oclif/plugin-plugins/compare/4.1.8...4.1.9) (2023-12-05)
 
 ### Bug Fixes
