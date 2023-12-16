@@ -694,10 +694,10 @@
     wordwrap "^1.0.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^3.0.4", "@oclif/core@^3.10.2", "@oclif/core@^3.10.8", "@oclif/core@^3.3.1":
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.11.0.tgz#dadfac39238af3b717e33b910dde1f1f0fd2105e"
-  integrity sha512-9A2LhDQATf1vrRqPoO0gGuBrey0jt3kDafC+eazxTNWV2EvlEpgY2587iyrxPK/fL2xg7f+0mtxYaSHdO2k8eg==
+"@oclif/core@^3.0.4", "@oclif/core@^3.10.2", "@oclif/core@^3.14.1", "@oclif/core@^3.3.1":
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.15.0.tgz#28405012137fa92efcc5a2c4d61336dd64c697cb"
+  integrity sha512-A1EVh4gv7mqAJ9OGVxLugaLcHvQnGwvOnPToP8OT9AldJ0LwVExOwhhlnOstYca33MIpGH00twYxWMS5nxMuDQ==
   dependencies:
     ansi-escapes "^4.3.2"
     ansi-styles "^4.3.0"
@@ -705,6 +705,7 @@
     chalk "^4.1.2"
     clean-stack "^3.0.1"
     cli-progress "^3.12.0"
+    color "^4.2.3"
     debug "^4.3.4"
     ejs "^3.1.9"
     get-package-type "^0.1.0"
@@ -734,11 +735,11 @@
     "@oclif/core" "^2.15.0"
 
 "@oclif/plugin-help@^6":
-  version "6.0.6"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-6.0.6.tgz#6bf150c5a2e68e65b89cd6edaa25017aca6d936d"
-  integrity sha512-MBk0147mpub3NXKTqchjXon4ufhz8keDv9u2IlVKg4MfZSDesljEckot+MCgtDl5k24jCMubrkJQId1g5Ay70w==
+  version "6.0.8"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-6.0.8.tgz#9ad196f9ddbeae1f5353448d16e0cb68463bac31"
+  integrity sha512-q7OWy0JSrsZVynPkWQxmd3dEFA2czym9FdqS06YteRldIH/Csvovst+35KneM4iD8ewqPbY8KAMYZMkMavao0g==
   dependencies:
-    "@oclif/core" "^3.10.8"
+    "@oclif/core" "^3.14.1"
 
 "@oclif/plugin-not-found@^2.3.32":
   version "2.4.3"
@@ -2170,15 +2171,31 @@ color-name@1.1.3:
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==
 
-color-name@~1.1.4:
+color-name@^1.0.0, color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+color-string@^1.9.0:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.9.1.tgz#4467f9146f036f855b764dfb5bf8582bf342c7a4"
+  integrity sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
 
 color-support@^1.1.2, color-support@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
   integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
+
+color@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/color/-/color-4.2.3.tgz#d781ecb5e57224ee43ea9627560107c0e0c6463a"
+  integrity sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==
+  dependencies:
+    color-convert "^2.0.1"
+    color-string "^1.9.0"
 
 colorette@^2.0.20:
   version "2.0.20"
@@ -3812,6 +3829,11 @@ is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==
+
+is-arrayish@^0.3.1:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.2.tgz#4574a2ae56f7ab206896fb431eaeed066fdf8f03"
+  integrity sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
 
 is-bigint@^1.0.1:
   version "1.0.4"
@@ -6476,6 +6498,13 @@ sigstore@^2.0.0, sigstore@^2.1.0:
     "@sigstore/protobuf-specs" "^0.2.1"
     "@sigstore/sign" "^2.1.0"
     "@sigstore/tuf" "^2.1.0"
+
+simple-swizzle@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
+  integrity sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==
+  dependencies:
+    is-arrayish "^0.3.1"
 
 sinon@^16.1.3:
   version "16.1.3"
