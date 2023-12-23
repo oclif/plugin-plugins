@@ -117,7 +117,7 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -125,7 +125,7 @@ Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ mycli plugins:inspect PLUGIN...
+  $ mycli plugins inspect PLUGIN...
 
 ARGUMENTS
   PLUGIN  [default: .] Plugin to inspect.
@@ -144,7 +144,7 @@ EXAMPLES
   $ mycli plugins inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -152,7 +152,7 @@ Installs a plugin into the CLI.
 
 ```
 USAGE
-  $ mycli plugins:install PLUGIN...
+  $ mycli plugins install PLUGIN...
 
 ARGUMENTS
   PLUGIN  Plugin to install.
@@ -188,7 +188,7 @@ EXAMPLES
   $ mycli plugins install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -196,7 +196,7 @@ Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ mycli plugins:link PLUGIN
+  $ mycli plugins link PLUGIN
 
 ARGUMENTS
   PATH  [default: .] path to plugin
@@ -218,7 +218,7 @@ EXAMPLES
   $ mycli plugins link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/link.ts)_
 
 ## `mycli plugins reset`
 
@@ -229,7 +229,7 @@ USAGE
   $ mycli plugins reset
 ```
 
-_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/reset.ts)_
+_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/reset.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -237,7 +237,7 @@ Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ mycli plugins:uninstall PLUGIN...
+  $ mycli plugins uninstall PLUGIN...
 
 ARGUMENTS
   PLUGIN  plugin to uninstall
@@ -257,7 +257,7 @@ EXAMPLES
   $ mycli plugins uninstall myplugin
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins update`
 
@@ -275,6 +275,6 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.1.10/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.1.11/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->
