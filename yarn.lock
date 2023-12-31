@@ -5585,10 +5585,10 @@ object.values@^1.1.7:
     define-properties "^1.2.0"
     es-abstract "^1.22.1"
 
-oclif@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/oclif/-/oclif-4.0.3.tgz#2ff8fab10c29b2cd0bbf8e9c87640a64151b65ff"
-  integrity sha512-Bq7t1bJvAKYwW3DKQIzok3jkXv7yUIMneoSec1qUr9wfSqzRTZQB0UUDovwlT/L+3TBMVoRyw1WeX+YDvfRJNA==
+oclif@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/oclif/-/oclif-4.1.0.tgz#486004caf6da8af9f5bdda681a616b5b2c180b45"
+  integrity sha512-4E6z1HOdUYXHu/cbbSv0gnbFJfR9BGc9Oa+e9l8SkRoicGnrEPMpuZyY2vxWPGwMndN6ijxxuFlVmw1/j+MJpg==
   dependencies:
     "@oclif/core" "^3.0.4"
     "@oclif/plugin-help" "^5.2.14"
