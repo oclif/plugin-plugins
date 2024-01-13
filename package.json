@@ -27,7 +27,7 @@
     "@types/shelljs": "^0.8.15",
     "@types/sinon": "^10.0.19",
     "@types/validate-npm-package-name": "^4.0.2",
-    "chai": "^4.4.0",
+    "chai": "^4.4.1",
     "commitlint": "^17.8.1",
     "eslint": "^8.56.0",
     "eslint-config-oclif": "^5.0.0",
