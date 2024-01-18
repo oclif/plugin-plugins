@@ -1,3 +1,45 @@
+## [4.1.17](https://github.com/oclif/plugin-plugins/compare/4.1.16...4.1.17) (2024-01-16)
+
+### Bug Fixes
+
+- update npm version ([92ae29e](https://github.com/oclif/plugin-plugins/commit/92ae29ec66bc1fd886169813f661498dcc30e592))
+
+## [4.1.16](https://github.com/oclif/plugin-plugins/compare/4.1.15...4.1.16) (2024-01-14)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.5 to 10.3.0 ([#764](https://github.com/oclif/plugin-plugins/issues/764)) ([b43ddfd](https://github.com/oclif/plugin-plugins/commit/b43ddfdc17b0c0e74af18d900a3649980aa48f72))
+
+## [4.1.15](https://github.com/oclif/plugin-plugins/compare/4.1.14...4.1.15) (2024-01-07)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.3 to 10.2.5 ([#758](https://github.com/oclif/plugin-plugins/issues/758)) ([5c9f008](https://github.com/oclif/plugin-plugins/commit/5c9f008f5918d0a592d84badb375b3cbb77c5ba5))
+
+## [4.1.14](https://github.com/oclif/plugin-plugins/compare/4.1.13...4.1.14) (2024-01-02)
+
+### Bug Fixes
+
+- update npm version ([7e48654](https://github.com/oclif/plugin-plugins/commit/7e48654a9bbde27da0c00c2ac97c9b1a1874c60c))
+
+## [4.1.13](https://github.com/oclif/plugin-plugins/compare/4.1.12...4.1.13) (2023-12-31)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.3 to 10.2.5 ([#754](https://github.com/oclif/plugin-plugins/issues/754)) ([27010e8](https://github.com/oclif/plugin-plugins/commit/27010e8192c79fa664cebb51d8b638c8fc2fc9b1))
+
+## [4.1.12](https://github.com/oclif/plugin-plugins/compare/4.1.11...4.1.12) (2023-12-26)
+
+### Bug Fixes
+
+- update npm version ([fe1988e](https://github.com/oclif/plugin-plugins/commit/fe1988e1a193b00a4cd461b622105dd48e9aba27))
+
+## [4.1.11](https://github.com/oclif/plugin-plugins/compare/4.1.10...4.1.11) (2023-12-23)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.3 to 10.2.5 ([#751](https://github.com/oclif/plugin-plugins/issues/751)) ([1271c84](https://github.com/oclif/plugin-plugins/commit/1271c8443762d978a393657840b7f3b1d23f1117))
+
 ## [4.1.10](https://github.com/oclif/plugin-plugins/compare/4.1.9...4.1.10) (2023-12-06)
 
 ### Bug Fixes
