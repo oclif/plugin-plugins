@@ -138,4 +138,12 @@ export default class Yarn {
       })
     })
   }
+
+  async npm(args: string[], opts: YarnExecOptions): Promise<void> {
+    await this.fork(require.resolve('.bin/npm'), args, opts)
+  }
+
+  async pnpm(args: string[], opts: YarnExecOptions): Promise<void> {
+    await this.fork(require.resolve('.bin/pnpm'), args, opts)
+  }
 }

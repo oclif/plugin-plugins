@@ -124,7 +124,29 @@ export default class Plugins {
 
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
-        await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
+
+        // await mkdir(join(this.config.dataDir, name), {recursive: true})
+        // await writeFile(join(this.config.dataDir, name, 'package.json'), JSON.stringify({name, version: tag}))
+        // await this.yarn.pnpm(['add', name], {...yarnOpts, cwd: join(this.config.dataDir, name)})
+        // await this.yarn.pnpm(['link', '--dir', join(name, 'node_modules', name)], yarnOpts)
+
+        const packageManager = process.env.PM ?? 'yarn'
+        switch (packageManager) {
+          case 'yarn': {
+            await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
+            break
+          }
+
+          case 'pnpm': {
+            await this.yarn.pnpm(['add', `${name}@${tag}`], yarnOpts)
+            break
+          }
+
+          case 'npm': {
+            await this.yarn.npm(['install', `${name}@${tag}`, '--omit', 'dev'], yarnOpts)
+            break
+          }
+        }
 
         this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
@@ -137,7 +159,10 @@ export default class Plugins {
 
         this.isValidPlugin(plugin)
 
-        await this.refresh({all: true, prod: true}, plugin.root)
+        if (packageManager === 'yarn') {
+          // await this.refresh({all: true, prod: true}, plugin.root)
+        }
+
         await this.add({name, tag: range || tag, type: 'user'})
       }
 
@@ -397,6 +422,7 @@ export default class Plugins {
     this.debug(`Using npm executable located at: ${npmCli}`)
 
     // wrap node and path in double quotes to deal with spaces
+    // TODO: This doesn't respect scoped NPM_REGISTRY env var
     const command = `"${nodeExecutable}" "${npmCli}" show ${name} dist-tags`
 
     let npmShowResult
@@ -434,6 +460,6 @@ export default class Plugins {
   private async savePJSON(pjson: UserPJSON) {
     this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
     await mkdir(dirname(this.pjsonPath), {recursive: true})
-    await writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
+    await writeFile(this.pjsonPath, JSON.stringify({name: this.config.name, ...pjson}, null, 2))
   }
 }
