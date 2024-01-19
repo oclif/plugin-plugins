@@ -1,3 +1,9 @@
+## [4.1.18](https://github.com/oclif/plugin-plugins/compare/4.1.17...4.1.18) (2024-01-19)
+
+### Bug Fixes
+
+- respect scoped NPM_REGISTRY env var when running npm show ([#769](https://github.com/oclif/plugin-plugins/issues/769)) ([1dff527](https://github.com/oclif/plugin-plugins/commit/1dff5271e6a57e235718509a76c75efbe5a30970))
+
 ## [4.1.17](https://github.com/oclif/plugin-plugins/compare/4.1.16...4.1.17) (2024-01-16)
 
 ### Bug Fixes
