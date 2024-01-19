@@ -396,8 +396,10 @@ export default class Plugins {
     this.debug(`Using node executable located at: ${nodeExecutable}`)
     this.debug(`Using npm executable located at: ${npmCli}`)
 
+    const registry = this.config.scopedEnvVar('NPM_REGISTRY')
+    const registryFlag = registry ? `--registry=${registry}` : ''
     // wrap node and path in double quotes to deal with spaces
-    const command = `"${nodeExecutable}" "${npmCli}" show ${name} dist-tags`
+    const command = `"${nodeExecutable}" "${npmCli}" show ${name} dist-tags ${registryFlag}`
 
     let npmShowResult
     try {
