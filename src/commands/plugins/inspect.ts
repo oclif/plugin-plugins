@@ -70,18 +70,21 @@ export default class PluginsInspect extends Command {
       paths.push(start)
     }
 
-    try {
-      return await Promise.any(
-        paths.map(async (p) => {
-          const fullPath = join(p, dependencyPath)
-          const pkgJsonPath = join(fullPath, 'package.json')
-          const pkgJson = JSON.parse(await readFile(pkgJsonPath, 'utf8'))
-          return {pkgPath: fullPath, version: pkgJson.version as string}
-        }),
-      )
-    } catch {
-      return {pkgPath: null, version: null}
+    // NOTE: we cannot parallelize this because we need to check the order of the paths matters.
+    // Parallelizing this would be faster, but would make the result non-deterministic.
+    for (const p of paths) {
+      try {
+        const fullPath = join(p, dependencyPath)
+        const pkgJsonPath = join(fullPath, 'package.json')
+        // eslint-disable-next-line no-await-in-loop
+        const pkgJson = JSON.parse(await readFile(pkgJsonPath, 'utf8'))
+        return {pkgPath: fullPath, version: pkgJson.version as string}
+      } catch {
+        // try the next path
+      }
     }
+
+    return {pkgPath: null, version: null}
   }
 
   findPlugin(pluginName: string): Plugin {
