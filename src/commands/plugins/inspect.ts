@@ -70,7 +70,7 @@ export default class PluginsInspect extends Command {
       paths.push(start)
     }
 
-    // NOTE: we cannot parallelize this because we need to check the order of the paths matters.
+    // NOTE: we cannot parallelize this because we need to check the paths in the order they were found.
     // Parallelizing this would be faster, but would make the result non-deterministic.
     for (const p of paths) {
       try {
