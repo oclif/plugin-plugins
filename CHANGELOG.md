@@ -1,3 +1,9 @@
+## [4.1.20](https://github.com/oclif/plugin-plugins/compare/4.1.19...4.1.20) (2024-01-22)
+
+### Bug Fixes
+
+- make dep resolution deterministic ([cfaa353](https://github.com/oclif/plugin-plugins/commit/cfaa353447ca7ec64053c0bdfdb744e0c27b3ad3))
+
 ## [4.1.19](https://github.com/oclif/plugin-plugins/compare/4.1.18...4.1.19) (2024-01-20)
 
 ### Bug Fixes
