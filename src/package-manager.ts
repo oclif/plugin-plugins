@@ -1,38 +1,50 @@
-import {ux} from '@oclif/core'
+import {Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {fork} from 'node:child_process'
 import {createRequire} from 'node:module'
-import {join} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import NpmRunPath from 'npm-run-path'
-
-import {InstallOptions, PackageManager, PackageManagerExecOptions} from './package-manager.js'
-import {YarnMessagesCache} from './util.js'
 
 const debug = makeDebug('cli:yarn')
 
 const require = createRequire(import.meta.url)
 
-export default class Yarn extends PackageManager {
-  public get name(): 'yarn' {
-    return 'yarn'
+export type PackageManagerExecOptions = {
+  cwd: string
+  noSpinner?: boolean
+  silent: boolean
+  verbose: boolean
+}
+
+export type InstallOptions = PackageManagerExecOptions & {
+  prod?: boolean
+}
+
+export abstract class PackageManager {
+  protected config: Interfaces.Config
+
+  constructor({config}: {config: Interfaces.Config}) {
+    this.config = config
+  }
+
+  abstract exec(args: string[], opts: PackageManagerExecOptions): Promise<void>
+  abstract install(args: string[], opts: InstallOptions): Promise<void>
+  abstract get name(): 'npm' | 'yarn'
+  abstract refresh(args: string[], opts: InstallOptions): Promise<void>
+  abstract uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void>
+  abstract update(args: string[], opts: PackageManagerExecOptions): Promise<void>
+}
+
+export class NPM extends PackageManager {
+  public get name(): 'npm' {
+    return 'npm'
   }
 
   async exec(args: string[] = [], opts: PackageManagerExecOptions): Promise<void> {
-    const bin = require.resolve('yarn/bin/yarn.js', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
-    debug('yarn binary path', bin)
+    const bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
+    debug('npm binary path', bin)
     const {cwd, silent, verbose} = opts
     if (args[0] !== 'run') {
-      // https://classic.yarnpkg.com/lang/en/docs/cli/#toc-concurrency-and-mutex
-      // Default port is: 31997
-      const port = this.config.scopedEnvVar('NETWORK_MUTEX_PORT')
-      const optionalPort = port ? `:${port}` : ''
-      const mutex = this.config.scopedEnvVar('USE_NETWORK_MUTEX')
-        ? `network${optionalPort}`
-        : `file:${join(cwd, 'yarn.lock')}`
-      const cacheDir = join(this.config.cacheDir, 'yarn')
-      args = [...args, '--non-interactive', `--mutex=${mutex}`, `--preferred-cache-folder=${cacheDir}`, '--check-files']
-
       const networkTimeout = this.config.scopedEnvVar('NETWORK_TIMEOUT')
       if (networkTimeout) args.push(`--network-timeout=${networkTimeout}`)
 
@@ -65,24 +77,14 @@ export default class Yarn extends PackageManager {
     debug(`${cwd}: ${bin} ${args.join(' ')}`)
     try {
       await this.fork(bin, args, options)
-      debug('yarn done')
+      debug('npm done')
     } catch (error: unknown) {
-      const {message} = error as Error & {message: string}
-      debug('yarn error', error)
-      // to-do: https://github.com/yarnpkg/yarn/issues/2191
-      const networkConcurrency = '--network-concurrency=1'
-      if (message.includes('EAI_AGAIN') && !args.includes(networkConcurrency)) {
-        debug('EAI_AGAIN')
-        return this.exec([...args, networkConcurrency], opts)
-      }
-
+      debug('npm error', error)
       throw error
     }
   }
 
   fork(modulePath: string, args: string[] = [], options: PackageManagerExecOptions): Promise<void> {
-    const cache = YarnMessagesCache.getInstance()
-
     return new Promise((resolve, reject) => {
       const forked = fork(modulePath, args, {
         ...options,
@@ -91,27 +93,12 @@ export default class Yarn extends PackageManager {
           // Disable husky hooks because a plugin might be trying to install them, which will
           // break the install since the install location isn't a .git directory.
           HUSKY: '0',
-          // YARN_IGNORE_PATH=1 prevents yarn from resolving to the globally configured yarn binary.
-          // In other words, it ensures that it resolves to the yarn binary that is available in the node_modules directory.
-          YARN_IGNORE_PATH: '1',
         },
       })
       forked.stderr?.on('data', (d: Buffer) => {
         if (!options.silent) {
           const str = d.toString()
-          if (str.startsWith('error')) cache.addErrors(str)
-          else
-            cache.addWarnings(
-              ...str
-                .split('\n')
-                .map((i) =>
-                  i
-                    .trim()
-                    .replace(/^warning/, '')
-                    .trim(),
-                )
-                .filter(Boolean),
-            )
+          process.stderr.write(str)
         }
       })
       forked.stdout?.setEncoding('utf8')
@@ -132,28 +119,20 @@ export default class Yarn extends PackageManager {
   }
 
   async install(args: string[], opts: InstallOptions): Promise<void> {
-    const prod = opts.prod ? ['--prod'] : []
-    await this.exec(['add', ...args, ...prod], opts)
+    const prod = opts.prod ? ['--omit', 'dev'] : []
+    await this.exec(['install', ...args, ...prod, '--json'], opts)
   }
 
   async refresh(args: string[], opts: InstallOptions): Promise<void> {
-    const prod = opts.prod ? ['--prod'] : []
-    await this.exec([...args, ...prod], opts)
+    const prod = opts.prod ? ['--omit', 'dev'] : []
+    await this.exec(['install', ...args, ...prod], opts)
   }
 
   async uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void> {
-    await this.exec(['remove', ...args], opts)
+    await this.exec(['uninstall', ...args], opts)
   }
 
   async update(args: string[], opts: PackageManagerExecOptions): Promise<void> {
-    await this.exec(['upgrade', ...args], opts)
+    await this.exec(['update', ...args], opts)
   }
-
-  // async npm(args: string[], opts: PackageManagerExecOptions): Promise<void> {
-  //   await this.fork(require.resolve('.bin/npm'), args, opts)
-  // }
-
-  // async pnpm(args: string[], opts: PackageManagerExecOptions): Promise<void> {
-  //   await this.fork(require.resolve('.bin/pnpm'), args, opts)
-  // }
 }

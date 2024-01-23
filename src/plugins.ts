@@ -2,9 +2,11 @@ import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {access, mkdir, readFile, rename, writeFile} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
+import npa from 'npm-package-arg'
 import {gt, valid, validRange} from 'semver'
 
-import {findNode, findNpm, uniq, uniqWith} from './util.js'
+import {NPM, PackageManager} from './package-manager.js'
+import {findNode, findNpm, uniqWith} from './util.js'
 import Yarn from './yarn.js'
 
 type UserPJSON = {
@@ -31,39 +33,52 @@ async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-export default class Plugins {
-  silent = false
-  verbose = false
+function dedupePlugins(
+  plugins: Interfaces.PJSON.PluginTypes[],
+): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] {
+  return uniqWith(
+    plugins,
+    // @ts-expect-error because typescript doesn't think it's possible for a plugin to have the `link` type here
+    (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root),
+  ) as (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]
+}
 
-  readonly yarn: Yarn
+export default class Plugins {
+  public readonly packageManager: PackageManager
+  public silent = false
+  public verbose = false
 
   private readonly debug: ReturnType<typeof makeDebug>
 
   constructor(public config: Interfaces.Config) {
-    this.yarn = new Yarn({config})
     this.debug = makeDebug('@oclif/plugins')
+    this.packageManager =
+      this.config.scopedEnvVar('PACKAGE_MANAGER')?.toLowerCase() === 'yarn' ? new Yarn({config}) : new NPM({config})
+    if (this.packageManager.name === 'yarn') {
+      ux.warn('All yarn related functionality should be removed prior to this feature being released.')
+    }
   }
 
-  async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
+  public async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
     const pjson = await this.pjson()
-
+    const mergedPlugins = [...(pjson.oclif.plugins || []), ...plugins] as typeof pjson.oclif.plugins
     await this.savePJSON({
       ...pjson,
       oclif: {
         ...pjson.oclif,
-        plugins: uniq([...(pjson.oclif.plugins || []), ...plugins]) as typeof pjson.oclif.plugins,
+        plugins: dedupePlugins(mergedPlugins),
       },
     })
   }
 
-  friendlyName(name: string): string {
+  public friendlyName(name: string): string {
     const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return name
     const match = name.match(`@${scope}/${pluginPrefix ?? 'plugin'}-(.+)`)
     return match?.[1] ?? name
   }
 
-  async hasPlugin(
+  public async hasPlugin(
     name: string,
   ): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User | false> {
     const list = await this.list()
@@ -75,23 +90,33 @@ export default class Plugins {
     )
   }
 
-  async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
+  public async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
     try {
       this.debug(`installing plugin ${name}`)
-      const yarnOpts = {cwd: this.config.dataDir, silent: this.silent, verbose: this.verbose}
+      const options = {cwd: this.config.dataDir, prod: true, silent: this.silent, verbose: this.verbose}
       await this.createPJSON()
       let plugin
-      const add = force ? ['add', '--force'] : ['add']
+      const add = force ? ['--force'] : []
       if (name.includes(':')) {
         // url
         const url = name
-        await this.yarn.exec([...add, url], yarnOpts)
+        await this.packageManager.install([...add, url], options)
         const {dependencies} = await this.pjson()
-        name = Object.entries(dependencies ?? {}).find(([, u]) => u === url)![0]
-        const root = join(this.config.dataDir, 'node_modules', name)
+        const normalizedUrl = npa(url)
+        const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
+          const normalized = npa(u)
+          return (
+            normalized.hosted?.type === normalizedUrl.hosted?.type &&
+            normalized.hosted?.user === normalizedUrl.hosted?.user &&
+            normalized.hosted?.project === normalizedUrl.hosted?.project
+          )
+        })
+        const installedPluginName = matches?.[0]
+        if (!installedPluginName) throw new Errors.CLIError(`Could not find plugin name for ${url}`)
+        const root = join(this.config.dataDir, 'node_modules', installedPluginName)
         plugin = await Config.load({
           devPlugins: false,
-          name,
+          name: installedPluginName,
           root,
           userPlugins: false,
         })
@@ -99,21 +124,7 @@ export default class Plugins {
 
         this.isValidPlugin(plugin)
 
-        await this.add({name, type: 'user', url})
-
-        if (
-          plugin.getPluginsList().find((p) => p.root === root)?.moduleType === 'module' &&
-          (await fileExists(join(plugin.root, 'tsconfig.json')))
-        ) {
-          try {
-            // CJS plugins can be auto-transpiled at runtime but ESM plugins
-            // cannot. To support ESM plugins we need to compile them after
-            // installing them.
-            await this.yarn.exec(['run', 'tsc'], {...yarnOpts, cwd: plugin.root})
-          } catch (error) {
-            this.debug(error)
-          }
-        }
+        await this.add({name: installedPluginName, type: 'user', url})
       } else {
         // npm
         const range = validRange(tag)
@@ -125,28 +136,7 @@ export default class Plugins {
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
 
-        // await mkdir(join(this.config.dataDir, name), {recursive: true})
-        // await writeFile(join(this.config.dataDir, name, 'package.json'), JSON.stringify({name, version: tag}))
-        // await this.yarn.pnpm(['add', name], {...yarnOpts, cwd: join(this.config.dataDir, name)})
-        // await this.yarn.pnpm(['link', '--dir', join(name, 'node_modules', name)], yarnOpts)
-
-        const packageManager = process.env.PM ?? 'yarn'
-        switch (packageManager) {
-          case 'yarn': {
-            await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
-            break
-          }
-
-          case 'pnpm': {
-            await this.yarn.pnpm(['add', `${name}@${tag}`], yarnOpts)
-            break
-          }
-
-          case 'npm': {
-            await this.yarn.npm(['install', `${name}@${tag}`, '--omit', 'dev'], yarnOpts)
-            break
-          }
-        }
+        await this.packageManager.install([...add, `${name}@${tag}`], options)
 
         this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
@@ -159,11 +149,9 @@ export default class Plugins {
 
         this.isValidPlugin(plugin)
 
-        if (packageManager === 'yarn') {
-          // await this.refresh({all: true, prod: true}, plugin.root)
-        }
+        await this.refresh({all: true, prod: true}, plugin.root)
 
-        await this.add({name, tag: range || tag, type: 'user'})
+        await this.add({name, tag: range ?? tag, type: 'user'})
       }
 
       return plugin
@@ -183,22 +171,31 @@ export default class Plugins {
     }
   }
 
-  async link(p: string, {install}: {install: boolean}): Promise<void> {
+  public async link(p: string, {install}: {install: boolean}): Promise<void> {
     const c = await Config.load(resolve(p))
     ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     this.isValidPlugin(c)
 
     // refresh will cause yarn.lock to install dependencies, including devDeps
-    if (install) await this.refresh({all: false, prod: false}, c.root)
+    if (install) {
+      await this.packageManager.install([], {
+        cwd: c.root,
+        noSpinner: true,
+        prod: false,
+        silent: true,
+        verbose: false,
+      })
+    }
+
     await this.add({name: c.name, root: c.root, type: 'link'})
   }
 
-  async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
+  public async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
     const pjson = await this.pjson()
     return pjson.oclif.plugins
   }
 
-  async maybeUnfriendlyName(name: string): Promise<string> {
+  public async maybeUnfriendlyName(name: string): Promise<string> {
     const unfriendly = this.unfriendlyName(name)
     this.debug(`checking registry for expanded package name ${unfriendly}`)
     if (unfriendly && (await this.npmHasPackage(unfriendly))) {
@@ -209,7 +206,7 @@ export default class Plugins {
     return name
   }
 
-  async pjson(): Promise<UserPJSON> {
+  public async pjson(): Promise<UserPJSON> {
     const pjson = await this.readPJSON()
     const plugins = pjson ? this.normalizePlugins(pjson.oclif.plugins) : []
     return {
@@ -224,10 +221,11 @@ export default class Plugins {
   }
 
   /**
+   * @deprecated
    * If a yarn.lock or oclif.lock exists at the root, refresh dependencies by
    * rerunning yarn. If options.prod is true, only install production dependencies.
    *
-   * As of v9 npm will always ignore the yarn.lock during `npm pack`]
+   * As of v9 npm will always ignore the yarn.lock during `npm pack`
    * (see https://github.com/npm/cli/issues/6738). To get around this plugins can
    * rename yarn.lock to oclif.lock before running `npm pack` using `oclif lock`.
    *
@@ -239,12 +237,14 @@ export default class Plugins {
    * @param roots string[]
    * @returns Promise<void>
    */
-  async refresh(options: {all: boolean; prod: boolean}, ...roots: string[]): Promise<void> {
+  public async refresh(options: {all: boolean; prod: boolean}, ...roots: string[]): Promise<void> {
+    if (this.packageManager.name !== 'yarn') return
     ux.action.status = 'Refreshing user plugins...'
     const doRefresh = async (root: string) => {
-      await this.yarn.exec(options.prod ? ['--prod'] : [], {
+      await this.packageManager.refresh([], {
         cwd: root,
         noSpinner: true,
+        prod: options.prod,
         silent: true,
         verbose: false,
       })
@@ -276,7 +276,7 @@ export default class Plugins {
     )
   }
 
-  async remove(name: string): Promise<void> {
+  public async remove(name: string): Promise<void> {
     const pjson = await this.pjson()
     if (pjson.dependencies) delete pjson.dependencies[name]
     await this.savePJSON({
@@ -288,18 +288,18 @@ export default class Plugins {
     })
   }
 
-  unfriendlyName(name: string): string | undefined {
+  public unfriendlyName(name: string): string | undefined {
     if (name.includes('@')) return
     const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return
     return `@${scope}/${pluginPrefix ?? 'plugin'}-${name}`
   }
 
-  async uninstall(name: string): Promise<void> {
+  public async uninstall(name: string): Promise<void> {
     try {
       const pjson = await this.pjson()
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
-        await this.yarn.exec(['remove', name], {
+        await this.packageManager.uninstall([name], {
           cwd: this.config.dataDir,
           silent: this.silent,
           verbose: this.verbose,
@@ -312,7 +312,7 @@ export default class Plugins {
     }
   }
 
-  async update(): Promise<void> {
+  public async update(): Promise<void> {
     // eslint-disable-next-line unicorn/no-await-expression-member
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
@@ -330,7 +330,7 @@ export default class Plugins {
     }
 
     if (plugins.some((p) => Boolean(p.url))) {
-      await this.yarn.exec(['upgrade'], {
+      await this.packageManager.update([], {
         cwd: this.config.dataDir,
         silent: this.silent,
         verbose: this.verbose,
@@ -341,26 +341,23 @@ export default class Plugins {
     const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
     const modifiedPlugins: Interfaces.PJSON.PluginTypes[] = []
     if (npmPlugins.length > 0) {
-      await this.yarn.exec(
-        [
-          'add',
-          ...npmPlugins.map((p) => {
-            // a not valid tag indicates that it's a dist-tag like 'latest'
-            if (!valid(p.tag)) return `${p.name}@${p.tag}`
+      await this.packageManager.install(
+        npmPlugins.map((p) => {
+          // a not valid tag indicates that it's a dist-tag like 'latest'
+          if (!valid(p.tag)) return `${p.name}@${p.tag}`
 
-            if (p.tag && valid(p.tag) && jitPlugins[p.name] && gt(p.tag, jitPlugins[p.name])) {
-              // The user has installed a version of the JIT plugin that is newer than the one
-              // specified by the root plugin's JIT configuration. In this case, we want to
-              // keep the version installed by the user.
-              return `${p.name}@${p.tag}`
-            }
+          if (p.tag && valid(p.tag) && jitPlugins[p.name] && gt(p.tag, jitPlugins[p.name])) {
+            // The user has installed a version of the JIT plugin that is newer than the one
+            // specified by the root plugin's JIT configuration. In this case, we want to
+            // keep the version installed by the user.
+            return `${p.name}@${p.tag}`
+          }
 
-            const tag = jitPlugins[p.name] ?? p.tag
-            modifiedPlugins.push({...p, tag})
-            return `${p.name}@${tag}`
-          }),
-        ],
-        {cwd: this.config.dataDir, silent: this.silent, verbose: this.verbose},
+          const tag = jitPlugins[p.name] ?? p.tag
+          modifiedPlugins.push({...p, tag})
+          return `${p.name}@${tag}`
+        }),
+        {cwd: this.config.dataDir, prod: true, silent: this.silent, verbose: this.verbose},
       )
     }
 
@@ -407,11 +404,8 @@ export default class Plugins {
 
       return p
     })
-    return uniqWith(
-      plugins,
-      // @ts-expect-error because typescript doesn't think it's possible for a plugin to have the `link` type here
-      (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root),
-    )
+
+    return dedupePlugins(plugins)
   }
 
   private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
@@ -422,7 +416,6 @@ export default class Plugins {
     this.debug(`Using npm executable located at: ${npmCli}`)
 
     // wrap node and path in double quotes to deal with spaces
-    // TODO: This doesn't respect scoped NPM_REGISTRY env var
     const command = `"${nodeExecutable}" "${npmCli}" show ${name} dist-tags`
 
     let npmShowResult
