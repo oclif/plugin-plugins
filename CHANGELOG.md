@@ -1,3 +1,27 @@
+## [4.1.21](https://github.com/oclif/plugin-plugins/compare/4.1.20...4.1.21) (2024-01-23)
+
+### Bug Fixes
+
+- update npm version ([8eacddc](https://github.com/oclif/plugin-plugins/commit/8eacddcdc67db5ccaa91794d055f721ac6372c7d))
+
+## [4.1.20](https://github.com/oclif/plugin-plugins/compare/4.1.19...4.1.20) (2024-01-22)
+
+### Bug Fixes
+
+- make dep resolution deterministic ([cfaa353](https://github.com/oclif/plugin-plugins/commit/cfaa353447ca7ec64053c0bdfdb744e0c27b3ad3))
+
+## [4.1.19](https://github.com/oclif/plugin-plugins/compare/4.1.18...4.1.19) (2024-01-20)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.3 to 10.3.0 ([#772](https://github.com/oclif/plugin-plugins/issues/772)) ([c34e810](https://github.com/oclif/plugin-plugins/commit/c34e81010b0501a189e83d489ed7856ce3b7082b))
+
+## [4.1.18](https://github.com/oclif/plugin-plugins/compare/4.1.17...4.1.18) (2024-01-19)
+
+### Bug Fixes
+
+- respect scoped NPM_REGISTRY env var when running npm show ([#769](https://github.com/oclif/plugin-plugins/issues/769)) ([1dff527](https://github.com/oclif/plugin-plugins/commit/1dff5271e6a57e235718509a76c75efbe5a30970))
+
 ## [4.1.17](https://github.com/oclif/plugin-plugins/compare/4.1.16...4.1.17) (2024-01-16)
 
 ### Bug Fixes
