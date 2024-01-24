@@ -1,6 +1,6 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
-import {access, mkdir, readFile, rename, writeFile} from 'node:fs/promises'
+import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
 import npa from 'npm-package-arg'
 import {gt, valid, validRange} from 'semver'
@@ -153,6 +153,8 @@ export default class Plugins {
 
         await this.add({name, tag: range ?? tag, type: 'user'})
       }
+
+      if (this.packageManager.name !== 'yarn') await rm(join(this.config.dataDir, 'yarn.lock'))
 
       return plugin
     } catch (error: unknown) {
