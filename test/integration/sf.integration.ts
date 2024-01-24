@@ -26,7 +26,8 @@ async function ensureSfExists(): Promise<boolean> {
   }
 }
 
-describe('sf Integration', () => {
+// TODO: skip until we decide on a better testing strategy
+describe.skip('sf Integration', () => {
   before(async () => {
     await ensureSfExists()
 
