@@ -160,7 +160,7 @@ export default class Plugins {
 
   async link(p: string, {install}: {install: boolean}): Promise<void> {
     const c = await Config.load(resolve(p))
-    ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
+
     this.isValidPlugin(c)
 
     // refresh will cause yarn.lock to install dependencies, including devDeps
