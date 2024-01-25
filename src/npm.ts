@@ -1,4 +1,4 @@
-import {Interfaces} from '@oclif/core'
+import {Errors, Interfaces} from '@oclif/core'
 import makeDebug from 'debug'
 import {fork as cpFork} from 'node:child_process'
 import {createRequire} from 'node:module'
@@ -56,7 +56,7 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
       if (code === 0) {
         resolve()
       } else {
-        reject(new Error(`${modulePath} ${args.join(' ')} exited with code ${code}`))
+        reject(new Errors.CLIError(`${modulePath} ${args.join(' ')} exited with code ${code}`))
       }
     })
   })
