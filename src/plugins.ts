@@ -86,7 +86,6 @@ export default class Plugins {
   }
 
   public async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
-    await this.npm.exec(['help'], {cwd: this.config.dataDir})
     try {
       this.debug(`installing plugin ${name}`)
       const options = {cwd: this.config.dataDir, prod: true}
