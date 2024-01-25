@@ -60,7 +60,8 @@ describe('install/uninstall integration tests', () => {
     })
 
     it('should install plugin', async () => {
-      await PluginsInstall.run(['@oclif/plugin-test-esm-1', '--verbose'], cwd)
+      process.env.DEBUG = '@oclif/plugin-plugins*'
+      await PluginsInstall.run(['@oclif/plugin-test-esm-1', '--npm-log-level=silly'], cwd)
 
       const result = await PluginsIndex.run([], cwd)
       expect(stdoutStub.calledWith(match('test-esm-1'))).to.be.true
