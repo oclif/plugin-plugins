@@ -39,7 +39,7 @@ describe('Plugins', () => {
       ...config.pjson.oclif,
       pluginPrefix: undefined,
     }
-    plugins = new Plugins({config, silent: true, verbose: false})
+    plugins = new Plugins({config})
     // @ts-expect-error because savePJSON is private
     saveStub = sandbox.stub(plugins, 'savePJSON').resolves()
   })
