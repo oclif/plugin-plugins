@@ -141,6 +141,10 @@ export default class Yarn extends PackageManager {
     await this.exec([...args, ...prod], opts)
   }
 
+  async show(args: string[], opts: PackageManagerExecOptions): Promise<void> {
+    await this.exec(['info', ...args], opts)
+  }
+
   async uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void> {
     await this.exec(['remove', ...args], opts)
   }

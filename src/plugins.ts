@@ -6,7 +6,7 @@ import npa from 'npm-package-arg'
 import {gt, valid, validRange} from 'semver'
 
 import {NPM, PackageManager} from './package-manager.js'
-import {findNode, findNpm, uniqWith} from './util.js'
+import {uniqWith} from './util.js'
 import Yarn from './yarn.js'
 
 type UserPJSON = {
@@ -411,33 +411,22 @@ export default class Plugins {
   }
 
   private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
-    const nodeExecutable = await findNode(this.config.root)
-    const npmCli = await findNpm()
-
-    this.debug(`Using node executable located at: ${nodeExecutable}`)
-    this.debug(`Using npm executable located at: ${npmCli}`)
-
     const registry = this.config.scopedEnvVar('NPM_REGISTRY')
-    const registryFlag = registry ? `--registry=${registry}` : ''
-    // wrap node and path in double quotes to deal with spaces
-    const command = `"${nodeExecutable}" "${npmCli}" show ${name} dist-tags ${registryFlag}`
+    const args = registry ? [name, '--registry', registry] : [name]
 
-    let npmShowResult
     try {
-      const {default: shelljs} = await import('shelljs')
-      npmShowResult = shelljs.exec(command, {silent: true})
-    } catch {
-      throw new Errors.CLIError(`Could not run npm show for ${name}`)
-    }
-
-    if (npmShowResult?.code !== 0) {
-      this.debug(npmShowResult?.stderr)
+      await this.packageManager.show(args, {
+        cwd: this.config.dataDir,
+        silent: true,
+        verbose: false,
+      })
+      this.debug(`Found ${name} in the registry.`)
+      return true
+    } catch (error) {
+      this.debug(error)
       if (throwOnNotFound) throw new Errors.CLIError(`${name} does not exist in the registry.`)
       return false
     }
-
-    this.debug(`Found ${name} in the registry.`)
-    return true
   }
 
   private get pjsonPath() {

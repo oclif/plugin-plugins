@@ -31,18 +31,25 @@ export abstract class PackageManager {
   abstract install(args: string[], opts: InstallOptions): Promise<void>
   abstract get name(): 'npm' | 'yarn'
   abstract refresh(args: string[], opts: InstallOptions): Promise<void>
+  abstract show(args: string[], opts: PackageManagerExecOptions): Promise<void>
   abstract uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void>
   abstract update(args: string[], opts: PackageManagerExecOptions): Promise<void>
 }
 
 export class NPM extends PackageManager {
+  private bin: string
+
+  public constructor({config}: {config: Interfaces.Config}) {
+    super({config})
+    this.bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
+  }
+
   public get name(): 'npm' {
     return 'npm'
   }
 
   async exec(args: string[] = [], opts: PackageManagerExecOptions): Promise<void> {
-    const bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
-    debug('npm binary path', bin)
+    debug('npm binary path', this.bin)
     const {cwd, silent, verbose} = opts
     if (args[0] !== 'run') {
       const networkTimeout = this.config.scopedEnvVar('NETWORK_TIMEOUT')
@@ -71,12 +78,12 @@ export class NPM extends PackageManager {
     }
 
     if (verbose) {
-      process.stderr.write(`${cwd}: ${bin} ${args.join(' ')}`)
+      process.stderr.write(`${cwd}: ${this.bin} ${args.join(' ')}`)
     }
 
-    debug(`${cwd}: ${bin} ${args.join(' ')}`)
+    debug(`${cwd}: ${this.bin} ${args.join(' ')}`)
     try {
-      await this.fork(bin, args, options)
+      await this.fork(args, options)
       debug('npm done')
     } catch (error: unknown) {
       debug('npm error', error)
@@ -84,9 +91,9 @@ export class NPM extends PackageManager {
     }
   }
 
-  fork(modulePath: string, args: string[] = [], options: PackageManagerExecOptions): Promise<void> {
+  async fork(args: string[] = [], options: PackageManagerExecOptions): Promise<void> {
     return new Promise((resolve, reject) => {
-      const forked = fork(modulePath, args, {
+      const forked = fork(this.bin, args, {
         ...options,
         env: {
           ...process.env,
@@ -112,7 +119,7 @@ export class NPM extends PackageManager {
         if (code === 0) {
           resolve()
         } else {
-          reject(new Error(`${modulePath} ${args.join(' ')} exited with code ${code}`))
+          reject(new Error(`${this.bin} ${args.join(' ')} exited with code ${code}`))
         }
       })
     })
@@ -120,12 +127,16 @@ export class NPM extends PackageManager {
 
   async install(args: string[], opts: InstallOptions): Promise<void> {
     const prod = opts.prod ? ['--omit', 'dev'] : []
-    await this.exec(['install', ...args, ...prod, '--json'], opts)
+    await this.exec(['install', ...args, ...prod], opts)
   }
 
   async refresh(args: string[], opts: InstallOptions): Promise<void> {
     const prod = opts.prod ? ['--omit', 'dev'] : []
     await this.exec(['install', ...args, ...prod], opts)
+  }
+
+  async show(args: string[], opts: PackageManagerExecOptions): Promise<void> {
+    await this.exec(['show', ...args], opts)
   }
 
   async uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void> {
