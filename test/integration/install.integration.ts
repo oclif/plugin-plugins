@@ -1,4 +1,4 @@
-import {Errors} from '@oclif/core'
+import {Errors, ux} from '@oclif/core'
 import {expect} from 'chai'
 import chalk from 'chalk'
 import {rm} from 'node:fs/promises'
@@ -39,7 +39,7 @@ describe('install/uninstall integration tests', () => {
 
   beforeEach(() => {
     sandbox = createSandbox()
-    // stdoutStub = sandbox.stub(ux.write, 'stdout')
+    stdoutStub = sandbox.stub(ux.write, 'stdout')
     process.env.MYCLI_CACHE_DIR = cacheDir
     process.env.MYCLI_CONFIG_DIR = configDir
     process.env.MYCLI_DATA_DIR = dataDir
@@ -54,14 +54,13 @@ describe('install/uninstall integration tests', () => {
   })
 
   describe('basic', () => {
-    it.skip('should return "No Plugins" if no plugins are installed', async () => {
+    it('should return "No Plugins" if no plugins are installed', async () => {
       await PluginsIndex.run([], cwd)
       expect(stdoutStub.calledWith('No plugins installed.\n')).to.be.true
     })
 
     it('should install plugin', async () => {
-      process.env.DEBUG = '@oclif/plugin-plugins*'
-      await PluginsInstall.run(['@oclif/plugin-test-esm-1', '--npm-log-level', 'verbose'], cwd)
+      await PluginsInstall.run(['@oclif/plugin-test-esm-1'], cwd)
 
       const result = await PluginsIndex.run([], cwd)
       expect(stdoutStub.calledWith(match('test-esm-1'))).to.be.true
