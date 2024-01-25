@@ -26,15 +26,17 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
     verbose: Flags.boolean({char: 'v'}),
   }
 
-  static usage = 'plugins:link PLUGIN'
-
-  plugins = new Plugins(this.config)
-
   async run(): Promise<void> {
     const {args, flags} = await this.parse(PluginsLink)
-    this.plugins.verbose = flags.verbose
+
+    const plugins = new Plugins({
+      config: this.config,
+      silent: !flags.verbose,
+      verbose: flags.verbose,
+    })
+
     ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
-    await this.plugins.link(args.path, {install: flags.install})
+    await plugins.link(args.path, {install: flags.install})
     ux.action.stop()
   }
 }

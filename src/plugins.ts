@@ -2,7 +2,6 @@ import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {access, mkdir, readFile, rm, writeFile} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
-import npa from 'npm-package-arg'
 import {gt, valid, validRange} from 'semver'
 
 import {NPM} from './npm.js'
@@ -43,15 +42,15 @@ function dedupePlugins(
 }
 
 export default class Plugins {
+  public config: Interfaces.Config
   public readonly npm: NPM
-  public silent = false
-  public verbose = false
 
   private readonly debug: ReturnType<typeof makeDebug>
 
-  constructor(public config: Interfaces.Config) {
+  constructor(options: {config: Interfaces.Config; silent: boolean; verbose: boolean}) {
+    this.config = options.config
     this.debug = makeDebug('@oclif/plugin-plugins')
-    this.npm = new NPM({config})
+    this.npm = new NPM(options)
   }
 
   public async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
@@ -88,15 +87,16 @@ export default class Plugins {
   public async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
     try {
       this.debug(`installing plugin ${name}`)
-      const options = {cwd: this.config.dataDir, prod: true, silent: this.silent, verbose: this.verbose}
+      const options = {cwd: this.config.dataDir, prod: true}
       await this.createPJSON()
       let plugin
-      const add = force ? ['--force'] : []
+      const args = force ? ['--force'] : []
       if (name.includes(':')) {
         // url
         const url = name
-        await this.npm.install([...add, url], options)
+        await this.npm.install([...args, url], options)
         const {dependencies} = await this.pjson()
+        const {default: npa} = await import('npm-package-arg')
         const normalizedUrl = npa(url)
         const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
           const normalized = npa(u)
@@ -130,7 +130,7 @@ export default class Plugins {
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
 
-        await this.npm.install([...add, `${name}@${tag}`], options)
+        await this.npm.install([...args, `${name}@${tag}`], options)
 
         this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
@@ -174,8 +174,6 @@ export default class Plugins {
       await this.npm.install([], {
         cwd: c.root,
         prod: false,
-        silent: this.silent,
-        verbose: this.verbose,
       })
     }
 
@@ -237,8 +235,6 @@ export default class Plugins {
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.npm.uninstall([name], {
           cwd: this.config.dataDir,
-          silent: this.silent,
-          verbose: this.verbose,
         })
       }
     } catch (error: unknown) {
@@ -268,8 +264,6 @@ export default class Plugins {
     if (plugins.some((p) => Boolean(p.url))) {
       await this.npm.update([], {
         cwd: this.config.dataDir,
-        silent: this.silent,
-        verbose: this.verbose,
       })
     }
 
@@ -293,7 +287,7 @@ export default class Plugins {
           modifiedPlugins.push({...p, tag})
           return `${p.name}@${tag}`
         }),
-        {cwd: this.config.dataDir, prod: true, silent: this.silent, verbose: this.verbose},
+        {cwd: this.config.dataDir, prod: true},
       )
     }
 
@@ -347,8 +341,6 @@ export default class Plugins {
     try {
       await this.npm.show([name], {
         cwd: this.config.dataDir,
-        silent: this.silent,
-        verbose: this.verbose,
       })
       this.debug(`Found ${name} in the registry.`)
       return true

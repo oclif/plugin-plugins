@@ -7,7 +7,11 @@ export default class Reset extends Command {
   static summary = 'Remove all user-installed and linked plugins.'
 
   async run(): Promise<void> {
-    const plugins = new Plugins(this.config)
+    const plugins = new Plugins({
+      config: this.config,
+      silent: true,
+      verbose: false,
+    })
     const userPlugins = await plugins.list()
 
     this.log(`Uninstalling ${userPlugins.length} plugin${userPlugins.length === 0 ? '' : 's'}`)

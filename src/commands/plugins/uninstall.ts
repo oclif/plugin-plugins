@@ -37,21 +37,22 @@ export default class PluginsUninstall extends Command {
 
   static strict = false
 
-  static usage = 'plugins:uninstall PLUGIN...'
-
-  plugins = new Plugins(this.config)
-
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(PluginsUninstall)
-    this.plugins = new Plugins(this.config)
-    if (flags.verbose) this.plugins.verbose = true
+
+    const plugins = new Plugins({
+      config: this.config,
+      silent: !flags.verbose,
+      verbose: flags.verbose,
+    })
+
     if (argv.length === 0) argv.push('.')
     for (const plugin of argv as string[]) {
-      const friendly = removeTags(this.plugins.friendlyName(plugin))
+      const friendly = removeTags(plugins.friendlyName(plugin))
       ux.action.start(`Uninstalling ${friendly}`)
-      const unfriendly = await this.plugins.hasPlugin(removeTags(plugin))
+      const unfriendly = await plugins.hasPlugin(removeTags(plugin))
       if (!unfriendly) {
         const p = this.config.getPluginsList().find((p) => p.name === plugin)
         if (p?.parent)
@@ -64,7 +65,7 @@ export default class PluginsUninstall extends Command {
 
       try {
         const {name} = unfriendly
-        await this.plugins.uninstall(name)
+        await plugins.uninstall(name)
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))
         throw error

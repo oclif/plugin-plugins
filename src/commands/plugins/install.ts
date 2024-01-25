@@ -31,7 +31,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static flags = {
     force: Flags.boolean({
       char: 'f',
-      description: 'Run "npm install" with force flag.',
+      description: 'Force npm to fetch remote resources even if a local copy exists on disk.',
     }),
     help: Flags.help({char: 'h'}),
     jit: Flags.boolean({
@@ -45,7 +45,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         const jitPluginsConfig = ctx.config.pjson.oclif.jitPlugins ?? {}
         if (Object.keys(jitPluginsConfig).length === 0) return input
 
-        const plugins = new Plugins(ctx.config)
+        const plugins = new Plugins({config: ctx.config, silent: true, verbose: false})
 
         const nonJitPlugins = await Promise.all(
           requestedPlugins.map(async (plugin) => {
@@ -79,11 +79,13 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static usage = 'plugins:install PLUGIN...'
 
   flags!: Interfaces.InferredFlags<typeof PluginsInstall.flags>
-  plugins = new Plugins(this.config)
 
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
-  async parsePlugin(input: string): Promise<{name: string; tag: string; type: 'npm'} | {type: 'repo'; url: string}> {
+  async parsePlugin(
+    plugins: Plugins,
+    input: string,
+  ): Promise<{name: string; tag: string; type: 'npm'} | {type: 'repo'; url: string}> {
     // git ssh url
     if (input.startsWith('git+ssh://') || input.endsWith('.git')) {
       return {type: 'repo', url: input}
@@ -92,7 +94,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     const getNameAndTag = async (input: string): Promise<{name: string; tag: string}> => {
       const regexAtSymbolNotAtBeginning = /(?<!^)@/
       const [splitName, tag = 'latest'] = input.split(regexAtSymbolNotAtBeginning)
-      const name = splitName.startsWith('@') ? splitName : await this.plugins.maybeUnfriendlyName(splitName)
+      const name = splitName.startsWith('@') ? splitName : await plugins.maybeUnfriendlyName(splitName)
       validateNpmPkgName(name)
 
       if (this.flags.jit) {
@@ -134,27 +136,31 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(PluginsInstall)
     this.flags = flags
-    if (flags.verbose && !flags.silent) this.plugins.verbose = true
-    if (flags.silent && !flags.verbose) this.plugins.silent = true
+
+    const plugins = new Plugins({
+      config: this.config,
+      silent: flags.silent && !flags.verbose,
+      verbose: flags.verbose && !flags.silent,
+    })
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {
       if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] || name
-      const p = await this.parsePlugin(name)
+      const p = await this.parsePlugin(plugins, name)
       let plugin
       await this.config.runHook('plugins:preinstall', {
         plugin: p,
       })
       try {
         if (p.type === 'npm') {
-          ux.action.start(`Installing plugin ${chalk.cyan(this.plugins.friendlyName(p.name) + '@' + p.tag)}`)
-          plugin = await this.plugins.install(p.name, {
+          ux.action.start(`Installing plugin ${chalk.cyan(plugins.friendlyName(p.name) + '@' + p.tag)}`)
+          plugin = await plugins.install(p.name, {
             force: flags.force,
             tag: p.tag,
           })
         } else {
           ux.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
-          plugin = await this.plugins.install(p.url, {force: flags.force})
+          plugin = await plugins.install(p.url, {force: flags.force})
         }
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))

@@ -10,14 +10,18 @@ export default class PluginsUpdate extends Command {
     verbose: Flags.boolean({char: 'v'}),
   }
 
-  plugins = new Plugins(this.config)
-
   async run(): Promise<void> {
     const {flags} = await this.parse(PluginsUpdate)
-    this.plugins.verbose = flags.verbose
+
+    const plugins = new Plugins({
+      config: this.config,
+      silent: !flags.verbose,
+      verbose: flags.verbose,
+    })
+
     ux.action.start(`${this.config.name}: Updating plugins`)
 
-    await this.plugins.update()
+    await plugins.update()
 
     ux.action.stop()
   }

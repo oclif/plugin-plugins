@@ -9,40 +9,33 @@ const debug = makeDebug('@oclif/plugin-plugins:npm')
 
 const require = createRequire(import.meta.url)
 
-export type PackageManagerExecOptions = {
-  cwd: string
-  silent: boolean
-  verbose: boolean
-}
-
-export type InstallOptions = PackageManagerExecOptions & {
-  prod?: boolean
-}
-
 export class NPM {
   private bin: string
   private config: Interfaces.Config
+  private silent: boolean
+  private verbose: boolean
 
-  public constructor({config}: {config: Interfaces.Config}) {
+  public constructor({config, silent, verbose}: {config: Interfaces.Config; silent: boolean; verbose: boolean}) {
     this.config = config
+    this.silent = silent
+    this.verbose = verbose
     this.bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
   }
 
-  async exec(args: string[] = [], opts: PackageManagerExecOptions): Promise<void> {
+  async exec(args: string[] = [], {cwd}: {cwd: string}): Promise<void> {
     debug('npm binary path', this.bin)
-    const {cwd, silent, verbose} = opts
 
-    if (verbose) args.push('--loglevel=verbose')
-    if (silent && !verbose) args.push('--loglevel=silent')
+    if (this.verbose) args.push('--loglevel=verbose')
+    if (this.silent && !this.verbose) args.push('--loglevel=silent')
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
-    if (verbose) {
+    if (this.verbose) {
       process.stderr.write(`${cwd}: ${this.bin} ${args.join(' ')}`)
     }
 
     debug(`${cwd}: ${this.bin} ${args.join(' ')}`)
     try {
-      await this.fork(args, opts)
+      await this.fork(args, {cwd})
       debug('npm done')
     } catch (error: unknown) {
       debug('npm error', error)
@@ -50,10 +43,10 @@ export class NPM {
     }
   }
 
-  async fork(args: string[] = [], options: PackageManagerExecOptions): Promise<void> {
+  async fork(args: string[] = [], {cwd}: {cwd: string}): Promise<void> {
     return new Promise((resolve, reject) => {
       const forked = fork(this.bin, args, {
-        cwd: options.cwd,
+        cwd,
         env: {
           ...npmRunPathEnv(),
           // Disable husky hooks because a plugin might be trying to install them, which will
@@ -73,12 +66,12 @@ export class NPM {
 
       forked.stderr?.setEncoding('utf8')
       forked.stderr?.on('data', (d: Buffer) => {
-        if (options.verbose) process.stderr.write(d)
+        if (this.verbose) process.stderr.write(d)
       })
 
       forked.stdout?.setEncoding('utf8')
       forked.stdout?.on('data', (d) => {
-        if (options.verbose) process.stdout.write(d)
+        if (this.verbose) process.stdout.write(d)
       })
 
       forked.on('error', reject)
@@ -92,20 +85,20 @@ export class NPM {
     })
   }
 
-  async install(args: string[], opts: InstallOptions): Promise<void> {
+  async install(args: string[], opts: {cwd: string; prod?: boolean}): Promise<void> {
     const prod = opts.prod ? ['--omit', 'dev'] : []
     await this.exec(['install', ...args, ...prod], opts)
   }
 
-  async show(args: string[], opts: PackageManagerExecOptions): Promise<void> {
+  async show(args: string[], opts: {cwd: string}): Promise<void> {
     await this.exec(['show', ...args], opts)
   }
 
-  async uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void> {
+  async uninstall(args: string[], opts: {cwd: string}): Promise<void> {
     await this.exec(['uninstall', ...args], opts)
   }
 
-  async update(args: string[], opts: PackageManagerExecOptions): Promise<void> {
+  async update(args: string[], opts: {cwd: string}): Promise<void> {
     await this.exec(['update', ...args], opts)
   }
 }

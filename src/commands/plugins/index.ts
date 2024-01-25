@@ -17,10 +17,16 @@ export default class PluginsIndex extends Command {
     core: Flags.boolean({description: 'Show core plugins.'}),
   }
 
-  plugins = new Plugins(this.config)
+  plugins!: Plugins
 
   async run(): Promise<PluginsJson> {
     const {flags} = await this.parse(PluginsIndex)
+    this.plugins = new Plugins({
+      config: this.config,
+      silent: !flags.verbose,
+      verbose: flags.verbose,
+    })
+
     let plugins = this.config.getPluginsList()
     sortBy(plugins, (p) => this.plugins.friendlyName(p.name))
     if (!flags.core) {

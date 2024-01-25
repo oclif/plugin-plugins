@@ -59,7 +59,7 @@ export default class PluginsInspect extends Command {
 
   static usage = 'plugins:inspect PLUGIN...'
 
-  plugins = new Plugins(this.config)
+  plugins!: Plugins
 
   async findDep(plugin: Plugin, dependency: string): Promise<{pkgPath: null | string; version: null | string}> {
     const dependencyPath = join(...dependency.split('/'))
@@ -140,7 +140,11 @@ export default class PluginsInspect extends Command {
   /* eslint-disable no-await-in-loop */
   async run(): Promise<PluginWithDeps[]> {
     const {argv, flags} = await this.parse(PluginsInspect)
-    if (flags.verbose) this.plugins.verbose = true
+    this.plugins = new Plugins({
+      config: this.config,
+      silent: !flags.verbose,
+      verbose: flags.verbose,
+    })
     const aliases = this.config.pjson.oclif.aliases ?? {}
     const plugins: PluginWithDeps[] = []
     for (let name of argv as string[]) {
