@@ -53,7 +53,13 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
       if (code === 0) {
         resolve()
       } else {
-        reject(new Errors.CLIError(`${modulePath} ${args.join(' ')} exited with code ${code}`))
+        reject(
+          new Errors.CLIError(`${modulePath} ${args.join(' ')} exited with code ${code}`, {
+            suggestions: [
+              'Try running with DEBUG=@oclif/plugin-plugins:* and --npm-log-level=verbose to see debug output.',
+            ],
+          }),
+        )
       }
     })
   })
