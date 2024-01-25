@@ -6,7 +6,7 @@ export type LogLevel = (typeof LOG_LEVELS)[number]
 
 export const npmLogLevelFlag = Flags.option({
   char: 'l',
-  default: 'notice',
+  default: 'silent',
   options: LOG_LEVELS,
   summary: 'Set the npm --loglevel flag for all npm executions.',
 })

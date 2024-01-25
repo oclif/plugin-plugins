@@ -340,7 +340,7 @@ export default class Plugins {
 
   private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
     try {
-      await this.npm.show([name], {
+      await this.npm.view([name], {
         cwd: this.config.dataDir,
       })
       this.debug(`Found ${name} in the registry.`)
