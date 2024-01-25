@@ -3,7 +3,7 @@ import makeDebug from 'debug'
 import {fork as cpFork} from 'node:child_process'
 import {createRequire} from 'node:module'
 import {fileURLToPath} from 'node:url'
-import {npmRunPathEnv} from 'npm-run-path'
+// import {npmRunPathEnv} from 'npm-run-path'
 
 import {LogLevel} from './log-level.js'
 
@@ -25,7 +25,7 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
     const forked = cpFork(modulePath, args, {
       cwd,
       env: {
-        ...npmRunPathEnv(),
+        // ...npmRunPathEnv(),
         // Disable husky hooks because a plugin might be trying to install them, which will
         // break the install since the install location isn't a .git directory.
         HUSKY: '0',
