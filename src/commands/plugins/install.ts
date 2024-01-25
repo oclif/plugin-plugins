@@ -3,6 +3,7 @@ import {Args, Command, Errors, Flags, Interfaces, ux} from '@oclif/core'
 import chalk from 'chalk'
 import validate from 'validate-npm-package-name'
 
+import {determineLogLevel, npmLogLevelFlag} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 
 export default class PluginsInstall extends Command {
@@ -45,7 +46,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         const jitPluginsConfig = ctx.config.pjson.oclif.jitPlugins ?? {}
         if (Object.keys(jitPluginsConfig).length === 0) return input
 
-        const plugins = new Plugins({config: ctx.config, silent: true, verbose: false})
+        const plugins = new Plugins({config: ctx.config})
 
         const nonJitPlugins = await Promise.all(
           requestedPlugins.map(async (plugin) => {
@@ -62,6 +63,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         return input
       },
     }),
+    'npm-log-level': npmLogLevelFlag({exclusive: ['silent', 'verbose']}),
     silent: Flags.boolean({
       char: 's',
       description: 'Silences npm output.',
@@ -139,8 +141,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
     const plugins = new Plugins({
       config: this.config,
-      silent: flags.silent && !flags.verbose,
-      verbose: flags.verbose && !flags.silent,
+      logLevel: determineLogLevel(this.flags),
     })
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {

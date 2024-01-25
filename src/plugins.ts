@@ -4,6 +4,7 @@ import {access, mkdir, readFile, rm, writeFile} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
 import {gt, valid, validRange} from 'semver'
 
+import {LogLevel} from './log-level.js'
 import {NPM} from './npm.js'
 import {uniqWith} from './util.js'
 
@@ -47,7 +48,7 @@ export default class Plugins {
 
   private readonly debug: ReturnType<typeof makeDebug>
 
-  constructor(options: {config: Interfaces.Config; silent: boolean; verbose: boolean}) {
+  constructor(options: {config: Interfaces.Config; logLevel?: LogLevel}) {
     this.config = options.config
     this.debug = makeDebug('@oclif/plugin-plugins')
     this.npm = new NPM(options)

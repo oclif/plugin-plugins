@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import {readFile} from 'node:fs/promises'
 import {dirname, join, sep} from 'node:path'
 
+import {determineLogLevel, npmLogLevelFlag} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 import {sortBy} from '../../util.js'
 
@@ -52,6 +53,7 @@ export default class PluginsInspect extends Command {
 
   static flags = {
     help: Flags.help({char: 'h'}),
+    'npm-log-level': npmLogLevelFlag({exclusive: ['verbose']}),
     verbose: Flags.boolean({char: 'v'}),
   }
 
@@ -142,8 +144,7 @@ export default class PluginsInspect extends Command {
     const {argv, flags} = await this.parse(PluginsInspect)
     this.plugins = new Plugins({
       config: this.config,
-      silent: !flags.verbose,
-      verbose: flags.verbose,
+      logLevel: determineLogLevel(flags),
     })
     const aliases = this.config.pjson.oclif.aliases ?? {}
     const plugins: PluginWithDeps[] = []

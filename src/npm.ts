@@ -5,6 +5,8 @@ import {createRequire} from 'node:module'
 import {fileURLToPath} from 'node:url'
 import {npmRunPathEnv} from 'npm-run-path'
 
+import {LogLevel} from './log-level.js'
+
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
 const require = createRequire(import.meta.url)
@@ -12,21 +14,20 @@ const require = createRequire(import.meta.url)
 export class NPM {
   private bin: string
   private config: Interfaces.Config
-  private silent: boolean
+  private logLevel: LogLevel | undefined
   private verbose: boolean
 
-  public constructor({config, silent, verbose}: {config: Interfaces.Config; silent: boolean; verbose: boolean}) {
+  public constructor({config, logLevel}: {config: Interfaces.Config; logLevel?: LogLevel}) {
     this.config = config
-    this.silent = silent
-    this.verbose = verbose
+    this.logLevel = logLevel
+    this.verbose = logLevel === 'verbose' || logLevel === 'silly'
     this.bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
   }
 
   async exec(args: string[] = [], {cwd}: {cwd: string}): Promise<void> {
     debug('npm binary path', this.bin)
 
-    if (this.verbose) args.push('--loglevel=verbose')
-    if (this.silent && !this.verbose) args.push('--loglevel=silent')
+    if (this.logLevel) args.push(`--loglevel=${this.logLevel}}`)
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
     if (this.verbose) {

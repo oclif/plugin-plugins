@@ -5,8 +5,6 @@ import Plugins from '../plugins.js'
 export const update: Hook<'update'> = async function () {
   const plugins = new Plugins({
     config: this.config,
-    silent: true,
-    verbose: false,
   })
   try {
     await plugins.update()

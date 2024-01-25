@@ -9,8 +9,6 @@ export default class Reset extends Command {
   async run(): Promise<void> {
     const plugins = new Plugins({
       config: this.config,
-      silent: true,
-      verbose: false,
     })
     const userPlugins = await plugins.list()
 
