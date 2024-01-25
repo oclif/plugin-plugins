@@ -1,15 +1,13 @@
 import {Errors, Interfaces} from '@oclif/core'
 import makeDebug from 'debug'
 import {fork as cpFork} from 'node:child_process'
+import {readFile} from 'node:fs/promises'
 import {createRequire} from 'node:module'
-import {fileURLToPath} from 'node:url'
-// import {npmRunPathEnv} from 'npm-run-path'
+import {join, sep} from 'node:path'
 
 import {LogLevel} from './log-level.js'
 
 const debug = makeDebug('@oclif/plugin-plugins:npm')
-
-const require = createRequire(import.meta.url)
 
 type ExecOptions = {
   cwd: string
@@ -63,28 +61,28 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
 }
 
 export class NPM {
-  private bin: string
+  private bin: string | undefined
   private config: Interfaces.Config
   private logLevel: LogLevel | undefined
 
   public constructor({config, logLevel}: {config: Interfaces.Config; logLevel?: LogLevel}) {
     this.config = config
     this.logLevel = logLevel
-    this.bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
-    debug('npm binary path', this.bin)
   }
 
   async exec(args: string[] = [], options: ExecOptions): Promise<void> {
+    const bin = await this.findNpm()
+    debug('npm binary path', bin)
     if (this.logLevel) args.push(`--loglevel=${this.logLevel}`)
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
     if (this.logLevel && this.logLevel !== 'silent') {
-      process.stderr.write(`${options.cwd}: ${this.bin} ${args.join(' ')}\n`)
+      process.stderr.write(`${options.cwd}: ${bin} ${args.join(' ')}\n`)
     }
 
-    debug(`${options.cwd}: ${this.bin} ${args.join(' ')}`)
+    debug(`${options.cwd}: ${bin} ${args.join(' ')}`)
     try {
-      await fork(this.bin, args, options)
+      await fork(bin, args, options)
       debug('npm done')
     } catch (error: unknown) {
       debug('npm error', error)
@@ -107,5 +105,21 @@ export class NPM {
 
   async view(args: string[], opts: ExecOptions): Promise<void> {
     await this.exec(['view', ...args], {...opts, silent: this.logLevel === 'silent'})
+  }
+
+  /**
+   * Get the path to the npm CLI file.
+   * This will always resolve npm to the pinned version in `@oclif/plugin-plugins/package.json`.
+   *
+   * @returns The path to the `npm/bin/npm-cli.js` file.
+   */
+  private async findNpm(): Promise<string> {
+    if (this.bin) return this.bin
+
+    const npmPjsonPath = createRequire(import.meta.url).resolve('npm/package.json')
+    const npmPjson = JSON.parse(await readFile(npmPjsonPath, {encoding: 'utf8'}))
+    const npmPath = npmPjsonPath.slice(0, Math.max(0, npmPjsonPath.lastIndexOf(sep)))
+    this.bin = join(npmPath, npmPjson.bin.npm)
+    return this.bin
   }
 }
