@@ -154,7 +154,7 @@ export default class Plugins {
         await this.add({name, tag: range ?? tag, type: 'user'})
       }
 
-      if (this.packageManager.name !== 'yarn') await rm(join(this.config.dataDir, 'yarn.lock'))
+      if (this.packageManager.name !== 'yarn') await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
 
       return plugin
     } catch (error: unknown) {
