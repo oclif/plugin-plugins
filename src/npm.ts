@@ -79,7 +79,7 @@ export class NPM {
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
     if (this.logLevel && this.logLevel !== 'silent') {
-      process.stderr.write(`${options.cwd}: ${this.bin} ${args.join(' ')}`)
+      process.stderr.write(`${options.cwd}: ${this.bin} ${args.join(' ')}\n`)
     }
 
     debug(`${options.cwd}: ${this.bin} ${args.join(' ')}`)
