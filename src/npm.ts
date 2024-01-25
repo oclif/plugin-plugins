@@ -23,7 +23,6 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
     const forked = cpFork(modulePath, args, {
       cwd,
       env: {
-        // ...npmRunPathEnv(),
         // Disable husky hooks because a plugin might be trying to install them, which will
         // break the install since the install location isn't a .git directory.
         HUSKY: '0',

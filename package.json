@@ -10,7 +10,6 @@
     "debug": "^4.3.4",
     "npm": "10.2.3",
     "npm-package-arg": "^11.0.1",
-    "npm-run-path": "^5",
     "semver": "^7.5.4",
     "validate-npm-package-name": "^5.0.0"
   },
