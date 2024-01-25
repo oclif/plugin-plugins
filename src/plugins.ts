@@ -1,13 +1,12 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
-import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
+import {access, mkdir, readFile, rm, writeFile} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
 import npa from 'npm-package-arg'
 import {gt, valid, validRange} from 'semver'
 
-import {NPM, PackageManager} from './package-manager.js'
+import {NPM} from './npm.js'
 import {uniqWith} from './util.js'
-import Yarn from './yarn.js'
 
 type UserPJSON = {
   dependencies: Record<string, string>
@@ -44,19 +43,15 @@ function dedupePlugins(
 }
 
 export default class Plugins {
-  public readonly packageManager: PackageManager
+  public readonly npm: NPM
   public silent = false
   public verbose = false
 
   private readonly debug: ReturnType<typeof makeDebug>
 
   constructor(public config: Interfaces.Config) {
-    this.debug = makeDebug('@oclif/plugins')
-    this.packageManager =
-      this.config.scopedEnvVar('PACKAGE_MANAGER')?.toLowerCase() === 'yarn' ? new Yarn({config}) : new NPM({config})
-    if (this.packageManager.name === 'yarn') {
-      ux.warn('All yarn related functionality should be removed prior to this feature being released.')
-    }
+    this.debug = makeDebug('@oclif/plugin-plugins')
+    this.npm = new NPM({config})
   }
 
   public async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
@@ -100,7 +95,7 @@ export default class Plugins {
       if (name.includes(':')) {
         // url
         const url = name
-        await this.packageManager.install([...add, url], options)
+        await this.npm.install([...add, url], options)
         const {dependencies} = await this.pjson()
         const normalizedUrl = npa(url)
         const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
@@ -120,7 +115,6 @@ export default class Plugins {
           root,
           userPlugins: false,
         })
-        await this.refresh({all: true, prod: true}, plugin.root)
 
         this.isValidPlugin(plugin)
 
@@ -136,7 +130,7 @@ export default class Plugins {
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
 
-        await this.packageManager.install([...add, `${name}@${tag}`], options)
+        await this.npm.install([...add, `${name}@${tag}`], options)
 
         this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
@@ -149,12 +143,10 @@ export default class Plugins {
 
         this.isValidPlugin(plugin)
 
-        await this.refresh({all: true, prod: true}, plugin.root)
-
         await this.add({name, tag: range ?? tag, type: 'user'})
       }
 
-      if (this.packageManager.name !== 'yarn') await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
+      await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
 
       return plugin
     } catch (error: unknown) {
@@ -178,14 +170,12 @@ export default class Plugins {
     ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     this.isValidPlugin(c)
 
-    // refresh will cause yarn.lock to install dependencies, including devDeps
     if (install) {
-      await this.packageManager.install([], {
+      await this.npm.install([], {
         cwd: c.root,
-        noSpinner: true,
         prod: false,
-        silent: true,
-        verbose: false,
+        silent: this.silent,
+        verbose: this.verbose,
       })
     }
 
@@ -222,62 +212,6 @@ export default class Plugins {
     }
   }
 
-  /**
-   * @deprecated
-   * If a yarn.lock or oclif.lock exists at the root, refresh dependencies by
-   * rerunning yarn. If options.prod is true, only install production dependencies.
-   *
-   * As of v9 npm will always ignore the yarn.lock during `npm pack`
-   * (see https://github.com/npm/cli/issues/6738). To get around this plugins can
-   * rename yarn.lock to oclif.lock before running `npm pack` using `oclif lock`.
-   *
-   * We still check for the existence of yarn.lock since it could be included if a plugin was
-   * packed using yarn or v8 of npm. Plugins installed directly from a git url will also
-   * have a yarn.lock.
-   *
-   * @param options {prod: boolean, all: boolean}
-   * @param roots string[]
-   * @returns Promise<void>
-   */
-  public async refresh(options: {all: boolean; prod: boolean}, ...roots: string[]): Promise<void> {
-    if (this.packageManager.name !== 'yarn') return
-    ux.action.status = 'Refreshing user plugins...'
-    const doRefresh = async (root: string) => {
-      await this.packageManager.refresh([], {
-        cwd: root,
-        noSpinner: true,
-        prod: options.prod,
-        silent: true,
-        verbose: false,
-      })
-    }
-
-    const pluginRoots = [...roots]
-    if (options.all) {
-      const userPluginsRoots = this.config
-        .getPluginsList()
-        .filter((p) => p.type === 'user')
-        .map((p) => p.root)
-      pluginRoots.push(...userPluginsRoots)
-    }
-
-    const deduped = [...new Set(pluginRoots)]
-    await Promise.all(
-      deduped.map(async (r) => {
-        if (await fileExists(join(r, 'yarn.lock'))) {
-          this.debug(`yarn.lock exists at ${r}. Installing prod dependencies`)
-          await doRefresh(r)
-        } else if (await fileExists(join(r, 'oclif.lock'))) {
-          this.debug(`oclif.lock exists at ${r}. Installing prod dependencies`)
-          await rename(join(r, 'oclif.lock'), join(r, 'yarn.lock'))
-          await doRefresh(r)
-        } else {
-          this.debug(`no yarn.lock or oclif.lock exists at ${r}. Skipping dependency refresh`)
-        }
-      }),
-    )
-  }
-
   public async remove(name: string): Promise<void> {
     const pjson = await this.pjson()
     if (pjson.dependencies) delete pjson.dependencies[name]
@@ -301,7 +235,7 @@ export default class Plugins {
     try {
       const pjson = await this.pjson()
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
-        await this.packageManager.uninstall([name], {
+        await this.npm.uninstall([name], {
           cwd: this.config.dataDir,
           silent: this.silent,
           verbose: this.verbose,
@@ -332,7 +266,7 @@ export default class Plugins {
     }
 
     if (plugins.some((p) => Boolean(p.url))) {
-      await this.packageManager.update([], {
+      await this.npm.update([], {
         cwd: this.config.dataDir,
         silent: this.silent,
         verbose: this.verbose,
@@ -343,7 +277,7 @@ export default class Plugins {
     const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
     const modifiedPlugins: Interfaces.PJSON.PluginTypes[] = []
     if (npmPlugins.length > 0) {
-      await this.packageManager.install(
+      await this.npm.install(
         npmPlugins.map((p) => {
           // a not valid tag indicates that it's a dist-tag like 'latest'
           if (!valid(p.tag)) return `${p.name}@${p.tag}`
@@ -363,7 +297,6 @@ export default class Plugins {
       )
     }
 
-    await this.refresh({all: true, prod: true})
     await this.add(...modifiedPlugins)
   }
 
@@ -411,14 +344,11 @@ export default class Plugins {
   }
 
   private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
-    const registry = this.config.scopedEnvVar('NPM_REGISTRY')
-    const args = registry ? [name, '--registry', registry] : [name]
-
     try {
-      await this.packageManager.show(args, {
+      await this.npm.show([name], {
         cwd: this.config.dataDir,
-        silent: true,
-        verbose: false,
+        silent: this.silent,
+        verbose: this.verbose,
       })
       this.debug(`Found ${name} in the registry.`)
       return true

@@ -1,17 +1,16 @@
-import {Interfaces, ux} from '@oclif/core'
+import {Interfaces} from '@oclif/core'
 import makeDebug from 'debug'
 import {fork} from 'node:child_process'
 import {createRequire} from 'node:module'
 import {fileURLToPath} from 'node:url'
-import NpmRunPath from 'npm-run-path'
+import {npmRunPathEnv} from 'npm-run-path'
 
-const debug = makeDebug('cli:yarn')
+const debug = makeDebug('@oclif/plugin-plugins:npm')
 
 const require = createRequire(import.meta.url)
 
 export type PackageManagerExecOptions = {
   cwd: string
-  noSpinner?: boolean
   silent: boolean
   verbose: boolean
 }
@@ -20,62 +19,22 @@ export type InstallOptions = PackageManagerExecOptions & {
   prod?: boolean
 }
 
-export abstract class PackageManager {
-  protected config: Interfaces.Config
-
-  constructor({config}: {config: Interfaces.Config}) {
-    this.config = config
-  }
-
-  abstract exec(args: string[], opts: PackageManagerExecOptions): Promise<void>
-  abstract install(args: string[], opts: InstallOptions): Promise<void>
-  abstract get name(): 'npm' | 'yarn'
-  abstract refresh(args: string[], opts: InstallOptions): Promise<void>
-  abstract show(args: string[], opts: PackageManagerExecOptions): Promise<void>
-  abstract uninstall(args: string[], opts: PackageManagerExecOptions): Promise<void>
-  abstract update(args: string[], opts: PackageManagerExecOptions): Promise<void>
-}
-
-export class NPM extends PackageManager {
+export class NPM {
   private bin: string
+  private config: Interfaces.Config
 
   public constructor({config}: {config: Interfaces.Config}) {
-    super({config})
+    this.config = config
     this.bin = require.resolve('.bin/npm', {paths: [this.config.root, fileURLToPath(import.meta.url)]})
-  }
-
-  public get name(): 'npm' {
-    return 'npm'
   }
 
   async exec(args: string[] = [], opts: PackageManagerExecOptions): Promise<void> {
     debug('npm binary path', this.bin)
     const {cwd, silent, verbose} = opts
-    if (args[0] !== 'run') {
-      const networkTimeout = this.config.scopedEnvVar('NETWORK_TIMEOUT')
-      if (networkTimeout) args.push(`--network-timeout=${networkTimeout}`)
 
-      if (verbose && !silent) args.push('--verbose')
-      if (silent && !verbose) args.push('--silent')
-
-      if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
-    }
-
-    const npmRunPath: typeof NpmRunPath = require('npm-run-path')
-    const options = {
-      ...opts,
-      cwd,
-      env: npmRunPath.env({cwd, env: process.env}),
-      // The ts-node/esm loader isn't need to execute yarn commands anyways.
-      execArgv: process.execArgv
-        .join(' ')
-        // Remove --loader ts-node/esm from execArgv so that the subprocess doesn't fail if it can't find ts-node.
-        .replace('--loader ts-node/esm', '')
-        .replace('--loader=ts-node/esm', '')
-        .split(' ')
-        .filter(Boolean),
-      stdio: [0, null, null, 'ipc'],
-    }
+    if (verbose) args.push('--loglevel=verbose')
+    if (silent && !verbose) args.push('--loglevel=silent')
+    if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
     if (verbose) {
       process.stderr.write(`${cwd}: ${this.bin} ${args.join(' ')}`)
@@ -83,7 +42,7 @@ export class NPM extends PackageManager {
 
     debug(`${cwd}: ${this.bin} ${args.join(' ')}`)
     try {
-      await this.fork(args, options)
+      await this.fork(args, opts)
       debug('npm done')
     } catch (error: unknown) {
       debug('npm error', error)
@@ -94,24 +53,32 @@ export class NPM extends PackageManager {
   async fork(args: string[] = [], options: PackageManagerExecOptions): Promise<void> {
     return new Promise((resolve, reject) => {
       const forked = fork(this.bin, args, {
-        ...options,
+        cwd: options.cwd,
         env: {
-          ...process.env,
+          ...npmRunPathEnv(),
           // Disable husky hooks because a plugin might be trying to install them, which will
           // break the install since the install location isn't a .git directory.
           HUSKY: '0',
         },
+        execArgv: process.execArgv
+          .join(' ')
+          // Remove --loader ts-node/esm from execArgv so that the subprocess doesn't fail if it can't find ts-node.
+          // The ts-node/esm loader isn't need to execute npm commands anyways.
+          .replace('--loader ts-node/esm', '')
+          .replace('--loader=ts-node/esm', '')
+          .split(' ')
+          .filter(Boolean),
+        stdio: [0, null, null, 'ipc'],
       })
+
+      forked.stderr?.setEncoding('utf8')
       forked.stderr?.on('data', (d: Buffer) => {
-        if (!options.silent) {
-          const str = d.toString()
-          process.stderr.write(str)
-        }
+        if (options.verbose) process.stderr.write(d)
       })
+
       forked.stdout?.setEncoding('utf8')
       forked.stdout?.on('data', (d) => {
         if (options.verbose) process.stdout.write(d)
-        else if (!options.noSpinner) ux.action.status = d.replace(/\n$/, '').split('\n').pop()
       })
 
       forked.on('error', reject)
@@ -126,11 +93,6 @@ export class NPM extends PackageManager {
   }
 
   async install(args: string[], opts: InstallOptions): Promise<void> {
-    const prod = opts.prod ? ['--omit', 'dev'] : []
-    await this.exec(['install', ...args, ...prod], opts)
-  }
-
-  async refresh(args: string[], opts: InstallOptions): Promise<void> {
     const prod = opts.prod ? ['--omit', 'dev'] : []
     await this.exec(['install', ...args, ...prod], opts)
   }

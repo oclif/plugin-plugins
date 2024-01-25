@@ -10,12 +10,9 @@
     "debug": "^4.3.4",
     "npm": "10.2.3",
     "npm-package-arg": "^11.0.1",
-    "npm-run-path": "^4.0.1",
-    "pnpm": "^8.12.0",
+    "npm-run-path": "^5",
     "semver": "^7.5.4",
-    "shelljs": "^0.8.5",
-    "validate-npm-package-name": "^5.0.0",
-    "yarn": "^1.22.21"
+    "validate-npm-package-name": "^5.0.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.8.1",

@@ -1,7 +1,6 @@
 import {Command, Flags, ux} from '@oclif/core'
 
 import Plugins from '../../plugins.js'
-import {YarnMessagesCache} from '../../util.js'
 
 export default class PluginsUpdate extends Command {
   static description = 'Update installed plugins.'
@@ -21,7 +20,5 @@ export default class PluginsUpdate extends Command {
     await this.plugins.update()
 
     ux.action.stop()
-
-    YarnMessagesCache.getInstance().flush()
   }
 }

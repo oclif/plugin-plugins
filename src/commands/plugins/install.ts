@@ -4,7 +4,6 @@ import chalk from 'chalk'
 import validate from 'validate-npm-package-name'
 
 import Plugins from '../../plugins.js'
-import {YarnMessagesCache} from '../../util.js'
 
 export default class PluginsInstall extends Command {
   static aliases = ['plugins:add']
@@ -32,7 +31,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   static flags = {
     force: Flags.boolean({
       char: 'f',
-      description: 'Run yarn install with force flag.',
+      description: 'Run "npm install" with force flag.',
     }),
     help: Flags.help({char: 'h'}),
     jit: Flags.boolean({
@@ -65,12 +64,12 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     }),
     silent: Flags.boolean({
       char: 's',
-      description: 'Silences yarn output.',
+      description: 'Silences npm output.',
       exclusive: ['verbose'],
     }),
     verbose: Flags.boolean({
       char: 'v',
-      description: 'Show verbose yarn output.',
+      description: 'Show verbose npm output.',
       exclusive: ['silent'],
     }),
   }
@@ -159,15 +158,10 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         }
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))
-        YarnMessagesCache.getInstance().flush(plugin)
         throw error
       }
 
       ux.action.stop(`installed v${plugin.version}`)
-
-      YarnMessagesCache.getInstance().flush(plugin)
-
-      this.log(chalk.green(`\nSuccessfully installed ${plugin.name} v${plugin.version}`))
     }
   }
 }
