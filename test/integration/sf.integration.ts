@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import chalk from 'chalk'
 import {exec as cpExec} from 'node:child_process'
-import {rm} from 'node:fs/promises'
+import {mkdir, rm, writeFile} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
 
 async function exec(command: string): Promise<{code: number; stderr: string; stdout: string}> {
@@ -26,8 +26,7 @@ async function ensureSfExists(): Promise<boolean> {
   }
 }
 
-// TODO: skip until we decide on a better testing strategy
-describe.skip('sf Integration', () => {
+describe('sf Integration', () => {
   before(async () => {
     await ensureSfExists()
 
@@ -55,43 +54,35 @@ describe.skip('sf Integration', () => {
     const {stdout} = await exec('sf plugins --core')
     expect(stdout).to.contain('@oclif/plugin-plugins')
     expect(stdout).to.contain(`(link) ${process.cwd()}`)
+
+    await mkdir(process.env.SF_CONFIG_DIR, {recursive: true})
+    const allowList = join(process.env.SF_CONFIG_DIR, 'unsignedPluginAllowList.json')
+    await writeFile(allowList, JSON.stringify(['@oclif/plugin-version', '@oclif/plugin-help']))
   })
 
-  it('should install plugin with oclif.lock', async () => {
-    const result = await exec('sf plugins install custom-metadata@2.2.1')
+  it('should install plugin with npm-shrinkwrap.json', async () => {
+    const result = await exec('sf plugins install @oclif/plugin-version@2.0.10-dev.2')
     expect(result.code).to.equal(0)
 
-    const inspectResult = await exec('sf plugins inspect custom-metadata --json')
+    const inspectResult = await exec('sf plugins inspect @oclif/plugin-version --json')
     const [plugin] = JSON.parse(inspectResult.stdout)
 
     const expected = {
-      '@oclif/core': {from: '^2.15.0', version: '2.15.0'},
-      '@salesforce/core': {from: '^5.2.0', version: '5.2.6'},
-      '@salesforce/sf-plugins-core': {from: '^3.1.20', version: '3.1.21'},
-      '@salesforce/ts-types': {from: '^2.0.6', version: '2.0.7'},
-      'csv-parse': {from: '^5.4.0', version: '5.4.0'},
-      'fast-xml-parser': {from: '^4.2.7', version: '4.2.7'},
-      tslib: {from: '^2', version: '2.6.2'},
+      '@oclif/core': {from: '^3.14.1', version: '3.14.1'},
     }
 
     expect(plugin.deps).to.deep.equal(expected)
   })
 
   it('should keep locked deps despite other plugin installs', async () => {
-    const result = await exec('sf plugins install settings')
+    const result = await exec('sf plugins install @oclif/plugin-help')
     expect(result.code).to.equal(0)
 
-    const inspectResult = await exec('sf plugins inspect custom-metadata --json')
+    const inspectResult = await exec('sf plugins inspect @oclif/plugin-version --json')
     const [plugin] = JSON.parse(inspectResult.stdout)
 
     const expected = {
-      '@oclif/core': {from: '^2.15.0', version: '2.15.0'},
-      '@salesforce/core': {from: '^5.2.0', version: '5.2.6'},
-      '@salesforce/sf-plugins-core': {from: '^3.1.20', version: '3.1.21'},
-      '@salesforce/ts-types': {from: '^2.0.6', version: '2.0.7'},
-      'csv-parse': {from: '^5.4.0', version: '5.4.0'},
-      'fast-xml-parser': {from: '^4.2.7', version: '4.2.7'},
-      tslib: {from: '^2', version: '2.6.2'},
+      '@oclif/core': {from: '^3.14.1', version: '3.14.1'},
     }
 
     expect(plugin.deps).to.deep.equal(expected)
