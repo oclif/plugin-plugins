@@ -3,7 +3,6 @@ import {Args, Command, Errors, Flags, Interfaces, ux} from '@oclif/core'
 import chalk from 'chalk'
 import validate from 'validate-npm-package-name'
 
-import {determineLogLevel, npmLogLevelFlag} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 
 export default class PluginsInstall extends Command {
@@ -63,9 +62,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
         return input
       },
     }),
-    'npm-log-level': npmLogLevelFlag({exclusive: ['silent', 'verbose']}),
     silent: Flags.boolean({
       char: 's',
+      default: true,
       description: 'Silences npm output.',
       exclusive: ['verbose'],
     }),
@@ -141,7 +140,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
     const plugins = new Plugins({
       config: this.config,
-      logLevel: determineLogLevel(this.flags),
+      verbose: this.flags.verbose,
     })
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {

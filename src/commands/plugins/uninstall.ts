@@ -2,7 +2,6 @@
 import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
-import {determineLogLevel, npmLogLevelFlag} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 
 function removeTags(plugin: string): string {
@@ -33,7 +32,6 @@ export default class PluginsUninstall extends Command {
 
   static flags = {
     help: Flags.help({char: 'h'}),
-    'npm-log-level': npmLogLevelFlag({exclusive: ['verbose']}),
     verbose: Flags.boolean({char: 'v'}),
   }
 
@@ -46,7 +44,7 @@ export default class PluginsUninstall extends Command {
 
     const plugins = new Plugins({
       config: this.config,
-      logLevel: determineLogLevel(flags),
+      verbose: flags.verbose,
     })
 
     if (argv.length === 0) argv.push('.')

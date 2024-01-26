@@ -1,4 +1,4 @@
-import {Errors, Interfaces} from '@oclif/core'
+import {Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {fork as cpFork} from 'node:child_process'
 import {readFile} from 'node:fs/promises'
@@ -6,20 +6,18 @@ import {createRequire} from 'node:module'
 import {join, sep} from 'node:path'
 import {npmRunPathEnv} from 'npm-run-path'
 
-import {LogLevel} from './log-level.js'
-
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
 type ExecOptions = {
   cwd: string
-  silent?: boolean
+  verbose?: boolean
 }
 
 type InstallOptions = ExecOptions & {
   prod?: boolean
 }
 
-async function fork(modulePath: string, args: string[] = [], {cwd, silent}: ExecOptions): Promise<void> {
+async function fork(modulePath: string, args: string[] = [], {cwd, verbose}: ExecOptions): Promise<void> {
   return new Promise((resolve, reject) => {
     const forked = cpFork(modulePath, args, {
       cwd,
@@ -42,12 +40,14 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
 
     forked.stderr?.setEncoding('utf8')
     forked.stderr?.on('data', (d: Buffer) => {
-      if (!silent) process.stderr.write(d)
+      if (verbose) ux.logToStderr(d.toString())
+      else debug(d.toString().trimEnd())
     })
 
     forked.stdout?.setEncoding('utf8')
-    forked.stdout?.on('data', (d) => {
-      if (!silent) process.stdout.write(d)
+    forked.stdout?.on('data', (d: Buffer) => {
+      if (verbose) ux.log(d.toString())
+      else debug(d.toString().trimEnd())
     })
 
     forked.on('error', reject)
@@ -57,9 +57,7 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
       } else {
         reject(
           new Errors.CLIError(`${modulePath} ${args.join(' ')} exited with code ${code}`, {
-            suggestions: [
-              'Try running with DEBUG=@oclif/plugin-plugins* and --npm-log-level=verbose to see debug output.',
-            ],
+            suggestions: ['Run with DEBUG=@oclif/plugin-plugins* to see debug output.'],
           }),
         )
       }
@@ -70,21 +68,21 @@ async function fork(modulePath: string, args: string[] = [], {cwd, silent}: Exec
 export class NPM {
   private bin: string | undefined
   private config: Interfaces.Config
-  private logLevel: LogLevel | undefined
+  private verbose: boolean | undefined
 
-  public constructor({config, logLevel}: {config: Interfaces.Config; logLevel?: LogLevel}) {
+  public constructor({config, verbose}: {config: Interfaces.Config; verbose?: boolean}) {
     this.config = config
-    this.logLevel = logLevel
+    this.verbose = verbose
   }
 
   async exec(args: string[] = [], options: ExecOptions): Promise<void> {
     const bin = await this.findNpm()
     debug('npm binary path', bin)
-    if (this.logLevel) args.push(`--loglevel=${this.logLevel}`)
+    if (this.verbose) args.push('--loglevel=verbose')
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
-    if (this.logLevel && this.logLevel !== 'silent') {
-      process.stderr.write(`${options.cwd}: ${bin} ${args.join(' ')}\n`)
+    if (this.verbose) {
+      ux.logToStderr(`${options.cwd}: ${bin} ${args.join(' ')}`)
     }
 
     debug(`${options.cwd}: ${bin} ${args.join(' ')}`)
@@ -111,7 +109,7 @@ export class NPM {
   }
 
   async view(args: string[], opts: ExecOptions): Promise<void> {
-    await this.exec(['view', ...args], {...opts, silent: this.logLevel === 'silent'})
+    await this.exec(['view', ...args], {...opts, verbose: this.verbose})
   }
 
   /**
