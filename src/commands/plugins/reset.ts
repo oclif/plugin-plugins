@@ -23,19 +23,11 @@ export default class Reset extends Command {
     const plugins = new Plugins(this.config)
     const userPlugins = await plugins.list()
 
-    this.log(`Found the following ${userPlugins.length} plugin${userPlugins.length === 0 ? '' : 's'}:`)
+    this.log(`Found ${userPlugins.length} plugin${userPlugins.length === 0 ? '' : 's'}:`)
     for (const plugin of userPlugins) {
-      this.log(`- ${plugin.name} ${chalk.dim(`(${plugin.type})`)}`)
-    }
-
-    // These need to run sequentially so as to avoid write conflicts to the package.json
-    for (const plugin of userPlugins) {
-      try {
-        await plugins.uninstall(plugin.name)
-        this.log(`✅ Uninstalled ${plugin.name}`)
-      } catch {
-        this.warn(`Failed to uninstall ${plugin.name}`)
-      }
+      this.log(
+        `- ${plugin.name} ${chalk.dim(this.config.plugins.get(plugin.name)?.version)} ${chalk.dim(`(${plugin.type})`)}`,
+      )
     }
 
     if (flags.hard) {
@@ -52,6 +44,20 @@ export default class Reset extends Command {
       }
 
       await Promise.all(filesToDelete.map((file) => rm(file, {force: true, recursive: true})))
+
+      for (const plugin of userPlugins) {
+        this.log(`✅ ${plugin.type === 'link' ? 'Unlinked' : 'Uninstalled'} ${plugin.name}`)
+      }
+    } else {
+      // These need to run sequentially so as to avoid write conflicts to the package.json
+      for (const plugin of userPlugins) {
+        try {
+          await plugins.uninstall(plugin.name)
+          this.log(`✅ ${plugin.type === 'link' ? 'Unlinked' : 'Uninstalled'} ${plugin.name}`)
+        } catch {
+          this.warn(`Failed to uninstall ${plugin.name}`)
+        }
+      }
     }
 
     if (flags.reinstall) {
@@ -68,8 +74,9 @@ export default class Reset extends Command {
 
         if (plugin.type === 'user') {
           try {
-            await plugins.install(plugin.name, {tag: plugin.tag})
-            this.log(`✅ Reinstalled ${plugin.name}`)
+            const newPlugin = await plugins.install(plugin.name, {tag: plugin.tag})
+            const newVersion = chalk.dim(`-> ${newPlugin.version}`)
+            this.log(`✅ Reinstalled ${plugin.name}@${plugin.tag} ${newVersion}`)
           } catch {
             this.warn(`Failed to reinstall ${plugin.name}`)
           }
