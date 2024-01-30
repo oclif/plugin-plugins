@@ -1,3 +1,9 @@
+## [4.1.23](https://github.com/oclif/plugin-plugins/compare/4.1.22...4.1.23) (2024-01-30)
+
+### Bug Fixes
+
+- update npm version ([2bf7ff4](https://github.com/oclif/plugin-plugins/commit/2bf7ff40d2a9019f42dec235071bd56aef8cf31b))
+
 ## [4.1.22](https://github.com/oclif/plugin-plugins/compare/4.1.21...4.1.22) (2024-01-27)
 
 ### Bug Fixes
