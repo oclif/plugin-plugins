@@ -85,6 +85,7 @@ export default class Plugins {
   }
 
   public async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
+    await this.maybeCleanUp()
     try {
       this.debug(`installing plugin ${name}`)
       const options = {cwd: this.config.dataDir, prod: true}
@@ -167,7 +168,6 @@ export default class Plugins {
 
   public async link(p: string, {install}: {install: boolean}): Promise<void> {
     const c = await Config.load(resolve(p))
-    ux.action.start(`${this.config.name}: linking plugin ${c.name}`)
     this.isValidPlugin(c)
 
     if (install) {
@@ -249,6 +249,8 @@ export default class Plugins {
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
 
+    await this.maybeCleanUp()
+
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
     for (const [name, to] of Object.entries(aliases)) {
@@ -261,10 +263,14 @@ export default class Plugins {
       plugins = plugins.filter((p) => p.name !== name)
     }
 
-    if (plugins.some((p) => Boolean(p.url))) {
-      await this.npm.update([], {
-        cwd: this.config.dataDir,
-      })
+    const urlPlugins = plugins.filter((p) => Boolean(p.url))
+    if (urlPlugins.length > 0) {
+      await this.npm.update(
+        urlPlugins.map((p) => p.name),
+        {
+          cwd: this.config.dataDir,
+        },
+      )
     }
 
     const npmPlugins = plugins.filter((p) => !p.url)
@@ -317,6 +323,20 @@ export default class Plugins {
         'Plugin failed to install because it does not appear to be a valid CLI plugin.\nIf you are sure it is, contact the CLI developer noting this error.',
       ],
     })
+  }
+
+  private async maybeCleanUp(): Promise<void> {
+    // If the yarn.lock exists, then we assume that the last install was done with an older major
+    // version of plugin-plugins that used yarn (v1). In this case, we want to remove the yarn.lock
+    // and node_modules to ensure a clean install or update.
+    if (await fileExists(join(this.config.dataDir, 'yarn.lock'))) {
+      this.debug('Found yarn.lock! Removing yarn.lock and node_modules...')
+      ux.action.status = 'Cleaning up'
+      await Promise.all([
+        rm(join(this.config.dataDir, 'yarn.lock'), {force: true}),
+        rm(join(this.config.dataDir, 'node_modules'), {force: true, recursive: true}),
+      ])
+    }
   }
 
   private normalizePlugins(

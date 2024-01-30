@@ -34,7 +34,7 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
       verbose: flags.verbose,
     })
 
-    ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
+    ux.action.start(`${this.config.name}: Linking plugin ${chalk.cyan(args.path)}`)
     await plugins.link(args.path, {install: flags.install})
     ux.action.stop()
   }

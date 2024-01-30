@@ -153,13 +153,15 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
       })
       try {
         if (p.type === 'npm') {
-          ux.action.start(`Installing plugin ${chalk.cyan(plugins.friendlyName(p.name) + '@' + p.tag)}`)
+          ux.action.start(
+            `${this.config.name}: Installing plugin ${chalk.cyan(plugins.friendlyName(p.name) + '@' + p.tag)}`,
+          )
           plugin = await plugins.install(p.name, {
             force: flags.force,
             tag: p.tag,
           })
         } else {
-          ux.action.start(`Installing plugin ${chalk.cyan(p.url)}`)
+          ux.action.start(`${this.config.name}: Installing plugin ${chalk.cyan(p.url)}`)
           plugin = await plugins.install(p.url, {force: flags.force})
         }
       } catch (error) {
