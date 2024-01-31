@@ -1,3 +1,9 @@
+## [4.2.1](https://github.com/oclif/plugin-plugins/compare/4.2.0...4.2.1) (2024-01-31)
+
+### Bug Fixes
+
+- display url when resetting plugin from url ([#783](https://github.com/oclif/plugin-plugins/issues/783)) ([da61ec1](https://github.com/oclif/plugin-plugins/commit/da61ec188741cb58f2224ec7d6054367922fa217))
+
 # [4.2.0](https://github.com/oclif/plugin-plugins/compare/4.1.23...4.2.0) (2024-01-31)
 
 ### Features
