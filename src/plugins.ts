@@ -166,8 +166,9 @@ export default class Plugins {
     }
   }
 
-  public async link(p: string, {install}: {install: boolean}): Promise<void> {
+  public async link(p: string, {install}: {install: boolean}): Promise<Interfaces.Config> {
     const c = await Config.load(resolve(p))
+
     this.isValidPlugin(c)
 
     if (install) {
@@ -178,6 +179,8 @@ export default class Plugins {
     }
 
     await this.add({name: c.name, root: c.root, type: 'link'})
+
+    return c
   }
 
   public async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
