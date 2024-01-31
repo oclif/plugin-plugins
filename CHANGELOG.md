@@ -1,3 +1,9 @@
+# [4.2.0](https://github.com/oclif/plugin-plugins/compare/4.1.23...4.2.0) (2024-01-31)
+
+### Features
+
+- reset --reinstall --hard ([#777](https://github.com/oclif/plugin-plugins/issues/777)) ([27504a2](https://github.com/oclif/plugin-plugins/commit/27504a2b0ee2b348ad61e50261153c15ed278551))
+
 ## [4.1.23](https://github.com/oclif/plugin-plugins/compare/4.1.22...4.1.23) (2024-01-30)
 
 ### Bug Fixes
