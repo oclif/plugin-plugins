@@ -1,7 +1,9 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
-import {access, mkdir, readFile, rm, writeFile} from 'node:fs/promises'
+import {spawn} from 'node:child_process'
+import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
 import {NPM} from './npm.js'
@@ -334,11 +336,18 @@ export default class Plugins {
     // and node_modules to ensure a clean install or update.
     if (await fileExists(join(this.config.dataDir, 'yarn.lock'))) {
       this.debug('Found yarn.lock! Removing yarn.lock and node_modules...')
-      ux.action.status = 'Cleaning up'
       await Promise.all([
+        rename(join(this.config.dataDir, 'node_modules'), join(this.config.dataDir, 'node_modules.old')),
         rm(join(this.config.dataDir, 'yarn.lock'), {force: true}),
-        rm(join(this.config.dataDir, 'node_modules'), {force: true, recursive: true}),
       ])
+
+      // Spawn a new process so that node_modules can be deleted asynchronously.
+      const rmScript = join(dirname(fileURLToPath(import.meta.url)), 'rm.js')
+      this.debug(`spawning ${rmScript} to remove node_modules.old`)
+      spawn(process.argv[0], [rmScript, join(this.config.dataDir, 'node_modules.old')], {
+        detached: true,
+        stdio: 'ignore',
+      }).unref()
     }
   }
 
