@@ -65,8 +65,9 @@ export default class Reset extends Command {
       for (const plugin of userPlugins) {
         if (plugin.type === 'link') {
           try {
-            await plugins.link(plugin.root, {install: false})
-            this.log(`✅ Relinked ${plugin.name}`)
+            const newPlugin = await plugins.link(plugin.root, {install: false})
+            const newVersion = chalk.dim(`${newPlugin.version}`)
+            this.log(`✅ Relinked ${plugin.name} ${newVersion}`)
           } catch {
             this.warn(`Failed to relink ${plugin.name}`)
           }
