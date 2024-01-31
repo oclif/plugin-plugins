@@ -61,12 +61,13 @@ export default class Reset extends Command {
     }
 
     if (flags.reinstall) {
+      this.log('Reinstall flag passed:')
       // These need to run sequentially so as to avoid write conflicts to the package.json
       for (const plugin of userPlugins) {
         if (plugin.type === 'link') {
           try {
             const newPlugin = await plugins.link(plugin.root, {install: false})
-            const newVersion = chalk.dim(`${newPlugin.version}`)
+            const newVersion = chalk.dim(`-> ${newPlugin.version}`)
             this.log(`✅ Relinked ${plugin.name} ${newVersion}`)
           } catch {
             this.warn(`Failed to relink ${plugin.name}`)
