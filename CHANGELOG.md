@@ -1,3 +1,9 @@
+## [4.2.5](https://github.com/oclif/plugin-plugins/compare/4.2.4...4.2.5) (2024-02-21)
+
+### Bug Fixes
+
+- **deps:** bump ip from 2.0.0 to 2.0.1 ([#800](https://github.com/oclif/plugin-plugins/issues/800)) ([60a9305](https://github.com/oclif/plugin-plugins/commit/60a9305e4a781d82e146c3dca57330914f187067))
+
 ## [4.2.4](https://github.com/oclif/plugin-plugins/compare/4.2.3...4.2.4) (2024-02-20)
 
 ### Bug Fixes
