@@ -16,7 +16,14 @@ plugins plugin for oclif
 - [Aliases](#aliases)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
-<!-- tocstop -->
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins link PATH`](#mycli-plugins-link-path)
+  - [`mycli plugins reset`](#mycli-plugins-reset)
+  - [`mycli plugins uninstall [PLUGIN]`](#mycli-plugins-uninstall-plugin)
+  - [`mycli plugins update`](#mycli-plugins-update)
+  <!-- tocstop -->
 
 # What is this?
 
@@ -88,13 +95,20 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 <!-- commands -->
 
-- [`mycli plugins`](#mycli-plugins)
-- [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
-- [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-- [`mycli plugins link PATH`](#mycli-plugins-link-path)
-- [`mycli plugins reset`](#mycli-plugins-reset)
-- [`mycli plugins uninstall [PLUGIN]`](#mycli-plugins-uninstall-plugin)
-- [`mycli plugins update`](#mycli-plugins-update)
+- [@oclif/plugin-plugins](#oclifplugin-plugins)
+- [What is this?](#what-is-this)
+- [Usage](#usage)
+- [Friendly names](#friendly-names)
+- [Aliases](#aliases)
+- [Environment Variables](#environment-variables)
+- [Commands](#commands)
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins link PATH`](#mycli-plugins-link-path)
+  - [`mycli plugins reset`](#mycli-plugins-reset)
+  - [`mycli plugins uninstall [PLUGIN]`](#mycli-plugins-uninstall-plugin)
+  - [`mycli plugins update`](#mycli-plugins-update)
 
 ## `mycli plugins`
 
@@ -117,7 +131,7 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -144,7 +158,7 @@ EXAMPLES
   $ mycli plugins inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -188,7 +202,7 @@ EXAMPLES
   $ mycli plugins install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/install.ts)_
 
 ## `mycli plugins link PATH`
 
@@ -218,7 +232,7 @@ EXAMPLES
   $ mycli plugins link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/link.ts)_
 
 ## `mycli plugins reset`
 
@@ -233,7 +247,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/reset.ts)_
+_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/reset.ts)_
 
 ## `mycli plugins uninstall [PLUGIN]`
 
@@ -261,7 +275,7 @@ EXAMPLES
   $ mycli plugins uninstall myplugin
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins update`
 
@@ -279,6 +293,6 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.1.24-beta.0/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.2.5/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->

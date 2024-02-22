@@ -1,3 +1,39 @@
+## [4.2.5](https://github.com/oclif/plugin-plugins/compare/4.2.4...4.2.5) (2024-02-21)
+
+### Bug Fixes
+
+- **deps:** bump ip from 2.0.0 to 2.0.1 ([#800](https://github.com/oclif/plugin-plugins/issues/800)) ([60a9305](https://github.com/oclif/plugin-plugins/commit/60a9305e4a781d82e146c3dca57330914f187067))
+
+## [4.2.4](https://github.com/oclif/plugin-plugins/compare/4.2.3...4.2.4) (2024-02-20)
+
+### Bug Fixes
+
+- update npm version ([cc89ddf](https://github.com/oclif/plugin-plugins/commit/cc89ddf0e75af6921c0c4d86609079ce17fbdc25))
+
+## [4.2.3](https://github.com/oclif/plugin-plugins/compare/4.2.2...4.2.3) (2024-02-17)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.4 to 10.4.0 ([#798](https://github.com/oclif/plugin-plugins/issues/798)) ([69de50c](https://github.com/oclif/plugin-plugins/commit/69de50c5da2eeaa489da481b36023993cf1032e0))
+
+## [4.2.2](https://github.com/oclif/plugin-plugins/compare/4.2.1...4.2.2) (2024-02-10)
+
+### Bug Fixes
+
+- **deps:** bump semver from 7.5.4 to 7.6.0 ([#794](https://github.com/oclif/plugin-plugins/issues/794)) ([251879e](https://github.com/oclif/plugin-plugins/commit/251879ede49decf1f11eaa6a41d6e98607eececc))
+
+## [4.2.1](https://github.com/oclif/plugin-plugins/compare/4.2.0...4.2.1) (2024-01-31)
+
+### Bug Fixes
+
+- display url when resetting plugin from url ([#783](https://github.com/oclif/plugin-plugins/issues/783)) ([da61ec1](https://github.com/oclif/plugin-plugins/commit/da61ec188741cb58f2224ec7d6054367922fa217))
+
+# [4.2.0](https://github.com/oclif/plugin-plugins/compare/4.1.23...4.2.0) (2024-01-31)
+
+### Features
+
+- reset --reinstall --hard ([#777](https://github.com/oclif/plugin-plugins/issues/777)) ([27504a2](https://github.com/oclif/plugin-plugins/commit/27504a2b0ee2b348ad61e50261153c15ed278551))
+
 ## [4.1.23](https://github.com/oclif/plugin-plugins/compare/4.1.22...4.1.23) (2024-01-30)
 
 ### Bug Fixes

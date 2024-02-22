@@ -80,7 +80,8 @@ export default class Reset extends Command {
           try {
             const newPlugin = await plugins.install(plugin.name, {tag: plugin.tag})
             const newVersion = chalk.dim(`-> ${newPlugin.version}`)
-            this.log(`✅ Reinstalled ${plugin.name}@${plugin.tag} ${newVersion}`)
+            const tag = plugin.tag ? `@${plugin.tag}` : plugin.url ? ` (${plugin.url})` : ''
+            this.log(`✅ Reinstalled ${plugin.name}${tag} ${newVersion}`)
           } catch {
             this.warn(`Failed to reinstall ${plugin.name}`)
           }

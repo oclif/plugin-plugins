@@ -25,7 +25,14 @@ jobs:
           echo "package.json npm version: $(jq -r '.dependencies.npm' package.json)"
           echo "GHA Node LTS npm version: $(npm -v)"
           yarn add npm@$(npm -v)
+      - uses: salesforcecli/github-workflows/.github/actions/getGithubUserInfo@main
+        id: github-user-info
+        with:
+          SVC_CLI_BOT_GITHUB_TOKEN: ${{ secrets.SVC_CLI_BOT_GITHUB_TOKEN }}
       - uses: salesforcecli/github-workflows/.github/actions/gitConfig@main
+        with:
+          username: ${{ steps.github-user-info.outputs.username }}
+          email: ${{ steps.github-user-info.outputs.email }}
       # Push changes if 'git status' is not empty
       - run: |
           if [[ -n $(git status --short) ]]; then
