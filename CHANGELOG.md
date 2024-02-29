@@ -1,3 +1,9 @@
+## [4.2.6](https://github.com/oclif/plugin-plugins/compare/4.2.5...4.2.6) (2024-02-29)
+
+### Bug Fixes
+
+- install deps before attempting to compile ([#808](https://github.com/oclif/plugin-plugins/issues/808)) ([98749e7](https://github.com/oclif/plugin-plugins/commit/98749e7dae176933134339f11f534e2e321ca131))
+
 ## [4.2.5](https://github.com/oclif/plugin-plugins/compare/4.2.4...4.2.5) (2024-02-21)
 
 ### Bug Fixes
