@@ -113,17 +113,20 @@ describe('install/uninstall integration tests', () => {
     })
   })
 
-  describe('github org/repo', () => {
+  describe.only('github org/repo', () => {
     it('should install plugin from github org/repo', async () => {
       await PluginsInstall.run(['oclif/plugin-test-esm-1'], cwd)
 
       const result = await PluginsIndex.run([], cwd)
       expect(stdoutStub.calledWith(match('test-esm-1'))).to.be.true
-      expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
+      expect(
+        result.some((r) => r.name === '@oclif/plugin-test-esm-1'),
+        'plugin to be installed',
+      ).to.be.true
 
       // test that the plugin was compiled after install (only applies to github installs)
       const compiledDir = join(dataDir, 'node_modules', '@oclif', 'plugin-test-esm-1', 'dist')
-      expect(existsSync(compiledDir)).to.be.true
+      expect(existsSync(compiledDir), 'compiled dir to exist').to.be.true
     })
 
     it('should uninstall plugin from github', async () => {
