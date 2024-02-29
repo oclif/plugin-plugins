@@ -113,7 +113,7 @@ describe('install/uninstall integration tests', () => {
     })
   })
 
-  describe.only('github org/repo', () => {
+  describe('github org/repo', () => {
     it('should install plugin from github org/repo', async () => {
       await PluginsInstall.run(['oclif/plugin-test-esm-1'], cwd)
 
