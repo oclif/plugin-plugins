@@ -95,7 +95,6 @@ export default class Plugins {
           root,
           userPlugins: false,
         })
-        await this.refresh({all: true, prod: true}, plugin.root)
 
         this.isValidPlugin(plugin)
 
@@ -109,11 +108,14 @@ export default class Plugins {
             // CJS plugins can be auto-transpiled at runtime but ESM plugins
             // cannot. To support ESM plugins we need to compile them after
             // installing them.
+            await this.yarn.exec(['install'], {...yarnOpts, cwd: plugin.root})
             await this.yarn.exec(['run', 'tsc'], {...yarnOpts, cwd: plugin.root})
           } catch (error) {
             this.debug(error)
           }
         }
+
+        await this.refresh({all: true, prod: true}, plugin.root)
       } else {
         // npm
         const range = validRange(tag)
