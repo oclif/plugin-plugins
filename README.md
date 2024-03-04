@@ -89,11 +89,14 @@ For removing plugins that are no longer needed (either because they're sunset or
 <!-- commands -->
 
 - [`mycli plugins`](#mycli-plugins)
-- [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
 - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+- [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+- [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin-1)
 - [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
-- [`mycli plugins reset`](#mycli-plugins-reset)
 - [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
+- [`mycli plugins reset`](#mycli-plugins-reset)
+- [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin-1)
+- [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin-2)
 - [`mycli plugins update`](#mycli-plugins-update)
 
 ## `mycli plugins`
@@ -117,7 +120,49 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/index.ts)_
+
+## `mycli plugins:install PLUGIN...`
+
+Installs a plugin into the CLI.
+
+```
+USAGE
+  $ mycli plugins add plugins:install PLUGIN...
+
+ARGUMENTS
+  PLUGIN  Plugin to install.
+
+FLAGS
+  -f, --force    Run yarn install with force flag.
+  -h, --help     Show CLI help.
+  -s, --silent   Silences yarn output.
+  -v, --verbose  Show verbose yarn output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Installs a plugin into the CLI.
+  Can be installed from npm or a git url.
+
+  Installation of a user-installed plugin will override a core plugin.
+
+  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
+  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
+  the CLI without the need to patch and update the whole CLI.
+
+
+ALIASES
+  $ mycli plugins add
+
+EXAMPLES
+  $ mycli plugins add myplugin
+
+  $ mycli plugins add https://github.com/someuser/someplugin
+
+  $ mycli plugins add someuser/someplugin
+```
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -144,7 +189,7 @@ EXAMPLES
   $ mycli plugins inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -188,7 +233,7 @@ EXAMPLES
   $ mycli plugins install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -218,7 +263,33 @@ EXAMPLES
   $ mycli plugins link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/link.ts)_
+
+## `mycli plugins:uninstall PLUGIN...`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ mycli plugins remove plugins:uninstall PLUGIN...
+
+ARGUMENTS
+  PLUGIN  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ mycli plugins unlink
+  $ mycli plugins remove
+
+EXAMPLES
+  $ mycli plugins remove myplugin
+```
 
 ## `mycli plugins reset`
 
@@ -233,7 +304,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/reset.ts)_
+_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/reset.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -261,7 +332,33 @@ EXAMPLES
   $ mycli plugins uninstall myplugin
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/uninstall.ts)_
+
+## `mycli plugins:uninstall PLUGIN...`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ mycli plugins unlink plugins:uninstall PLUGIN...
+
+ARGUMENTS
+  PLUGIN  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ mycli plugins unlink
+  $ mycli plugins remove
+
+EXAMPLES
+  $ mycli plugins unlink myplugin
+```
 
 ## `mycli plugins update`
 
@@ -279,6 +376,6 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.2.8/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/v4.2.6-dev.0/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->
