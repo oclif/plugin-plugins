@@ -1,3 +1,9 @@
+# [4.3.0](https://github.com/oclif/plugin-plugins/compare/4.2.8...4.3.0) (2024-03-04)
+
+### Features
+
+- export commands and hooks ([#807](https://github.com/oclif/plugin-plugins/issues/807)) ([f1c1822](https://github.com/oclif/plugin-plugins/commit/f1c1822b5390b3c57b1f1191d26741b2e4238ba2))
+
 ## [4.2.8](https://github.com/oclif/plugin-plugins/compare/4.2.7...4.2.8) (2024-03-04)
 
 ### Bug Fixes
