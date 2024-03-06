@@ -1,3 +1,9 @@
+## [4.3.2](https://github.com/oclif/plugin-plugins/compare/4.3.1...4.3.2) (2024-03-06)
+
+### Bug Fixes
+
+- publish npm-shrinkwrap.json ([b8d51b2](https://github.com/oclif/plugin-plugins/commit/b8d51b2d2f2fa2cd26057c4d52a82fec59371ccc))
+
 ## [4.3.1](https://github.com/oclif/plugin-plugins/compare/4.3.0...4.3.1) (2024-03-05)
 
 ### Bug Fixes
