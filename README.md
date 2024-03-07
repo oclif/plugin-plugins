@@ -16,7 +16,14 @@ plugins plugin for oclif
 - [Aliases](#aliases)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
-<!-- tocstop -->
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins link PATH`](#mycli-plugins-link-path)
+  - [`mycli plugins reset`](#mycli-plugins-reset)
+  - [`mycli plugins uninstall [PLUGIN]`](#mycli-plugins-uninstall-plugin)
+  - [`mycli plugins update`](#mycli-plugins-update)
+  <!-- tocstop -->
 
 # What is this?
 
@@ -88,13 +95,20 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 <!-- commands -->
 
-- [`mycli plugins`](#mycli-plugins)
-- [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
-- [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-- [`mycli plugins link PATH`](#mycli-plugins-link-path)
-- [`mycli plugins reset`](#mycli-plugins-reset)
-- [`mycli plugins uninstall [PLUGIN]`](#mycli-plugins-uninstall-plugin)
-- [`mycli plugins update`](#mycli-plugins-update)
+- [@oclif/plugin-plugins](#oclifplugin-plugins)
+- [What is this?](#what-is-this)
+- [Usage](#usage)
+- [Friendly names](#friendly-names)
+- [Aliases](#aliases)
+- [Environment Variables](#environment-variables)
+- [Commands](#commands)
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins link PATH`](#mycli-plugins-link-path)
+  - [`mycli plugins reset`](#mycli-plugins-reset)
+  - [`mycli plugins uninstall [PLUGIN]`](#mycli-plugins-uninstall-plugin)
+  - [`mycli plugins update`](#mycli-plugins-update)
 
 ## `mycli plugins`
 
