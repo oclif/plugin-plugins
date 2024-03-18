@@ -3,7 +3,6 @@
 plugins plugin for oclif
 
 [![Version](https://img.shields.io/npm/v/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
-[![Known Vulnerabilities](https://snyk.io/test/github/oclif/plugin-plugins/badge.svg)](https://snyk.io/test/github/oclif/plugin-plugins)
 [![Downloads/week](https://img.shields.io/npm/dw/@oclif/plugin-plugins.svg)](https://npmjs.org/package/@oclif/plugin-plugins)
 [![License](https://img.shields.io/npm/l/@oclif/plugin-plugins.svg)](https://github.com/oclif/plugin-plugins/blob/main/package.json)
 
@@ -16,6 +15,14 @@ plugins plugin for oclif
 - [Aliases](#aliases)
 - [Environment Variables](#environment-variables)
 - [Commands](#commands)
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
+  - [`mycli plugins reset`](#mycli-plugins-reset)
+  - [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
+  - [`mycli plugins update`](#mycli-plugins-update)
+- [Contributing](#contributing)
 <!-- tocstop -->
 
 # What is this?
@@ -88,13 +95,21 @@ For removing plugins that are no longer needed (either because they're sunset or
 
 <!-- commands -->
 
-- [`mycli plugins`](#mycli-plugins)
-- [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
-- [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
-- [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
-- [`mycli plugins reset`](#mycli-plugins-reset)
-- [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
-- [`mycli plugins update`](#mycli-plugins-update)
+- [@oclif/plugin-plugins](#oclifplugin-plugins)
+- [What is this?](#what-is-this)
+- [Usage](#usage)
+- [Friendly names](#friendly-names)
+- [Aliases](#aliases)
+- [Environment Variables](#environment-variables)
+- [Commands](#commands)
+  - [`mycli plugins`](#mycli-plugins)
+  - [`mycli plugins:inspect PLUGIN...`](#mycli-pluginsinspect-plugin)
+  - [`mycli plugins:install PLUGIN...`](#mycli-pluginsinstall-plugin)
+  - [`mycli plugins:link PLUGIN`](#mycli-pluginslink-plugin)
+  - [`mycli plugins reset`](#mycli-plugins-reset)
+  - [`mycli plugins:uninstall PLUGIN...`](#mycli-pluginsuninstall-plugin)
+  - [`mycli plugins update`](#mycli-plugins-update)
+- [Contributing](#contributing)
 
 ## `mycli plugins`
 
@@ -282,3 +297,7 @@ DESCRIPTION
 _See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->
+
+# Contributing
+
+See [contributing guide](./CONRTIBUTING.md)
