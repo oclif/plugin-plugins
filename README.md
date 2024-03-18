@@ -117,7 +117,7 @@ EXAMPLES
   $ mycli plugins
 ```
 
-_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/index.ts)_
+_See code: [src/commands/plugins/index.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/index.ts)_
 
 ## `mycli plugins:inspect PLUGIN...`
 
@@ -128,7 +128,7 @@ USAGE
   $ mycli plugins inspect PLUGIN...
 
 ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
+  PLUGIN...  [default: .] Plugin to inspect.
 
 FLAGS
   -h, --help     Show CLI help.
@@ -144,7 +144,7 @@ EXAMPLES
   $ mycli plugins inspect myplugin
 ```
 
-_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/inspect.ts)_
+_See code: [src/commands/plugins/inspect.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/inspect.ts)_
 
 ## `mycli plugins:install PLUGIN...`
 
@@ -155,7 +155,7 @@ USAGE
   $ mycli plugins install PLUGIN...
 
 ARGUMENTS
-  PLUGIN  Plugin to install.
+  PLUGIN...  Plugin to install.
 
 FLAGS
   -f, --force    Run yarn install with force flag.
@@ -188,7 +188,7 @@ EXAMPLES
   $ mycli plugins install someuser/someplugin
 ```
 
-_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/install.ts)_
+_See code: [src/commands/plugins/install.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/install.ts)_
 
 ## `mycli plugins:link PLUGIN`
 
@@ -218,7 +218,7 @@ EXAMPLES
   $ mycli plugins link myplugin
 ```
 
-_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/link.ts)_
+_See code: [src/commands/plugins/link.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/link.ts)_
 
 ## `mycli plugins reset`
 
@@ -233,7 +233,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/reset.ts)_
+_See code: [src/commands/plugins/reset.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/reset.ts)_
 
 ## `mycli plugins:uninstall PLUGIN...`
 
@@ -244,7 +244,7 @@ USAGE
   $ mycli plugins uninstall PLUGIN...
 
 ARGUMENTS
-  PLUGIN  plugin to uninstall
+  PLUGIN...  plugin to uninstall
 
 FLAGS
   -h, --help     Show CLI help.
@@ -261,7 +261,7 @@ EXAMPLES
   $ mycli plugins uninstall myplugin
 ```
 
-_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/uninstall.ts)_
+_See code: [src/commands/plugins/uninstall.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/uninstall.ts)_
 
 ## `mycli plugins update`
 
@@ -279,6 +279,6 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.3.6/src/commands/plugins/update.ts)_
+_See code: [src/commands/plugins/update.ts](https://github.com/oclif/plugin-plugins/blob/4.3.7/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->
