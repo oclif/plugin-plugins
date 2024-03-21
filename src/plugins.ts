@@ -114,9 +114,11 @@ export default class Plugins {
     name: string,
   ): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User | false> {
     const list = await this.list()
+    const friendlyName = this.friendlyName(name)
+    const unfriendlyName = this.unfriendlyName(name) ?? name
     return (
-      list.find((p) => this.friendlyName(p.name) === this.friendlyName(name)) ?? // friendly
-      list.find((p) => this.unfriendlyName(p.name) === this.unfriendlyName(name)) ?? // unfriendly
+      list.find((p) => this.friendlyName(p.name) === friendlyName) ?? // friendly
+      list.find((p) => this.unfriendlyName(p.name) === unfriendlyName) ?? // unfriendly
       list.find((p) => p.type === 'link' && resolve(p.root) === resolve(name)) ?? // link
       false
     )
