@@ -130,7 +130,7 @@ export default class Plugins {
       this.debug(`installing plugin ${name}`)
       const options = {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true}
       await this.createPJSON()
-      let plugin
+      let plugin: Config
       const args = force ? ['--force'] : []
       if (name.includes(':')) {
         // url
