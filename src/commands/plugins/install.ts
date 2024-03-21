@@ -3,6 +3,7 @@ import {Args, Command, Errors, Flags, Interfaces, ux} from '@oclif/core'
 import chalk from 'chalk'
 import validate from 'validate-npm-package-name'
 
+import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 
 export default class PluginsInstall extends Command {
@@ -12,20 +13,28 @@ export default class PluginsInstall extends Command {
     plugin: Args.string({description: 'Plugin to install.', required: true}),
   }
 
-  static description = `Installs a plugin into the CLI.
-Can be installed from npm or a git url.
+  static description = `Uses bundled npm executable to install plugins into <%= config.dataDir %>
 
 Installation of a user-installed plugin will override a core plugin.
 
-e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in the CLI without the need to patch and update the whole CLI.
-`
+Use the <%= config.scopedEnvVarKey('NPM_LOG_LEVEL') %> environment variable to set the npm loglevel.
+Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to set the npm registry.`
 
   public static enableJsonFlag = true
 
   static examples = [
-    '<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
-    '<%= config.bin %> <%= command.id %> https://github.com/someuser/someplugin',
-    '<%= config.bin %> <%= command.id %> someuser/someplugin',
+    {
+      command: '<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
+      description: 'Install a plugin from npm registry.',
+    },
+    {
+      command: '<%= config.bin %> <%= command.id %> https://github.com/someuser/someplugin',
+      description: 'Install a plugin from a github url.',
+    },
+    {
+      command: '<%= config.bin %> <%= command.id %> someuser/someplugin',
+      description: 'Install a plugin from a github slug.',
+    },
   ]
 
   static flags = {
@@ -64,7 +73,6 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
     }),
     silent: Flags.boolean({
       char: 's',
-      default: true,
       description: 'Silences npm output.',
       exclusive: ['verbose'],
     }),
@@ -77,7 +85,7 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
 
   static strict = false
 
-  static usage = 'plugins:install PLUGIN...'
+  static summary = 'Installs a plugin into <%= config.bin %>.'
 
   flags!: Interfaces.InferredFlags<typeof PluginsInstall.flags>
 
@@ -137,10 +145,9 @@ e.g. If you have a core plugin that has a 'hello' command, installing a user-ins
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(PluginsInstall)
     this.flags = flags
-
     const plugins = new Plugins({
       config: this.config,
-      verbose: this.flags.verbose,
+      logLevel: determineLogLevel(this.config, this.flags, 'notice'),
     })
     const aliases = this.config.pjson.oclif.aliases || {}
     for (let name of argv as string[]) {

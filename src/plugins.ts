@@ -1,4 +1,5 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
+import chalk from 'chalk'
 import makeDebug from 'debug'
 import {spawn} from 'node:child_process'
 import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
@@ -6,7 +7,8 @@ import {dirname, join, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
-import {NPM} from './npm.js'
+import {LogLevel} from './log-level.js'
+import {NPM, NpmOutput} from './npm.js'
 import {uniqWith} from './util.js'
 
 type UserPJSON = {
@@ -43,16 +45,50 @@ function dedupePlugins(
   ) as (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]
 }
 
+function extractIssuesLocation(
+  bugs: {url: string} | string | undefined,
+  repository: {type: string; url: string} | string | undefined,
+): string | undefined {
+  if (bugs) {
+    return typeof bugs === 'string' ? bugs : bugs.url
+  }
+
+  if (repository) {
+    return typeof repository === 'string' ? repository : repository.url.replace('git+', '').replace('.git', '')
+  }
+}
+
+function notifyUser(plugin: Config, output: NpmOutput): void {
+  const containsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
+  if (containsWarnings) {
+    ux.logToStderr(chalk.bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
+
+    if (plugin.pjson.bugs || plugin.pjson.repository) {
+      ux.logToStderr(
+        `We suggest that you create an issue at ${extractIssuesLocation(
+          plugin.pjson.bugs,
+          plugin.pjson.repository,
+        )} and ask the plugin owners to address them.\n`,
+      )
+    }
+  }
+}
+
 export default class Plugins {
   public config: Interfaces.Config
   public readonly npm: NPM
 
   private readonly debug: ReturnType<typeof makeDebug>
+  private readonly logLevel: LogLevel
 
-  constructor(options: {config: Interfaces.Config; verbose?: boolean}) {
+  constructor(options: {config: Interfaces.Config; logLevel?: LogLevel}) {
     this.config = options.config
     this.debug = makeDebug('@oclif/plugin-plugins')
-    this.npm = new NPM(options)
+    this.logLevel = options.logLevel ?? 'notice'
+    this.npm = new NPM({
+      config: this.config,
+      logLevel: this.logLevel,
+    })
   }
 
   public async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
@@ -90,14 +126,14 @@ export default class Plugins {
     await this.maybeCleanUp()
     try {
       this.debug(`installing plugin ${name}`)
-      const options = {cwd: this.config.dataDir, prod: true}
+      const options = {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true}
       await this.createPJSON()
       let plugin
       const args = force ? ['--force'] : []
       if (name.includes(':')) {
         // url
         const url = name
-        await this.npm.install([...args, url], options)
+        const output = await this.npm.install([...args, url], options)
         const {dependencies} = await this.pjson()
         const {default: npa} = await import('npm-package-arg')
         const normalizedUrl = npa(url)
@@ -119,6 +155,8 @@ export default class Plugins {
           userPlugins: false,
         })
 
+        notifyUser(plugin, output)
+
         this.isValidPlugin(plugin)
 
         await this.add({name: installedPluginName, type: 'user', url})
@@ -133,7 +171,7 @@ export default class Plugins {
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
 
-        await this.npm.install([...args, `${name}@${tag}`], options)
+        const output = await this.npm.install([...args, `${name}@${tag}`], options)
 
         this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
@@ -143,7 +181,7 @@ export default class Plugins {
           userPlugins: false,
         })
         this.debug(`finished loading plugin ${name} at root ${plugin.root}`)
-
+        notifyUser(plugin, output)
         this.isValidPlugin(plugin)
 
         await this.add({name, tag: range ?? tag, type: 'user'})
@@ -176,6 +214,7 @@ export default class Plugins {
     if (install) {
       await this.npm.install([], {
         cwd: c.root,
+        logLevel: this.logLevel,
         prod: false,
       })
     }
@@ -240,6 +279,7 @@ export default class Plugins {
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
         await this.npm.uninstall([name], {
           cwd: this.config.dataDir,
+          logLevel: this.logLevel,
         })
       }
     } catch (error: unknown) {
@@ -274,6 +314,7 @@ export default class Plugins {
         urlPlugins.map((p) => p.name),
         {
           cwd: this.config.dataDir,
+          logLevel: this.logLevel,
         },
       )
     }
@@ -298,7 +339,7 @@ export default class Plugins {
           modifiedPlugins.push({...p, tag})
           return `${p.name}@${tag}`
         }),
-        {cwd: this.config.dataDir, prod: true},
+        {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true},
       )
     }
 
@@ -373,6 +414,7 @@ export default class Plugins {
     try {
       await this.npm.view([name], {
         cwd: this.config.dataDir,
+        logLevel: this.logLevel,
       })
       this.debug(`Found ${name} in the registry.`)
       return true

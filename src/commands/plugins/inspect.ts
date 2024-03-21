@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import {readFile} from 'node:fs/promises'
 import {dirname, join, sep} from 'node:path'
 
+import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 import {sortBy} from '../../util.js'
 
@@ -142,7 +143,7 @@ export default class PluginsInspect extends Command {
     const {argv, flags} = await this.parse(PluginsInspect)
     this.plugins = new Plugins({
       config: this.config,
-      verbose: flags.verbose,
+      logLevel: determineLogLevel(this.config, flags, 'silent'),
     })
     const aliases = this.config.pjson.oclif.aliases ?? {}
     const plugins: PluginWithDeps[] = []

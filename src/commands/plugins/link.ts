@@ -1,6 +1,7 @@
 import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
+import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
 
 export default class PluginsLink extends Command {
@@ -31,7 +32,7 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
 
     const plugins = new Plugins({
       config: this.config,
-      verbose: flags.verbose,
+      logLevel: determineLogLevel(this.config, flags, 'silent'),
     })
 
     ux.action.start(`${this.config.name}: Linking plugin ${chalk.cyan(args.path)}`)

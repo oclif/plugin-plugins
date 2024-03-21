@@ -6,18 +6,25 @@ import {createRequire} from 'node:module'
 import {join, sep} from 'node:path'
 import {npmRunPathEnv} from 'npm-run-path'
 
+import {LogLevel} from './log-level.js'
+
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
 type ExecOptions = {
   cwd: string
-  verbose?: boolean
+  logLevel: LogLevel
 }
 
 type InstallOptions = ExecOptions & {
   prod?: boolean
 }
 
-async function fork(modulePath: string, args: string[] = [], {cwd, verbose}: ExecOptions): Promise<void> {
+export type NpmOutput = {
+  stderr: string[]
+  stdout: string[]
+}
+
+async function fork(modulePath: string, args: string[] = [], {cwd, logLevel}: ExecOptions): Promise<NpmOutput> {
   return new Promise((resolve, reject) => {
     const forked = cpFork(modulePath, args, {
       cwd,
@@ -37,23 +44,29 @@ async function fork(modulePath: string, args: string[] = [], {cwd, verbose}: Exe
         .filter(Boolean),
       stdio: [0, null, null, 'ipc'],
     })
-
+    const isNoisyLogLevel = logLevel !== 'silent'
+    const stderr: string[] = []
     forked.stderr?.setEncoding('utf8')
     forked.stderr?.on('data', (d: Buffer) => {
-      if (verbose) ux.logToStderr(d.toString())
-      else debug(d.toString().trimEnd())
+      const output = d.toString().trimEnd()
+      stderr.push(output)
+      if (isNoisyLogLevel) ux.log(output)
+      else debug(output)
     })
 
+    const stdout: string[] = []
     forked.stdout?.setEncoding('utf8')
     forked.stdout?.on('data', (d: Buffer) => {
-      if (verbose) ux.log(d.toString())
-      else debug(d.toString().trimEnd())
+      const output = d.toString().trimEnd()
+      stdout.push(output)
+      if (isNoisyLogLevel) ux.log(output)
+      else debug(output)
     })
 
     forked.on('error', reject)
     forked.on('exit', (code: number) => {
       if (code === 0) {
-        resolve()
+        resolve({stderr, stdout})
       } else {
         reject(
           new Errors.CLIError(`${modulePath} ${args.join(' ')} exited with code ${code}`, {
@@ -68,48 +81,50 @@ async function fork(modulePath: string, args: string[] = [], {cwd, verbose}: Exe
 export class NPM {
   private bin: string | undefined
   private config: Interfaces.Config
-  private verbose: boolean | undefined
+  private logLevel: LogLevel
 
-  public constructor({config, verbose}: {config: Interfaces.Config; verbose?: boolean}) {
+  public constructor({config, logLevel}: {config: Interfaces.Config; logLevel: LogLevel}) {
     this.config = config
-    this.verbose = verbose
+    this.logLevel = logLevel
   }
 
-  async exec(args: string[] = [], options: ExecOptions): Promise<void> {
+  async exec(args: string[] = [], options: ExecOptions): Promise<NpmOutput> {
     const bin = await this.findNpm()
     debug('npm binary path', bin)
-    if (this.verbose) args.push('--loglevel=verbose')
+
+    args.push(`--loglevel=${this.logLevel}`, '--no-fund')
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
-    if (this.verbose) {
+    if (options.logLevel !== 'notice' && options.logLevel !== 'silent') {
       ux.logToStderr(`${options.cwd}: ${bin} ${args.join(' ')}`)
     }
 
     debug(`${options.cwd}: ${bin} ${args.join(' ')}`)
     try {
-      await fork(bin, args, options)
+      const output = await fork(bin, args, options)
       debug('npm done')
+      return output
     } catch (error: unknown) {
       debug('npm error', error)
       throw error
     }
   }
 
-  async install(args: string[], opts: InstallOptions): Promise<void> {
+  async install(args: string[], opts: InstallOptions): Promise<NpmOutput> {
     const prod = opts.prod ? ['--omit', 'dev'] : []
-    await this.exec(['install', ...args, ...prod], opts)
+    return this.exec(['install', ...args, ...prod, '--no-audit'], opts)
   }
 
-  async uninstall(args: string[], opts: ExecOptions): Promise<void> {
-    await this.exec(['uninstall', ...args], opts)
+  async uninstall(args: string[], opts: ExecOptions): Promise<NpmOutput> {
+    return this.exec(['uninstall', ...args], opts)
   }
 
-  async update(args: string[], opts: ExecOptions): Promise<void> {
-    await this.exec(['update', ...args], opts)
+  async update(args: string[], opts: ExecOptions): Promise<NpmOutput> {
+    return this.exec(['update', ...args], opts)
   }
 
-  async view(args: string[], opts: ExecOptions): Promise<void> {
-    await this.exec(['view', ...args], {...opts, verbose: this.verbose})
+  async view(args: string[], opts: ExecOptions): Promise<NpmOutput> {
+    return this.exec(['view', ...args], {...opts, logLevel: 'silent'})
   }
 
   /**
