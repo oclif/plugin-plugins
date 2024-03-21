@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import makeDebug from 'debug'
 import {spawn} from 'node:child_process'
 import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
-import {dirname, join, resolve} from 'node:path'
+import {basename, dirname, join, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
@@ -162,6 +162,23 @@ export default class Plugins {
         this.isValidPlugin(plugin)
 
         await this.add({name: installedPluginName, type: 'user', url})
+
+        // Check that the prepare script produced all the expected files
+        // If it didn't, it might be because the plugin doesn't have a prepare
+        // script that compiles the plugin from source.
+        const safeToNotExist = new Set(['oclif.manifest.json', 'oclif.lock', 'npm-shrinkwrap.json'])
+        const files = ((plugin.pjson.files ?? []) as string[])
+          .map((f) => join(root, f))
+          .filter((f) => !safeToNotExist.has(basename(f)))
+
+        this.debug(`checking for existence of files: ${files.join(', ')}`)
+        const results = Object.fromEntries(await Promise.all(files?.map(async (f) => [f, await fileExists(f)]) ?? []))
+        this.debug(results)
+        if (!Object.values(results).every(Boolean)) {
+          ux.warn(
+            `This plugin from github may not work as expected because the prepare script did not produce all the expected files.`,
+          )
+        }
       } else {
         // npm
         const range = validRange(tag)
