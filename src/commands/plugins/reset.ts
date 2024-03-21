@@ -46,7 +46,6 @@ export default class Reset extends Command {
       }
 
       await Promise.all(filesToDelete.map((file) => rm(file, {force: true, recursive: true})))
-
       for (const plugin of userPlugins) {
         this.log(`✅ ${plugin.type === 'link' ? 'Unlinked' : 'Uninstalled'} ${plugin.name}`)
       }
@@ -78,7 +77,9 @@ export default class Reset extends Command {
 
         if (plugin.type === 'user') {
           try {
-            const newPlugin = await plugins.install(plugin.name, {tag: plugin.tag})
+            const newPlugin = plugin.url
+              ? await plugins.install(plugin.url)
+              : await plugins.install(plugin.name, {tag: plugin.tag})
             const newVersion = chalk.dim(`-> ${newPlugin.version}`)
             const tag = plugin.tag ? `@${plugin.tag}` : plugin.url ? ` (${plugin.url})` : ''
             this.log(`✅ Reinstalled ${plugin.name}${tag} ${newVersion}`)
