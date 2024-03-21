@@ -44,23 +44,43 @@ async function fork(modulePath: string, args: string[] = [], {cwd, logLevel}: Ex
         .filter(Boolean),
       stdio: [0, null, null, 'ipc'],
     })
-    const isNoisyLogLevel = logLevel !== 'silent'
+
+    const possibleLastLinesOfNpmInstall = ['up to date', 'added']
     const stderr: string[] = []
+    const stdout: string[] = []
+    const loggedStderr: string[] = []
+    const loggedStdout: string[] = []
+
+    const shouldPrint = (str: string): boolean => {
+      // For ux cleanliness purposes, don't print the final line of npm install output if
+      // the log level is 'notice' and there's no other output.
+      const noOtherOutput = loggedStderr.length === 0 && loggedStdout.length === 0
+      const isLastLine = possibleLastLinesOfNpmInstall.some((line) => str.startsWith(line))
+      if (noOtherOutput && isLastLine && logLevel === 'notice') {
+        return false
+      }
+
+      return logLevel !== 'silent'
+    }
+
     forked.stderr?.setEncoding('utf8')
     forked.stderr?.on('data', (d: Buffer) => {
-      const output = d.toString().trimEnd()
+      const output = d.toString().trim()
       stderr.push(output)
-      if (isNoisyLogLevel) ux.log(output)
-      else debug(output)
+      if (shouldPrint(output)) {
+        loggedStderr.push(output)
+        ux.log(output)
+      } else debug(output)
     })
 
-    const stdout: string[] = []
     forked.stdout?.setEncoding('utf8')
     forked.stdout?.on('data', (d: Buffer) => {
-      const output = d.toString().trimEnd()
+      const output = d.toString().trim()
       stdout.push(output)
-      if (isNoisyLogLevel) ux.log(output)
-      else debug(output)
+      if (shouldPrint(output)) {
+        loggedStdout.push(output)
+        ux.log(output)
+      } else debug(output)
     })
 
     forked.on('error', reject)
