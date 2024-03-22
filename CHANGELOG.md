@@ -1,3 +1,21 @@
+## [4.3.8](https://github.com/oclif/plugin-plugins/compare/4.3.7...4.3.8) (2024-03-19)
+
+### Bug Fixes
+
+- update npm version ([1f35a94](https://github.com/oclif/plugin-plugins/commit/1f35a9448d37970a270e45b028cd55f42ea17ecb))
+
+## [4.3.7](https://github.com/oclif/plugin-plugins/compare/4.3.6...4.3.7) (2024-03-18)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.23.0 to 3.25.2 ([#823](https://github.com/oclif/plugin-plugins/issues/823)) ([80c8e6d](https://github.com/oclif/plugin-plugins/commit/80c8e6da04573ffc66eaf91046de4396c553c7ba))
+
+## [4.3.6](https://github.com/oclif/plugin-plugins/compare/4.3.5...4.3.6) (2024-03-14)
+
+### Bug Fixes
+
+- bump version of npm ([151453f](https://github.com/oclif/plugin-plugins/commit/151453f0351c22ace3d5a8449b9774005f53283c))
+
 ## [4.3.5](https://github.com/oclif/plugin-plugins/compare/4.3.4...4.3.5) (2024-03-12)
 
 ### Bug Fixes
