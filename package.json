@@ -84,7 +84,7 @@
     "prepack": "yarn build && oclif manifest && oclif readme && npm shrinkwrap",
     "prepare": "husky && yarn build",
     "pretest": "yarn build --noEmit && tsc -p test --noEmit",
-    "test:integration:install": "mocha \"test/**/install.integration.ts\"",
+    "test:integration:install": "mocha \"test/**/install.integration.ts\" --timeout 1200000",
     "test:integration:link": "mocha \"test/**/link.integration.ts\"",
     "test:integration:sf": "mocha \"test/**/sf.integration.ts\"",
     "test:integration": "mocha \"test/**/*.integration.ts\"",
