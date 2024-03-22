@@ -129,7 +129,7 @@ export default class Plugins {
     try {
       this.debug(`installing plugin ${name}`)
       const options = {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true}
-      await this.createPJSON()
+      await this.ensurePJSON()
       let plugin: Config
       const args = force ? ['--force'] : []
       if (name.includes(':')) {
@@ -249,6 +249,7 @@ export default class Plugins {
   }
 
   public async maybeUnfriendlyName(name: string): Promise<string> {
+    await this.ensurePJSON()
     const unfriendly = this.unfriendlyName(name)
     this.debug(`checking registry for expanded package name ${unfriendly}`)
     if (unfriendly && (await this.npmHasPackage(unfriendly))) {
@@ -365,7 +366,7 @@ export default class Plugins {
     await this.add(...modifiedPlugins)
   }
 
-  private async createPJSON() {
+  private async ensurePJSON() {
     if (!(await fileExists(this.pjsonPath))) {
       this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
       await this.savePJSON(initPJSON)
@@ -395,19 +396,23 @@ export default class Plugins {
     // version of plugin-plugins that used yarn (v1). In this case, we want to remove the yarn.lock
     // and node_modules to ensure a clean install or update.
     if (await fileExists(join(this.config.dataDir, 'yarn.lock'))) {
-      this.debug('Found yarn.lock! Removing yarn.lock and node_modules...')
-      await Promise.all([
-        rename(join(this.config.dataDir, 'node_modules'), join(this.config.dataDir, 'node_modules.old')),
-        rm(join(this.config.dataDir, 'yarn.lock'), {force: true}),
-      ])
+      try {
+        this.debug('Found yarn.lock! Removing yarn.lock and node_modules...')
+        await Promise.all([
+          rename(join(this.config.dataDir, 'node_modules'), join(this.config.dataDir, 'node_modules.old')),
+          rm(join(this.config.dataDir, 'yarn.lock'), {force: true}),
+        ])
 
-      // Spawn a new process so that node_modules can be deleted asynchronously.
-      const rmScript = join(dirname(fileURLToPath(import.meta.url)), 'rm.js')
-      this.debug(`spawning ${rmScript} to remove node_modules.old`)
-      spawn(process.argv[0], [rmScript, join(this.config.dataDir, 'node_modules.old')], {
-        detached: true,
-        stdio: 'ignore',
-      }).unref()
+        // Spawn a new process so that node_modules can be deleted asynchronously.
+        const rmScript = join(dirname(fileURLToPath(import.meta.url)), 'rm.js')
+        this.debug(`spawning ${rmScript} to remove node_modules.old`)
+        spawn(process.argv[0], [rmScript, join(this.config.dataDir, 'node_modules.old')], {
+          detached: true,
+          stdio: 'ignore',
+        }).unref()
+      } catch (error) {
+        this.debug('Error cleaning up yarn.lock and node_modules:', error)
+      }
     }
   }
 
