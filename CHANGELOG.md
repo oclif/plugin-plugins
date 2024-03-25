@@ -1,3 +1,9 @@
+## [4.3.10](https://github.com/oclif/plugin-plugins/compare/4.3.9...4.3.10) (2024-03-25)
+
+### Bug Fixes
+
+- remove docs directory ([4d3ffd2](https://github.com/oclif/plugin-plugins/commit/4d3ffd27bf864337d1bbe031fd4fbb07889c7111))
+
 ## [4.3.9](https://github.com/oclif/plugin-plugins/compare/4.3.8...4.3.9) (2024-03-24)
 
 ### Bug Fixes
