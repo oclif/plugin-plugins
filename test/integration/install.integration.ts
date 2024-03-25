@@ -1,7 +1,6 @@
 import {Errors, ux} from '@oclif/core'
 import {expect} from 'chai'
 import chalk from 'chalk'
-import {existsSync} from 'node:fs'
 import {rm} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
 import {SinonSandbox, SinonStub, createSandbox, match} from 'sinon'
@@ -119,14 +118,7 @@ describe('install/uninstall integration tests', () => {
 
       const result = await PluginsIndex.run([], cwd)
       expect(stdoutStub.calledWith(match('test-esm-1'))).to.be.true
-      expect(
-        result.some((r) => r.name === '@oclif/plugin-test-esm-1'),
-        'plugin to be installed',
-      ).to.be.true
-
-      // test that the plugin was compiled after install (only applies to github installs)
-      const compiledDir = join(dataDir, 'node_modules', '@oclif', 'plugin-test-esm-1', 'dist')
-      expect(existsSync(compiledDir), 'compiled dir to exist').to.be.true
+      expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
     })
 
     it('should uninstall plugin from github', async () => {
@@ -145,10 +137,6 @@ describe('install/uninstall integration tests', () => {
       const result = await PluginsIndex.run([], cwd)
       expect(stdoutStub.calledWith(match('test-esm-1'))).to.be.true
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
-
-      // test that the plugin was compiled after install (only applies to github installs)
-      const compiledDir = join(dataDir, 'node_modules', '@oclif', 'plugin-test-esm-1', 'dist')
-      expect(existsSync(compiledDir)).to.be.true
     })
 
     it('should uninstall plugin from github', async () => {
@@ -168,10 +156,6 @@ describe('install/uninstall integration tests', () => {
       expect(stdoutStub.calledWith(match('test-esm-1'))).to.be.true
       expect(stdoutStub.calledWith(match('0.5.4'))).to.be.true
       expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
-
-      // test that the plugin was compiled after install (only applies to github installs)
-      const compiledDir = join(dataDir, 'node_modules', '@oclif', 'plugin-test-esm-1', 'dist')
-      expect(existsSync(compiledDir)).to.be.true
     })
 
     it('should uninstall plugin from github', async () => {

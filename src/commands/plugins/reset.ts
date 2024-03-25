@@ -20,7 +20,9 @@ export default class Reset extends Command {
 
   async run(): Promise<void> {
     const {flags} = await this.parse(Reset)
-    const plugins = new Plugins(this.config)
+    const plugins = new Plugins({
+      config: this.config,
+    })
     const userPlugins = await plugins.list()
 
     this.log(`Found ${userPlugins.length} plugin${userPlugins.length === 0 ? '' : 's'}:`)
@@ -44,7 +46,6 @@ export default class Reset extends Command {
       }
 
       await Promise.all(filesToDelete.map((file) => rm(file, {force: true, recursive: true})))
-
       for (const plugin of userPlugins) {
         this.log(`✅ ${plugin.type === 'link' ? 'Unlinked' : 'Uninstalled'} ${plugin.name}`)
       }
@@ -76,7 +77,9 @@ export default class Reset extends Command {
 
         if (plugin.type === 'user') {
           try {
-            const newPlugin = await plugins.install(plugin.name, {tag: plugin.tag})
+            const newPlugin = plugin.url
+              ? await plugins.install(plugin.url)
+              : await plugins.install(plugin.name, {tag: plugin.tag})
             const newVersion = chalk.dim(`-> ${newPlugin.version}`)
             const tag = plugin.tag ? `@${plugin.tag}` : plugin.url ? ` (${plugin.url})` : ''
             this.log(`✅ Reinstalled ${plugin.name}${tag} ${newVersion}`)

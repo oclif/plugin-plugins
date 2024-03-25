@@ -1,4 +1,3 @@
-export {default} from './plugins.js'
 import PluginsIndex from './commands/plugins/index.js'
 import PluginsInspect from './commands/plugins/inspect.js'
 import PluginsInstall from './commands/plugins/install.js'

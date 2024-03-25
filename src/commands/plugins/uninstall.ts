@@ -2,8 +2,8 @@
 import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
+import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
-import {YarnMessagesCache} from '../../util.js'
 
 function removeTags(plugin: string): string {
   if (plugin.includes('@')) {
@@ -38,21 +38,20 @@ export default class PluginsUninstall extends Command {
 
   static strict = false
 
-  static usage = 'plugins:uninstall PLUGIN...'
-
-  plugins = new Plugins(this.config)
-
   // In this case we want these operations to happen
   // sequentially so the `no-await-in-loop` rule is ignored
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(PluginsUninstall)
-    this.plugins = new Plugins(this.config)
-    if (flags.verbose) this.plugins.verbose = true
+
+    const plugins = new Plugins({
+      config: this.config,
+      logLevel: determineLogLevel(this.config, flags, 'silent'),
+    })
+
     if (argv.length === 0) argv.push('.')
     for (const plugin of argv as string[]) {
-      const friendly = removeTags(this.plugins.friendlyName(plugin))
-      ux.action.start(`Uninstalling ${friendly}`)
-      const unfriendly = await this.plugins.hasPlugin(removeTags(plugin))
+      const friendly = removeTags(plugins.friendlyName(plugin))
+      const unfriendly = await plugins.hasPlugin(removeTags(plugin))
       if (!unfriendly) {
         const p = this.config.getPluginsList().find((p) => p.name === plugin)
         if (p?.parent)
@@ -65,15 +64,15 @@ export default class PluginsUninstall extends Command {
 
       try {
         const {name} = unfriendly
-        await this.plugins.uninstall(name)
+        const displayName = friendly === '.' ? name : friendly ?? name
+        ux.action.start(`${this.config.name}: Uninstalling ${displayName}`)
+        await plugins.uninstall(name)
       } catch (error) {
         ux.action.stop(chalk.bold.red('failed'))
         throw error
       }
 
       ux.action.stop()
-
-      YarnMessagesCache.getInstance().flush()
     }
   }
 }

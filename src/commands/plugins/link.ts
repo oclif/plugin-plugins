@@ -1,8 +1,8 @@
 import {Args, Command, Flags, ux} from '@oclif/core'
 import chalk from 'chalk'
 
+import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
-import {YarnMessagesCache} from '../../util.js'
 
 export default class PluginsLink extends Command {
   static args = {
@@ -27,17 +27,16 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
     verbose: Flags.boolean({char: 'v'}),
   }
 
-  static usage = 'plugins:link PLUGIN'
-
-  plugins = new Plugins(this.config)
-
   async run(): Promise<void> {
     const {args, flags} = await this.parse(PluginsLink)
-    this.plugins.verbose = flags.verbose
-    ux.action.start(`Linking plugin ${chalk.cyan(args.path)}`)
-    await this.plugins.link(args.path, {install: flags.install})
-    ux.action.stop()
 
-    YarnMessagesCache.getInstance().flush()
+    const plugins = new Plugins({
+      config: this.config,
+      logLevel: determineLogLevel(this.config, flags, 'silent'),
+    })
+
+    ux.action.start(`${this.config.name}: Linking plugin ${chalk.cyan(args.path)}`)
+    await plugins.link(args.path, {install: flags.install})
+    ux.action.stop()
   }
 }

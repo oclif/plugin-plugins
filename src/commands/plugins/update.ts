@@ -1,7 +1,7 @@
 import {Command, Flags, ux} from '@oclif/core'
 
+import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
-import {YarnMessagesCache} from '../../util.js'
 
 export default class PluginsUpdate extends Command {
   static description = 'Update installed plugins.'
@@ -11,17 +11,18 @@ export default class PluginsUpdate extends Command {
     verbose: Flags.boolean({char: 'v'}),
   }
 
-  plugins = new Plugins(this.config)
-
   async run(): Promise<void> {
     const {flags} = await this.parse(PluginsUpdate)
-    this.plugins.verbose = flags.verbose
+
+    const plugins = new Plugins({
+      config: this.config,
+      logLevel: determineLogLevel(this.config, flags, 'silent'),
+    })
+
     ux.action.start(`${this.config.name}: Updating plugins`)
 
-    await this.plugins.update()
+    await plugins.update()
 
     ux.action.stop()
-
-    YarnMessagesCache.getInstance().flush()
   }
 }

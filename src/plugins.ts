@@ -1,11 +1,15 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
+import chalk from 'chalk'
 import makeDebug from 'debug'
-import {access, mkdir, readFile, rename, writeFile} from 'node:fs/promises'
-import {dirname, join, resolve} from 'node:path'
+import {spawn} from 'node:child_process'
+import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
+import {basename, dirname, join, resolve} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
-import {findNode, findNpm, uniq, uniqWith} from './util.js'
-import Yarn from './yarn.js'
+import {LogLevel} from './log-level.js'
+import {NPM, NpmOutput} from './npm.js'
+import {uniqWith} from './util.js'
 
 type UserPJSON = {
   dependencies: Record<string, string>
@@ -31,91 +35,150 @@ async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-export default class Plugins {
-  silent = false
-  verbose = false
+function dedupePlugins(
+  plugins: Interfaces.PJSON.PluginTypes[],
+): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] {
+  return uniqWith(
+    plugins,
+    // @ts-expect-error because typescript doesn't think it's possible for a plugin to have the `link` type here
+    (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root),
+  ) as (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]
+}
 
-  readonly yarn: Yarn
-
-  private readonly debug: ReturnType<typeof makeDebug>
-
-  constructor(public config: Interfaces.Config) {
-    this.yarn = new Yarn({config})
-    this.debug = makeDebug('@oclif/plugins')
+function extractIssuesLocation(
+  bugs: {url: string} | string | undefined,
+  repository: {type: string; url: string} | string | undefined,
+): string | undefined {
+  if (bugs) {
+    return typeof bugs === 'string' ? bugs : bugs.url
   }
 
-  async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
-    const pjson = await this.pjson()
+  if (repository) {
+    return typeof repository === 'string' ? repository : repository.url.replace('git+', '').replace('.git', '')
+  }
+}
 
+function notifyUser(plugin: Config, output: NpmOutput): void {
+  const containsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
+  if (containsWarnings) {
+    ux.logToStderr(chalk.bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
+
+    if (plugin.pjson.bugs || plugin.pjson.repository) {
+      ux.logToStderr(
+        `We suggest that you create an issue at ${extractIssuesLocation(
+          plugin.pjson.bugs,
+          plugin.pjson.repository,
+        )} and ask the plugin owners to address them.\n`,
+      )
+    }
+  }
+}
+
+export default class Plugins {
+  public config: Interfaces.Config
+  public readonly npm: NPM
+
+  private readonly debug: ReturnType<typeof makeDebug>
+  private readonly logLevel: LogLevel
+
+  constructor(options: {config: Interfaces.Config; logLevel?: LogLevel}) {
+    this.config = options.config
+    this.debug = makeDebug('@oclif/plugin-plugins')
+    this.logLevel = options.logLevel ?? 'notice'
+    this.npm = new NPM({
+      config: this.config,
+      logLevel: this.logLevel,
+    })
+  }
+
+  public async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
+    const pjson = await this.pjson()
+    const mergedPlugins = [...(pjson.oclif.plugins || []), ...plugins] as typeof pjson.oclif.plugins
     await this.savePJSON({
       ...pjson,
       oclif: {
         ...pjson.oclif,
-        plugins: uniq([...(pjson.oclif.plugins || []), ...plugins]) as typeof pjson.oclif.plugins,
+        plugins: dedupePlugins(mergedPlugins),
       },
     })
   }
 
-  friendlyName(name: string): string {
+  public friendlyName(name: string): string {
     const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return name
     const match = name.match(`@${scope}/${pluginPrefix ?? 'plugin'}-(.+)`)
     return match?.[1] ?? name
   }
 
-  async hasPlugin(
+  public async hasPlugin(
     name: string,
   ): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User | false> {
     const list = await this.list()
+    const friendlyName = this.friendlyName(name)
+    const unfriendlyName = this.unfriendlyName(name) ?? name
     return (
-      list.find((p) => this.friendlyName(p.name) === this.friendlyName(name)) ?? // friendly
-      list.find((p) => this.unfriendlyName(p.name) === this.unfriendlyName(name)) ?? // unfriendly
+      list.find((p) => this.friendlyName(p.name) === friendlyName) ?? // friendly
+      list.find((p) => this.unfriendlyName(p.name) === unfriendlyName) ?? // unfriendly
       list.find((p) => p.type === 'link' && resolve(p.root) === resolve(name)) ?? // link
       false
     )
   }
 
-  async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
+  public async install(name: string, {force = false, tag = 'latest'} = {}): Promise<Interfaces.Config> {
+    await this.maybeCleanUp()
     try {
       this.debug(`installing plugin ${name}`)
-      const yarnOpts = {cwd: this.config.dataDir, silent: this.silent, verbose: this.verbose}
-      await this.createPJSON()
-      let plugin
-      const add = force ? ['add', '--force'] : ['add']
+      const options = {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true}
+      await this.ensurePJSON()
+      let plugin: Config
+      const args = force ? ['--force'] : []
       if (name.includes(':')) {
         // url
         const url = name
-        await this.yarn.exec([...add, url], yarnOpts)
+        const output = await this.npm.install([...args, url], options)
         const {dependencies} = await this.pjson()
-        name = Object.entries(dependencies ?? {}).find(([, u]) => u === url)![0]
-        const root = join(this.config.dataDir, 'node_modules', name)
+        const {default: npa} = await import('npm-package-arg')
+        const normalizedUrl = npa(url)
+        const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
+          const normalized = npa(u)
+          return (
+            normalized.hosted?.type === normalizedUrl.hosted?.type &&
+            normalized.hosted?.user === normalizedUrl.hosted?.user &&
+            normalized.hosted?.project === normalizedUrl.hosted?.project
+          )
+        })
+        const installedPluginName = matches?.[0]
+        if (!installedPluginName) throw new Errors.CLIError(`Could not find plugin name for ${url}`)
+        const root = join(this.config.dataDir, 'node_modules', installedPluginName)
         plugin = await Config.load({
           devPlugins: false,
-          name,
+          name: installedPluginName,
           root,
           userPlugins: false,
         })
 
+        notifyUser(plugin, output)
+
         this.isValidPlugin(plugin)
 
-        await this.add({name, type: 'user', url})
+        await this.add({name: installedPluginName, type: 'user', url})
 
-        if (
-          plugin.getPluginsList().find((p) => p.root === root)?.moduleType === 'module' &&
-          (await fileExists(join(plugin.root, 'tsconfig.json')))
-        ) {
-          try {
-            // CJS plugins can be auto-transpiled at runtime but ESM plugins
-            // cannot. To support ESM plugins we need to compile them after
-            // installing them.
-            await this.yarn.exec(['install'], {...yarnOpts, cwd: plugin.root})
-            await this.yarn.exec(['run', 'tsc'], {...yarnOpts, cwd: plugin.root})
-          } catch (error) {
-            this.debug(error)
-          }
+        // Check that the prepare script produced all the expected files
+        // If it didn't, it might be because the plugin doesn't have a prepare
+        // script that compiles the plugin from source.
+        const safeToNotExist = new Set(['oclif.manifest.json', 'oclif.lock', 'npm-shrinkwrap.json'])
+        const files = ((plugin.pjson.files ?? []) as string[])
+          .map((f) => join(root, f))
+          .filter((f) => !safeToNotExist.has(basename(f)))
+
+        this.debug(`checking for existence of files: ${files.join(', ')}`)
+        const results = Object.fromEntries(await Promise.all(files?.map(async (f) => [f, await fileExists(f)]) ?? []))
+        this.debug(results)
+        if (!Object.values(results).every(Boolean)) {
+          ux.warn(
+            `This plugin from github may not work as expected because the prepare script did not produce all the expected files.`,
+          )
         }
-
-        await this.refresh({all: true, prod: true}, plugin.root)
       } else {
         // npm
         const range = validRange(tag)
@@ -126,7 +189,8 @@ export default class Plugins {
 
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
-        await this.yarn.exec([...add, `${name}@${tag}`], yarnOpts)
+
+        const output = await this.npm.install([...args, `${name}@${tag}`], options)
 
         this.debug(`loading plugin ${name}...`)
         plugin = await Config.load({
@@ -136,12 +200,13 @@ export default class Plugins {
           userPlugins: false,
         })
         this.debug(`finished loading plugin ${name} at root ${plugin.root}`)
-
+        notifyUser(plugin, output)
         this.isValidPlugin(plugin)
 
-        await this.refresh({all: true, prod: true}, plugin.root)
-        await this.add({name, tag: range || tag, type: 'user'})
+        await this.add({name, tag: range ?? tag, type: 'user'})
       }
+
+      await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
 
       return plugin
     } catch (error: unknown) {
@@ -160,24 +225,31 @@ export default class Plugins {
     }
   }
 
-  async link(p: string, {install}: {install: boolean}): Promise<Interfaces.Config> {
+  public async link(p: string, {install}: {install: boolean}): Promise<Interfaces.Config> {
     const c = await Config.load(resolve(p))
 
     this.isValidPlugin(c)
 
-    // refresh will cause yarn.lock to install dependencies, including devDeps
-    if (install) await this.refresh({all: false, prod: false}, c.root)
+    if (install) {
+      await this.npm.install([], {
+        cwd: c.root,
+        logLevel: this.logLevel,
+        prod: false,
+      })
+    }
+
     await this.add({name: c.name, root: c.root, type: 'link'})
 
     return c
   }
 
-  async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
+  public async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
     const pjson = await this.pjson()
     return pjson.oclif.plugins
   }
 
-  async maybeUnfriendlyName(name: string): Promise<string> {
+  public async maybeUnfriendlyName(name: string): Promise<string> {
+    await this.ensurePJSON()
     const unfriendly = this.unfriendlyName(name)
     this.debug(`checking registry for expanded package name ${unfriendly}`)
     if (unfriendly && (await this.npmHasPackage(unfriendly))) {
@@ -188,7 +260,7 @@ export default class Plugins {
     return name
   }
 
-  async pjson(): Promise<UserPJSON> {
+  public async pjson(): Promise<UserPJSON> {
     const pjson = await this.readPJSON()
     const plugins = pjson ? this.normalizePlugins(pjson.oclif.plugins) : []
     return {
@@ -202,60 +274,7 @@ export default class Plugins {
     }
   }
 
-  /**
-   * If a yarn.lock or oclif.lock exists at the root, refresh dependencies by
-   * rerunning yarn. If options.prod is true, only install production dependencies.
-   *
-   * As of v9 npm will always ignore the yarn.lock during `npm pack`]
-   * (see https://github.com/npm/cli/issues/6738). To get around this plugins can
-   * rename yarn.lock to oclif.lock before running `npm pack` using `oclif lock`.
-   *
-   * We still check for the existence of yarn.lock since it could be included if a plugin was
-   * packed using yarn or v8 of npm. Plugins installed directly from a git url will also
-   * have a yarn.lock.
-   *
-   * @param options {prod: boolean, all: boolean}
-   * @param roots string[]
-   * @returns Promise<void>
-   */
-  async refresh(options: {all: boolean; prod: boolean}, ...roots: string[]): Promise<void> {
-    ux.action.status = 'Refreshing user plugins...'
-    const doRefresh = async (root: string) => {
-      await this.yarn.exec(options.prod ? ['--prod'] : [], {
-        cwd: root,
-        noSpinner: true,
-        silent: true,
-        verbose: false,
-      })
-    }
-
-    const pluginRoots = [...roots]
-    if (options.all) {
-      const userPluginsRoots = this.config
-        .getPluginsList()
-        .filter((p) => p.type === 'user')
-        .map((p) => p.root)
-      pluginRoots.push(...userPluginsRoots)
-    }
-
-    const deduped = [...new Set(pluginRoots)]
-    await Promise.all(
-      deduped.map(async (r) => {
-        if (await fileExists(join(r, 'yarn.lock'))) {
-          this.debug(`yarn.lock exists at ${r}. Installing prod dependencies`)
-          await doRefresh(r)
-        } else if (await fileExists(join(r, 'oclif.lock'))) {
-          this.debug(`oclif.lock exists at ${r}. Installing prod dependencies`)
-          await rename(join(r, 'oclif.lock'), join(r, 'yarn.lock'))
-          await doRefresh(r)
-        } else {
-          this.debug(`no yarn.lock or oclif.lock exists at ${r}. Skipping dependency refresh`)
-        }
-      }),
-    )
-  }
-
-  async remove(name: string): Promise<void> {
+  public async remove(name: string): Promise<void> {
     const pjson = await this.pjson()
     if (pjson.dependencies) delete pjson.dependencies[name]
     await this.savePJSON({
@@ -267,21 +286,20 @@ export default class Plugins {
     })
   }
 
-  unfriendlyName(name: string): string | undefined {
+  public unfriendlyName(name: string): string | undefined {
     if (name.includes('@')) return
     const {pluginPrefix, scope} = this.config.pjson.oclif
     if (!scope) return
     return `@${scope}/${pluginPrefix ?? 'plugin'}-${name}`
   }
 
-  async uninstall(name: string): Promise<void> {
+  public async uninstall(name: string): Promise<void> {
     try {
       const pjson = await this.pjson()
       if ((pjson.oclif.plugins ?? []).some((p) => typeof p === 'object' && p.type === 'user' && p.name === name)) {
-        await this.yarn.exec(['remove', name], {
+        await this.npm.uninstall([name], {
           cwd: this.config.dataDir,
-          silent: this.silent,
-          verbose: this.verbose,
+          logLevel: this.logLevel,
         })
       }
     } catch (error: unknown) {
@@ -291,10 +309,12 @@ export default class Plugins {
     }
   }
 
-  async update(): Promise<void> {
+  public async update(): Promise<void> {
     // eslint-disable-next-line unicorn/no-await-expression-member
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
+
+    await this.maybeCleanUp()
 
     // migrate deprecated plugins
     const aliases = this.config.pjson.oclif.aliases || {}
@@ -308,46 +328,45 @@ export default class Plugins {
       plugins = plugins.filter((p) => p.name !== name)
     }
 
-    if (plugins.some((p) => Boolean(p.url))) {
-      await this.yarn.exec(['upgrade'], {
-        cwd: this.config.dataDir,
-        silent: this.silent,
-        verbose: this.verbose,
-      })
+    const urlPlugins = plugins.filter((p) => Boolean(p.url))
+    if (urlPlugins.length > 0) {
+      await this.npm.update(
+        urlPlugins.map((p) => p.name),
+        {
+          cwd: this.config.dataDir,
+          logLevel: this.logLevel,
+        },
+      )
     }
 
     const npmPlugins = plugins.filter((p) => !p.url)
     const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
     const modifiedPlugins: Interfaces.PJSON.PluginTypes[] = []
     if (npmPlugins.length > 0) {
-      await this.yarn.exec(
-        [
-          'add',
-          ...npmPlugins.map((p) => {
-            // a not valid tag indicates that it's a dist-tag like 'latest'
-            if (!valid(p.tag)) return `${p.name}@${p.tag}`
+      await this.npm.install(
+        npmPlugins.map((p) => {
+          // a not valid tag indicates that it's a dist-tag like 'latest'
+          if (!valid(p.tag)) return `${p.name}@${p.tag}`
 
-            if (p.tag && valid(p.tag) && jitPlugins[p.name] && gt(p.tag, jitPlugins[p.name])) {
-              // The user has installed a version of the JIT plugin that is newer than the one
-              // specified by the root plugin's JIT configuration. In this case, we want to
-              // keep the version installed by the user.
-              return `${p.name}@${p.tag}`
-            }
+          if (p.tag && valid(p.tag) && jitPlugins[p.name] && gt(p.tag, jitPlugins[p.name])) {
+            // The user has installed a version of the JIT plugin that is newer than the one
+            // specified by the root plugin's JIT configuration. In this case, we want to
+            // keep the version installed by the user.
+            return `${p.name}@${p.tag}`
+          }
 
-            const tag = jitPlugins[p.name] ?? p.tag
-            modifiedPlugins.push({...p, tag})
-            return `${p.name}@${tag}`
-          }),
-        ],
-        {cwd: this.config.dataDir, silent: this.silent, verbose: this.verbose},
+          const tag = jitPlugins[p.name] ?? p.tag
+          modifiedPlugins.push({...p, tag})
+          return `${p.name}@${tag}`
+        }),
+        {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true},
       )
     }
 
-    await this.refresh({all: true, prod: true})
     await this.add(...modifiedPlugins)
   }
 
-  private async createPJSON() {
+  private async ensurePJSON() {
     if (!(await fileExists(this.pjsonPath))) {
       this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
       await this.savePJSON(initPJSON)
@@ -372,6 +391,31 @@ export default class Plugins {
     })
   }
 
+  private async maybeCleanUp(): Promise<void> {
+    // If the yarn.lock exists, then we assume that the last install was done with an older major
+    // version of plugin-plugins that used yarn (v1). In this case, we want to remove the yarn.lock
+    // and node_modules to ensure a clean install or update.
+    if (await fileExists(join(this.config.dataDir, 'yarn.lock'))) {
+      try {
+        this.debug('Found yarn.lock! Removing yarn.lock and node_modules...')
+        await Promise.all([
+          rename(join(this.config.dataDir, 'node_modules'), join(this.config.dataDir, 'node_modules.old')),
+          rm(join(this.config.dataDir, 'yarn.lock'), {force: true}),
+        ])
+
+        // Spawn a new process so that node_modules can be deleted asynchronously.
+        const rmScript = join(dirname(fileURLToPath(import.meta.url)), 'rm.js')
+        this.debug(`spawning ${rmScript} to remove node_modules.old`)
+        spawn(process.argv[0], [rmScript, join(this.config.dataDir, 'node_modules.old')], {
+          detached: true,
+          stdio: 'ignore',
+        }).unref()
+      } catch (error) {
+        this.debug('Error cleaning up yarn.lock and node_modules:', error)
+      }
+    }
+  }
+
   private normalizePlugins(
     input: Interfaces.PJSON.User['oclif']['plugins'],
   ): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] {
@@ -386,41 +430,23 @@ export default class Plugins {
 
       return p
     })
-    return uniqWith(
-      plugins,
-      // @ts-expect-error because typescript doesn't think it's possible for a plugin to have the `link` type here
-      (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root),
-    )
+
+    return dedupePlugins(plugins)
   }
 
   private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
-    const nodeExecutable = await findNode(this.config.root)
-    const npmCli = await findNpm()
-
-    this.debug(`Using node executable located at: ${nodeExecutable}`)
-    this.debug(`Using npm executable located at: ${npmCli}`)
-
-    const registry = this.config.scopedEnvVar('NPM_REGISTRY')
-    const registryFlag = registry ? `--registry=${registry}` : ''
-    // wrap node and path in double quotes to deal with spaces
-    const command = `"${nodeExecutable}" "${npmCli}" show ${name} dist-tags ${registryFlag}`
-
-    let npmShowResult
     try {
-      const {default: shelljs} = await import('shelljs')
-      npmShowResult = shelljs.exec(command, {silent: true})
-    } catch {
-      throw new Errors.CLIError(`Could not run npm show for ${name}`)
-    }
-
-    if (npmShowResult?.code !== 0) {
-      this.debug(npmShowResult?.stderr)
+      await this.npm.view([name], {
+        cwd: this.config.dataDir,
+        logLevel: this.logLevel,
+      })
+      this.debug(`Found ${name} in the registry.`)
+      return true
+    } catch (error) {
+      this.debug(error)
       if (throwOnNotFound) throw new Errors.CLIError(`${name} does not exist in the registry.`)
       return false
     }
-
-    this.debug(`Found ${name} in the registry.`)
-    return true
   }
 
   private get pjsonPath() {
@@ -440,6 +466,6 @@ export default class Plugins {
   private async savePJSON(pjson: UserPJSON) {
     this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
     await mkdir(dirname(this.pjsonPath), {recursive: true})
-    await writeFile(this.pjsonPath, JSON.stringify(pjson, null, 2))
+    await writeFile(this.pjsonPath, JSON.stringify({name: this.config.name, ...pjson}, null, 2))
   }
 }
