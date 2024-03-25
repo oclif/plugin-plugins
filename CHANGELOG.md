@@ -1,3 +1,5 @@
+# [5.0.0](https://github.com/oclif/plugin-plugins/compare/4.3.10...5.0.0) (2024-03-25)
+
 ## [4.3.10](https://github.com/oclif/plugin-plugins/compare/4.3.9...4.3.10) (2024-03-25)
 
 ### Bug Fixes
