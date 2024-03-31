@@ -1,3 +1,9 @@
+## [5.0.4](https://github.com/oclif/plugin-plugins/compare/5.0.3...5.0.4) (2024-03-31)
+
+### Bug Fixes
+
+- **deps:** bump npm-run-path from 5.2.0 to 5.3.0 ([#831](https://github.com/oclif/plugin-plugins/issues/831)) ([24b0c0f](https://github.com/oclif/plugin-plugins/commit/24b0c0f4a6b6b0b7193c11a58a7b6f278bbc1149))
+
 ## [5.0.3](https://github.com/oclif/plugin-plugins/compare/5.0.2...5.0.3) (2024-03-31)
 
 ### Bug Fixes
