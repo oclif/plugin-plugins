@@ -1,3 +1,9 @@
+## [5.0.6](https://github.com/oclif/plugin-plugins/compare/5.0.5...5.0.6) (2024-04-06)
+
+### Bug Fixes
+
+- **deps:** bump npm from 10.2.4 to 10.5.1 ([#839](https://github.com/oclif/plugin-plugins/issues/839)) ([2ba6f82](https://github.com/oclif/plugin-plugins/commit/2ba6f82b6f5743f61c19106b6154bc060f67076f))
+
 ## [5.0.5](https://github.com/oclif/plugin-plugins/compare/5.0.4...5.0.5) (2024-04-02)
 
 ### Bug Fixes
