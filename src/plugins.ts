@@ -7,9 +7,11 @@ import {basename, dirname, join, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
+import {Output} from './fork.js'
 import {LogLevel} from './log-level.js'
-import {NPM, NpmOutput} from './npm.js'
+import {NPM} from './npm.js'
 import {uniqWith} from './util.js'
+import {Yarn} from './yarn.js'
 
 type UserPJSON = {
   dependencies: Record<string, string>
@@ -58,7 +60,7 @@ function extractIssuesLocation(
   }
 }
 
-function notifyUser(plugin: Config, output: NpmOutput): void {
+function notifyUser(plugin: Config, output: Output): void {
   const containsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
   if (containsWarnings) {
     ux.logToStderr(chalk.bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
@@ -231,11 +233,30 @@ export default class Plugins {
     this.isValidPlugin(c)
 
     if (install) {
-      await this.npm.install([], {
-        cwd: c.root,
-        logLevel: this.logLevel,
-        prod: false,
-      })
+      if (await fileExists(join(c.root, 'yarn.lock'))) {
+        this.debug('installing dependencies with yarn')
+        const yarn = new Yarn({config: this.config, logLevel: this.logLevel})
+        await yarn.install([], {
+          cwd: c.root,
+          logLevel: this.logLevel,
+          prod: false,
+        })
+      } else if (await fileExists(join(c.root, 'package-lock.json'))) {
+        this.debug('installing dependencies with npm')
+        await this.npm.install([], {
+          cwd: c.root,
+          logLevel: this.logLevel,
+          prod: false,
+        })
+      } else if (await fileExists(join(c.root, 'pnpm-lock.yaml'))) {
+        ux.warn(
+          `pnpm is not supported for installing after a link. The link succeeded, but you may need to run 'pnpm install' in ${c.root}.`,
+        )
+      } else {
+        ux.warn(
+          `No lockfile found in ${c.root}. The link succeeded, but you may need to install the dependencies in your project.`,
+        )
+      }
     }
 
     await this.add({name: c.name, root: c.root, type: 'link'})
