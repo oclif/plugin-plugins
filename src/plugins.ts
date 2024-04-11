@@ -239,7 +239,6 @@ export default class Plugins {
         await yarn.install([], {
           cwd: c.root,
           logLevel: this.logLevel,
-          prod: false,
         })
       } else if (await fileExists(join(c.root, 'package-lock.json'))) {
         this.debug('installing dependencies with npm')
