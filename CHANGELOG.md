@@ -1,3 +1,9 @@
+## [5.0.10](https://github.com/oclif/plugin-plugins/compare/5.0.9...5.0.10) (2024-04-16)
+
+### Bug Fixes
+
+- windows spawn ([#847](https://github.com/oclif/plugin-plugins/issues/847)) ([495a4a3](https://github.com/oclif/plugin-plugins/commit/495a4a31842788f1860c87e57111fe3ec288c720))
+
 ## [5.0.9](https://github.com/oclif/plugin-plugins/compare/5.0.8...5.0.9) (2024-04-14)
 
 ### Bug Fixes
