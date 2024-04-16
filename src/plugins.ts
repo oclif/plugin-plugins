@@ -262,7 +262,7 @@ export default class Plugins {
 
   public async pjson(): Promise<UserPJSON> {
     const pjson = await this.readPJSON()
-    const plugins = pjson ? this.normalizePlugins(pjson.oclif.plugins) : []
+    const plugins = pjson ? normalizePlugins(pjson.oclif.plugins) : []
     return {
       ...initPJSON,
       ...pjson,
@@ -409,29 +409,12 @@ export default class Plugins {
         spawn(process.argv[0], [rmScript, join(this.config.dataDir, 'node_modules.old')], {
           detached: true,
           stdio: 'ignore',
+          ...(this.config.windows ? {shell: true} : {}),
         }).unref()
       } catch (error) {
         this.debug('Error cleaning up yarn.lock and node_modules:', error)
       }
     }
-  }
-
-  private normalizePlugins(
-    input: Interfaces.PJSON.User['oclif']['plugins'],
-  ): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] {
-    const plugins = (input ?? []).map((p) => {
-      if (typeof p === 'string') {
-        return {
-          name: p,
-          tag: 'latest',
-          type: 'user',
-        } as Interfaces.PJSON.PluginTypes.User
-      }
-
-      return p
-    })
-
-    return dedupePlugins(plugins)
   }
 
   private async npmHasPackage(name: string, throwOnNotFound = false): Promise<boolean> {
@@ -469,3 +452,19 @@ export default class Plugins {
     await writeFile(this.pjsonPath, JSON.stringify({name: this.config.name, ...pjson}, null, 2))
   }
 }
+
+// if the plugin is a simple string, convert it to an object
+const normalizePlugins = (
+  input: Interfaces.PJSON.User['oclif']['plugins'],
+): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] =>
+  dedupePlugins(
+    (input ?? []).map((p) =>
+      typeof p === 'string'
+        ? {
+            name: p,
+            tag: 'latest',
+            type: 'user' as const,
+          }
+        : p,
+    ),
+  )
