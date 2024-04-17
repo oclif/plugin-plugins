@@ -1,3 +1,9 @@
+## [5.0.11](https://github.com/oclif/plugin-plugins/compare/5.0.10...5.0.11) (2024-04-17)
+
+### Bug Fixes
+
+- use yarn to install deps when linking yarn plugins ([a5d1e6c](https://github.com/oclif/plugin-plugins/commit/a5d1e6c4011e343496f129c94968ce23de77aa6e))
+
 ## [5.0.10](https://github.com/oclif/plugin-plugins/compare/5.0.9...5.0.10) (2024-04-16)
 
 ### Bug Fixes
