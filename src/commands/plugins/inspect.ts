@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-objects */
 import {Args, Command, Flags, Plugin} from '@oclif/core'
 import chalk from 'chalk'
 import {readFile} from 'node:fs/promises'
@@ -22,7 +21,7 @@ function trimUntil(fsPath: string, part: string): string {
   return parts.slice(0, partIndex + 1).join(sep)
 }
 
-type Dependencies = Record<string, {from: string; version: string}>
+type Dependencies = Record<string, {from: string | undefined; version: string}>
 type PluginWithDeps = Omit<
   Plugin,
   | '_commandsDir'
@@ -106,29 +105,28 @@ export default class PluginsInspect extends Command {
 
   async inspect(pluginName: string, verbose = false): Promise<PluginWithDeps> {
     const plugin = this.findPlugin(pluginName)
-    const dependencies: Record<string, string> = {}
-    const deps = sortBy(Object.keys({...plugin.pjson.dependencies}), (d) => d)
+    const dependencies: Record<string, null> = {}
     const depsJson: Dependencies = {}
-    for (const dep of deps) {
+    for (const dep of sortBy(Object.keys({...plugin.pjson.dependencies}), (d) => d)) {
       // eslint-disable-next-line no-await-in-loop
       const {pkgPath, version} = await this.findDep(plugin, dep)
       if (!version) continue
 
-      const from = dependencies[dep] ?? null
+      const from = plugin.pjson.dependencies?.[dep]
       const versionMsg = chalk.dim(from ? `${from} => ${version}` : version)
       const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
 
-      dependencies[dep] = msg
+      dependencies[msg] = null
       depsJson[dep] = {from, version}
     }
 
     const tree = {
       [chalk.bold.cyan(plugin.name)]: {
-        version: `version ${plugin.version}`,
-        ...(plugin.tag ? {tag: `tag ${plugin.tag}`} : {}),
-        ...(plugin.pjson.homepage ? {homepage: `homepage ${plugin.pjson.homepage}`} : {}),
-        location: `location ${plugin.root}`,
-        commands: sortBy(plugin.commandIDs, (c) => c),
+        [`version ${plugin.version}`]: null,
+        ...(plugin.tag ? {[`tag ${plugin.tag}`]: null} : {}),
+        ...(plugin.pjson.homepage ? {[`homepage ${plugin.pjson.homepage}`]: null} : {}),
+        [`location ${plugin.root}`]: null,
+        commands: Object.fromEntries(sortBy(plugin.commandIDs, (c) => c).map((id) => [id, null])),
         dependencies,
       },
     }
