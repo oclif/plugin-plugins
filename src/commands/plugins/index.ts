@@ -1,11 +1,16 @@
-import {Command, Flags, Interfaces, Plugin, ux} from '@oclif/core'
+import {Command, Flags, Interfaces, Plugin} from '@oclif/core'
 import chalk from 'chalk'
+// @ts-expect-error because object-treeify does not have types: https://github.com/blackflux/object-treeify/issues/1077
+import treeify from 'object-treeify'
 
 import Plugins from '../../plugins.js'
 import {sortBy} from '../../util.js'
 
 type JitPlugin = {name: string; type: string; version: string}
 type PluginsJson = Array<Interfaces.Plugin | JitPlugin>
+interface RecursiveTree {
+  [key: string]: RecursiveTree | string
+}
 
 export default class PluginsIndex extends Command {
   static description = 'List installed plugins.'
@@ -54,10 +59,9 @@ export default class PluginsIndex extends Command {
   }
 
   private createTree(plugin: Plugin) {
-    const tree = ux.tree()
+    const tree: RecursiveTree = {}
     for (const p of plugin.children) {
-      const name = this.formatPlugin(p)
-      tree.insert(name, this.createTree(p))
+      tree[this.formatPlugin(p)] = this.createTree(p)
     }
 
     return tree
@@ -68,7 +72,7 @@ export default class PluginsIndex extends Command {
       this.log(this.formatPlugin(plugin))
       if (plugin.children && plugin.children.length > 0) {
         const tree = this.createTree(plugin)
-        tree.display()
+        this.log(treeify(tree))
       }
     }
   }
