@@ -30,7 +30,7 @@
     "chai": "^4.4.1",
     "commitlint": "^18",
     "eslint": "^8.56.0",
-    "eslint-config-oclif": "^5.1.0",
+    "eslint-config-oclif": "^5.1.2",
     "eslint-config-oclif-typescript": "^3.1.4",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9",
