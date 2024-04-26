@@ -1,7 +1,9 @@
-import {Args, Command, Flags, Plugin, ux} from '@oclif/core'
+import {Args, Command, Flags, Plugin} from '@oclif/core'
 import chalk from 'chalk'
 import {readFile} from 'node:fs/promises'
 import {dirname, join, sep} from 'node:path'
+// @ts-expect-error because object-treeify does not have types: https://github.com/blackflux/object-treeify/issues/1077
+import treeify from 'object-treeify'
 
 import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
@@ -19,7 +21,7 @@ function trimUntil(fsPath: string, part: string): string {
   return parts.slice(0, partIndex + 1).join(sep)
 }
 
-type Dependencies = Record<string, {from: string; version: string}>
+type Dependencies = Record<string, {from: string | undefined; version: string}>
 type PluginWithDeps = Omit<
   Plugin,
   | '_commandsDir'
@@ -103,37 +105,33 @@ export default class PluginsInspect extends Command {
 
   async inspect(pluginName: string, verbose = false): Promise<PluginWithDeps> {
     const plugin = this.findPlugin(pluginName)
-    const tree = ux.tree()
-    const pluginHeader = chalk.bold.cyan(plugin.name)
-    tree.insert(pluginHeader)
-    tree.nodes[pluginHeader].insert(`version ${plugin.version}`)
-    if (plugin.tag) tree.nodes[pluginHeader].insert(`tag ${plugin.tag}`)
-    if (plugin.pjson.homepage) tree.nodes[pluginHeader].insert(`homepage ${plugin.pjson.homepage}`)
-    tree.nodes[pluginHeader].insert(`location ${plugin.root}`)
-
-    tree.nodes[pluginHeader].insert('commands')
-    const commands = sortBy(plugin.commandIDs, (c) => c)
-    for (const cmd of commands) tree.nodes[pluginHeader].nodes.commands.insert(cmd)
-
-    const dependencies = {...plugin.pjson.dependencies}
-
-    tree.nodes[pluginHeader].insert('dependencies')
-    const deps = sortBy(Object.keys(dependencies), (d) => d)
+    const dependencies: Record<string, null> = {}
     const depsJson: Dependencies = {}
-    for (const dep of deps) {
+    for (const dep of sortBy(Object.keys({...plugin.pjson.dependencies}), (d) => d)) {
       // eslint-disable-next-line no-await-in-loop
       const {pkgPath, version} = await this.findDep(plugin, dep)
       if (!version) continue
 
-      const from = dependencies[dep] ?? null
+      const from = plugin.pjson.dependencies?.[dep]
       const versionMsg = chalk.dim(from ? `${from} => ${version}` : version)
       const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
 
-      tree.nodes[pluginHeader].nodes.dependencies.insert(msg)
+      dependencies[msg] = null
       depsJson[dep] = {from, version}
     }
 
-    if (!this.jsonEnabled()) tree.display()
+    const tree = {
+      [chalk.bold.cyan(plugin.name)]: {
+        [`version ${plugin.version}`]: null,
+        ...(plugin.tag ? {[`tag ${plugin.tag}`]: null} : {}),
+        ...(plugin.pjson.homepage ? {[`homepage ${plugin.pjson.homepage}`]: null} : {}),
+        [`location ${plugin.root}`]: null,
+        commands: Object.fromEntries(sortBy(plugin.commandIDs, (c) => c).map((id) => [id, null])),
+        dependencies,
+      },
+    }
+
+    this.log(treeify(tree))
 
     return {...plugin, deps: depsJson}
   }
