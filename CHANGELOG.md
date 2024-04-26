@@ -1,3 +1,9 @@
+## [5.0.15](https://github.com/oclif/plugin-plugins/compare/5.0.14...5.0.15) (2024-04-26)
+
+### Bug Fixes
+
+- use object-treeify instead of ux ([#848](https://github.com/oclif/plugin-plugins/issues/848)) ([28b282b](https://github.com/oclif/plugin-plugins/commit/28b282b84cd784d35266a59dd08dc6c1c3e4a8ea))
+
 ## [5.0.14](https://github.com/oclif/plugin-plugins/compare/5.0.13...5.0.14) (2024-04-23)
 
 ### Bug Fixes
