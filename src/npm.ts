@@ -9,9 +9,9 @@ import {LogLevel} from './log-level.js'
 
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
-type InstallOptions = ExecOptions & {
+type InstallOptions = {
   prod?: boolean
-}
+} & ExecOptions
 
 export class NPM {
   private bin: string | undefined

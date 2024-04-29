@@ -461,7 +461,7 @@ export default class Plugins {
       return JSON.parse(await readFile(this.pjsonPath, 'utf8')) as Interfaces.PJSON.User
     } catch (error: unknown) {
       this.debug(error)
-      const err = error as Error & {code?: string}
+      const err = error as {code?: string} & Error
       if (err.code !== 'ENOENT') process.emitWarning(err)
     }
   }
