@@ -22,7 +22,7 @@ function trimUntil(fsPath: string, part: string): string {
 }
 
 type Dependencies = Record<string, {from: string | undefined; version: string}>
-type PluginWithDeps = Omit<
+type PluginWithDeps = {deps: Dependencies} & Omit<
   Plugin,
   | '_commandsDir'
   | '_debug'
@@ -36,7 +36,7 @@ type PluginWithDeps = Omit<
   | 'topics'
   | 'warn'
   | 'warned'
-> & {deps: Dependencies}
+>
 
 export default class PluginsInspect extends Command {
   static args = {
