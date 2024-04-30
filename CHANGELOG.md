@@ -1,3 +1,9 @@
+## [5.0.17](https://github.com/oclif/plugin-plugins/compare/5.0.16...5.0.17) (2024-04-30)
+
+### Bug Fixes
+
+- update npm version ([f772cbb](https://github.com/oclif/plugin-plugins/commit/f772cbb1911889832c5caf14f582fac186267594))
+
 ## [5.0.16](https://github.com/oclif/plugin-plugins/compare/5.0.15...5.0.16) (2024-04-27)
 
 ### Bug Fixes
