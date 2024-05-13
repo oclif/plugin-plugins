@@ -4,8 +4,8 @@ import {readFile} from 'node:fs/promises'
 import {createRequire} from 'node:module'
 import {join, sep} from 'node:path'
 
-import {ExecOptions, Output, fork} from './fork.js'
 import {LogLevel} from './log-level.js'
+import {ExecOptions, Output, spawn} from './spawn.js'
 
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
@@ -36,7 +36,7 @@ export class NPM {
 
     debug(`${options.cwd}: ${bin} ${args.join(' ')}`)
     try {
-      const output = await fork(bin, args, options)
+      const output = await spawn(bin, args, options)
       debug('npm done')
       return output
     } catch (error: unknown) {

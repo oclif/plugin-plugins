@@ -7,9 +7,9 @@ import {basename, dirname, join, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
-import {Output} from './fork.js'
 import {LogLevel} from './log-level.js'
 import {NPM} from './npm.js'
+import {Output} from './spawn.js'
 import {uniqWith} from './util.js'
 import {Yarn} from './yarn.js'
 

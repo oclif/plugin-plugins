@@ -1,6 +1,6 @@
 import {Errors, ux} from '@oclif/core'
 import makeDebug from 'debug'
-import {fork as cpFork} from 'node:child_process'
+import {spawn as cpSpawn} from 'node:child_process'
 import {npmRunPathEnv} from 'npm-run-path'
 
 import {LogLevel} from './log-level.js'
@@ -15,11 +15,19 @@ export type Output = {
   stdout: string[]
 }
 
-const debug = makeDebug('@oclif/plugin-plugins:fork')
+const debug = makeDebug('@oclif/plugin-plugins:spawn')
 
-export async function fork(modulePath: string, args: string[] = [], {cwd, logLevel}: ExecOptions): Promise<Output> {
+export async function spawn(modulePath: string, args: string[] = [], {cwd, logLevel}: ExecOptions): Promise<Output> {
   return new Promise((resolve, reject) => {
-    const forked = cpFork(modulePath, args, {
+    // On windows, the global path to npm could be .cmd, .exe, or .js. If it's a .js file, we need to run it with node.
+    if (process.platform === 'win32' && modulePath.endsWith('.js')) {
+      args.unshift(`"${modulePath}"`)
+      modulePath = 'node'
+    }
+
+    debug('modulePath', modulePath)
+    debug('args', args)
+    const spawned = cpSpawn(modulePath, args, {
       cwd,
       env: {
         ...npmRunPathEnv(),
@@ -27,15 +35,9 @@ export async function fork(modulePath: string, args: string[] = [], {cwd, logLev
         // break the install since the install location isn't a .git directory.
         HUSKY: '0',
       },
-      execArgv: process.execArgv
-        .join(' ')
-        // Remove --loader ts-node/esm from execArgv so that the subprocess doesn't fail if it can't find ts-node.
-        // The ts-node/esm loader isn't need to execute npm or yarn commands anyways.
-        .replace('--loader ts-node/esm', '')
-        .replace('--loader=ts-node/esm', '')
-        .split(' ')
-        .filter(Boolean),
-      stdio: [0, null, null, 'ipc'],
+      stdio: 'pipe',
+      windowsVerbatimArguments: true,
+      ...(process.platform === 'win32' && modulePath.toLowerCase().endsWith('.cmd') && {shell: true}),
     })
 
     const possibleLastLinesOfNpmInstall = ['up to date', 'added']
@@ -56,8 +58,8 @@ export async function fork(modulePath: string, args: string[] = [], {cwd, logLev
       return logLevel !== 'silent'
     }
 
-    forked.stderr?.setEncoding('utf8')
-    forked.stderr?.on('data', (d: Buffer) => {
+    spawned.stderr?.setEncoding('utf8')
+    spawned.stderr?.on('data', (d: Buffer) => {
       const output = d.toString().trim()
       stderr.push(output)
       if (shouldPrint(output)) {
@@ -66,8 +68,8 @@ export async function fork(modulePath: string, args: string[] = [], {cwd, logLev
       } else debug(output)
     })
 
-    forked.stdout?.setEncoding('utf8')
-    forked.stdout?.on('data', (d: Buffer) => {
+    spawned.stdout?.setEncoding('utf8')
+    spawned.stdout?.on('data', (d: Buffer) => {
       const output = d.toString().trim()
       stdout.push(output)
       if (shouldPrint(output)) {
@@ -76,8 +78,8 @@ export async function fork(modulePath: string, args: string[] = [], {cwd, logLev
       } else debug(output)
     })
 
-    forked.on('error', reject)
-    forked.on('exit', (code: number) => {
+    spawned.on('error', reject)
+    spawned.on('exit', (code: number) => {
       if (code === 0) {
         resolve({stderr, stdout})
       } else {
