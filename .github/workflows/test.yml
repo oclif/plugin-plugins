@@ -42,8 +42,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         test: ['test:integration:install', 'test:integration:link']
+        lite: [true, false]
         exclude:
           - os: windows-latest
+            test: test:integration:link
+          - lite: true
             test: test:integration:link
     runs-on: ${{matrix.os}}
     steps:
@@ -53,5 +56,11 @@ jobs:
           node-version: latest
       - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
       - run: yarn build
+      - name: Remove package managers
+        if: ${{matrix.lite}}
+        run: |
+          yarn remove yarn npm
       - name: Run tests
         run: yarn ${{matrix.test}}
+        env:
+          DEBUG: '@oclif/plugin-plugins*'
