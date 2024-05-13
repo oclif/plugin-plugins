@@ -64,17 +64,28 @@ export class NPM {
 
   /**
    * Get the path to the npm CLI file.
-   * This will always resolve npm to the pinned version in `@oclif/plugin-plugins/package.json`.
+   * This will resolve npm to the pinned version in `@oclif/plugin-plugins/package.json` if it exists.
+   * Otherwise, it will use the globally installed npm.
    *
    * @returns The path to the `npm/bin/npm-cli.js` file.
    */
   private async findNpm(): Promise<string> {
     if (this.bin) return this.bin
 
-    const npmPjsonPath = createRequire(import.meta.url).resolve('npm/package.json')
-    const npmPjson = JSON.parse(await readFile(npmPjsonPath, {encoding: 'utf8'}))
-    const npmPath = npmPjsonPath.slice(0, Math.max(0, npmPjsonPath.lastIndexOf(sep)))
-    this.bin = join(npmPath, npmPjson.bin.npm)
+    try {
+      const npmPjsonPath = createRequire(import.meta.url).resolve('npm/package.json')
+      const npmPjson = JSON.parse(await readFile(npmPjsonPath, {encoding: 'utf8'}))
+      const npmPath = npmPjsonPath.slice(0, Math.max(0, npmPjsonPath.lastIndexOf(sep)))
+      this.bin = join(npmPath, npmPjson.bin.npm)
+    } catch {
+      const {default: which} = await import('which')
+      this.bin = await which('npm')
+    }
+
+    if (!this.bin) {
+      throw new Error('npm not found')
+    }
+
     return this.bin
   }
 }

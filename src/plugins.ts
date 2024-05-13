@@ -330,7 +330,6 @@ export default class Plugins {
   }
 
   public async update(): Promise<void> {
-    // eslint-disable-next-line unicorn/no-await-expression-member
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
 
