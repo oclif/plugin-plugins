@@ -35,6 +35,8 @@ jobs:
   build-lite-version:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - name: Build lite version
         run: |
           # update package.json name to @oclif/plugin-plugins-lite
