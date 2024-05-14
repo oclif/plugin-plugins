@@ -62,5 +62,3 @@ jobs:
           yarn remove yarn npm
       - name: Run tests
         run: yarn ${{matrix.test}}
-        env:
-          DEBUG: '@oclif/plugin-plugins*'

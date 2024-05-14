@@ -1,4 +1,4 @@
-import {Interfaces, ux} from '@oclif/core'
+import {Errors, Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {readFile} from 'node:fs/promises'
 import {createRequire} from 'node:module'
@@ -83,7 +83,7 @@ export class NPM {
     }
 
     if (!this.bin) {
-      throw new Error('npm not found')
+      throw new Errors.CLIError('npm not found')
     }
 
     return this.bin
