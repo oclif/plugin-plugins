@@ -31,24 +31,3 @@ jobs:
       githubTag: ${{ github.event.release.tag_name || inputs.tag }}
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  build-lite-version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - name: Build lite version
-        run: |
-          # update package.json name to @oclif/plugin-plugins-lite
-          jq '.name = "@oclif/plugin-plugins-lite"' package.json > temp.json && mv temp.json package.json
-          yarn remove yarn npm
-          yarn install
-
-  publish-lite-version:
-    uses: salesforcecli/github-workflows/.github/workflows/npmPublish.yml@main
-    needs: [getDistTag, npm, build-lite-version]
-    with:
-      tag: ${{ needs.getDistTag.outputs.tag || 'latest' }}
-      githubTag: ${{ github.event.release.tag_name || inputs.tag }}
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
