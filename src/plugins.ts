@@ -7,9 +7,9 @@ import {basename, dirname, join, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
-import {Output} from './fork.js'
 import {LogLevel} from './log-level.js'
 import {NPM} from './npm.js'
+import {Output} from './spawn.js'
 import {uniqWith} from './util.js'
 import {Yarn} from './yarn.js'
 
@@ -330,7 +330,6 @@ export default class Plugins {
   }
 
   public async update(): Promise<void> {
-    // eslint-disable-next-line unicorn/no-await-expression-member
     let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
     if (plugins.length === 0) return
 

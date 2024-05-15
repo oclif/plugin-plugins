@@ -42,8 +42,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         test: ['test:integration:install', 'test:integration:link']
+        no-local-package-managers: [true, false]
         exclude:
           - os: windows-latest
+            test: test:integration:link
+          - no-local-package-managers: true
             test: test:integration:link
     runs-on: ${{matrix.os}}
     steps:
@@ -53,5 +56,9 @@ jobs:
           node-version: latest
       - uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
       - run: yarn build
+      - name: Remove package managers
+        if: ${{matrix.no-local-package-managers}}
+        run: |
+          yarn remove yarn npm
       - name: Run tests
         run: yarn ${{matrix.test}}
