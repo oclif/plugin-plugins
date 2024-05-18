@@ -1,3 +1,9 @@
+# [5.1.0](https://github.com/oclif/plugin-plugins/compare/5.0.21...5.1.0) (2024-05-18)
+
+### Features
+
+- fall back to global npm and yarn if not found ([#871](https://github.com/oclif/plugin-plugins/issues/871)) ([48dc584](https://github.com/oclif/plugin-plugins/commit/48dc584390e013f95de2444f371bf2575d275f4b))
+
 ## [5.0.21](https://github.com/oclif/plugin-plugins/compare/5.0.20...5.0.21) (2024-05-11)
 
 ### Bug Fixes
