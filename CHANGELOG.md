@@ -1,3 +1,9 @@
+## [5.1.1](https://github.com/oclif/plugin-plugins/compare/5.1.0...5.1.1) (2024-05-18)
+
+### Bug Fixes
+
+- **deps:** bump validate-npm-package-name from 5.0.0 to 5.0.1 ([#874](https://github.com/oclif/plugin-plugins/issues/874)) ([1ff5aef](https://github.com/oclif/plugin-plugins/commit/1ff5aef1af2a50d28bfd2dfee7df90a6650ca8fe))
+
 # [5.1.0](https://github.com/oclif/plugin-plugins/compare/5.0.21...5.1.0) (2024-05-18)
 
 ### Features
