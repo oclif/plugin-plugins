@@ -469,7 +469,6 @@ export default class Plugins {
   }
 
   private async savePJSON(pjson: UserPJSON) {
-    this.debug(`saving pjson at ${this.pjsonPath}`, JSON.stringify(pjson, null, 2))
     await mkdir(dirname(this.pjsonPath), {recursive: true})
     await writeFile(this.pjsonPath, JSON.stringify({name: this.config.name, ...pjson}, null, 2))
   }
