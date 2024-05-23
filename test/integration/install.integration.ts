@@ -1,6 +1,6 @@
 import {Errors, ux} from '@oclif/core'
+import {dim} from 'ansis'
 import {expect} from 'chai'
-import chalk from 'chalk'
 import {rm} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
 import {SinonSandbox, SinonStub, createSandbox, match} from 'sinon'
@@ -18,9 +18,9 @@ describe('install/uninstall integration tests', () => {
   const configDir = join(tmp, 'plugin-plugins-tests', 'config')
   const dataDir = join(tmp, 'plugin-plugins-tests', 'data')
 
-  console.log('process.env.MYCLI_DATA_DIR:', chalk.dim(dataDir))
-  console.log('process.env.MYCLI_CACHE_DIR:', chalk.dim(cacheDir))
-  console.log('process.env.MYCLI_CONFIG_DIR:', chalk.dim(configDir))
+  console.log('process.env.MYCLI_DATA_DIR:', dim(dataDir))
+  console.log('process.env.MYCLI_CACHE_DIR:', dim(cacheDir))
+  console.log('process.env.MYCLI_CONFIG_DIR:', dim(configDir))
 
   const cwd = process.cwd()
 

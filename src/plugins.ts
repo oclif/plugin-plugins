@@ -1,5 +1,5 @@
 import {Config, Errors, Interfaces, ux} from '@oclif/core'
-import chalk from 'chalk'
+import {bold} from 'ansis'
 import makeDebug from 'debug'
 import {spawn} from 'node:child_process'
 import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
@@ -68,7 +68,7 @@ function extractIssuesLocation(
 function notifyUser(plugin: Config, output: Output): void {
   const containsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
   if (containsWarnings) {
-    ux.stderr(chalk.bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
+    ux.stderr(bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
 
     if (plugin.pjson.bugs || plugin.pjson.repository) {
       ux.stderr(

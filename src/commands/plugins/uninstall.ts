@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import {Args, Command, Flags, ux} from '@oclif/core'
-import chalk from 'chalk'
+import {bold} from 'ansis'
 
 import {determineLogLevel} from '../../log-level.js'
 import Plugins from '../../plugins.js'
@@ -68,7 +68,7 @@ export default class PluginsUninstall extends Command {
         ux.action.start(`${this.config.name}: Uninstalling ${displayName}`)
         await plugins.uninstall(name)
       } catch (error) {
-        ux.action.stop(chalk.bold.red('failed'))
+        ux.action.stop(bold.red('failed'))
         throw error
       }
 
