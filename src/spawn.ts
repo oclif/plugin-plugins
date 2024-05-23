@@ -64,7 +64,7 @@ export async function spawn(modulePath: string, args: string[] = [], {cwd, logLe
       stderr.push(output)
       if (shouldPrint(output)) {
         loggedStderr.push(output)
-        ux.log(output)
+        ux.stdout(output)
       } else debug(output)
     })
 
@@ -74,7 +74,7 @@ export async function spawn(modulePath: string, args: string[] = [], {cwd, logLe
       stdout.push(output)
       if (shouldPrint(output)) {
         loggedStdout.push(output)
-        ux.log(output)
+        ux.stdout(output)
       } else debug(output)
     })
 

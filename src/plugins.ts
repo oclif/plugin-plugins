@@ -13,10 +13,21 @@ import {Output} from './spawn.js'
 import {uniqWith} from './util.js'
 import {Yarn} from './yarn.js'
 
+type Plugin = Interfaces.LinkedPlugin | Interfaces.UserPlugin
+
 type UserPJSON = {
   dependencies: Record<string, string>
   oclif: {
-    plugins: Array<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User>
+    plugins: Plugin[]
+    schema: number
+  }
+  private: boolean
+}
+
+type NormalizedUserPJSON = {
+  dependencies: Record<string, string>
+  oclif: {
+    plugins: Plugin[]
     schema: number
   }
   private: boolean
@@ -37,14 +48,8 @@ async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-function dedupePlugins(
-  plugins: Interfaces.PJSON.PluginTypes[],
-): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] {
-  return uniqWith(
-    plugins,
-    // @ts-expect-error because typescript doesn't think it's possible for a plugin to have the `link` type here
-    (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root),
-  ) as (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]
+function dedupePlugins(plugins: Plugin[]): Plugin[] {
+  return uniqWith(plugins, (a, b) => a.name === b.name || (a.type === 'link' && b.type === 'link' && a.root === b.root))
 }
 
 function extractIssuesLocation(
@@ -63,10 +68,10 @@ function extractIssuesLocation(
 function notifyUser(plugin: Config, output: Output): void {
   const containsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
   if (containsWarnings) {
-    ux.logToStderr(chalk.bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
+    ux.stderr(chalk.bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
 
     if (plugin.pjson.bugs || plugin.pjson.repository) {
-      ux.logToStderr(
+      ux.stderr(
         `We suggest that you create an issue at ${extractIssuesLocation(
           plugin.pjson.bugs,
           plugin.pjson.repository,
@@ -93,7 +98,7 @@ export default class Plugins {
     })
   }
 
-  public async add(...plugins: Interfaces.PJSON.PluginTypes[]): Promise<void> {
+  public async add(...plugins: Plugin[]): Promise<void> {
     const pjson = await this.pjson()
     const mergedPlugins = [...(pjson.oclif.plugins || []), ...plugins] as typeof pjson.oclif.plugins
     await this.savePJSON({
@@ -112,9 +117,7 @@ export default class Plugins {
     return match?.[1] ?? name
   }
 
-  public async hasPlugin(
-    name: string,
-  ): Promise<Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User | false> {
+  public async hasPlugin(name: string): Promise<Plugin | false> {
     const list = await this.list()
     const friendlyName = this.friendlyName(name)
     const unfriendlyName = this.unfriendlyName(name) ?? name
@@ -263,7 +266,7 @@ export default class Plugins {
     return c
   }
 
-  public async list(): Promise<(Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[]> {
+  public async list(): Promise<Plugin[]> {
     const pjson = await this.pjson()
     return pjson.oclif.plugins
   }
@@ -280,7 +283,7 @@ export default class Plugins {
     return name
   }
 
-  public async pjson(): Promise<UserPJSON> {
+  public async pjson(): Promise<NormalizedUserPJSON> {
     const pjson = await this.readPJSON()
     const plugins = pjson ? normalizePlugins(pjson.oclif.plugins) : []
     return {
@@ -330,7 +333,7 @@ export default class Plugins {
   }
 
   public async update(): Promise<void> {
-    let plugins = (await this.list()).filter((p): p is Interfaces.PJSON.PluginTypes.User => p.type === 'user')
+    let plugins = (await this.list()).filter((p): p is Interfaces.UserPlugin => p.type === 'user')
     if (plugins.length === 0) return
 
     await this.maybeCleanUp()
@@ -360,7 +363,7 @@ export default class Plugins {
 
     const npmPlugins = plugins.filter((p) => !p.url)
     const jitPlugins = this.config.pjson.oclif.jitPlugins ?? {}
-    const modifiedPlugins: Interfaces.PJSON.PluginTypes[] = []
+    const modifiedPlugins: Plugin[] = []
     if (npmPlugins.length > 0) {
       await this.npm.install(
         npmPlugins.map((p) => {
@@ -455,9 +458,9 @@ export default class Plugins {
     return join(this.config.dataDir, 'package.json')
   }
 
-  private async readPJSON(): Promise<Interfaces.PJSON.User | undefined> {
+  private async readPJSON(): Promise<UserPJSON | undefined> {
     try {
-      return JSON.parse(await readFile(this.pjsonPath, 'utf8')) as Interfaces.PJSON.User
+      return JSON.parse(await readFile(this.pjsonPath, 'utf8')) as UserPJSON
     } catch (error: unknown) {
       this.debug(error)
       const err = error as {code?: string} & Error
@@ -473,17 +476,16 @@ export default class Plugins {
 }
 
 // if the plugin is a simple string, convert it to an object
-const normalizePlugins = (
-  input: Interfaces.PJSON.User['oclif']['plugins'],
-): (Interfaces.PJSON.PluginTypes.Link | Interfaces.PJSON.PluginTypes.User)[] =>
-  dedupePlugins(
-    (input ?? []).map((p) =>
-      typeof p === 'string'
-        ? {
-            name: p,
-            tag: 'latest',
-            type: 'user' as const,
-          }
-        : p,
-    ),
+const normalizePlugins = (input: Plugin[]): Plugin[] => {
+  const normalized = (input ?? []).map((p) =>
+    typeof p === 'string'
+      ? {
+          name: p,
+          tag: 'latest',
+          type: 'user' as const,
+        }
+      : p,
   )
+
+  return dedupePlugins(normalized)
+}
