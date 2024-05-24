@@ -1,3 +1,9 @@
+## [5.1.3](https://github.com/oclif/plugin-plugins/compare/5.1.2...5.1.3) (2024-05-24)
+
+### Bug Fixes
+
+- remove config from json response ([#878](https://github.com/oclif/plugin-plugins/issues/878)) ([0305a8c](https://github.com/oclif/plugin-plugins/commit/0305a8c1fc53b7d8be2204b940306b2414fe5a2b))
+
 ## [5.1.2](https://github.com/oclif/plugin-plugins/compare/5.1.1...5.1.2) (2024-05-18)
 
 ### Bug Fixes
