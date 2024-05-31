@@ -55,7 +55,17 @@ export default class PluginsIndex extends Command {
       this.displayJitPlugins(jitPlugins)
     }
 
-    return [...results.filter((p) => !p.parent), ...jitPlugins]
+    return [
+      ...results
+        .filter((p) => !p.parent)
+        .map((p) => {
+          // @ts-expect-error because we are removing the config property, which may or may not be there.
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const {config, ...rest} = p
+          return rest
+        }),
+      ...jitPlugins,
+    ]
   }
 
   private createTree(plugin: Plugin) {
