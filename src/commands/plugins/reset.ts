@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import {Command, Flags} from '@oclif/core'
-import chalk from 'chalk'
+import {dim} from 'ansis'
 import {rm} from 'node:fs/promises'
 import {join} from 'node:path'
 
@@ -28,7 +28,7 @@ export default class Reset extends Command {
     this.log(`Found ${userPlugins.length} plugin${userPlugins.length === 0 ? '' : 's'}:`)
     for (const plugin of userPlugins) {
       this.log(
-        `- ${plugin.name} ${chalk.dim(this.config.plugins.get(plugin.name)?.version)} ${chalk.dim(`(${plugin.type})`)}`,
+        `- ${plugin.name} ${dim(this.config.plugins.get(plugin.name)?.version ?? '')} ${dim(`(${plugin.type})`)}`,
       )
     }
 
@@ -68,7 +68,7 @@ export default class Reset extends Command {
         if (plugin.type === 'link') {
           try {
             const newPlugin = await plugins.link(plugin.root, {install: false})
-            const newVersion = chalk.dim(`-> ${newPlugin.version}`)
+            const newVersion = dim(`-> ${newPlugin.version}`)
             this.log(`✅ Relinked ${plugin.name} ${newVersion}`)
           } catch {
             this.warn(`Failed to relink ${plugin.name}`)
@@ -80,7 +80,7 @@ export default class Reset extends Command {
             const newPlugin = plugin.url
               ? await plugins.install(plugin.url)
               : await plugins.install(plugin.name, {tag: plugin.tag})
-            const newVersion = chalk.dim(`-> ${newPlugin.version}`)
+            const newVersion = dim(`-> ${newPlugin.version}`)
             const tag = plugin.tag ? `@${plugin.tag}` : plugin.url ? ` (${plugin.url})` : ''
             this.log(`✅ Reinstalled ${plugin.name}${tag} ${newVersion}`)
           } catch {

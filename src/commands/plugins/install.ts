@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import {Args, Command, Errors, Flags, Interfaces, ux} from '@oclif/core'
-import chalk from 'chalk'
+import {bold, cyan} from 'ansis'
 import validate from 'validate-npm-package-name'
 
 import {determineLogLevel} from '../../log-level.js'
@@ -160,19 +160,17 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
       })
       try {
         if (p.type === 'npm') {
-          ux.action.start(
-            `${this.config.name}: Installing plugin ${chalk.cyan(plugins.friendlyName(p.name) + '@' + p.tag)}`,
-          )
+          ux.action.start(`${this.config.name}: Installing plugin ${cyan(plugins.friendlyName(p.name) + '@' + p.tag)}`)
           plugin = await plugins.install(p.name, {
             force: flags.force,
             tag: p.tag,
           })
         } else {
-          ux.action.start(`${this.config.name}: Installing plugin ${chalk.cyan(p.url)}`)
+          ux.action.start(`${this.config.name}: Installing plugin ${cyan(p.url)}`)
           plugin = await plugins.install(p.url, {force: flags.force})
         }
       } catch (error) {
-        ux.action.stop(chalk.bold.red('failed'))
+        ux.action.stop(bold.red('failed'))
         throw error
       }
 

@@ -11,13 +11,13 @@ describe('Plugins', () => {
   let saveStub: SinonSpy
   let config: Config
 
-  const userPlugin: Interfaces.PJSON.PluginTypes.User = {
+  const userPlugin: Interfaces.UserPlugin = {
     name: '@oclif/plugin-user',
     tag: 'latest',
     type: 'user',
   }
 
-  const linkedPlugin: Interfaces.PJSON.PluginTypes.Link = {
+  const linkedPlugin: Interfaces.LinkedPlugin = {
     name: '@oclif/plugin-linked',
     root: join('some', 'path', 'package.json'),
     type: 'link',

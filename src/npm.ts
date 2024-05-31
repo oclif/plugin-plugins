@@ -31,7 +31,7 @@ export class NPM {
     if (this.config.npmRegistry) args.push(`--registry=${this.config.npmRegistry}`)
 
     if (options.logLevel !== 'notice' && options.logLevel !== 'silent') {
-      ux.logToStderr(`${options.cwd}: ${bin} ${args.join(' ')}`)
+      ux.stderr(`${options.cwd}: ${bin} ${args.join(' ')}`)
     }
 
     debug(`${options.cwd}: ${bin} ${args.join(' ')}`)

@@ -1,14 +1,9 @@
-import {ux} from '@oclif/core'
+import {runCommand} from '@oclif/test'
 import {expect} from 'chai'
 import {exec as cpExec} from 'node:child_process'
 import {rm} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import {join} from 'node:path'
-import {SinonSandbox, SinonStub, createSandbox} from 'sinon'
-
-import PluginsIndex from '../../src/commands/plugins/index.js'
-import PluginsLink from '../../src/commands/plugins/link.js'
-import PluginsUninstall from '../../src/commands/plugins/uninstall.js'
 
 async function exec(cmd: string, opts?: {cwd?: string}) {
   return new Promise((resolve, reject) => {
@@ -20,15 +15,11 @@ async function exec(cmd: string, opts?: {cwd?: string}) {
 }
 
 describe('link/unlink integration tests', () => {
-  let sandbox: SinonSandbox
-  let stdoutStub: SinonStub
-
   const cacheDir = join(tmpdir(), 'plugin-plugins-tests', 'cache')
   const configDir = join(tmpdir(), 'plugin-plugins-tests', 'config')
   const dataDir = join(tmpdir(), 'plugin-plugins-tests', 'data')
   const pluginDir = join(tmpdir(), 'plugin-plugins-tests', 'plugin')
   const repo = 'https://github.com/oclif/plugin-test-esm-1.git'
-  const cwd = process.cwd()
 
   before(async () => {
     try {
@@ -49,38 +40,32 @@ describe('link/unlink integration tests', () => {
   })
 
   beforeEach(() => {
-    sandbox = createSandbox()
-    stdoutStub = sandbox.stub(ux.write, 'stdout')
     process.env.MYCLI_CACHE_DIR = cacheDir
     process.env.MYCLI_CONFIG_DIR = configDir
     process.env.MYCLI_DATA_DIR = dataDir
   })
 
   afterEach(() => {
-    sandbox.restore()
-
     delete process.env.MYCLI_CACHE_DIR
     delete process.env.MYCLI_CONFIG_DIR
     delete process.env.MYCLI_DATA_DIR
   })
 
   it('should return "No Plugins" if no plugins are linked', async () => {
-    await PluginsIndex.run([], cwd)
-    expect(stdoutStub.firstCall.firstArg).to.equal('No plugins installed.\n')
+    const {stdout} = await runCommand('plugins')
+    expect(stdout).to.contain('No plugins installed.\n')
   })
 
   it('should link plugin', async () => {
-    await PluginsLink.run([pluginDir, '--no-install'], cwd)
-
-    const result = await PluginsIndex.run([], cwd)
-    expect(stdoutStub.firstCall.firstArg).to.include('test-esm-1')
-    expect(result.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
+    await runCommand(`plugins link ${pluginDir} --no-install`)
+    const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
+    expect(stdout).to.include('test-esm-1')
+    expect(result?.some((r) => r.name === '@oclif/plugin-test-esm-1')).to.be.true
   })
 
   it('should unlink plugin', async () => {
-    await PluginsUninstall.run([pluginDir], cwd)
-
-    await PluginsIndex.run([], cwd)
-    expect(stdoutStub.firstCall.firstArg).to.equal('No plugins installed.\n')
+    await runCommand(`plugins unlink ${pluginDir}`)
+    const {stdout} = await runCommand<Array<{name: string}>>('plugins')
+    expect(stdout).to.contain('No plugins installed.\n')
   })
 })

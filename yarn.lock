@@ -1493,6 +1493,29 @@
     proc-log "^4.0.0"
     which "^4.0.0"
 
+"@oclif/core@4.0.0-beta.11":
+  version "4.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.0.0-beta.11.tgz#127deb8c9acd0b3d79ba6a9b6a18e7e3413b7863"
+  integrity sha512-CHhxoNBD5vaT+VtgzESyLoS8O/vkxJUb1cUX+wrmELdzaiggHfmiGCzWZM7VKvEEnOOg3SUz0eDLRlTH9Xy+/Q==
+  dependencies:
+    ansi-escapes "^4.3.2"
+    ansis "^3.0.1"
+    clean-stack "^3.0.1"
+    cli-spinners "^2.9.2"
+    cosmiconfig "^9.0.0"
+    debug "^4.3.4"
+    ejs "^3.1.10"
+    get-package-type "^0.1.0"
+    globby "^11.1.0"
+    indent-string "^4.0.0"
+    is-wsl "^2.2.0"
+    minimatch "^9.0.4"
+    string-width "^4.2.3"
+    supports-color "^9.4.0"
+    widest-line "^3.1.0"
+    wordwrap "^1.0.0"
+    wrap-ansi "^7.0.0"
+
 "@oclif/core@^3.26.5", "@oclif/core@^3.26.6":
   version "3.26.6"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.26.6.tgz#f371868cfa0fe150a6547e6af98b359065d2f971"
@@ -1559,6 +1582,14 @@
   version "0.2.1"
   resolved "https://registry.npmjs.org/@oclif/prettier-config/-/prettier-config-0.2.1.tgz"
   integrity sha512-XB8kwQj8zynXjIIWRm+6gO/r8Qft2xKtwBMSmq1JRqtA6TpwpqECqiu8LosBCyg2JBXuUy2lU23/L98KIR7FrQ==
+
+"@oclif/test@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@oclif/test/-/test-4.0.2.tgz#e1e2d851540aa4e757907ba631dfa1389b3a5f56"
+  integrity sha512-2aWjvDzi6tw/NYnKjhSdatiwY8PpHvlsFiv0DDkQ1Z9TqclMcm56xRzKiBKSBq2bVrnItfJYyFB3pb4tvxpfUw==
+  dependencies:
+    ansis "^3.2.0"
+    debug "^4.3.4"
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
@@ -2540,6 +2571,11 @@ ansicolors@~0.3.2:
   version "0.3.2"
   resolved "https://registry.npmjs.org/ansicolors/-/ansicolors-0.3.2.tgz"
   integrity sha512-QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==
+
+ansis@^3.0.1, ansis@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ansis/-/ansis-3.2.0.tgz#0e050c5be94784f32ffdac4b84fccba064aeae4b"
+  integrity sha512-Yk3BkHH9U7oPyCN3gL5Tc7CpahG/+UFv/6UG03C311Vy9lzRmA5uoxDTpU9CO3rGHL6KzJz/pdDeXZCZ5Mu/Sg==
 
 anymatch@~3.1.2:
   version "3.1.3"

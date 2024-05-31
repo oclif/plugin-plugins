@@ -1,8 +1,10 @@
+import {Ansis} from 'ansis'
 import {expect} from 'chai'
-import chalk from 'chalk'
 import {exec as cpExec} from 'node:child_process'
 import {mkdir, rm, writeFile} from 'node:fs/promises'
 import {join, resolve} from 'node:path'
+
+const ansis = new Ansis()
 
 async function exec(command: string): Promise<{code: number; stderr: string; stdout: string}> {
   return new Promise((resolve, reject) => {
@@ -10,7 +12,7 @@ async function exec(command: string): Promise<{code: number; stderr: string; std
       if (error) {
         reject(error)
       } else {
-        resolve({code: 0, stderr, stdout})
+        resolve({code: 0, stderr: ansis.strip(stderr), stdout: ansis.strip(stdout)})
       }
     })
   })
@@ -19,7 +21,7 @@ async function exec(command: string): Promise<{code: number; stderr: string; std
 async function ensureSfExists(): Promise<boolean> {
   try {
     const {stdout} = await exec('sf --version')
-    console.log('sf version:', chalk.dim(stdout.trim()))
+    console.log('sf version:', ansis.dim(stdout.trim()))
     return true
   } catch {
     return false
@@ -35,9 +37,9 @@ describe('sf Integration', () => {
     process.env.SF_CACHE_DIR = join(tmp, 'cache')
     process.env.SF_CONFIG_DIR = join(tmp, 'config')
 
-    console.log('process.env.SF_DATA_DIR:', chalk.dim(process.env.SF_DATA_DIR))
-    console.log('process.env.SF_CACHE_DIR:', chalk.dim(process.env.SF_CACHE_DIR))
-    console.log('process.env.SF_CONFIG_DIR:', chalk.dim(process.env.SF_CONFIG_DIR))
+    console.log('process.env.SF_DATA_DIR:', ansis.dim(process.env.SF_DATA_DIR))
+    console.log('process.env.SF_CACHE_DIR:', ansis.dim(process.env.SF_CACHE_DIR))
+    console.log('process.env.SF_CONFIG_DIR:', ansis.dim(process.env.SF_CONFIG_DIR))
 
     try {
       // no need to clear out directories in CI since they'll always be empty

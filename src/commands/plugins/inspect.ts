@@ -1,5 +1,5 @@
 import {Args, Command, Flags, Plugin} from '@oclif/core'
-import chalk from 'chalk'
+import {bold, dim} from 'ansis'
 import {readFile} from 'node:fs/promises'
 import {dirname, join, sep} from 'node:path'
 // @ts-expect-error because object-treeify does not have types: https://github.com/blackflux/object-treeify/issues/1077
@@ -113,7 +113,7 @@ export default class PluginsInspect extends Command {
       if (!version) continue
 
       const from = plugin.pjson.dependencies?.[dep]
-      const versionMsg = chalk.dim(from ? `${from} => ${version}` : version)
+      const versionMsg = dim(from ? `${from} => ${version}` : version)
       const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
 
       dependencies[msg] = null
@@ -121,7 +121,7 @@ export default class PluginsInspect extends Command {
     }
 
     const tree = {
-      [chalk.bold.cyan(plugin.name)]: {
+      [bold.cyan(plugin.name)]: {
         [`version ${plugin.version}`]: null,
         ...(plugin.tag ? {[`tag ${plugin.tag}`]: null} : {}),
         ...(plugin.pjson.homepage ? {[`homepage ${plugin.pjson.homepage}`]: null} : {}),
@@ -158,7 +158,7 @@ export default class PluginsInspect extends Command {
       try {
         plugins.push(await this.inspect(pluginName, flags.verbose))
       } catch (error) {
-        this.log(chalk.bold.red('failed'))
+        this.log(bold.red('failed'))
         throw error
       }
     }

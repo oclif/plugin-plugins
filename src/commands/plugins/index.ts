@@ -1,5 +1,5 @@
 import {Command, Flags, Interfaces, Plugin} from '@oclif/core'
-import chalk from 'chalk'
+import {dim} from 'ansis'
 // @ts-expect-error because object-treeify does not have types: https://github.com/blackflux/object-treeify/issues/1077
 import treeify from 'object-treeify'
 
@@ -89,17 +89,17 @@ export default class PluginsIndex extends Command {
 
   private displayJitPlugins(jitPlugins: JitPlugin[]) {
     if (jitPlugins.length === 0) return
-    this.log(chalk.dim('\nUninstalled JIT Plugins:'))
+    this.log(dim('\nUninstalled JIT Plugins:'))
     for (const {name, version} of jitPlugins) {
-      this.log(`${this.plugins.friendlyName(name)} ${chalk.dim(version)}`)
+      this.log(`${this.plugins.friendlyName(name)} ${dim(version)}`)
     }
   }
 
   private formatPlugin(plugin: Plugin): string {
-    let output = `${this.plugins.friendlyName(plugin.name)} ${chalk.dim(plugin.version)}`
-    if (plugin.type !== 'user') output += chalk.dim(` (${plugin.type})`)
+    let output = `${this.plugins.friendlyName(plugin.name)} ${dim(plugin.version)}`
+    if (plugin.type !== 'user') output += dim(` (${plugin.type})`)
     if (plugin.type === 'link') output += ` ${plugin.root}`
-    else if (plugin.tag && plugin.tag !== 'latest') output += chalk.dim(` (${String(plugin.tag)})`)
+    else if (plugin.tag && plugin.tag !== 'latest') output += dim(` (${String(plugin.tag)})`)
     return output
   }
 }
