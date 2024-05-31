@@ -1,3 +1,21 @@
+# [5.2.0](https://github.com/oclif/plugin-plugins/compare/5.1.3-dev.0...5.2.0) (2024-05-31)
+
+## [5.1.3](https://github.com/oclif/plugin-plugins/compare/5.1.2...5.1.3) (2024-05-24)
+
+### Bug Fixes
+
+- remove config from json response ([#878](https://github.com/oclif/plugin-plugins/issues/878)) ([0305a8c](https://github.com/oclif/plugin-plugins/commit/0305a8c1fc53b7d8be2204b940306b2414fe5a2b))
+
+## [5.1.3-dev.0](https://github.com/oclif/plugin-plugins/compare/5.1.3...5.1.3-dev.0) (2024-05-24)
+
+### Bug Fixes
+
+- use ansis instead of chalk ([61aad8b](https://github.com/oclif/plugin-plugins/commit/61aad8b90f85fc7d88a683d519f99b6e0411cf57))
+
+### Features
+
+- use core v4 ([4d3852e](https://github.com/oclif/plugin-plugins/commit/4d3852ed05193eb5fda809efa8e6b79bb1bf17c6))
+
 ## [5.1.3](https://github.com/oclif/plugin-plugins/compare/5.1.2...5.1.3) (2024-05-24)
 
 ### Bug Fixes
