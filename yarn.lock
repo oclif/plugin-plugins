@@ -1493,10 +1493,10 @@
     proc-log "^4.0.0"
     which "^4.0.0"
 
-"@oclif/core@4.0.0-beta.11":
-  version "4.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.0.0-beta.11.tgz#127deb8c9acd0b3d79ba6a9b6a18e7e3413b7863"
-  integrity sha512-CHhxoNBD5vaT+VtgzESyLoS8O/vkxJUb1cUX+wrmELdzaiggHfmiGCzWZM7VKvEEnOOg3SUz0eDLRlTH9Xy+/Q==
+"@oclif/core@4.0.0-beta.13":
+  version "4.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.0.0-beta.13.tgz#0e0a6431cfe612db77073d2f9ef361f14e4090b8"
+  integrity sha512-ug8CZUCJphgetSZVgd4HQgyewlYVGGG1LIeFXGxjgYsjZ/f5I3nSCj7xpAMEDqjVD/lwmSujtVwa7tvEgLGICw==
   dependencies:
     ansi-escapes "^4.3.2"
     ansis "^3.0.1"
