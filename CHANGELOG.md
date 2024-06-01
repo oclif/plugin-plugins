@@ -1,3 +1,9 @@
+## [5.2.1](https://github.com/oclif/plugin-plugins/compare/5.2.0...5.2.1) (2024-06-01)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 4.0.0-beta.11 to 4.0.0-beta.13 ([#885](https://github.com/oclif/plugin-plugins/issues/885)) ([827ce49](https://github.com/oclif/plugin-plugins/commit/827ce497c0aa6be77d9cef35dbac5e6d1f7f3767))
+
 # [5.2.0](https://github.com/oclif/plugin-plugins/compare/5.1.3-dev.0...5.2.0) (2024-05-31)
 
 ## [5.1.3](https://github.com/oclif/plugin-plugins/compare/5.1.2...5.1.3) (2024-05-24)
