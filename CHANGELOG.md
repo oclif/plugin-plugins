@@ -1,3 +1,9 @@
+## [5.2.2](https://github.com/oclif/plugin-plugins/compare/5.2.1...5.2.2) (2024-06-04)
+
+### Bug Fixes
+
+- core v4 ([bd761e3](https://github.com/oclif/plugin-plugins/commit/bd761e3513ab706c0c4094847fafaa34e7238c69))
+
 ## [5.2.1](https://github.com/oclif/plugin-plugins/compare/5.2.0...5.2.1) (2024-06-01)
 
 ### Bug Fixes
