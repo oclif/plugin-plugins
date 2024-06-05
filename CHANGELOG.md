@@ -1,3 +1,9 @@
+## [5.2.3](https://github.com/oclif/plugin-plugins/compare/5.2.2...5.2.3) (2024-06-05)
+
+### Bug Fixes
+
+- dont use config.dataDir in description ([#887](https://github.com/oclif/plugin-plugins/issues/887)) ([1cae7b5](https://github.com/oclif/plugin-plugins/commit/1cae7b58fa015e8469e59e0f61793db259e19f10))
+
 ## [5.2.2](https://github.com/oclif/plugin-plugins/compare/5.2.1...5.2.2) (2024-06-04)
 
 ### Bug Fixes
