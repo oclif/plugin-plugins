@@ -13,7 +13,7 @@ export default class PluginsInstall extends Command {
     plugin: Args.string({description: 'Plugin to install.', required: true}),
   }
 
-  static description = `Uses bundled npm executable to install plugins into <%= config.dataDir %>
+  static description = `Uses npm to install plugins.
 
 Installation of a user-installed plugin will override a core plugin.
 
