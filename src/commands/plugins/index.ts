@@ -24,7 +24,7 @@ export default class PluginsIndex extends Command {
 
   plugins!: Plugins
 
-  async run(): Promise<PluginsJson> {
+  public async run(): Promise<PluginsJson> {
     const {flags} = await this.parse(PluginsIndex)
     this.plugins = new Plugins({
       config: this.config,
@@ -70,7 +70,7 @@ export default class PluginsIndex extends Command {
 
   private createTree(plugin: Plugin) {
     const tree: RecursiveTree = {}
-    for (const p of plugin.children) {
+    for (const p of plugin.children ?? []) {
       tree[this.formatPlugin(p)] = this.createTree(p)
     }
 
