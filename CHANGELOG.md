@@ -1,3 +1,9 @@
+# [5.3.0](https://github.com/oclif/plugin-plugins/compare/5.2.4...5.3.0) (2024-06-12)
+
+### Features
+
+- disallow installing root plugin ([#888](https://github.com/oclif/plugin-plugins/issues/888)) ([0ac0ffd](https://github.com/oclif/plugin-plugins/commit/0ac0ffda71f9e30a36ff28877b9f8a0f7415ce34))
+
 ## [5.2.4](https://github.com/oclif/plugin-plugins/compare/5.2.3...5.2.4) (2024-06-09)
 
 ### Bug Fixes
