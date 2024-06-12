@@ -163,7 +163,7 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
           this.config.binPath && this.config.plugins.get('@oclif/plugin-update')
             ? ` Use "${this.config.bin} update" to update ${this.config.name}.`
             : ''
-        const msg = `Ignoring root plugin ${this.config.name}.${updateInstructions}`
+        const msg = `Ignoring top-level CLI plugin ${this.config.name}.${updateInstructions}`
 
         if (count === 1) {
           this.error(msg)

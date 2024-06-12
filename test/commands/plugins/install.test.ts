@@ -9,6 +9,6 @@ describe('plugins:install', () => {
 
   it('fails if you install root plugin', async () => {
     const {error} = await runCommand('plugins install @oclif/plugin-plugins')
-    expect(error?.message).to.equal('Ignoring root plugin @oclif/plugin-plugins.')
+    expect(error?.message).to.equal('Ignoring top-level CLI plugin @oclif/plugin-plugins.')
   })
 })
