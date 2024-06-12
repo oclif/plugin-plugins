@@ -150,9 +150,30 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
       logLevel: determineLogLevel(this.config, this.flags, 'notice'),
     })
     const aliases = this.config.pjson.oclif.aliases || {}
+
+    const count = argv.length
     for (let name of argv as string[]) {
       if (aliases[name] === null) this.error(`${name} is blocked`)
       name = aliases[name] || name
+
+      // Ignore the root plugin. Error if it's the only plugin being installed.
+      if (name === this.config.name) {
+        const updateInstructions =
+          // this.config.binPath is set when the CLI is installed from an installer but not when it's installed from npm
+          this.config.binPath && this.config.plugins.get('@oclif/plugin-update')
+            ? ` Use "${this.config.bin} update" to update ${this.config.name}.`
+            : ''
+        const msg = `Ignoring top-level CLI plugin ${this.config.name}.${updateInstructions}`
+
+        if (count === 1) {
+          this.error(msg)
+        } else {
+          this.warn(msg)
+        }
+
+        continue
+      }
+
       const p = await this.parsePlugin(plugins, name)
       let plugin
       await this.config.runHook('plugins:preinstall', {

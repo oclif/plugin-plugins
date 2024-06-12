@@ -24,7 +24,7 @@ export default class PluginsIndex extends Command {
 
   plugins!: Plugins
 
-  async run(): Promise<PluginsJson> {
+  public async run(): Promise<PluginsJson> {
     const {flags} = await this.parse(PluginsIndex)
     this.plugins = new Plugins({
       config: this.config,
@@ -70,7 +70,7 @@ export default class PluginsIndex extends Command {
 
   private createTree(plugin: Plugin) {
     const tree: RecursiveTree = {}
-    for (const p of plugin.children) {
+    for (const p of plugin.children ?? []) {
       tree[this.formatPlugin(p)] = this.createTree(p)
     }
 
@@ -78,7 +78,10 @@ export default class PluginsIndex extends Command {
   }
 
   private display(plugins: Plugin[]) {
+    const rootPlugin = plugins.find((p) => p.root === this.config.root)
     for (const plugin of plugins.filter((p: Plugin) => !p.parent)) {
+      // don't log the root plugin
+      if (plugin.name === rootPlugin?.name) continue
       this.log(this.formatPlugin(plugin))
       if (plugin.children && plugin.children.length > 0) {
         const tree = this.createTree(plugin)
