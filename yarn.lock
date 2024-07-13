@@ -1610,9 +1610,9 @@
     wrap-ansi "^7.0.0"
 
 "@oclif/core@^4":
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.0.8.tgz#667caa6481682e34594a4df6faeb3137879652d8"
-  integrity sha512-9AzNoRlKfIeuqOin+HK9cyouELeup7sX+MGIFc5dR+bnG0sSzFnV1A/Z57E7KWrY5NdWULHYT5NhiL1YpEhG2w==
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.0.11.tgz#0a774d00ccab8ee63eb01c5ad2bffc69a170dba8"
+  integrity sha512-cZLLdSm9tGSbuoRjjgXf128zvPZH+afjQMQcrvDfoN347KvPg75ne8YJ8qHix+T3Vl03iXfgIH6guQN0kLgmjg==
   dependencies:
     ansi-escapes "^4.3.2"
     ansis "^3.1.1"
