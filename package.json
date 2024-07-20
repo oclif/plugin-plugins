@@ -41,7 +41,7 @@
     "lint-staged": "^15.2.7",
     "mocha": "^10.6.0",
     "oclif": "^4.14.0",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "shx": "^0.3.4",
     "sinon": "^18",
     "ts-node": "^10.9.2",
