@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import {Args, Command, Errors, Flags, Interfaces, ux} from '@oclif/core'
+import {Args, Command, Errors, Flags, Interfaces, Plugin, ux} from '@oclif/core'
 import {bold, cyan} from 'ansis'
 import validate from 'validate-npm-package-name'
 
@@ -194,6 +194,12 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
         ux.action.stop(bold.red('failed'))
         throw error
       }
+
+      const pluginInstance = new Plugin(plugin)
+      await pluginInstance.load()
+      this.config.plugins.set(pluginInstance.name, pluginInstance)
+
+      await this.config.runHook('plugins:postinstall', {})
 
       ux.action.stop(`installed v${plugin.version}`)
     }

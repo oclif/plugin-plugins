@@ -48,6 +48,8 @@ export default class PluginsUninstall extends Command {
       logLevel: determineLogLevel(this.config, flags, 'silent'),
     })
 
+    let pluginNameToDelete: string | undefined
+
     if (argv.length === 0) argv.push('.')
     for (const plugin of argv as string[]) {
       const friendly = removeTags(plugins.friendlyName(plugin))
@@ -64,9 +66,10 @@ export default class PluginsUninstall extends Command {
 
       try {
         const {name} = unfriendly
-        const displayName = friendly === '.' ? name : friendly ?? name
+        const displayName = friendly === '.' ? name : (friendly ?? name)
         ux.action.start(`${this.config.name}: Uninstalling ${displayName}`)
         await plugins.uninstall(name)
+        pluginNameToDelete = name
       } catch (error) {
         ux.action.stop(bold.red('failed'))
         throw error
@@ -74,5 +77,11 @@ export default class PluginsUninstall extends Command {
 
       ux.action.stop()
     }
+
+    if (pluginNameToDelete) {
+      this.config.plugins.delete(pluginNameToDelete)
+    }
+
+    await this.config.runHook('plugins:postuninstall', {})
   }
 }
