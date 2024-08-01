@@ -1,3 +1,9 @@
+# [5.4.0](https://github.com/oclif/plugin-plugins/compare/5.3.9...5.4.0) (2024-08-01)
+
+### Features
+
+- add `plugins:post`\* hooks ([#932](https://github.com/oclif/plugin-plugins/issues/932)) ([53725d5](https://github.com/oclif/plugin-plugins/commit/53725d59245b98069b8aa7e14e8625628dd992cc))
+
 ## [5.3.9](https://github.com/oclif/plugin-plugins/compare/5.3.8...5.3.9) (2024-07-23)
 
 ### Bug Fixes
