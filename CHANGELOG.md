@@ -1,3 +1,9 @@
+## [5.4.2](https://github.com/oclif/plugin-plugins/compare/5.4.1...5.4.2) (2024-08-03)
+
+### Bug Fixes
+
+- **deps:** bump debug from 4.3.5 to 4.3.6 ([#935](https://github.com/oclif/plugin-plugins/issues/935)) ([92cf8f8](https://github.com/oclif/plugin-plugins/commit/92cf8f86606995f1e8b9276a8042f2de9c7e5796))
+
 ## [5.4.1](https://github.com/oclif/plugin-plugins/compare/5.4.0...5.4.1) (2024-08-03)
 
 ### Bug Fixes
