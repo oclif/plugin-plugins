@@ -6,7 +6,7 @@
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
     "@oclif/core": "^4",
-    "ansis": "^3.2.1",
+    "ansis": "^3.3.2",
     "debug": "^4.3.4",
     "npm": "^10.8.2",
     "npm-package-arg": "^11.0.2",
