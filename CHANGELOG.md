@@ -1,3 +1,9 @@
+## [5.4.4](https://github.com/oclif/plugin-plugins/compare/5.4.3...5.4.4) (2024-08-11)
+
+### Bug Fixes
+
+- **deps:** bump npm-package-arg from 11.0.2 to 11.0.3 ([#938](https://github.com/oclif/plugin-plugins/issues/938)) ([8cd36dd](https://github.com/oclif/plugin-plugins/commit/8cd36dd2c63267b37dadcf2eeed60b0be9cde2dc))
+
 ## [5.4.3](https://github.com/oclif/plugin-plugins/compare/5.4.2...5.4.3) (2024-08-10)
 
 ### Bug Fixes
