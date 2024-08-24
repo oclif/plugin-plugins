@@ -1,3 +1,9 @@
+## [5.4.6](https://github.com/oclif/plugin-plugins/compare/5.4.5...5.4.6) (2024-08-24)
+
+### Bug Fixes
+
+- **deps:** bump micromatch from 4.0.7 to 4.0.8 ([#953](https://github.com/oclif/plugin-plugins/issues/953)) ([42d5242](https://github.com/oclif/plugin-plugins/commit/42d5242cd58857bf3e654985ae70a070621b9077))
+
 ## [5.4.5](https://github.com/oclif/plugin-plugins/compare/5.4.4...5.4.5) (2024-08-24)
 
 ### Bug Fixes
