@@ -14,7 +14,6 @@ Installation of a linked plugin will override a user-installed or core plugin.
 
 e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello' command will override the user-installed or core plugin implementation. This is useful for development work.
 `
-
   static examples = ['<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
 
   static flags = {
@@ -26,6 +25,8 @@ e.g. If you have a user-installed or core plugin that has a 'hello' command, ins
     }),
     verbose: Flags.boolean({char: 'v'}),
   }
+
+  static summary = 'Links a plugin into the CLI for development.'
 
   async run(): Promise<void> {
     const {args, flags} = await this.parse(PluginsLink)
