@@ -9,8 +9,7 @@ export default class PluginsLink extends Command {
     path: Args.string({default: '.', description: 'path to plugin', name: 'path', required: true}),
   }
 
-  static description = `Links a plugin into the CLI for development.
-Installation of a linked plugin will override a user-installed or core plugin.
+  static description = `Installation of a linked plugin will override a user-installed or core plugin.
 
 e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello' command will override the user-installed or core plugin implementation. This is useful for development work.
 `
