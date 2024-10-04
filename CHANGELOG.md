@@ -1,3 +1,9 @@
+## [5.4.11](https://github.com/oclif/plugin-plugins/compare/5.4.10...5.4.11) (2024-10-04)
+
+### Bug Fixes
+
+- summary for link ([#980](https://github.com/oclif/plugin-plugins/issues/980)) ([0964834](https://github.com/oclif/plugin-plugins/commit/0964834b4d6dc8c215e0d4ce2e040d6cf072ef91))
+
 ## [5.4.10](https://github.com/oclif/plugin-plugins/compare/5.4.9...5.4.10) (2024-09-28)
 
 ### Bug Fixes
