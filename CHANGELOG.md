@@ -1,3 +1,9 @@
+## [5.4.12](https://github.com/oclif/plugin-plugins/compare/5.4.11...5.4.12) (2024-10-04)
+
+### Bug Fixes
+
+- remove summary from description ([19e5b34](https://github.com/oclif/plugin-plugins/commit/19e5b34d4fb62e4a9a3d5d9c9c1d1cb61cb53e2e))
+
 ## [5.4.11](https://github.com/oclif/plugin-plugins/compare/5.4.10...5.4.11) (2024-10-04)
 
 ### Bug Fixes
