@@ -1,3 +1,9 @@
+## [5.4.15](https://github.com/oclif/plugin-plugins/compare/5.4.14...5.4.15) (2024-10-11)
+
+### Bug Fixes
+
+- bump oclif/core ([#985](https://github.com/oclif/plugin-plugins/issues/985)) ([58a2636](https://github.com/oclif/plugin-plugins/commit/58a263631a4fffe1d873b9ead3d778d45f3407c2))
+
 ## [5.4.14](https://github.com/oclif/plugin-plugins/compare/5.4.13...5.4.14) (2024-10-05)
 
 ### Bug Fixes
