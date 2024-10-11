@@ -5,7 +5,7 @@
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
-    "@oclif/core": "^4",
+    "@oclif/core": "^4.0.28",
     "ansis": "^3.3.2",
     "debug": "^4.3.7",
     "npm": "^10.9.0",
