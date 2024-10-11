@@ -1,11 +1,11 @@
 {
   "name": "@oclif/plugin-plugins",
   "description": "plugins plugin for oclif",
-  "version": "5.4.14",
+  "version": "5.4.15-dev.0",
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
-    "@oclif/core": "^4",
+    "@oclif/core": "^4.0.28",
     "ansis": "^3.3.2",
     "debug": "^4.3.7",
     "npm": "^10.9.0",
