@@ -13,7 +13,6 @@ plugins plugin for oclif
 - [Usage](#usage)
 - [Friendly names](#friendly-names)
 - [Aliases](#aliases)
-- [Environment Variables](#environment-variables)
 - [Commands](#commands)
 - [Contributing](#contributing)
 <!-- tocstop -->
@@ -77,12 +76,6 @@ For removing plugins that are no longer needed (either because they're sunset or
 ```
 
 `old-name-plugin` will be autoremoved on the next update and will not be able to be installed with `mycli plugins:install old-name-plugin`.
-
-# Environment Variables
-
-`<CLI>_USE_NETWORK_MUTEX` if true, use the `--mutex=network` option on yarn operations
-`<CLI>_NETWORK_MUTEX_PORT` specify the port for the `mutex=network` option, depends on `<CLI>_USE_NETWORK_MUTEX`
-`<CLI>_NETWORK_TIMEOUT` specify the `--network-timeout` option on yarn operation (set in milliseconds)
 
 # Commands
 
