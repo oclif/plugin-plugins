@@ -1,3 +1,9 @@
+## [5.4.16](https://github.com/oclif/plugin-plugins/compare/5.4.15...5.4.16) (2024-11-16)
+
+### Bug Fixes
+
+- **deps:** bump cross-spawn from 7.0.3 to 7.0.5 ([#1006](https://github.com/oclif/plugin-plugins/issues/1006)) ([47cf832](https://github.com/oclif/plugin-plugins/commit/47cf832ab338d76fd664a30dfbda04e37a3be89b))
+
 ## [5.4.15](https://github.com/oclif/plugin-plugins/compare/5.4.14...5.4.15) (2024-10-11)
 
 ### Bug Fixes
