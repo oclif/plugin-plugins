@@ -7,7 +7,7 @@
   "dependencies": {
     "@oclif/core": "^4.0.33",
     "ansis": "^3.3.2",
-    "debug": "^4.3.7",
+    "debug": "^4.4.0",
     "npm": "^10.9.1",
     "npm-package-arg": "^11.0.3",
     "npm-run-path": "^5.3.0",
