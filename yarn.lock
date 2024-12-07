@@ -125,10 +125,10 @@
     "@smithy/util-waiter" "^3.1.8"
     tslib "^2.6.2"
 
-"@aws-sdk/client-s3@^3.699.0":
-  version "3.699.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.699.0.tgz#cb4705965af88aeac7f2c53dcb183f1042ececf6"
-  integrity sha512-x3wV9e6d0esA6Yyg3xWJucMYd/O8JVrNCJnGm/sz3lMYOQGefpVZKZZsHcnzQcTEVAQMF/T5/cdfdvPzIx/esA==
+"@aws-sdk/client-s3@^3.701.0":
+  version "3.705.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.705.0.tgz#7a4a4784bd5b3ca3187ff876b771eaf0cbde1c42"
+  integrity sha512-Fm0Cbc4zr0yG0DnNycz7ywlL5tQFdLSb7xCIPfzrxJb3YQiTXWxH5eu61SSsP/Z6RBNRolmRPvst/iNgX0fWvA==
   dependencies:
     "@aws-crypto/sha1-browser" "5.2.0"
     "@aws-crypto/sha256-browser" "5.2.0"
@@ -139,7 +139,7 @@
     "@aws-sdk/credential-provider-node" "3.699.0"
     "@aws-sdk/middleware-bucket-endpoint" "3.696.0"
     "@aws-sdk/middleware-expect-continue" "3.696.0"
-    "@aws-sdk/middleware-flexible-checksums" "3.697.0"
+    "@aws-sdk/middleware-flexible-checksums" "3.701.0"
     "@aws-sdk/middleware-host-header" "3.696.0"
     "@aws-sdk/middleware-location-constraint" "3.696.0"
     "@aws-sdk/middleware-logger" "3.696.0"
@@ -716,10 +716,10 @@
     "@smithy/types" "^3.7.1"
     tslib "^2.6.2"
 
-"@aws-sdk/middleware-flexible-checksums@3.697.0":
-  version "3.697.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-flexible-checksums/-/middleware-flexible-checksums-3.697.0.tgz#fe0a417db512d9a773f096ef275047236004fa15"
-  integrity sha512-K/y43P+NuHu5+21/29BoJSltcPekvcCU8i74KlGGHbW2Z105e5QVZlFjxivcPOjOA3gdC0W4SoFSIWam5RBhzw==
+"@aws-sdk/middleware-flexible-checksums@3.701.0":
+  version "3.701.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-flexible-checksums/-/middleware-flexible-checksums-3.701.0.tgz#1793c77302f37aeab61205a0dbd89b45081bcc4a"
+  integrity sha512-adNaPCyTT+CiVM0ufDiO1Fe7nlRmJdI9Hcgj0M9S6zR7Dw70Ra5z8Lslkd7syAccYvZaqxLklGjPQH/7GNxwTA==
   dependencies:
     "@aws-crypto/crc32" "5.2.0"
     "@aws-crypto/crc32c" "5.2.0"
@@ -6139,13 +6139,13 @@ object.values@^1.2.0:
     define-properties "^1.2.1"
     es-object-atoms "^1.0.0"
 
-oclif@^4.15.29:
-  version "4.15.29"
-  resolved "https://registry.yarnpkg.com/oclif/-/oclif-4.15.29.tgz#ec1b081bdadb695ad3c9fd513be9bfa03afa26e7"
-  integrity sha512-J5yLogJS5j8BCGbXM4jTGT9euDnhjHSldEfJ5V4g7ZOfratZrPLLYypy/4PW6WCTn+lh8YCW7IlYOEbyBRmnGQ==
+oclif@^4.16.0:
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/oclif/-/oclif-4.16.0.tgz#bd2e0ec5dc48ed8a2f5dbd7e298727812b7aadb5"
+  integrity sha512-Y5bcJc4vwhAW0UN9ctZvfLYZz+nC4rQJPmmpKFXLj7A6uKS1c+GrNa4WwZnk9D4eN32kP/awyRRdd2lbX/S+KQ==
   dependencies:
     "@aws-sdk/client-cloudfront" "^3.687.0"
-    "@aws-sdk/client-s3" "^3.699.0"
+    "@aws-sdk/client-s3" "^3.701.0"
     "@inquirer/confirm" "^3.1.22"
     "@inquirer/input" "^2.2.4"
     "@inquirer/select" "^2.5.0"
