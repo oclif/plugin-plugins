@@ -1,3 +1,9 @@
+## [5.4.23](https://github.com/oclif/plugin-plugins/compare/5.4.22...5.4.23) (2024-12-21)
+
+### Bug Fixes
+
+- **deps:** bump ansis from 3.3.2 to 3.4.0 ([#1032](https://github.com/oclif/plugin-plugins/issues/1032)) ([dade372](https://github.com/oclif/plugin-plugins/commit/dade372c09a66297d0fab3738f36f0476438685c))
+
 ## [5.4.22](https://github.com/oclif/plugin-plugins/compare/5.4.21...5.4.22) (2024-12-08)
 
 ### Bug Fixes
