@@ -22,7 +22,7 @@ function trimUntil(fsPath: string, part: string): string {
 }
 
 type Dependencies = Record<string, {from: string | undefined; version: string}>
-type PluginWithDeps = {deps: Dependencies} & Omit<
+type PluginWithDeps = Omit<
   Plugin,
   | '_commandsDir'
   | '_debug'
@@ -36,7 +36,7 @@ type PluginWithDeps = {deps: Dependencies} & Omit<
   | 'topics'
   | 'warn'
   | 'warned'
->
+> & {deps: Dependencies}
 
 export default class PluginsInspect extends Command {
   static args = {
@@ -46,22 +46,15 @@ export default class PluginsInspect extends Command {
       required: true,
     }),
   }
-
   static description = 'Displays installation properties of a plugin.'
-
   static enableJsonFlag = true
-
   static examples = ['<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
-
   static flags = {
     help: Flags.help({char: 'h'}),
     verbose: Flags.boolean({char: 'v'}),
   }
-
   static strict = false
-
   static usage = 'plugins:inspect PLUGIN...'
-
   plugins!: Plugins
 
   async findDep(plugin: Plugin, dependency: string): Promise<{pkgPath: null | string; version: null | string}> {

@@ -9,9 +9,9 @@ import {ExecOptions, Output, spawn} from './spawn.js'
 
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
-type InstallOptions = {
+type InstallOptions = ExecOptions & {
   prod?: boolean
-} & ExecOptions
+}
 
 export class NPM {
   private bin: string | undefined

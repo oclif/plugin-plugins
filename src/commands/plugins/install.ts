@@ -8,20 +8,16 @@ import Plugins from '../../plugins.js'
 
 export default class PluginsInstall extends Command {
   static aliases = ['plugins:add']
-
   static args = {
     plugin: Args.string({description: 'Plugin to install.', required: true}),
   }
-
   static description = `Uses npm to install plugins.
 
 Installation of a user-installed plugin will override a core plugin.
 
 Use the <%= config.scopedEnvVarKey('NPM_LOG_LEVEL') %> environment variable to set the npm loglevel.
 Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to set the npm registry.`
-
   public static enableJsonFlag = true
-
   static examples = [
     {
       command: '<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ',
@@ -36,7 +32,6 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
       description: 'Install a plugin from a github slug.',
     },
   ]
-
   static flags = {
     force: Flags.boolean({
       char: 'f',
@@ -82,11 +77,8 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
       exclusive: ['silent'],
     }),
   }
-
   static strict = false
-
   static summary = 'Installs a plugin into <%= config.bin %>.'
-
   flags!: Interfaces.InferredFlags<typeof PluginsInstall.flags>
 
   // In this case we want these operations to happen

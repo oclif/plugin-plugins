@@ -5,7 +5,6 @@ import Plugins from '../../plugins.js'
 
 export default class PluginsUpdate extends Command {
   static description = 'Update installed plugins.'
-
   static flags = {
     help: Flags.help({char: 'h'}),
     verbose: Flags.boolean({char: 'v'}),

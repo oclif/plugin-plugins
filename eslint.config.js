@@ -16,4 +16,10 @@ export default [
       '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
+  {
+    files: ['test/**/*.test.ts'],
+    rules: {
+      'import/no-named-as-default-member': 'off',
+    },
+  },
 ]

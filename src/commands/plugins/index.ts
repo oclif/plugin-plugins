@@ -15,13 +15,10 @@ interface RecursiveTree {
 export default class PluginsIndex extends Command {
   static description = 'List installed plugins.'
   static enableJsonFlag = true
-
   static examples = ['<%= config.bin %> <%= command.id %>']
-
   static flags = {
     core: Flags.boolean({description: 'Show core plugins.'}),
   }
-
   plugins!: Plugins
 
   public async run(): Promise<PluginsJson> {
