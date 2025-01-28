@@ -53,8 +53,8 @@ function dedupePlugins(plugins: Plugin[]): Plugin[] {
 }
 
 function extractIssuesLocation(
-  bugs: {url: string} | string | undefined,
-  repository: {type: string; url: string} | string | undefined,
+  bugs: string | undefined | {url: string},
+  repository: string | undefined | {type: string; url: string},
 ): string | undefined {
   if (bugs) {
     return typeof bugs === 'string' ? bugs : bugs.url
@@ -84,7 +84,6 @@ function notifyUser(plugin: Config, output: Output): void {
 export default class Plugins {
   public config: Interfaces.Config
   public readonly npm: NPM
-
   private readonly debug: ReturnType<typeof makeDebug>
   private readonly logLevel: LogLevel
 
@@ -96,6 +95,10 @@ export default class Plugins {
       config: this.config,
       logLevel: this.logLevel,
     })
+  }
+
+  private get pjsonPath() {
+    return join(this.config.dataDir, 'package.json')
   }
 
   public async add(...plugins: Plugin[]): Promise<void> {
@@ -117,7 +120,7 @@ export default class Plugins {
     return match?.[1] ?? name
   }
 
-  public async hasPlugin(name: string): Promise<Plugin | false> {
+  public async hasPlugin(name: string): Promise<false | Plugin> {
     const list = await this.list()
     const friendlyName = this.friendlyName(name)
     const unfriendlyName = this.unfriendlyName(name) ?? name
@@ -171,7 +174,7 @@ export default class Plugins {
         // Check that the prepare script produced all the expected files
         // If it didn't, it might be because the plugin doesn't have a prepare
         // script that compiles the plugin from source.
-        const safeToNotExist = new Set(['oclif.manifest.json', 'oclif.lock', 'npm-shrinkwrap.json'])
+        const safeToNotExist = new Set(['npm-shrinkwrap.json', 'oclif.lock', 'oclif.manifest.json'])
         const files = ((plugin.pjson.files ?? []) as string[])
           .map((f) => join(root, f))
           .filter((f) => !safeToNotExist.has(basename(f)))
@@ -454,16 +457,12 @@ export default class Plugins {
     }
   }
 
-  private get pjsonPath() {
-    return join(this.config.dataDir, 'package.json')
-  }
-
-  private async readPJSON(): Promise<UserPJSON | undefined> {
+  private async readPJSON(): Promise<undefined | UserPJSON> {
     try {
       return JSON.parse(await readFile(this.pjsonPath, 'utf8')) as UserPJSON
     } catch (error: unknown) {
       this.debug(error)
-      const err = error as {code?: string} & Error
+      const err = error as Error & {code?: string}
       if (err.code !== 'ENOENT') process.emitWarning(err)
     }
   }

@@ -15,9 +15,9 @@ export default class Reset extends Command {
       summary: 'Reinstall all plugins after uninstalling.',
     }),
   }
-
   static summary = 'Remove all user-installed and linked plugins.'
 
+  // eslint-disable-next-line complexity
   async run(): Promise<void> {
     const {flags} = await this.parse(Reset)
     const plugins = new Plugins({

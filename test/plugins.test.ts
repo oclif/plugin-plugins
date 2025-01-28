@@ -1,7 +1,7 @@
 import {Config, Interfaces} from '@oclif/core'
 import {expect} from 'chai'
 import {join} from 'node:path'
-import {SinonSandbox, SinonSpy, createSandbox} from 'sinon'
+import {createSandbox, SinonSandbox, SinonSpy} from 'sinon'
 
 import Plugins from '../src/plugins.js'
 

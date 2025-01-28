@@ -22,20 +22,15 @@ function removeTags(plugin: string): string {
 
 export default class PluginsUninstall extends Command {
   static aliases = ['plugins:unlink', 'plugins:remove']
-
   static args = {
     plugin: Args.string({description: 'plugin to uninstall'}),
   }
-
   static description = 'Removes a plugin from the CLI.'
-
   static examples = ['<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %>']
-
   static flags = {
     help: Flags.help({char: 'h'}),
     verbose: Flags.boolean({char: 'v'}),
   }
-
   static strict = false
 
   // In this case we want these operations to happen
