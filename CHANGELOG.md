@@ -1,3 +1,9 @@
+## [5.4.28](https://github.com/oclif/plugin-plugins/compare/5.4.27...5.4.28) (2025-01-28)
+
+### Bug Fixes
+
+- **W-17692101:** migrate to eslint 9 ([#1057](https://github.com/oclif/plugin-plugins/issues/1057)) ([66796b5](https://github.com/oclif/plugin-plugins/commit/66796b55ea22901e5e0f8bace678284fbe3aab0c))
+
 ## [5.4.27](https://github.com/oclif/plugin-plugins/compare/5.4.26...5.4.27) (2025-01-26)
 
 ### Bug Fixes
