@@ -1489,12 +1489,12 @@
   resolved "https://registry.npmjs.org/@oclif/prettier-config/-/prettier-config-0.2.1.tgz"
   integrity sha512-XB8kwQj8zynXjIIWRm+6gO/r8Qft2xKtwBMSmq1JRqtA6TpwpqECqiu8LosBCyg2JBXuUy2lU23/L98KIR7FrQ==
 
-"@oclif/test@^4.1.11":
-  version "4.1.11"
-  resolved "https://registry.yarnpkg.com/@oclif/test/-/test-4.1.11.tgz#b05957153ff83c8eacff80f11b1032957693722e"
-  integrity sha512-j689R13E2so1Rj6jJUfQ67yJ4N7u6L5KFzv87cvUfD9AZ79xAtCxGrd34/iOLUDJmv1huFt/0QumBcjKoWUSYw==
+"@oclif/test@^4.1.12":
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/@oclif/test/-/test-4.1.12.tgz#896a8b9b630218042160da271221d771d11f2527"
+  integrity sha512-EExENu6DOjAGJPx2VRFI2ZNR3dBMep5Q+pBhk+4f2OdKxEqrY8/Fr7lXBn9jq7n9w28r8sn5LZ8P4tn3oVd20w==
   dependencies:
-    ansis "^3.16.0"
+    ansis "^3.17.0"
     debug "^4.4.0"
 
 "@pkgjs/parseargs@^0.11.0":
@@ -2628,7 +2628,7 @@ ansi-styles@^6.0.0, ansi-styles@^6.1.0, ansi-styles@^6.2.1:
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.1.tgz"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
 
-ansis@^3.10.0, ansis@^3.16.0, ansis@^3.17.0:
+ansis@^3.10.0, ansis@^3.17.0:
   version "3.17.0"
   resolved "https://registry.yarnpkg.com/ansis/-/ansis-3.17.0.tgz#fa8d9c2a93fe7d1177e0c17f9eeb562a58a832d7"
   integrity sha512-0qWUglt9JEqLFr3w1I1pbrChn1grhaiAR2ocX1PP/flRmxgtwTzPFFFnfIlD6aMOLQZgSuCRlidD70lvx8yhzg==
