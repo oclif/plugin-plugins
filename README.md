@@ -53,6 +53,12 @@ To make it simpler for users to install plugins, we have "friendly name" functio
 
 To set this up, simply set the `oclif.scope` to the name of your npm org. In the example above, this would be `mynpmorg`.
 
+## Plugin prefixes
+
+Note that in the above example, the plugin prefix defaults to `plugin`. If you're setting the scope, you can also override the plugin prefix using `oclif.pluginPrefix`.
+
+For example, let's say `oclif.scope` is set to `mynpmorg` and `oclif.pluginPrefix` is set to `myprefix`. When you run `mycli plugins:install myplugin`, it will first check if `@mynpmorg/myprefix-myplugin` exists on npm before trying to install `myplugin`.
+
 # Aliases
 
 Over time in the Heroku CLI we've changed plugin names, brought plugins into the core of the CLI, or sunset old plugins that no longer function. There is support in this plugin for dealing with these situations.
