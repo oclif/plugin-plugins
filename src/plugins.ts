@@ -3,7 +3,7 @@ import {bold} from 'ansis'
 import makeDebug from 'debug'
 import {spawn} from 'node:child_process'
 import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
-import {basename, dirname, join, resolve} from 'node:path'
+import {basename, dirname, join, parse, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
@@ -147,21 +147,11 @@ export default class Plugins {
         const {dependencies} = await this.pjson()
         const {default: npa} = await import('npm-package-arg')
         const normalizedUrl = npa(url)
-        console.log({
-          normalizedUrl,
-          url,
-        })
-        const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
-          const normalized = npa(u)
-
-          console.log('------')
-          console.log({
-            normalized,
-            u,
-          })
+        const matches = Object.entries(dependencies ?? {}).find(([, npmVersion]) => {
+          const normalized = npa(npmVersion)
           // for local file paths
-          if (normalized.type === 'file' && normalized.fetchSpec) {
-            return url.endsWith(normalized.fetchSpec)
+          if (normalized.type === 'file' && normalized.raw) {
+            return parse(url).base === parse(normalized.raw).base
           }
 
           // for hosted git urls
@@ -171,7 +161,7 @@ export default class Plugins {
             normalized.hosted?.project === normalizedUrl.hosted?.project
           )
         })
-        console.log({matches})
+
         const installedPluginName = matches?.[0]
         if (!installedPluginName) throw new Errors.CLIError(`Could not find plugin name for ${url}`)
         const root = join(this.config.dataDir, 'node_modules', installedPluginName)
