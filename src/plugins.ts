@@ -3,7 +3,7 @@ import {bold} from 'ansis'
 import makeDebug from 'debug'
 import {spawn} from 'node:child_process'
 import {access, mkdir, readFile, rename, rm, writeFile} from 'node:fs/promises'
-import {basename, dirname, join, resolve} from 'node:path'
+import {basename, dirname, join, parse, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
@@ -147,14 +147,21 @@ export default class Plugins {
         const {dependencies} = await this.pjson()
         const {default: npa} = await import('npm-package-arg')
         const normalizedUrl = npa(url)
-        const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
-          const normalized = npa(u)
+        const matches = Object.entries(dependencies ?? {}).find(([, npmVersion]) => {
+          const normalized = npa(npmVersion)
+          // for local file paths
+          if (normalized.type === 'file' && normalized.raw) {
+            return parse(url).base === parse(normalized.raw).base
+          }
+
+          // for hosted git urls
           return (
             normalized.hosted?.type === normalizedUrl.hosted?.type &&
             normalized.hosted?.user === normalizedUrl.hosted?.user &&
             normalized.hosted?.project === normalizedUrl.hosted?.project
           )
         })
+
         const installedPluginName = matches?.[0]
         if (!installedPluginName) throw new Errors.CLIError(`Could not find plugin name for ${url}`)
         const root = join(this.config.dataDir, 'node_modules', installedPluginName)
@@ -184,7 +191,7 @@ export default class Plugins {
         this.debug(results)
         if (!Object.values(results).every(Boolean)) {
           ux.warn(
-            `This plugin from github may not work as expected because the prepare script did not produce all the expected files.`,
+            `This plugin may not work as expected because the prepare script did not produce all the expected files.`,
           )
         }
       } else {
