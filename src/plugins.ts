@@ -149,6 +149,13 @@ export default class Plugins {
         const normalizedUrl = npa(url)
         const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
           const normalized = npa(u)
+
+          // for local file paths
+          if (normalized.type === 'file' && normalizedUrl.fetchSpec) {
+            return url.endsWith(normalizedUrl.fetchSpec)
+          }
+
+          // for hosted git urls
           return (
             normalized.hosted?.type === normalizedUrl.hosted?.type &&
             normalized.hosted?.user === normalizedUrl.hosted?.user &&
