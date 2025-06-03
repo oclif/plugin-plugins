@@ -1,3 +1,11 @@
+## [5.4.39](https://github.com/oclif/plugin-plugins/compare/5.4.38...5.4.39) (2025-06-03)
+
+### Bug Fixes
+
+- parse file path when comparing ([fbe498d](https://github.com/oclif/plugin-plugins/commit/fbe498d05df053fec0a0f503fc4eb7bfb7d6c3f6))
+- resolve package name when using file url ([1a7e61f](https://github.com/oclif/plugin-plugins/commit/1a7e61fd7a23349ddf3b34afb6c3604bc878a8a4))
+- update warning message ([a43402b](https://github.com/oclif/plugin-plugins/commit/a43402bbc4ce1f73da5a1a842bd9c8364636ac33))
+
 ## [5.4.38](https://github.com/oclif/plugin-plugins/compare/5.4.37...5.4.38) (2025-05-17)
 
 ### Bug Fixes
