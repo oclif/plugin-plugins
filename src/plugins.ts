@@ -151,8 +151,8 @@ export default class Plugins {
           const normalized = npa(u)
 
           // for local file paths
-          if (normalized.type === 'file' && normalizedUrl.fetchSpec) {
-            return url.endsWith(normalizedUrl.fetchSpec)
+          if (normalized.type === 'file' && normalized.fetchSpec) {
+            return url.endsWith(normalized.fetchSpec)
           }
 
           // for hosted git urls
