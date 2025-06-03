@@ -147,9 +147,18 @@ export default class Plugins {
         const {dependencies} = await this.pjson()
         const {default: npa} = await import('npm-package-arg')
         const normalizedUrl = npa(url)
+        console.log({
+          normalizedUrl,
+          url,
+        })
         const matches = Object.entries(dependencies ?? {}).find(([, u]) => {
           const normalized = npa(u)
 
+          console.log('------')
+          console.log({
+            normalized,
+            u,
+          })
           // for local file paths
           if (normalized.type === 'file' && normalized.fetchSpec) {
             return url.endsWith(normalized.fetchSpec)
@@ -162,6 +171,7 @@ export default class Plugins {
             normalized.hosted?.project === normalizedUrl.hosted?.project
           )
         })
+        console.log({matches})
         const installedPluginName = matches?.[0]
         if (!installedPluginName) throw new Errors.CLIError(`Could not find plugin name for ${url}`)
         const root = join(this.config.dataDir, 'node_modules', installedPluginName)
