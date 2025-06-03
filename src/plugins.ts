@@ -191,7 +191,7 @@ export default class Plugins {
         this.debug(results)
         if (!Object.values(results).every(Boolean)) {
           ux.warn(
-            `This plugin from github may not work as expected because the prepare script did not produce all the expected files.`,
+            `This plugin may not work as expected because the prepare script did not produce all the expected files.`,
           )
         }
       } else {
