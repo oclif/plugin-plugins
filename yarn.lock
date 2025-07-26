@@ -123,10 +123,10 @@
     "@smithy/util-waiter" "^4.0.6"
     tslib "^2.6.2"
 
-"@aws-sdk/client-s3@^3.842.0":
-  version "3.848.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.848.0.tgz#41de4156f44b333532903f0456cdc317fbd627e0"
-  integrity sha512-6uT+THQfsB92eAH0p5zvpGiSCtO2ZhGwmuw6HWEngui53YIWz7W/GCnN0G7nrKpgD5DPrMaBwqZvKuoAh9NHAQ==
+"@aws-sdk/client-s3@^3.848.0":
+  version "3.850.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.850.0.tgz#a831d99d4c06332d9784c6a2d49f082ec8d98186"
+  integrity sha512-tX5bUfqiLOh6jtAlaiAuOUKFYh8KDG9k9zFLUdgGplC5TP47AYTreUEg+deCTHo4DD3YCvrLuyZ8tIDgKu7neQ==
   dependencies:
     "@aws-crypto/sha1-browser" "5.2.0"
     "@aws-crypto/sha256-browser" "5.2.0"
@@ -1525,10 +1525,10 @@
     ansis "^3.17.0"
     fast-levenshtein "^3.0.0"
 
-"@oclif/plugin-warn-if-update-available@^3.1.42":
-  version "3.1.44"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-warn-if-update-available/-/plugin-warn-if-update-available-3.1.44.tgz#90085466955601dd2447b5d51bf5a3a4eeab861a"
-  integrity sha512-nGYH6j4GZngSWDB0Ah8OZOSreDrS+lN6tyEeBtcP9pYO5fQlsepUy11/XzZmr3o1+3mUk0CTdOYHy/nbTFODNg==
+"@oclif/plugin-warn-if-update-available@^3.1.44":
+  version "3.1.45"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-warn-if-update-available/-/plugin-warn-if-update-available-3.1.45.tgz#4519a1421fc0a3c9b4ec2d9c6ff7311633ac830e"
+  integrity sha512-tYGLrHZLpt+KLPDdLtpZyrzzy5OZ9uqpfaDm/jy6GUNqfoxZkhD7Kj6Fv9IpM6ePQM8hFVZpUMiWC0NO/AaDaA==
   dependencies:
     "@oclif/core" "^4"
     ansis "^3.17.0"
@@ -6517,20 +6517,20 @@ object.values@^1.2.1:
     define-properties "^1.2.1"
     es-object-atoms "^1.0.0"
 
-oclif@^4.21.0:
-  version "4.21.0"
-  resolved "https://registry.yarnpkg.com/oclif/-/oclif-4.21.0.tgz#015cc9100f8e5a1a3f656869e4873aebfaf5e6ea"
-  integrity sha512-UPrfDEnslTM0Ore6qjhAl1wrdwU+QUggLGjRuHKnYmwvfh/K0Zvu7lDD2rdD5Yn7dTvZjlxvQPfLvBA90fdO1A==
+oclif@^4.22.1:
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/oclif/-/oclif-4.22.1.tgz#3089db11b47b8515659cddd5e92c78f0478b2dab"
+  integrity sha512-TU4L1XTQuxeF+mvcvSKfYeh5Zs3XeiQdKUCVLBDumalxhc4j3HwO5lFHnp3vDbP9NWyvSrvbcj+qXLBbELJfbA==
   dependencies:
     "@aws-sdk/client-cloudfront" "^3.844.0"
-    "@aws-sdk/client-s3" "^3.842.0"
+    "@aws-sdk/client-s3" "^3.848.0"
     "@inquirer/confirm" "^3.1.22"
     "@inquirer/input" "^2.2.4"
     "@inquirer/select" "^2.5.0"
     "@oclif/core" "^4.5.1"
     "@oclif/plugin-help" "^6.2.29"
     "@oclif/plugin-not-found" "^3.2.59"
-    "@oclif/plugin-warn-if-update-available" "^3.1.42"
+    "@oclif/plugin-warn-if-update-available" "^3.1.44"
     ansis "^3.16.0"
     async-retry "^1.3.3"
     change-case "^4"
