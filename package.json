@@ -1,7 +1,7 @@
 {
   "name": "@oclif/plugin-plugins",
   "description": "plugins plugin for oclif",
-  "version": "5.4.47",
+  "version": "5.4.48",
   "author": "Salesforce",
   "bugs": "https://github.com/oclif/plugin-plugins/issues",
   "dependencies": {
