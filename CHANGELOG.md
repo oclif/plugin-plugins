@@ -1,3 +1,9 @@
+## [5.4.52](https://github.com/oclif/plugin-plugins/compare/5.4.51...5.4.52) (2025-10-30)
+
+### Bug Fixes
+
+- add warning about deprecating auto-install feature ([#1230](https://github.com/oclif/plugin-plugins/issues/1230)) ([bbf8e0c](https://github.com/oclif/plugin-plugins/commit/bbf8e0c850b2c9284ee27877b5dc16e9152d3f74))
+
 ## [5.4.51](https://github.com/oclif/plugin-plugins/compare/5.4.50...5.4.51) (2025-10-25)
 
 ### Bug Fixes
