@@ -249,6 +249,9 @@ export default class Plugins {
       if (await fileExists(join(c.root, 'yarn.lock'))) {
         this.debug('installing dependencies with yarn')
         const yarn = new Yarn({config: this.config, logLevel: this.logLevel})
+        ux.warn(
+          `The ${ux.colorize('dim', 'plugins link')} command will no longer auto install dependencies in future versions. Please run ${ux.colorize('dim', 'yarn')} manually in the plugin directory before linking.`,
+        )
         await yarn.install([], {
           cwd: c.root,
           logLevel: this.logLevel,
