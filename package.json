@@ -22,7 +22,7 @@
     "@eslint/compat": "^1.4.1",
     "@oclif/plugin-help": "^6",
     "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4.1.14",
+    "@oclif/test": "^4.1.15",
     "@types/chai": "^4.3.16",
     "@types/debug": "^4.1.12",
     "@types/mocha": "^10.0.10",
