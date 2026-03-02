@@ -3,7 +3,7 @@ import {expect} from 'chai'
 import {join} from 'node:path'
 import {createSandbox, SinonSandbox, SinonSpy} from 'sinon'
 
-import Plugins from '../src/plugins.js'
+import Plugins, {normaliseTag} from '../src/plugins.js'
 
 describe('Plugins', () => {
   let sandbox: SinonSandbox
@@ -187,6 +187,67 @@ describe('Plugins', () => {
 
       await plugins.remove(userPlugin.name)
       expect(saveStub.calledWithExactly(userPJSON)).to.be.true
+    })
+  })
+
+  describe('normaliseTag', () => {
+    it('should keep invalid semver tag', async () => {
+      const cases: {
+        expected: string
+        expectedModifiedPluginsLength?: number
+        jitPlugins: Record<string, string>
+        modifiedPlugins: (Interfaces.LinkedPlugin | Interfaces.UserPlugin)[]
+        tag: string
+      }[] = [
+        {
+          expected: 'latest',
+          jitPlugins: {},
+          modifiedPlugins: [],
+          tag: 'latest',
+        },
+        {
+          expected: 'latest',
+          jitPlugins: {'@oclif/plugin-user': '*'},
+          modifiedPlugins: [],
+          tag: 'latest',
+        },
+        {
+          expected: '0.0.2',
+          jitPlugins: {'@oclif/plugin-user': '0.0.1'},
+          modifiedPlugins: [],
+          tag: '0.0.2',
+        },
+        {
+          expected: '0.0.2',
+          expectedModifiedPluginsLength: 1,
+          jitPlugins: {'@oclif/plugin-user': '0.0.2'},
+          modifiedPlugins: [],
+          tag: '0.0.1',
+        },
+        {
+          expected: '0.0.1',
+          expectedModifiedPluginsLength: 1,
+          jitPlugins: {'@oclif/plugin-user': '0.0.1'},
+          modifiedPlugins: [],
+          tag: '0.0.1',
+        },
+        {
+          expected: 'latest',
+          expectedModifiedPluginsLength: 1,
+          jitPlugins: {'@oclif/plugin-user': 'latest'},
+          modifiedPlugins: [],
+          tag: '0.0.1',
+        },
+      ]
+      for (const c of cases) {
+        const actual = normaliseTag(c.jitPlugins, c.modifiedPlugins, {
+          name: '@oclif/plugin-user',
+          tag: c.tag,
+          type: 'user',
+        })
+        expect(actual).to.equal(`@oclif/plugin-user@${c.expected}`)
+        expect(c.modifiedPlugins).to.lengthOf(c.expectedModifiedPluginsLength || 0)
+      }
     })
   })
 })
