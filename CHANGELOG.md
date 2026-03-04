@@ -1,3 +1,9 @@
+## [5.4.57](https://github.com/oclif/plugin-plugins/compare/5.4.56...5.4.57) (2026-03-04)
+
+### Bug Fixes
+
+- corrected stubbing errors in tests @W-21178947@ ([28ac927](https://github.com/oclif/plugin-plugins/commit/28ac9279d368ce72e97bd925f76e05606c2a5f6c))
+
 ## [5.4.56](https://github.com/oclif/plugin-plugins/compare/5.4.55...5.4.56) (2026-02-07)
 
 ### Bug Fixes
