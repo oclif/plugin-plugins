@@ -8,41 +8,49 @@ describe('plugins', () => {
     sinon.restore()
   })
 
-  it('shows no plugins installed', async () => {
+  it('when no plugins installed, says so', async () => {
     const config = await Config.load(import.meta.url)
-    sinon.stub(config, 'getPluginsList').returns([])
 
-    const {stdout} = await runCommand('plugins', config, {print: true})
+    const {error, stdout} = await runCommand('plugins', config, {print: true})
+    expect(error).to.be.undefined
     expect(stdout).to.equal('No plugins installed.\n')
   })
 
-  it('lists user plugins in stdout', async () => {
+  it('lists installed user plugins in stdout', async () => {
     const config = await Config.load(import.meta.url)
+    config.options
     const plugins = [
       ...config.getPluginsList(),
-      {name: 'user-plugin-1', type: 'user', version: '1.0.0'},
-      {name: 'user-plugin-2', type: 'user', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'user-plugin-1', topics: [], type: 'user', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'user-plugin-2', topics: [], type: 'user', version: '1.0.0'},
     ]
     // @ts-expect-error because we aren't stubbing the entire Plugin instance
     sinon.stub(config, 'getPluginsList').returns(plugins)
 
-    const {stdout} = await runCommand('plugins', config)
+    const {error, stdout} = await runCommand('plugins', config)
+    expect(error).to.be.undefined
     expect(stdout).to.equal('user-plugin-1 1.0.0\nuser-plugin-2 1.0.0\n')
   })
 
-  it('lists nested user plugins in stdout', async () => {
+  it('lists installed nested user plugins in stdout', async () => {
     const config = await Config.load(import.meta.url)
     const plugins = [
       ...config.getPluginsList(),
       {
         children: [
           {
+            commands: [],
+            hooks: new Map(),
             name: 'user-plugin-2',
+            topics: [],
             type: 'user',
             version: '1.0.0',
           },
         ],
+        commands: [],
+        hooks: new Map(),
         name: 'user-plugin-1',
+        topics: [],
         type: 'user',
         version: '1.0.0',
       },
@@ -50,23 +58,25 @@ describe('plugins', () => {
     // @ts-expect-error because we aren't stubbing the entire Plugin instance
     sinon.stub(config, 'getPluginsList').returns(plugins)
 
-    const {stdout} = await runCommand('plugins', config)
+    const {error, stdout} = await runCommand('plugins', config)
+    expect(error).to.be.undefined
     expect(stdout).to.equal(`user-plugin-1 1.0.0
 └─ user-plugin-2 1.0.0
 `)
   })
 
-  it('lists dev plugins in stdout with --core', async () => {
+  it('lists installed dev plugins in stdout with --core', async () => {
     const config = await Config.load(import.meta.url)
     const plugins = [
       ...config.getPluginsList(),
-      {name: 'dev-plugin-1', type: 'dev', version: '1.0.0'},
-      {name: 'user-plugin-1', type: 'user', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'dev-plugin-1', topics: [], type: 'dev', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'user-plugin-1', topics: [], type: 'user', version: '1.0.0'},
     ]
     // @ts-expect-error because we aren't stubbing the entire Plugin instance
     sinon.stub(config, 'getPluginsList').returns(plugins)
 
-    const {stdout} = await runCommand('plugins --core', config)
+    const {error, stdout} = await runCommand('plugins --core', config)
+    expect(error).to.be.undefined
     expect(stdout).to.equal('dev-plugin-1 1.0.0 (dev)\nuser-plugin-1 1.0.0\n')
   })
 
@@ -82,8 +92,8 @@ describe('plugins', () => {
     })
     const plugins = [
       ...config.getPluginsList(),
-      {name: 'user-plugin-1', type: 'user', version: '1.0.0'},
-      {name: 'jit-plugin-1', type: 'user', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'user-plugin-1', topics: [], type: 'user', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'jit-plugin-1', topics: [], type: 'user', version: '1.0.0'},
     ]
     // @ts-expect-error because we aren't stubbing the entire Plugin instance
     sinon.stub(config, 'getPluginsList').returns(plugins)
@@ -102,9 +112,9 @@ jit-plugin-3 1.0.0
     const config = await Config.load(import.meta.url)
     const plugins = [
       ...config.getPluginsList(),
-      {name: 'user-plugin-1', type: 'user', version: '1.0.0'},
-      {name: 'dev-plugin-1', type: 'dev', version: '1.0.0'},
-      {name: 'core-plugin-1', type: 'core', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'user-plugin-1', topics: [], type: 'user', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'dev-plugin-1', topics: [], type: 'dev', version: '1.0.0'},
+      {commands: [], hooks: new Map(), name: 'core-plugin-1', topics: [], type: 'core', version: '1.0.0'},
     ]
     // @ts-expect-error because we aren't stubbing the entire Plugin instance
     sinon.stub(config, 'getPluginsList').returns(plugins)
