@@ -61,6 +61,7 @@
   ],
   "license": "MIT",
   "oclif": {
+    "repositoryPrefix": "<%- repo %>/blob/<%- version %>/<%- commandPath %>",
     "commands": "./lib/commands",
     "hooks": {
       "update": "./lib/hooks/update.js"
