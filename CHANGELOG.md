@@ -1,3 +1,9 @@
+## [5.4.58](https://github.com/oclif/plugin-plugins/compare/5.4.57...5.4.58) (2026-03-06)
+
+### Bug Fixes
+
+- add validation check for JIT plugin versions ([d1139dd](https://github.com/oclif/plugin-plugins/commit/d1139ddc89ad2bbcbc23df65040cf31ddc1c44ce))
+
 ## [5.4.57](https://github.com/oclif/plugin-plugins/compare/5.4.56...5.4.57) (2026-03-04)
 
 ### Bug Fixes
