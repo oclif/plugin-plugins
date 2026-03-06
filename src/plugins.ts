@@ -81,6 +81,22 @@ function notifyUser(plugin: Config, output: Output): void {
   }
 }
 
+export function normaliseTag(jitPlugins: Record<string, string>, modifiedPlugins: Plugin[], p: Interfaces.UserPlugin) {
+  // a not valid tag indicates that it's a dist-tag like 'latest'
+  if (!valid(p.tag)) return `${p.name}@${p.tag}`
+
+  if (p.tag && valid(p.tag) && jitPlugins[p.name] && valid(jitPlugins[p.name]) && gt(p.tag, jitPlugins[p.name])) {
+    // The user has installed a version of the JIT plugin that is newer than the one
+    // specified by the root plugin's JIT configuration. In this case, we want to
+    // keep the version installed by the user.
+    return `${p.name}@${p.tag}`
+  }
+
+  const tag = jitPlugins[p.name] ?? p.tag
+  modifiedPlugins.push({...p, tag})
+  return `${p.name}@${tag}`
+}
+
 export default class Plugins {
   public config: Interfaces.Config
   public readonly npm: NPM
@@ -379,21 +395,7 @@ export default class Plugins {
     const modifiedPlugins: Plugin[] = []
     if (npmPlugins.length > 0) {
       await this.npm.install(
-        npmPlugins.map((p) => {
-          // a not valid tag indicates that it's a dist-tag like 'latest'
-          if (!valid(p.tag)) return `${p.name}@${p.tag}`
-
-          if (p.tag && valid(p.tag) && jitPlugins[p.name] && gt(p.tag, jitPlugins[p.name])) {
-            // The user has installed a version of the JIT plugin that is newer than the one
-            // specified by the root plugin's JIT configuration. In this case, we want to
-            // keep the version installed by the user.
-            return `${p.name}@${p.tag}`
-          }
-
-          const tag = jitPlugins[p.name] ?? p.tag
-          modifiedPlugins.push({...p, tag})
-          return `${p.name}@${tag}`
-        }),
+        npmPlugins.map((p) => normaliseTag(jitPlugins, modifiedPlugins, p)),
         {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true},
       )
     }
