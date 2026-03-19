@@ -1,3 +1,9 @@
+## [5.4.59](https://github.com/oclif/plugin-plugins/compare/5.4.58...5.4.59) (2026-03-19)
+
+### Bug Fixes
+
+- bump npm ([d19c81c](https://github.com/oclif/plugin-plugins/commit/d19c81c43b2d449aa8b438cc9fa38ac8091e25c2))
+
 ## [5.4.58](https://github.com/oclif/plugin-plugins/compare/5.4.57...5.4.58) (2026-03-06)
 
 ### Bug Fixes
