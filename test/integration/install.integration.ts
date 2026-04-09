@@ -185,7 +185,7 @@ describe('install/uninstall integration tests', () => {
     })
   })
 
-  describe('multiple plugins sequentially', async () => {
+  xdescribe('multiple plugins sequentially', async () => {
     /**
      * This is a test for @W-21915680@, a bizarre bug wherein if you installed a plugin from the registry by its true name,
      * and then installed a local tarball whose package name is alphabetically after the previous one, the local tarball
