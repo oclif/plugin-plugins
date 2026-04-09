@@ -23,6 +23,16 @@ describe('install/uninstall integration tests', () => {
   const otherPlugin = '@oclif/plugin-search'
   const otherPluginShortName = 'search'
 
+  const yetAnotherPlugin = '@oclif/plugin-update'
+  const yetAnotherPluginShortName = 'update'
+  let yetAnotherLocalPluginTarball = resolve(__dirname, '..', 'fixtures', 'oclif-plugin-update-v4.7.31.tgz')
+    // Normalize the path to ensure Windows compatibility
+    .replaceAll('\\', '/')
+  // If the path starts with 'C:', that needs to be removed
+  if (yetAnotherLocalPluginTarball.startsWith('C:')) {
+    yetAnotherLocalPluginTarball = yetAnotherLocalPluginTarball.slice(2)
+  }
+
   const tmp = resolve('tmp', 'install-integration')
   const cacheDir = join(tmp, 'plugin-plugins-tests', 'cache')
   const configDir = join(tmp, 'plugin-plugins-tests', 'config')
@@ -181,28 +191,39 @@ describe('install/uninstall integration tests', () => {
      * and then installed a local tarball whose package name is alphabetically after the previous one, the local tarball
      * would silently fail to install.
      */
-    it('handles local tarball installed after simple plugin name', async () => {
+    it('handles local tarballs installed after simple plugin name', async () => {
       // Install first plugin by its registered name
       await runCommand(`plugins install ${otherPlugin}`)
       const {result: firstResult, stdout: firstStdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(firstStdout).to.contain(otherPluginShortName)
       expect(firstResult?.some((r) => r.name === otherPlugin)).to.be.true
 
-      // Install second plugin by a local tarball
-      await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      // Install a second plugin by a local tarball. This one is alphabetically after the first one.
+      await runCommand(`plugins install "file://${yetAnotherLocalPluginTarball}"`)
       const {result: secondResult, stdout: secondStdout} = await runCommand<Array<{name: string}>>('plugins')
-      expect(secondStdout).to.contain(pluginShortName)
+      console.log(`stdout: ${secondStdout}`)
+      expect(secondStdout).to.contain(yetAnotherPluginShortName)
       expect(secondResult?.some((r) => r.name === otherPlugin)).to.be.true
-      expect(secondResult?.some((r) => r.name === plugin)).to.be.true
+      expect(secondResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
+
+      // Install a third plugin by a local tarball. This one is alphabetically after the second one.
+      await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      const {result: thirdResult, stdout: thirdStdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(thirdStdout).to.contain(pluginShortName)
+      expect(thirdResult?.some((r) => r.name === otherPlugin)).to.be.true
+      expect(thirdResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
+      expect(thirdResult?.some((r) => r.name === plugin)).to.be.true
     })
 
     it('uninstalls all plugins', async () => {
       await runCommand(`plugins uninstall ${plugin}`)
       await runCommand(`plugins uninstall ${otherPlugin}`)
+      await runCommand(`plugins uninstall ${yetAnotherPlugin}`)
       const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(stdout).to.contain('No plugins installed.')
       expect(result?.some((r) => r.name === plugin)).to.be.false
       expect(result?.some((r) => r.name === otherPlugin)).to.be.false
+      expect(result?.some((r) => r.name === yetAnotherPlugin)).to.be.false
     })
   })
 
