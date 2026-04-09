@@ -1,5 +1,6 @@
 import {runCommand} from '@oclif/test'
 import {dim} from 'ansis'
+import * as fs from 'node:fs';
 import {expect} from 'chai'
 import {rm} from 'node:fs/promises'
 import {dirname, join, resolve} from 'node:path'
@@ -208,6 +209,7 @@ describe('install/uninstall integration tests', () => {
       // Install a third plugin by a local tarball. This one is alphabetically after the second one.
       await runCommand(`plugins install "file://${pluginLocalTarball}`)
       const {result: thirdResult, stdout: thirdStdout} = await runCommand<Array<{name: string}>>('plugins')
+      console.log(fs.readFileSync(join('~', '.local', 'share', 'sf', 'package.json')))
       expect(thirdStdout).to.contain(pluginShortName)
       expect(thirdResult?.some((r) => r.name === otherPlugin)).to.be.true
       expect(thirdResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
@@ -261,7 +263,7 @@ describe('install/uninstall integration tests', () => {
       await runCommand('plugins install @oclif/plugin-legacy')
       await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
       const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
-      console.log(`result is ${JSON.stringify(result, null, 2)}`)
+      console.log(fs.readFileSync(join('~', '.local', 'share', 'sf', 'package.json')))
       console.log(`stdout is ${stdout}`)
       expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
       expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
