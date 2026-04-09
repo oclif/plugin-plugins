@@ -2,13 +2,26 @@ import {runCommand} from '@oclif/test'
 import {dim} from 'ansis'
 import {expect} from 'chai'
 import {rm} from 'node:fs/promises'
-import {join, resolve} from 'node:path'
+import {dirname, join, resolve} from 'node:path'
+import {fileURLToPath} from 'node:url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 describe('install/uninstall integration tests', () => {
   const plugin = '@oclif/plugin-version'
   const pluginShortName = 'version'
   const pluginGithubSlug = 'oclif/plugin-version'
   const pluginGithubUrl = 'https://github.com/oclif/plugin-version.git'
+  let pluginLocalTarball = resolve(__dirname, '..', 'fixtures', 'oclif-plugin-version-v2.2.41.tgz')
+    // Normalize the path to ensure Windows compatibility
+    .replaceAll('\\', '/')
+  // If the path starts with 'C:', that needs to be removed
+  if (pluginLocalTarball.startsWith('C:')) {
+    pluginLocalTarball = pluginLocalTarball.slice(2)
+  }
+
+  const otherPlugin = '@oclif/plugin-search'
+  const otherPluginShortName = 'search'
 
   const tmp = resolve('tmp', 'install-integration')
   const cacheDir = join(tmp, 'plugin-plugins-tests', 'cache')
@@ -143,6 +156,53 @@ describe('install/uninstall integration tests', () => {
       const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(stdout).to.contain('No plugins installed.')
       expect(result?.some((r) => r.name === plugin)).to.be.false
+    })
+  })
+
+  describe('local tarball', () => {
+    it('should install plugin from locally hosted tarball', async () => {
+      await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(stdout).to.contain(pluginShortName)
+      expect(result?.some((r) => r.name === plugin)).to.be.true
+    })
+
+    it('should uninstall plugin from local tarball', async () => {
+      await runCommand(`plugins uninstall ${plugin}`)
+      const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(stdout).to.contain('No plugins installed.')
+      expect(result?.some((r) => r.name === plugin)).to.be.false
+    })
+  })
+
+  describe('multiple plugins sequentially', async () => {
+    /**
+     * This is a test for @W-21915680@, a bizarre bug wherein if you installed a plugin from the registry by its true name,
+     * and then installed a local tarball whose package name is alphabetically after the previous one, the local tarball
+     * would silently fail to install.
+     */
+    it('handles local tarball installed after simple plugin name', async () => {
+      // Install first plugin by its registered name
+      await runCommand(`plugins install ${otherPlugin}`)
+      const {result: firstResult, stdout: firstStdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(firstStdout).to.contain(otherPluginShortName)
+      expect(firstResult?.some((r) => r.name === otherPlugin)).to.be.true
+
+      // Install second plugin by a local tarball
+      await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      const {result: secondResult, stdout: secondStdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(secondStdout).to.contain(pluginShortName)
+      expect(secondResult?.some((r) => r.name === otherPlugin)).to.be.true
+      expect(secondResult?.some((r) => r.name === plugin)).to.be.true
+    })
+
+    it('uninstalls all plugins', async () => {
+      await runCommand(`plugins uninstall ${plugin}`)
+      await runCommand(`plugins uninstall ${otherPlugin}`)
+      const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(stdout).to.contain('No plugins installed.')
+      expect(result?.some((r) => r.name === plugin)).to.be.false
+      expect(result?.some((r) => r.name === otherPlugin)).to.be.false
     })
   })
 
