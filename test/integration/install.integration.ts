@@ -256,7 +256,7 @@ describe('install/uninstall integration tests', () => {
     })
   })
 
-  describe.only('legacy plugin', () => {
+  describe('legacy plugin', () => {
     it('should install legacy plugin', async () => {
       await runCommand('plugins install @oclif/plugin-legacy')
       await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
