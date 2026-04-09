@@ -201,7 +201,6 @@ describe('install/uninstall integration tests', () => {
       // Install a second plugin by a local tarball. This one is alphabetically after the first one.
       await runCommand(`plugins install "file://${yetAnotherLocalPluginTarball}"`)
       const {result: secondResult, stdout: secondStdout} = await runCommand<Array<{name: string}>>('plugins')
-      console.log(`stdout: ${secondStdout}`)
       expect(secondStdout).to.contain(yetAnotherPluginShortName)
       expect(secondResult?.some((r) => r.name === otherPlugin)).to.be.true
       expect(secondResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
@@ -257,11 +256,13 @@ describe('install/uninstall integration tests', () => {
     })
   })
 
-  describe('legacy plugin', () => {
+  describe.only('legacy plugin', () => {
     it('should install legacy plugin', async () => {
       await runCommand('plugins install @oclif/plugin-legacy')
       await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
       const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
+      console.log(`result is ${JSON.stringify(result, null, 2)}`)
+      console.log(`stdout is ${stdout}`)
       expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
       expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
     })
