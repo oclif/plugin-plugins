@@ -208,7 +208,7 @@ describe('install/uninstall integration tests', () => {
       expect(secondResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
 
       // Install a third plugin by a local tarball. This one is alphabetically after the second one.
-      const {result: thirdAdd} = await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      const {stdout: thirdAdd} = await runCommand(`plugins install "file://${pluginLocalTarball}`)
       console.log(`third add stdout: ${thirdAdd}`)
       const {result: thirdResult, stdout: thirdStdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(thirdStdout).to.contain(pluginShortName)
@@ -261,8 +261,10 @@ describe('install/uninstall integration tests', () => {
 
   describe('legacy plugin', () => {
     it('should install legacy plugin', async () => {
-      await runCommand('plugins install @oclif/plugin-legacy')
-      await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
+      const {stdout: firstAdd} = await runCommand('plugins install @oclif/plugin-legacy')
+      const {stdout: secondAdd} = await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
+      console.log(`firstStdout: ${firstAdd}`)
+      console.log(`secondStdout: ${secondAdd}`)
       const {result, stdout} = await runCommand<Array<{ name: string }>>('plugins')
       console.log(`stdout is ${stdout}`)
       expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
