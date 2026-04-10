@@ -201,7 +201,6 @@ describe('install/uninstall integration tests', () => {
       // Install a second plugin by a local tarball. This one is alphabetically after the first one.
       await runCommand(`plugins install "file://${yetAnotherLocalPluginTarball}"`)
       const {result: secondResult, stdout: secondStdout} = await runCommand<Array<{name: string}>>('plugins')
-      console.log(`stdout: ${secondStdout}`)
       expect(secondStdout).to.contain(yetAnotherPluginShortName)
       expect(secondResult?.some((r) => r.name === otherPlugin)).to.be.true
       expect(secondResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
