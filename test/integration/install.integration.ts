@@ -60,7 +60,6 @@ describe('install/uninstall integration tests', () => {
     process.env.MYCLI_CACHE_DIR = cacheDir
     process.env.MYCLI_CONFIG_DIR = configDir
     process.env.MYCLI_DATA_DIR = dataDir
-    await runCommand('plugins reset')
   })
 
   afterEach(() => {
@@ -194,20 +193,23 @@ describe('install/uninstall integration tests', () => {
      */
     it('handles local tarballs installed after simple plugin name', async () => {
       // Install first plugin by its registered name
-      await runCommand(`plugins install ${otherPlugin}`)
+      const {stdout: firstAdd} = await runCommand(`plugins install ${otherPlugin}`)
+      console.log(`first add stdout: ${firstAdd}`)
       const {result: firstResult, stdout: firstStdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(firstStdout).to.contain(otherPluginShortName)
       expect(firstResult?.some((r) => r.name === otherPlugin)).to.be.true
 
       // Install a second plugin by a local tarball. This one is alphabetically after the first one.
-      await runCommand(`plugins install "file://${yetAnotherLocalPluginTarball}"`)
+      const {stdout: secondAdd} = await runCommand(`plugins install "file://${yetAnotherLocalPluginTarball}"`)
+      console.log(`second add stdout: ${secondAdd}`)
       const {result: secondResult, stdout: secondStdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(secondStdout).to.contain(yetAnotherPluginShortName)
       expect(secondResult?.some((r) => r.name === otherPlugin)).to.be.true
       expect(secondResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
 
       // Install a third plugin by a local tarball. This one is alphabetically after the second one.
-      await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      const {result: thirdAdd} = await runCommand(`plugins install "file://${pluginLocalTarball}`)
+      console.log(`third add stdout: ${thirdAdd}`)
       const {result: thirdResult, stdout: thirdStdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(thirdStdout).to.contain(pluginShortName)
       expect(thirdResult?.some((r) => r.name === otherPlugin)).to.be.true
