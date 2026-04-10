@@ -216,12 +216,14 @@ export default class Plugins {
         }
       } else {
         // npm
+        console.log(`L219`)
         const range = validRange(tag)
         const unfriendly = this.unfriendlyName(name)
         if (unfriendly && (await this.npmHasPackage(unfriendly))) {
           name = unfriendly
         }
 
+        console.log(`L226`)
         // validate that the package name exists in the npm registry before installing
         await this.npmHasPackage(name, true)
 
@@ -234,16 +236,17 @@ export default class Plugins {
           root: join(this.config.dataDir, 'node_modules', name),
           userPlugins: false,
         })
+        console.log(`L239`)
         this.debug(`finished loading plugin ${name} at root ${plugin.root}`)
         notifyUser(plugin, output)
         this.isValidPlugin(plugin)
-
+        console.log(`L243`)
         await this.add({name, tag: range ?? tag, type: 'user'})
       }
 
+      console.log(`L246`)
       await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
-
-      console.log(`package.json is ${await readFile(this.pjsonPath, 'utf8')}`)
+      console.log(`L248`)
       return plugin
     } catch (error: unknown) {
       this.debug('error installing plugin:', error)
