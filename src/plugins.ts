@@ -154,6 +154,7 @@ export default class Plugins {
       this.debug(`installing plugin ${name}`)
       const options = {cwd: this.config.dataDir, logLevel: this.logLevel, prod: true}
       await this.ensurePJSON()
+      console.log(`starting install: pjson is ${JSON.stringify(await this.pjson(), null, 2)}`)
       let plugin: Config
       const args = force ? ['--force'] : []
       if (name.includes(':')) {

@@ -56,10 +56,11 @@ describe('install/uninstall integration tests', () => {
     } catch {}
   })
 
-  beforeEach(() => {
+  beforeEach(async () => {
     process.env.MYCLI_CACHE_DIR = cacheDir
     process.env.MYCLI_CONFIG_DIR = configDir
     process.env.MYCLI_DATA_DIR = dataDir
+    await runCommand('plugins reset')
   })
 
   afterEach(() => {
@@ -258,18 +259,12 @@ describe('install/uninstall integration tests', () => {
 
   describe('legacy plugin', () => {
     it('should install legacy plugin', async () => {
-      try {
-        await runCommand('plugins install @oclif/plugin-legacy')
-        await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
-        const {result, stdout} = await runCommand<Array<{ name: string }>>('plugins')
-        console.log(`stdout is ${stdout}`)
-        expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
-        expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
-      } catch (error) {
-        const err: Error = error as Error;
-        console.log(`ERR: ${err.name}; ${err.message}, ${err.stack}`)
-        expect(true).to.equal(false, 'ERROR SHOULD NOT HAVE HAPPENED')
-      }
+      await runCommand('plugins install @oclif/plugin-legacy')
+      await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
+      const {result, stdout} = await runCommand<Array<{ name: string }>>('plugins')
+      console.log(`stdout is ${stdout}`)
+      expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
+      expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
     })
   })
 })
