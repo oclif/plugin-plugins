@@ -248,6 +248,7 @@ export default class Plugins {
       console.log(`L246`)
       await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
       console.log(`L248`)
+      console.log(`ending psjon ${JSON.stringify(await this.pjson(), null, 2)}`)
       return plugin
     } catch (error: unknown) {
       this.debug('error installing plugin:', error)
