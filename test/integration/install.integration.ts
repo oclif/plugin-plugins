@@ -265,9 +265,10 @@ describe('install/uninstall integration tests', () => {
         console.log(`stdout is ${stdout}`)
         expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
         expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
-      } catch (e) {
-        const err: Error = e as Error;
+      } catch (error) {
+        const err: Error = error as Error;
         console.log(`ERR: ${err.name}; ${err.message}, ${err.stack}`)
+        expect(true).to.equal(false, 'ERROR SHOULD NOT HAVE HAPPENED')
       }
     })
   })
