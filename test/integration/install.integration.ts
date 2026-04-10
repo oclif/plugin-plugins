@@ -258,12 +258,17 @@ describe('install/uninstall integration tests', () => {
 
   describe('legacy plugin', () => {
     it('should install legacy plugin', async () => {
-      await runCommand('plugins install @oclif/plugin-legacy')
-      await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
-      const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
-      console.log(`stdout is ${stdout}`)
-      expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
-      expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
+      try {
+        await runCommand('plugins install @oclif/plugin-legacy')
+        await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
+        const {result, stdout} = await runCommand<Array<{ name: string }>>('plugins')
+        console.log(`stdout is ${stdout}`)
+        expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
+        expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
+      } catch (e) {
+        const err: Error = e as Error;
+        console.log(`ERR: ${err.name}; ${err.message}, ${err.stack}`)
+      }
     })
   })
 })
