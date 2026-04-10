@@ -165,9 +165,9 @@ export default class Plugins {
         const normalizedUrl = npa(url)
         const matches = Object.entries(dependencies ?? {}).find(([, npmVersion]) => {
           const normalized = npa(npmVersion)
-          //if (normalized.type !== normalizedUrl.type) {
-          //  return false
-          //}
+          // if (normalized.type !== normalizedUrl.type) {
+          //   return false
+          // }
 
           // for local file paths
           if (normalized.type === 'file' && normalized.raw) {
