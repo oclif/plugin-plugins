@@ -243,6 +243,7 @@ export default class Plugins {
 
       await rm(join(this.config.dataDir, 'yarn.lock'), {force: true})
 
+      console.log(`package.json is ${await readFile(this.pjsonPath, 'utf-8')}`)
       return plugin
     } catch (error: unknown) {
       this.debug('error installing plugin:', error)
