@@ -28,6 +28,7 @@ export default class PluginsIndex extends Command {
     })
 
     let plugins = this.config.getPluginsList()
+    console.log(`config returned this many ${plugins.length} and they were ${plugins.map(p => p.name).join(', ')}`)
     sortBy(plugins, (p) => this.plugins.friendlyName(p.name))
     if (!flags.core) {
       plugins = plugins.filter((p) => p.type !== 'core' && p.type !== 'dev')

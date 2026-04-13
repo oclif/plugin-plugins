@@ -159,9 +159,13 @@ describe('install/uninstall integration tests', () => {
       const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(stdout).to.contain(pluginShortName)
       expect(result?.some((r) => r.name === plugin)).to.be.true
+      await runCommand(`plugins install ${otherPlugin}`)
+      const {stdout: otherStdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(otherStdout).to.contain(otherPlugin)
     })
 
     it('should uninstall plugin from github', async () => {
+      await runCommand(`plugins uninstall ${otherPlugin}`)
       await runCommand(`plugins uninstall ${plugin}`)
       const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(stdout).to.contain('No plugins installed.')
@@ -185,7 +189,7 @@ describe('install/uninstall integration tests', () => {
     })
   })
 
-  describe('multiple plugins sequentially', async () => {
+  describe('multiple plugins sequentially', () => {
     /**
      * This is a test for @W-21915680@, a bizarre bug wherein if you installed a plugin from the registry by its true name,
      * and then installed a local tarball whose package name is alphabetically after the previous one, the local tarball
@@ -212,6 +216,7 @@ describe('install/uninstall integration tests', () => {
       console.log(`third add stdout: ${thirdAdd}`)
       const {result: thirdResult, stdout: thirdStdout} = await runCommand<Array<{name: string}>>('plugins')
       expect(thirdStdout).to.contain(pluginShortName)
+      console.log(`plugins stdout is ${thirdStdout}`)
       expect(thirdResult?.some((r) => r.name === otherPlugin)).to.be.true
       expect(thirdResult?.some((r) => r.name === yetAnotherPlugin)).to.be.true
       expect(thirdResult?.some((r) => r.name === plugin)).to.be.true
@@ -261,12 +266,37 @@ describe('install/uninstall integration tests', () => {
 
   describe('legacy plugin', () => {
     it('should install legacy plugin', async () => {
+      /*
       const {stdout: firstAdd} = await runCommand('plugins install @oclif/plugin-legacy')
       const {stdout: secondAdd} = await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
       console.log(`firstStdout: ${firstAdd}`)
       console.log(`secondStdout: ${secondAdd}`)
       const {result, stdout} = await runCommand<Array<{ name: string }>>('plugins')
       console.log(`stdout is ${stdout}`)
+      expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
+      expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
+
+     */
+      const {stdout: otherAdd} = await runCommand('plugins install @oclif/plugin-version')
+      console.log(`===== stdout from adding @oclif/plugin-version===\n${otherAdd}\n====`)
+
+
+      const {stdout: otherPlugins} = await runCommand<Array<{ name: string}>>('plugins')
+      console.log(`====== stdout from plugins call after that======\n${otherPlugins}\n======`)
+
+
+
+      const {stdout: firstAdd} = await runCommand('plugins install @oclif/plugin-legacy')
+      const {result: firstResult, stdout: firstPlugins} = await runCommand<Array<{ name: string }>>('plugins')
+      console.log(`===== stdout from adding @oclif/plugin-legacy =====\n${firstAdd}\n=======`)
+      console.log(`=== stdout from running plugins command the first time ===\n${firstPlugins}\n====`)
+      expect(firstPlugins).to.contain('@oclif/plugin-legacy')
+      expect(firstResult?.some((r) => r.name === '@oclif/plugin-legacy')).to.be.true
+
+      const {stdout: secondAdd} = await runCommand('plugins install @heroku-cli/plugin-ps-exec --silent')
+      console.log(`====== stdout from adding @heroku-cli/plugins-ps-exec --silent =====\n${secondAdd}\n==========`)
+      const {result, stdout} = await runCommand<Array<{ name: string }>>('plugins')
+      console.log(`====== stdout from running plugins command the second time ====\n${stdout}\n=====`)
       expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
       expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
     })
