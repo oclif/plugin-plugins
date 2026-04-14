@@ -25,7 +25,7 @@ describe('install/uninstall integration tests', () => {
 
   const yetAnotherPlugin = '@oclif/plugin-update'
   const yetAnotherPluginShortName = 'update'
-  let yetAnotherLocalPluginTarball = resolve(__dirname, '..', 'fixtures', 'oclif-plugin-update-v4.7.31.tgz')
+  let yetAnotherLocalPluginTarball = resolve(__dirname, '..', 'fixtures', 'oclif-plugin-update-v4.7.32.tgz')
     // Normalize the path to ensure Windows compatibility
     .replaceAll('\\', '/')
   // If the path starts with 'C:', that needs to be removed
