@@ -1,3 +1,13 @@
+## [5.4.61](https://github.com/oclif/plugin-plugins/compare/5.4.60...5.4.61) (2026-04-14)
+
+### Bug Fixes
+
+- added failing test for sequential plugin installation @W-21915680@ ([cf1a801](https://github.com/oclif/plugin-plugins/commit/cf1a80181f1e4a244837822ee674cd1047342262))
+- improved test coverage for sequential plugin installation @W-21915680@ ([0678888](https://github.com/oclif/plugin-plugins/commit/06788880fc483f61b87f19a0fbb9c83bacf39d46))
+- removed errant console.log @W-21915680@ ([12e72a5](https://github.com/oclif/plugin-plugins/commit/12e72a51ddca307f67aad281d05f9cfe99746140))
+- sequential plugin installation now works @W-21915680@ ([a8aa113](https://github.com/oclif/plugin-plugins/commit/a8aa113ecb42d903a29cd6bf1dbc50cfdb20f779))
+- tarballs properly installable @W-21915680@ ([3217be0](https://github.com/oclif/plugin-plugins/commit/3217be09ed0503edccf45038cf5091e37cfb361a))
+
 ## [5.4.60](https://github.com/oclif/plugin-plugins/compare/5.4.59...5.4.60) (2026-04-10)
 
 ### Bug Fixes
