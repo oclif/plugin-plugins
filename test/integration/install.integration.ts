@@ -264,5 +264,14 @@ describe('install/uninstall integration tests', () => {
       expect(stdout).to.contain('@heroku-cli/plugin-ps-exec')
       expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.true
     })
+
+    it('should uninstall legacy plugin', async () => {
+      await runCommand('plugins uninstall @heroku-cli/plugin-ps-exec')
+      await runCommand('plugins uninstall @oclif/plugin-legacy')
+      const {result, stdout} = await runCommand<Array<{name: string}>>('plugins')
+      expect(stdout).to.contain('No plugins installed.')
+      expect(result?.some((r) => r.name === '@heroku-cli/plugin-ps-exec')).to.be.false
+      expect(result?.some((r) => r.name === '@oclif/plugin-legacy')).to.be.false
+    })
   })
 })
