@@ -5,6 +5,6 @@
     "enhancement": "USER STORY",
     "bug": "BUG P3"
   },
-  "hideWorkItemUrl": true,
+  "hideWorkItemUrl": "true",
   "statusWhenClosed": "CLOSED"
 }
