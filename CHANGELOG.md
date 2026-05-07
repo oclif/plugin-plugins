@@ -1,3 +1,9 @@
+## [5.4.64](https://github.com/oclif/plugin-plugins/compare/5.4.63...5.4.64) (2026-05-07)
+
+### Bug Fixes
+
+- **deps:** bump ip-address from 10.1.0 to 10.2.0 ([#1315](https://github.com/oclif/plugin-plugins/issues/1315)) ([9db38b9](https://github.com/oclif/plugin-plugins/commit/9db38b9f647b55b7934ca26a0b0565bcbbff762d))
+
 ## [5.4.63](https://github.com/oclif/plugin-plugins/compare/5.4.62...5.4.63) (2026-05-02)
 
 ### Bug Fixes
