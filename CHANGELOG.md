@@ -1,3 +1,9 @@
+## [5.4.66](https://github.com/oclif/plugin-plugins/compare/5.4.65...5.4.66) (2026-05-09)
+
+### Bug Fixes
+
+- **deps:** bump fast-uri from 3.1.0 to 3.1.2 ([#1317](https://github.com/oclif/plugin-plugins/issues/1317)) ([a08ba97](https://github.com/oclif/plugin-plugins/commit/a08ba97deebaf43c13d1974983ab49c1b0537d21))
+
 ## [5.4.65](https://github.com/oclif/plugin-plugins/compare/5.4.64...5.4.65) (2026-05-09)
 
 ### Bug Fixes
