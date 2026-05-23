@@ -1,3 +1,9 @@
+## [5.4.69](https://github.com/oclif/plugin-plugins/compare/5.4.68...5.4.69) (2026-05-23)
+
+### Bug Fixes
+
+- **deps:** bump npm from 11.14.1 to 11.15.0 ([#1329](https://github.com/oclif/plugin-plugins/issues/1329)) ([c2fe33b](https://github.com/oclif/plugin-plugins/commit/c2fe33bfff1b6a59db176290b82c66ce750f8768))
+
 ## [5.4.68](https://github.com/oclif/plugin-plugins/compare/5.4.67...5.4.68) (2026-05-16)
 
 ### Bug Fixes
