@@ -1,3 +1,9 @@
+## [5.4.75](https://github.com/oclif/plugin-plugins/compare/5.4.74...5.4.75) (2026-06-20)
+
+### Bug Fixes
+
+- **deps:** bump undici from 6.25.0 to 6.27.0 ([#1350](https://github.com/oclif/plugin-plugins/issues/1350)) ([9abccf7](https://github.com/oclif/plugin-plugins/commit/9abccf7cd1290c4bb64420c78a7d325947af2541))
+
 ## [5.4.74](https://github.com/oclif/plugin-plugins/compare/5.4.73...5.4.74) (2026-06-14)
 
 ### Bug Fixes
