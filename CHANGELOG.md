@@ -1,3 +1,9 @@
+## [5.4.79](https://github.com/oclif/plugin-plugins/compare/5.4.78...5.4.79) (2026-06-27)
+
+### Bug Fixes
+
+- **deps:** bump @sigstore/core from 3.2.0 to 3.2.1 ([#1356](https://github.com/oclif/plugin-plugins/issues/1356)) ([7389f9c](https://github.com/oclif/plugin-plugins/commit/7389f9c8ac8b4a1874f8d8f37839c108b359f2b9))
+
 ## [5.4.78](https://github.com/oclif/plugin-plugins/compare/5.4.77...5.4.78) (2026-06-21)
 
 ### Bug Fixes
