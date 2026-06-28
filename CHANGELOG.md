@@ -1,3 +1,9 @@
+## [5.4.80](https://github.com/oclif/plugin-plugins/compare/5.4.79...5.4.80) (2026-06-28)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 4.11.7 to 4.11.11 ([#1352](https://github.com/oclif/plugin-plugins/issues/1352)) ([8a9e3e9](https://github.com/oclif/plugin-plugins/commit/8a9e3e942f9d5fc7320f0540c7512385627e6a7d))
+
 ## [5.4.79](https://github.com/oclif/plugin-plugins/compare/5.4.78...5.4.79) (2026-06-27)
 
 ### Bug Fixes
@@ -482,7 +488,7 @@
 
 ### Features
 
-- add `plugins:post`\* hooks ([#932](https://github.com/oclif/plugin-plugins/issues/932)) ([53725d5](https://github.com/oclif/plugin-plugins/commit/53725d59245b98069b8aa7e14e8625628dd992cc))
+- add `plugins:post`* hooks ([#932](https://github.com/oclif/plugin-plugins/issues/932)) ([53725d5](https://github.com/oclif/plugin-plugins/commit/53725d59245b98069b8aa7e14e8625628dd992cc))
 
 ## [5.3.9](https://github.com/oclif/plugin-plugins/compare/5.3.8...5.3.9) (2024-07-23)
 
