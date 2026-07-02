@@ -1,3 +1,9 @@
+## [5.4.82](https://github.com/oclif/plugin-plugins/compare/5.4.81...5.4.82) (2026-07-02)
+
+### Bug Fixes
+
+- **deps:** bump sigstore from 4.1.0 to 4.1.1 ([#1358](https://github.com/oclif/plugin-plugins/issues/1358)) ([737128a](https://github.com/oclif/plugin-plugins/commit/737128a35549f091881ba34fb748e3d7532acae9))
+
 ## [5.4.81](https://github.com/oclif/plugin-plugins/compare/5.4.80...5.4.81) (2026-07-02)
 
 ### Bug Fixes
