@@ -1,3 +1,9 @@
+## [5.4.81](https://github.com/oclif/plugin-plugins/compare/5.4.80...5.4.81) (2026-07-02)
+
+### Bug Fixes
+
+- **deps:** bump @sigstore/verify from 3.1.0 to 3.1.1 ([#1357](https://github.com/oclif/plugin-plugins/issues/1357)) ([5a294d4](https://github.com/oclif/plugin-plugins/commit/5a294d497a31cd4040d2119f5aaa0bdef1d1ab94))
+
 ## [5.4.80](https://github.com/oclif/plugin-plugins/compare/5.4.79...5.4.80) (2026-06-28)
 
 ### Bug Fixes
