@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import {chmodSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs'
+import {chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs'
 import {tmpdir} from 'node:os'
 import {join} from 'node:path'
 
@@ -34,6 +34,18 @@ describe('spawn', () => {
     const result = await spawn(script, ['--flag', 'value'], {cwd: tempDir, logLevel: 'silent'})
 
     expect(result.stdout).to.include('["--flag","value"]')
+  })
+
+  it('should handle .js module paths with spaces in the path', async () => {
+    const dir = join(tempDir, 'dir with spaces')
+    mkdirSync(dir)
+    const script = join(dir, 'my script.js')
+    writeFileSync(script, 'console.log("spaces-ok")\n')
+    chmodSync(script, '755')
+
+    const result = await spawn(script, [], {cwd: tempDir, logLevel: 'silent'})
+
+    expect(result.stdout).to.include('spaces-ok')
   })
 
   it('should not modify non-.js module paths', async () => {
