@@ -30,7 +30,7 @@ export async function spawn(modulePath: string, args: string[] = [], {cwd, logLe
     const spawned = cpSpawn(modulePath, args, {
       cwd,
       env: {
-        ...npmRunPathEnv(),
+        ...npmRunPathEnv({cwd}),
         // Disable husky hooks because a plugin might be trying to install them, which will
         // break the install since the install location isn't a .git directory.
         HUSKY: '0',
