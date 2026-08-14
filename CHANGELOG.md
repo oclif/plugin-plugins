@@ -1,3 +1,9 @@
+## [5.4.87](https://github.com/oclif/plugin-plugins/compare/5.4.86...5.4.87) (2026-08-14)
+
+### Bug Fixes
+
+- pass cwd to npmRunPathEnv to prevent PATH hijack @W-23797722@ ([5450125](https://github.com/oclif/plugin-plugins/commit/5450125e05be0d9a126f52ff133ed78832f9f43e))
+
 ## [5.4.86](https://github.com/oclif/plugin-plugins/compare/5.4.85...5.4.86) (2026-07-25)
 
 ### Bug Fixes
