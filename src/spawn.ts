@@ -19,10 +19,10 @@ const debug = makeDebug('@oclif/plugin-plugins:spawn')
 
 export async function spawn(modulePath: string, args: string[] = [], {cwd, logLevel}: ExecOptions): Promise<Output> {
   return new Promise((resolve, reject) => {
-    // On windows, the global path to npm could be .cmd, .exe, or .js. If it's a .js file, we need to run it with node.
-    if (process.platform === 'win32' && modulePath.endsWith('.js')) {
-      args.unshift(`"${modulePath}"`)
-      modulePath = 'node'
+    if (modulePath.endsWith('.js')) {
+      const quote = process.platform === 'win32' ? `"${modulePath}"` : modulePath
+      args.unshift(quote)
+      modulePath = process.execPath
     }
 
     debug('modulePath', modulePath)
