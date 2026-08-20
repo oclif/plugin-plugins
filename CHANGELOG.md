@@ -1,3 +1,9 @@
+## [5.5.1](https://github.com/oclif/plugin-plugins/compare/5.5.0...5.5.1) (2026-08-20)
+
+### Bug Fixes
+
+- use process.execPath for .js module spawning on all platforms @W-21984392@ ([8b24637](https://github.com/oclif/plugin-plugins/commit/8b24637b938b622b8ece3a2a29b6591b9bba29f2))
+
 # [5.5.0](https://github.com/oclif/plugin-plugins/compare/5.4.87...5.5.0) (2026-08-19)
 
 ### Features
