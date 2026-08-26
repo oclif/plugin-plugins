@@ -1,7 +1,8 @@
 import {expect} from 'chai'
-import {chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync} from 'node:fs'
+import {chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs'
 import {tmpdir} from 'node:os'
-import {join} from 'node:path'
+import {dirname, join} from 'node:path'
+import {fileURLToPath} from 'node:url'
 
 import {spawn} from '../src/spawn.js'
 
@@ -66,6 +67,24 @@ describe('spawn', () => {
     } finally {
       Object.defineProperty(process, 'execPath', {configurable: true, value: originalExecPath, writable: true})
     }
+  })
+
+  it('must use windowsVerbatimArguments to prevent argument injection (security)', () => {
+    const spawnSrc = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'spawn.ts'), 'utf8')
+    expect(spawnSrc).to.include('windowsVerbatimArguments: true')
+  })
+
+  it('should not interpret shell metacharacters in arguments', async () => {
+    const script = join(tempDir, 'echo-args.js')
+    writeFileSync(script, 'console.log(JSON.stringify(process.argv.slice(2)))\n')
+    chmodSync(script, '755')
+
+    const result = await spawn(script, ['$(echo pwned)', '`echo pwned`', '%PATH%'], {cwd: tempDir, logLevel: 'silent'})
+    const output = result.stdout.join(' ')
+
+    expect(output).to.include('$(echo pwned)')
+    expect(output).to.include('`echo pwned`')
+    expect(output).to.include('%PATH%')
   })
 
   it('should not modify non-.js module paths', async () => {
