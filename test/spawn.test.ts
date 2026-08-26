@@ -79,15 +79,20 @@ describe('spawn', () => {
     writeFileSync(script, 'console.log(JSON.stringify(process.argv.slice(2)))\n')
     chmodSync(script, '755')
 
-    const result = await spawn(script, ['$(echo pwned)', '`echo pwned`', '%PATH%'], {cwd: tempDir, logLevel: 'silent'})
+    const result = await spawn(script, ['$(whoami)', '`whoami`', '%PATH%', '|calc.exe'], {
+      cwd: tempDir,
+      logLevel: 'silent',
+    })
     const output = result.stdout.join(' ')
 
-    expect(output).to.include('$(echo pwned)')
-    expect(output).to.include('`echo pwned`')
+    expect(output).to.include('$(whoami)')
+    expect(output).to.include('`whoami`')
     expect(output).to.include('%PATH%')
+    expect(output).to.include('|calc.exe')
   })
 
-  it('should not modify non-.js module paths', async () => {
+  it('should not modify non-.js module paths', async function () {
+    if (process.platform === 'win32') return this.skip()
     const script = join(tempDir, 'test-bin')
     writeFileSync(script, `#!/usr/bin/env bash\necho "bin-ok"\n`)
     chmodSync(script, '755')
