@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import {chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs'
+import {chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync} from 'node:fs'
 import {tmpdir} from 'node:os'
 import {join} from 'node:path'
 
@@ -46,6 +46,26 @@ describe('spawn', () => {
     const result = await spawn(script, [], {cwd: tempDir, logLevel: 'silent'})
 
     expect(result.stdout).to.include('spaces-ok')
+  })
+
+  it('should handle process.execPath containing spaces', async () => {
+    const nodeDir = join(tempDir, 'path with spaces', 'bin')
+    mkdirSync(nodeDir, {recursive: true})
+    const nodeLink = join(nodeDir, 'node')
+    symlinkSync(process.execPath, nodeLink)
+
+    const script = join(tempDir, 'exec-path-test.js')
+    writeFileSync(script, 'console.log("execpath-ok")\n')
+    chmodSync(script, '755')
+
+    const originalExecPath = process.execPath
+    try {
+      Object.defineProperty(process, 'execPath', {configurable: true, value: nodeLink, writable: true})
+      const result = await spawn(script, [], {cwd: tempDir, logLevel: 'silent'})
+      expect(result.stdout).to.include('execpath-ok')
+    } finally {
+      Object.defineProperty(process, 'execPath', {configurable: true, value: originalExecPath, writable: true})
+    }
   })
 
   it('should not modify non-.js module paths', async () => {

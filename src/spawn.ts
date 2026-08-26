@@ -19,10 +19,14 @@ const debug = makeDebug('@oclif/plugin-plugins:spawn')
 
 export async function spawn(modulePath: string, args: string[] = [], {cwd, logLevel}: ExecOptions): Promise<Output> {
   return new Promise((resolve, reject) => {
+    let argv0: string | undefined
     if (modulePath.endsWith('.js')) {
       const quote = process.platform === 'win32' ? `"${modulePath}"` : modulePath
       args.unshift(quote)
       modulePath = process.execPath
+      if (process.platform === 'win32' && modulePath.includes(' ')) {
+        argv0 = `"${modulePath}"`
+      }
     }
 
     debug('modulePath', modulePath)
@@ -37,6 +41,7 @@ export async function spawn(modulePath: string, args: string[] = [], {cwd, logLe
       },
       stdio: 'pipe',
       windowsVerbatimArguments: true,
+      ...(argv0 && {argv0}),
       ...(process.platform === 'win32' && modulePath.toLowerCase().endsWith('.cmd') && {shell: true}),
     })
 
