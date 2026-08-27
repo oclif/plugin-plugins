@@ -1,3 +1,11 @@
+## [5.5.2](https://github.com/oclif/plugin-plugins/compare/5.5.1...5.5.2) (2026-08-27)
+
+### Bug Fixes
+
+- handle spaces in process.execPath on Windows @W-23997746@ ([c34c18e](https://github.com/oclif/plugin-plugins/commit/c34c18ec0c472ab1235af7e2b5f267f9b4885a26)), closes [oclif/plugin-plugins#1387](https://github.com/oclif/plugin-plugins/issues/1387)
+- **test:** fix spawn tests for Windows CI ([a2784ea](https://github.com/oclif/plugin-plugins/commit/a2784ea5a9294f3a07e801098359004f9adb4843))
+- **test:** skip symlink-based test on Windows ([4288372](https://github.com/oclif/plugin-plugins/commit/42883724d72e69b156e61444ca782d873d2caeab))
+
 ## [5.5.1](https://github.com/oclif/plugin-plugins/compare/5.5.0...5.5.1) (2026-08-20)
 
 ### Bug Fixes
