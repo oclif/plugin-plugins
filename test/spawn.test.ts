@@ -49,7 +49,8 @@ describe('spawn', () => {
     expect(result.stdout).to.include('spaces-ok')
   })
 
-  it('should handle process.execPath containing spaces', async () => {
+  it('should handle process.execPath containing spaces', async function () {
+    if (process.platform === 'win32') return this.skip()
     const nodeDir = join(tempDir, 'path with spaces', 'bin')
     mkdirSync(nodeDir, {recursive: true})
     const nodeLink = join(nodeDir, 'node')
