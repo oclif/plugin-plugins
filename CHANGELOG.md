@@ -1,3 +1,9 @@
+## [6.0.1](https://github.com/oclif/plugin-plugins/compare/6.0.0...6.0.1) (2026-09-08)
+
+### Bug Fixes
+
+- bump npm ([179007c](https://github.com/oclif/plugin-plugins/commit/179007c1c14aa52ffc378e008ae839231321d627))
+
 # [6.0.0](https://github.com/oclif/plugin-plugins/compare/5.5.2...6.0.0) (2026-08-31)
 
 - feat!: upgrade oclif/core to v5 @W-23512455@ ([9c239c0](https://github.com/oclif/plugin-plugins/commit/9c239c0495863d4769153c22ae4e91b644b65276))
