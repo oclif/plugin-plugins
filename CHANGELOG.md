@@ -1,3 +1,11 @@
+# [7.0.0](https://github.com/oclif/plugin-plugins/compare/6.0.1...7.0.0) (2026-09-11)
+
+- feat!: remove support for installing legacy plugins (#1395) ([c53fe34](https://github.com/oclif/plugin-plugins/commit/c53fe3469e55f66f28a0202f85703a78df46ae4c)), closes [#1395](https://github.com/oclif/plugin-plugins/issues/1395)
+
+### BREAKING CHANGES
+
+- removes support for installing legacy plugins
+
 ## [6.0.1](https://github.com/oclif/plugin-plugins/compare/6.0.0...6.0.1) (2026-09-08)
 
 ### Bug Fixes
