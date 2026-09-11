@@ -188,14 +188,8 @@
     "@typescript-eslint/no-unsafe-assignment": {
       "count": 1
     },
-    "@typescript-eslint/no-unsafe-call": {
-      "count": 1
-    },
-    "@typescript-eslint/no-unsafe-member-access": {
-      "count": 1
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 3
+      "count": 2
     },
     "@typescript-eslint/use-unknown-in-catch-callback-variable": {
       "count": 1
