@@ -1,7 +1,7 @@
-import {Config, Interfaces} from '@oclif/core'
+import {Config, type Interfaces} from '@oclif/core'
 import {expect} from 'chai'
 import {join} from 'node:path'
-import {createSandbox, SinonSandbox, SinonSpy} from 'sinon'
+import {createSandbox, type SinonSandbox, type SinonSpy} from 'sinon'
 
 import Plugins, {normaliseTag} from '../src/plugins.js'
 
@@ -192,13 +192,13 @@ describe('Plugins', () => {
 
   describe('normaliseTag', () => {
     it('should keep invalid semver tag', async () => {
-      const cases: {
+      const cases: Array<{
         expected: string
         expectedModifiedPluginsLength?: number
         jitPlugins: Record<string, string>
-        modifiedPlugins: (Interfaces.LinkedPlugin | Interfaces.UserPlugin)[]
+        modifiedPlugins: Array<Interfaces.LinkedPlugin | Interfaces.UserPlugin>
         tag: string
-      }[] = [
+      }> = [
         {
           expected: 'latest',
           jitPlugins: {},

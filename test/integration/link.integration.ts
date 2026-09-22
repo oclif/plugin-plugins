@@ -8,7 +8,11 @@ import {join} from 'node:path'
 async function exec(cmd: string, opts?: {cwd?: string}) {
   return new Promise((resolve, reject) => {
     cpExec(cmd, opts, (err, stdout, stderr) => {
-      if (err) return reject(err)
+      if (err) {
+        reject(err)
+        return
+      }
+
       resolve({code: 0, stderr, stdout})
     })
   })

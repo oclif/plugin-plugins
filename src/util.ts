@@ -25,5 +25,5 @@ export function uniq<T>(arr: T[]): T[] {
 }
 
 export function uniqWith<T>(arr: T[], fn: (a: T, b: T) => boolean): T[] {
-  return arr.filter((a, i) => !arr.some((b, j) => j > i && fn(a, b)))
+  return arr.filter((a, i) => arr.every((b, j) => !(j > i && fn(a, b))))
 }

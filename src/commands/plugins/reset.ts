@@ -15,6 +15,7 @@ export default class Reset extends Command {
       summary: 'Reinstall all plugins after uninstalling.',
     }),
   }
+
   static summary = 'Remove all user-installed and linked plugins.'
 
   // eslint-disable-next-line complexity
@@ -45,7 +46,7 @@ export default class Reset extends Command {
         this.log(`- ${file}`)
       }
 
-      await Promise.all(filesToDelete.map((file) => rm(file, {force: true, recursive: true})))
+      await Promise.all(filesToDelete.map(async (file) => rm(file, {force: true, recursive: true})))
       for (const plugin of userPlugins) {
         this.log(`✅ ${plugin.type === 'link' ? 'Unlinked' : 'Uninstalled'} ${plugin.name}`)
       }

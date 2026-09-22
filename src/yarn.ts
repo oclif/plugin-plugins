@@ -1,18 +1,18 @@
-import {Errors, Interfaces, ux} from '@oclif/core'
+import {Errors, type Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {createRequire} from 'node:module'
 import {fileURLToPath} from 'node:url'
 
-import {LogLevel} from './log-level.js'
-import {ExecOptions, Output, spawn} from './spawn.js'
+import {type LogLevel} from './log-level.js'
+import {type ExecOptions, type Output, spawn} from './spawn.js'
 
 const require = createRequire(import.meta.url)
 const debug = makeDebug('@oclif/plugin-plugins:yarn')
 
 export class Yarn {
   private bin: string | undefined
-  private config: Interfaces.Config
-  private logLevel: LogLevel
+  private readonly config: Interfaces.Config
+  private readonly logLevel: LogLevel
 
   public constructor({config, logLevel}: {config: Interfaces.Config; logLevel: LogLevel}) {
     this.config = config

@@ -1,4 +1,4 @@
-import {Command, Flags, Interfaces, Plugin} from '@oclif/core'
+import {Command, Flags, type Interfaces, type Plugin} from '@oclif/core'
 import {dim} from 'ansis'
 // @ts-expect-error because object-treeify does not have types: https://github.com/blackflux/object-treeify/issues/1077
 import treeify from 'object-treeify'
@@ -8,7 +8,7 @@ import {sortBy} from '../../util.js'
 
 type JitPlugin = {name: string; type: string; version: string}
 type PluginsJson = Array<Interfaces.Plugin | JitPlugin>
-interface RecursiveTree {
+type RecursiveTree = {
   [key: string]: RecursiveTree | string
 }
 
@@ -19,6 +19,7 @@ export default class PluginsIndex extends Command {
   static flags = {
     core: Flags.boolean({description: 'Show core plugins.'}),
   }
+
   plugins!: Plugins
 
   public async run(): Promise<PluginsJson> {

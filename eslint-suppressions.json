@@ -5,15 +5,6 @@
     }
   },
   "src/commands/plugins/index.ts": {
-    "@stylistic/lines-between-class-members": {
-      "count": 1
-    },
-    "@typescript-eslint/consistent-type-definitions": {
-      "count": 1
-    },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "@typescript-eslint/no-unnecessary-type-conversion": {
       "count": 1
     },
@@ -37,20 +28,11 @@
     "@eslint-community/eslint-comments/require-description": {
       "count": 1
     },
-    "@stylistic/lines-between-class-members": {
-      "count": 2
-    },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
-    "@typescript-eslint/no-restricted-types": {
-      "count": 3
-    },
     "@typescript-eslint/no-unsafe-argument": {
       "count": 1
     },
     "@typescript-eslint/no-unsafe-assignment": {
-      "count": 3
+      "count": 4
     },
     "@typescript-eslint/no-unsafe-call": {
       "count": 1
@@ -64,9 +46,6 @@
     "unicorn/consistent-boolean-name": {
       "count": 1
     },
-    "unicorn/consistent-conditional-object-spread": {
-      "count": 2
-    },
     "unicorn/import-style": {
       "count": 1
     },
@@ -76,12 +55,6 @@
   },
   "src/commands/plugins/install.ts": {
     "@eslint-community/eslint-comments/require-description": {
-      "count": 1
-    },
-    "@stylistic/lines-between-class-members": {
-      "count": 3
-    },
-    "@typescript-eslint/consistent-type-imports": {
       "count": 1
     },
     "@typescript-eslint/no-shadow": {
@@ -95,24 +68,10 @@
     },
     "unicorn/no-computed-property-existence-check": {
       "count": 1
-    },
-    "unicorn/no-unnecessary-boolean-comparison": {
-      "count": 1
-    }
-  },
-  "src/commands/plugins/link.ts": {
-    "@stylistic/lines-between-class-members": {
-      "count": 2
     }
   },
   "src/commands/plugins/reset.ts": {
     "@eslint-community/eslint-comments/require-description": {
-      "count": 1
-    },
-    "@stylistic/lines-between-class-members": {
-      "count": 1
-    },
-    "@typescript-eslint/promise-function-async": {
       "count": 1
     },
     "unicorn/import-style": {
@@ -125,28 +84,9 @@
   "src/commands/plugins/uninstall.ts": {
     "@eslint-community/eslint-comments/require-description": {
       "count": 1
-    },
-    "@stylistic/lines-between-class-members": {
-      "count": 2
-    },
-    "@typescript-eslint/no-unnecessary-type-assertion": {
-      "count": 2
-    }
-  },
-  "src/hooks/update.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    }
-  },
-  "src/log-level.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
     }
   },
   "src/npm.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 3
-    },
     "@typescript-eslint/default-param-last": {
       "count": 1
     },
@@ -159,9 +99,6 @@
     "@typescript-eslint/no-unsafe-member-access": {
       "count": 1
     },
-    "@typescript-eslint/prefer-readonly": {
-      "count": 2
-    },
     "unicorn/consistent-class-member-order": {
       "count": 1
     },
@@ -170,12 +107,6 @@
     }
   },
   "src/plugins.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 3
-    },
-    "@typescript-eslint/no-confusing-void-expression": {
-      "count": 1
-    },
     "@typescript-eslint/no-dynamic-delete": {
       "count": 1
     },
@@ -195,12 +126,9 @@
       "count": 1
     },
     "unicorn/consistent-boolean-name": {
-      "count": 2
-    },
-    "unicorn/consistent-class-member-order": {
       "count": 1
     },
-    "unicorn/consistent-conditional-object-spread": {
+    "unicorn/consistent-class-member-order": {
       "count": 1
     },
     "unicorn/import-style": {
@@ -211,15 +139,9 @@
     },
     "unicorn/prefer-array-some": {
       "count": 1
-    },
-    "unicorn/prefer-early-return": {
-      "count": 1
     }
   },
   "src/spawn.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 1
-    },
     "@typescript-eslint/default-param-last": {
       "count": 1
     },
@@ -228,9 +150,6 @@
     },
     "n/prefer-global/buffer": {
       "count": 2
-    },
-    "unicorn/consistent-boolean-name": {
-      "count": 1
     }
   },
   "src/util.ts": {
@@ -243,25 +162,16 @@
     "unicorn/no-array-sort": {
       "count": 1
     },
-    "unicorn/no-negated-array-predicate": {
-      "count": 1
-    },
     "unicorn/no-useless-recursion": {
       "count": 1
     }
   },
   "src/yarn.ts": {
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 3
-    },
     "@typescript-eslint/default-param-last": {
       "count": 1
     },
     "@typescript-eslint/no-unused-private-class-members": {
       "count": 1
-    },
-    "@typescript-eslint/prefer-readonly": {
-      "count": 2
     },
     "unicorn/consistent-class-member-order": {
       "count": 1
@@ -281,9 +191,6 @@
     }
   },
   "test/integration/link.integration.ts": {
-    "@typescript-eslint/no-confusing-void-expression": {
-      "count": 1
-    },
     "unicorn/import-style": {
       "count": 1
     }
@@ -303,12 +210,6 @@
     }
   },
   "test/plugins.test.ts": {
-    "@typescript-eslint/array-type": {
-      "count": 2
-    },
-    "@typescript-eslint/consistent-type-imports": {
-      "count": 2
-    },
     "@typescript-eslint/prefer-nullish-coalescing": {
       "count": 1
     },
