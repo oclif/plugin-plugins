@@ -1,3 +1,9 @@
+## [7.0.1](https://github.com/oclif/plugin-plugins/compare/7.0.0...7.0.1) (2026-09-22)
+
+### Bug Fixes
+
+- resolving autofixable eslint violations (W-24099831) ([9ed019a](https://github.com/oclif/plugin-plugins/commit/9ed019ac3b039ffd2298dfa8675b47e0ad3794b4))
+
 # [7.0.0](https://github.com/oclif/plugin-plugins/compare/6.0.1...7.0.0) (2026-09-11)
 
 - feat!: remove support for installing legacy plugins (#1395) ([c53fe34](https://github.com/oclif/plugin-plugins/commit/c53fe3469e55f66f28a0202f85703a78df46ae4c)), closes [#1395](https://github.com/oclif/plugin-plugins/issues/1395)
