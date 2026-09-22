@@ -1,4 +1,4 @@
-import {Config, Errors, Interfaces, ux} from '@oclif/core'
+import {Config, Errors, type Interfaces, ux} from '@oclif/core'
 import {bold} from 'ansis'
 import makeDebug from 'debug'
 import {spawn} from 'node:child_process'
@@ -7,9 +7,9 @@ import {basename, dirname, join, parse, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {gt, valid, validRange} from 'semver'
 
-import {LogLevel} from './log-level.js'
+import {type LogLevel} from './log-level.js'
 import {NPM} from './npm.js'
-import {Output} from './spawn.js'
+import {type Output} from './spawn.js'
 import {uniqWith} from './util.js'
 import {Yarn} from './yarn.js'
 
@@ -66,8 +66,8 @@ function extractIssuesLocation(
 }
 
 function notifyUser(plugin: Config, output: Output): void {
-  const containsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
-  if (containsWarnings) {
+  const isContainsWarnings = [...output.stdout, ...output.stderr].some((l) => l.includes('npm WARN'))
+  if (isContainsWarnings) {
     ux.stderr(bold.yellow(`\nThese warnings can only be addressed by the owner(s) of ${plugin.name}.`))
 
     if (plugin.pjson.bugs || plugin.pjson.repository) {
@@ -246,7 +246,9 @@ export default class Plugins {
       return plugin
     } catch (error: unknown) {
       this.debug('error installing plugin:', error)
-      await this.uninstall(name).catch((error) => this.debug(error))
+      await this.uninstall(name).catch((error) => {
+        this.debug(error)
+      })
 
       if (String(error).includes('EACCES')) {
         throw new Errors.CLIError(error as Error, {
@@ -408,10 +410,12 @@ export default class Plugins {
   }
 
   private async ensurePJSON() {
-    if (!(await fileExists(this.pjsonPath))) {
-      this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
-      await this.savePJSON(initPJSON)
+    if (await fileExists(this.pjsonPath)) {
+      return
     }
+
+    this.debug(`creating ${this.pjsonPath} with pjson: ${JSON.stringify(initPJSON, null, 2)}`)
+    await this.savePJSON(initPJSON)
   }
 
   private isValidPlugin(p: Config): boolean {
@@ -442,7 +446,7 @@ export default class Plugins {
         spawn(process.argv[0], [rmScript, join(this.config.dataDir, 'node_modules.old')], {
           detached: true,
           stdio: 'ignore',
-          ...(this.config.windows ? {shell: true} : {}),
+          ...(this.config.windows && {shell: true}),
         }).unref()
       } catch (error) {
         this.debug('Error cleaning up yarn.lock and node_modules:', error)

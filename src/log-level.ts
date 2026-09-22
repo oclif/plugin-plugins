@@ -1,4 +1,4 @@
-import {Config} from '@oclif/core'
+import {type Config} from '@oclif/core'
 
 const LOG_LEVELS = ['silent', 'error', 'warn', 'notice', 'http', 'info', 'verbose', 'silly'] as const
 export type LogLevel = (typeof LOG_LEVELS)[number]

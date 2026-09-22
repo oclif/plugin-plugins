@@ -1,11 +1,11 @@
-import {Errors, Interfaces, ux} from '@oclif/core'
+import {Errors, type Interfaces, ux} from '@oclif/core'
 import makeDebug from 'debug'
 import {readFile} from 'node:fs/promises'
 import {createRequire} from 'node:module'
 import {join, sep} from 'node:path'
 
-import {LogLevel} from './log-level.js'
-import {ExecOptions, Output, spawn} from './spawn.js'
+import {type LogLevel} from './log-level.js'
+import {type ExecOptions, type Output, spawn} from './spawn.js'
 
 const debug = makeDebug('@oclif/plugin-plugins:npm')
 
@@ -15,8 +15,8 @@ type InstallOptions = ExecOptions & {
 
 export class NPM {
   private bin: string | undefined
-  private config: Interfaces.Config
-  private logLevel: LogLevel
+  private readonly config: Interfaces.Config
+  private readonly logLevel: LogLevel
 
   public constructor({config, logLevel}: {config: Interfaces.Config; logLevel: LogLevel}) {
     this.config = config

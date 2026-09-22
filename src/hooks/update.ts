@@ -1,4 +1,4 @@
-import {Hook} from '@oclif/core'
+import {type Hook} from '@oclif/core'
 
 import Plugins from '../plugins.js'
 

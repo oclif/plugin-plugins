@@ -3,7 +3,7 @@ import makeDebug from 'debug'
 import {spawn as cpSpawn} from 'node:child_process'
 import {npmRunPathEnv} from 'npm-run-path'
 
-import {LogLevel} from './log-level.js'
+import {type LogLevel} from './log-level.js'
 
 export type ExecOptions = {
   cwd: string
@@ -54,9 +54,9 @@ export async function spawn(modulePath: string, args: string[] = [], {cwd, logLe
     const shouldPrint = (str: string): boolean => {
       // For ux cleanliness purposes, don't print the final line of npm install output if
       // the log level is 'notice' and there's no other output.
-      const noOtherOutput = loggedStderr.length === 0 && loggedStdout.length === 0
+      const isNoOtherOutput = loggedStderr.length === 0 && loggedStdout.length === 0
       const isLastLine = possibleLastLinesOfNpmInstall.some((line) => str.startsWith(line))
-      if (noOtherOutput && isLastLine && logLevel === 'notice') {
+      if (isNoOtherOutput && isLastLine && logLevel === 'notice') {
         return false
       }
 

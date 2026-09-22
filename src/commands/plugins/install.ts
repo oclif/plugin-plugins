@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import {Args, Command, Errors, Flags, Interfaces, Plugin, ux} from '@oclif/core'
+import {Args, Command, Errors, Flags, type Interfaces, Plugin, ux} from '@oclif/core'
 import {bold, cyan} from 'ansis'
 import validate from 'validate-npm-package-name'
 
@@ -11,6 +11,7 @@ export default class PluginsInstall extends Command {
   static args = {
     plugin: Args.string({description: 'Plugin to install.', required: true}),
   }
+
   static description = `Uses npm to install plugins.
 
 Installation of a user-installed plugin will override a core plugin.
@@ -32,6 +33,7 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
       description: 'Install a plugin from a github slug.',
     },
   ]
+
   static flags = {
     force: Flags.boolean({
       char: 'f',
@@ -41,7 +43,7 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
     jit: Flags.boolean({
       hidden: true,
       async parse(input, ctx) {
-        if (input === false || input === undefined) return input
+        if (!input || input === undefined) return input
 
         const requestedPlugins = ctx.argv.filter((a) => !a.startsWith('-'))
         if (requestedPlugins.length === 0) return input
@@ -77,6 +79,7 @@ Use the <%= config.scopedEnvVarKey('NPM_REGISTRY') %> environment variable to se
       exclusive: ['silent'],
     }),
   }
+
   static strict = false
   static summary = 'Installs a plugin into <%= config.bin %>.'
   flags!: Interfaces.InferredFlags<typeof PluginsInstall.flags>

@@ -1,4 +1,4 @@
-import {Args, Command, Flags, Plugin} from '@oclif/core'
+import {Args, Command, Flags, type Plugin} from '@oclif/core'
 import {bold, dim} from 'ansis'
 import {readFile} from 'node:fs/promises'
 import {dirname, join, sep} from 'node:path'
@@ -46,6 +46,7 @@ export default class PluginsInspect extends Command {
       required: true,
     }),
   }
+
   static description = 'Displays installation properties of a plugin.'
   static enableJsonFlag = true
   static examples = ['<%= config.bin %> <%= command.id %> <%- config.pjson.oclif.examplePlugin || "myplugin" %> ']
@@ -53,11 +54,15 @@ export default class PluginsInspect extends Command {
     help: Flags.help({char: 'h'}),
     verbose: Flags.boolean({char: 'v'}),
   }
+
   static strict = false
   static usage = 'plugins:inspect PLUGIN...'
   plugins!: Plugins
 
-  async findDep(plugin: Plugin, dependency: string): Promise<{pkgPath: null | string; version: null | string}> {
+  async findDep(
+    plugin: Plugin,
+    dependency: string,
+  ): Promise<{pkgPath: string | undefined; version: string | undefined}> {
     const dependencyPath = join(...dependency.split('/'))
     let start = join(plugin.root, 'node_modules')
     const paths = [start]
@@ -80,7 +85,7 @@ export default class PluginsInspect extends Command {
       }
     }
 
-    return {pkgPath: null, version: null}
+    return {pkgPath: undefined, version: undefined}
   }
 
   findPlugin(pluginName: string): Plugin {
@@ -98,7 +103,7 @@ export default class PluginsInspect extends Command {
 
   async inspect(pluginName: string, verbose = false): Promise<PluginWithDeps> {
     const plugin = this.findPlugin(pluginName)
-    const dependencies: Record<string, null> = {}
+    const dependencies: Record<string, undefined> = {}
     const depsJson: Dependencies = {}
     for (const dep of sortBy(Object.keys({...plugin.pjson.dependencies}), (d) => d)) {
       // eslint-disable-next-line no-await-in-loop
@@ -109,15 +114,15 @@ export default class PluginsInspect extends Command {
       const versionMsg = dim(from ? `${from} => ${version}` : version)
       const msg = verbose ? `${dep} ${versionMsg} ${pkgPath}` : `${dep} ${versionMsg}`
 
-      dependencies[msg] = null
+      dependencies[msg] = undefined
       depsJson[dep] = {from, version}
     }
 
     const tree = {
       [bold.cyan(plugin.name)]: {
         [`version ${plugin.version}`]: null,
-        ...(plugin.tag ? {[`tag ${plugin.tag}`]: null} : {}),
-        ...(plugin.pjson.homepage ? {[`homepage ${plugin.pjson.homepage}`]: null} : {}),
+        ...(plugin.tag && {[`tag ${plugin.tag}`]: null}),
+        ...(plugin.pjson.homepage && {[`homepage ${plugin.pjson.homepage}`]: null}),
         [`location ${plugin.root}`]: null,
         commands: Object.fromEntries(sortBy(plugin.commandIDs, (c) => c).map((id) => [id, null])),
         dependencies,
