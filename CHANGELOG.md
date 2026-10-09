@@ -1,3 +1,9 @@
+## [7.0.4](https://github.com/oclif/plugin-plugins/compare/7.0.3...7.0.4) (2026-10-09)
+
+### Bug Fixes
+
+- **deps:** bump ip-address from 10.2.0 to 10.7.2 ([#1400](https://github.com/oclif/plugin-plugins/issues/1400)) ([a4b00a7](https://github.com/oclif/plugin-plugins/commit/a4b00a79255b3bf85c0c02b3060db8454106f3fb))
+
 ## [7.0.3](https://github.com/oclif/plugin-plugins/compare/7.0.2...7.0.3) (2026-09-25)
 
 ### Bug Fixes
