@@ -1,3 +1,9 @@
+## [7.0.8](https://github.com/oclif/plugin-plugins/compare/7.0.7...7.0.8) (2026-10-14)
+
+### Bug Fixes
+
+- **deps:** bump undici from 6.27.0 to 6.29.0 ([b09fe1a](https://github.com/oclif/plugin-plugins/commit/b09fe1ae4cef1e5383cb828e961790cce875cf8f))
+
 ## [7.0.7](https://github.com/oclif/plugin-plugins/compare/7.0.6...7.0.7) (2026-10-09)
 
 ### Bug Fixes
