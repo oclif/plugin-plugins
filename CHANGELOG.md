@@ -1,3 +1,9 @@
+## [7.0.12](https://github.com/oclif/plugin-plugins/compare/7.0.11...7.0.12) (2026-10-24)
+
+### Bug Fixes
+
+- **deps:** bump fast-uri from 3.1.7 to 3.1.9 ([#1419](https://github.com/oclif/plugin-plugins/issues/1419)) ([21e00ef](https://github.com/oclif/plugin-plugins/commit/21e00ef3feef0a922293eabc0f2d4e833103eabc))
+
 ## [7.0.11](https://github.com/oclif/plugin-plugins/compare/7.0.10...7.0.11) (2026-10-24)
 
 ### Bug Fixes
