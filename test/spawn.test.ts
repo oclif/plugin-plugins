@@ -4,7 +4,7 @@ import {tmpdir} from 'node:os'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 
-import {spawn} from '../src/spawn.js'
+import {quoteWindowsArg, spawn} from '../src/spawn.js'
 
 describe('spawn', () => {
   let tempDir: string
@@ -94,6 +94,26 @@ describe('spawn', () => {
     expect(output).to.include('`whoami`')
     expect(output).to.include('%PATH%')
     expect(output).to.include('|calc.exe')
+  })
+
+  it('should pass an argument containing spaces as one argument', async () => {
+    // e.g. a version range: `npm install pkg@>=1.0.0 <2.0.0` must not also install `<2.0.0`
+    const script = path.join(tempDir, 'echo-args.js')
+    writeFileSync(script, 'console.log(JSON.stringify(process.argv.slice(2)))\n')
+    chmodSync(script, '755')
+    const args = ['@scope/pkg@>=1.0.0 <2.0.0', 'say "hi"', String.raw`C:\dir with space\\`, '--flag']
+
+    const result = await spawn(script, [...args], {cwd: tempDir, logLevel: 'silent'})
+
+    expect(JSON.parse(result.stdout.join(''))).to.deep.equal(args)
+  })
+
+  it('should quote Windows arguments only when they need it', () => {
+    expect(quoteWindowsArg('--flag')).to.equal('--flag')
+    expect(quoteWindowsArg(String.raw`C:\no\spaces`)).to.equal(String.raw`C:\no\spaces`)
+    expect(quoteWindowsArg('a b')).to.equal('"a b"')
+    expect(quoteWindowsArg('say "hi"')).to.equal(String.raw`"say \"hi\""`)
+    expect(quoteWindowsArg(String.raw`dir with space\\`)).to.equal(String.raw`"dir with space\\\\"`)
   })
 
   it('should not modify non-.js module paths', async function () {

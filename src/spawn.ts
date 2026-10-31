@@ -17,8 +17,33 @@ export type Output = {
 
 const debug = makeDebug('@oclif/plugin-plugins:spawn')
 
+/**
+ * With `windowsVerbatimArguments`, Node joins the arguments with spaces and does no quoting, so an
+ * argument containing whitespace reaches the child as several. Quote those the way
+ * `CommandLineToArgvW` expects, which is what libuv does when arguments are not verbatim.
+ */
+export function quoteWindowsArg(arg: string): string {
+  if ([...arg].every((char) => char !== '"' && char.trim() !== '')) return arg
+
+  // Backslashes are literal except before a quote, so double the ones that end up before one: an
+  // escaped quote inside the argument, or the closing quote.
+  let quoted = '"'
+  let backslashes = 0
+  for (const char of arg) {
+    if (char === '\\') {
+      backslashes++
+    } else {
+      quoted += '\\'.repeat(char === '"' ? backslashes * 2 + 1 : backslashes) + char
+      backslashes = 0
+    }
+  }
+
+  return `${quoted}${'\\'.repeat(backslashes * 2)}"`
+}
+
 export async function spawn(modulePath: string, args: string[] = [], {cwd, logLevel}: ExecOptions): Promise<Output> {
   return new Promise((resolve, reject) => {
+    if (process.platform === 'win32') args = args.map((arg) => quoteWindowsArg(arg))
     let argv0: string | undefined
     if (modulePath.endsWith('.js')) {
       const quote = process.platform === 'win32' ? `"${modulePath}"` : modulePath
