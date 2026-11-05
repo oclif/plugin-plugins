@@ -1,3 +1,9 @@
+## [7.0.14](https://github.com/oclif/plugin-plugins/compare/7.0.13...7.0.14) (2026-11-05)
+
+### Bug Fixes
+
+- bump npm for undici ([f1bd98a](https://github.com/oclif/plugin-plugins/commit/f1bd98ac925d9ca301c0fe3fa3fd9216513f7f64))
+
 ## [7.0.13](https://github.com/oclif/plugin-plugins/compare/7.0.12...7.0.13) (2026-10-25)
 
 ### Bug Fixes
