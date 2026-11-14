@@ -1,3 +1,9 @@
+## [7.0.17](https://github.com/oclif/plugin-plugins/compare/7.0.16...7.0.17) (2026-11-14)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 5.1.11 to 5.1.12 ([#1428](https://github.com/oclif/plugin-plugins/issues/1428)) ([e0660ad](https://github.com/oclif/plugin-plugins/commit/e0660ad783c0bcccadc0aee6a1374991a9ae0422))
+
 ## [7.0.16](https://github.com/oclif/plugin-plugins/compare/7.0.15...7.0.16) (2026-11-07)
 
 ### Bug Fixes
