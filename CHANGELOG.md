@@ -1,3 +1,9 @@
+## [7.0.18](https://github.com/oclif/plugin-plugins/compare/7.0.17...7.0.18) (2026-11-21)
+
+### Bug Fixes
+
+- **deps:** bump npm from 11.21.2 to 11.21.3 ([#1430](https://github.com/oclif/plugin-plugins/issues/1430)) ([dd225f7](https://github.com/oclif/plugin-plugins/commit/dd225f70aa31119e38f84cb62aa965a1bb8eff7e))
+
 ## [7.0.17](https://github.com/oclif/plugin-plugins/compare/7.0.16...7.0.17) (2026-11-14)
 
 ### Bug Fixes
